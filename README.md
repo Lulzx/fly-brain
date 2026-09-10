@@ -1,47 +1,52 @@
 # fly-brain
 
-Interactive, in-browser simulation of the complete **male *Drosophila* central nervous system connectome**
-(HHMI Janelia FlyEM + Google Research, male CNS v1.0, CC-BY 4.0).
+Embodied, whole-CNS simulation of the **male *Drosophila* connectome** in the browser.
+Each fly is a 165,122-neuron connectome brain (male CNS v1.0, Janelia FlyEM + Google, CC-BY 4.0) living in a
+physics-simulated flybody body (MuJoCo, Janelia/DeepMind) with a trained compound-eye front end (flyvis,
+Lappalainen et al. 2024). The brain alone decides what the fly does.
 
-- 165,122 traced neurons (brain + ventral nerve cord), 10.5 M connections with ≥3 synapses (104 M synapses).
-- Every neuron is a leaky integrate-and-fire unit (parameters from Shiu et al. 2024, *Nature*), with
-  spike-frequency adaptation and short-term synaptic depression added to keep activity bounded.
-- Sign of each connection comes from the presynaptic neuron's predicted neurotransmitter
-  (ACh / monoamines excitatory; GABA / glutamate / histamine inhibitory).
-- Rendered with Three.js from downsampled skeletons; activity lights up neurons in real time.
+- `index.html` – the connectome viewer: 3D skeletons of all neurons, stimulate any cell type, watch activity.
+- `arena.html` – the embodied arena: add flies, place sugar, odour, bitter patches, heat, blocks; launch a
+  looming threat; change wind and light; follow a fly and watch its brain in the inset.
 
 ## Run
-
 ```sh
 npm install
-# data (≈70 MB preprocessed) — regenerate with the scripts below, or copy public/data
-npm run dev
+npm run dev            # http://localhost:5173/arena.html  (needs cross-origin isolation, set in vite.config.js)
 ```
+The preprocessed data in `public/` (~190 MB) is produced by the scripts below.
 
-## Data pipeline
+## What happens every simulated millisecond (per fly, in its own Web Worker)
+1. **Senses** (`src/sim/senses.js`, `src/sim/vision.js`): taste (labellum, taste pegs, each leg), odour plumes
+   per antenna (glomerulus-specific ORNs), phasic tarsal touch, leg proprioceptors, body bristles, halteres,
+   antennal wind, heat. Vision: 2 × 721 rays → flyvis optic-lobe model (50 Hz) → drives the matching
+   ~62,000 male-CNS optic-lobe neurons (same cell type, same retinotopic column).
+2. **Brain** (`src/wasm/lif.c`, WebAssembly): conductance-based LIF over 10.5 M connections, parameters fitted
+   to published behaviours (see PLAN.md).
+3. **Motor** (`src/sim/motor.js`): descending-neuron populations → walking/turning/backing (stepping pattern
+   generator), head grooming, escape jump (giant fibre / looming takeoff DNs); proboscis and antennae driven
+   by their own motor neurons. Optional "full connectome VNC" mode drives every leg muscle from its MNs.
+4. **Physics** (`src/sim/world.js`): flybody fly with exact inertias, adhesive claws, 0.2 ms MuJoCo steps.
 
+## Data / model pipeline
 ```sh
-uv venv .venv && uv pip install --python .venv/bin/python pyarrow pandas numpy scipy
-# ~1.2 GB flat connectome tables
-for f in body-annotations-male-cns-v1.0-minconf-0.5 body-neurotransmitters-male-cns-v1.0 connectome-weights-male-cns-v1.0-minconf-0.5; do
-  curl -o data/raw/$f.feather https://storage.googleapis.com/flyem-male-cns/v1.0/connectome-data/flat-connectome/$f.feather; done
-.venv/bin/python scripts/prep_graph.py 3          # -> public/data/{neurons.bin,graph_w3.bin,meta.json}
-# 5.5 GB of neuroglancer skeletons (one file per neuron)
-gsutil -m rsync gs://flyem-male-cns/v1.0/segmentation/skeletons-malecns/skeletons-precomputed/ data/skeletons/
-.venv/bin/python scripts/prep_skeletons.py 48     # -> public/data/skeletons_lo.bin
+uv venv .venv && uv pip install --python .venv/bin/python pyarrow pandas numpy scipy mujoco trimesh fast-simplification cma h5py
+.venv/bin/python scripts/prep_graph.py 3        # neurons.bin, graph_w3.bin, meta.json   (flat connectome tables)
+.venv/bin/python scripts/prep_skeletons.py 40   # skeletons_lo.bin                        (5.5 GB of skeletons)
+.venv/bin/python scripts/prep_body.py 0.25      # fly_physics.xml, fly_visual.*           (flybody model)
+.venv/bin/python scripts/prep_bodymap.py        # bodymap.json: motor/sensory/eye neuron maps
+.venv-flyvis/bin/python ...                     # flyvis export (see session notes) -> public/vision/
+.venv/bin/python scripts/prep_flyvis_map.py     # flyvis node <-> male-CNS neuron map (retinotopy via connectome)
+node scripts/calib_search.mjs '{"coba":true}'   # fit brain parameters to behavioural benchmarks
+.venv/bin/python scripts/gait_opt2.py 60        # stepping pattern generator (multi-condition CMA-ES)
 ```
 
-## Model tests (Node)
-
+## Headless experiments
 ```sh
-node scripts/simtest.mjs type DNp01 100 500        # stimulate the giant fiber at 100 Hz for 500 ms
-node scripts/persist.mjs class gustatory 50 0.275 2 0.2   # does activity die after stimulus off?
+node scripts/run_fly.mjs 6 nearodor     # walk toward food and odour
+node scripts/run_fly.mjs 3 onfood       # tarsal sugar: stop / proboscis
+node scripts/run_fly.mjs 2 threat       # looming object -> giant fibre -> jump -> run
+node scripts/calib_eval.mjs "$(cat public/data/brain_params.json)"   # behavioural benchmark suite
 ```
-
-## Layout
-
-- `src/lif.js` – pure LIF network core (usable in a worker, in Node, or one instance per fly)
-- `src/sim.worker.js` – worker wrapper; `src/brain.js` – `FlyBrain` class (drive / pulse / onFrame)
-- `src/main.js` – viewer + UI; `scripts/` – data prep and tests
-
-Source: https://male-cns.janelia.org · https://neuprint.janelia.org
+Sources: male-cns.janelia.org · neuprint.janelia.org · github.com/TuragaLab/flybody · github.com/TuragaLab/flyvis ·
+github.com/TuragaLab/FlySuite (real-fly walking kinematics).

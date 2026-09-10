@@ -2,14 +2,14 @@
 import { fork } from 'node:child_process';
 import fs from 'node:fs';
 const SPACE = {   // [lo, hi, scale]
-  wSyn: [0.2, 1.2, 'log'], sizeAlpha: [0, 1, 'lin'], kcThreshold: [0, 30, 'lin'], inhGain: [0.5, 5, 'log'], eInh: [-85, -55, 'lin'], minSyn: [3, 10, 'int'], adaptInc: [0, 3, 'lin'], tRef: [2, 6, 'lin'],
+  wSyn: [0.2, 1.2, 'log'], sizeAlpha: [0, 1, 'lin'], kcThreshold: [0, 30, 'lin'], inhGain: [0.5, 5, 'log'], eInh: [-85, -55, 'lin'], minSyn: [3, 10, 'int'], adaptInc: [0, 3, 'lin'], tRef: [2, 6, 'lin'], laminaBias: [0, 25, 'lin'],
 };
 const fixed = JSON.parse(process.argv[2] || '{"coba":true}'); const GENS = +(process.argv[3] || 12), POP = +(process.argv[4] || 24), NW = +(process.env.NW || 12);
 const keys = Object.keys(SPACE);
 const toU = (k, v) => { const [lo, hi, sc] = SPACE[k]; return sc === 'log' ? Math.log(v / lo) / Math.log(hi / lo) : (v - lo) / (hi - lo); };
 const fromU = (k, u) => { const [lo, hi, sc] = SPACE[k]; u = Math.min(1, Math.max(0, u)); const v = sc === 'log' ? lo * Math.pow(hi / lo, u) : lo + u * (hi - lo); return sc === 'int' ? Math.round(v) : +v.toFixed(3); };
 const seed = fs.existsSync('data/calib_best.json') ? JSON.parse(fs.readFileSync('data/calib_best.json')).cfg : {};
-let mu = keys.map(k => toU(k, { wSyn: 0.5, sizeAlpha: 0.4, kcThreshold: 10, inhGain: 1.2, eInh: -70, minSyn: 5, adaptInc: 0.5, tRef: 3, ...seed }[k])), sd = keys.map(() => 0.2);
+let mu = keys.map(k => toU(k, { wSyn: 0.5, sizeAlpha: 0.4, kcThreshold: 10, inhGain: 1.2, eInh: -70, minSyn: 5, adaptInc: 0.5, tRef: 3, laminaBias: 9, ...seed }[k])), sd = keys.map(() => 0.2);
 const workers = [...Array(NW)].map(() => fork('scripts/calib_eval.mjs'));
 const log = fs.createWriteStream('data/calib_log.jsonl', { flags: 'a' });
 let best = null;

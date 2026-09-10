@@ -4,18 +4,23 @@ import { loadAll } from './lib_node.mjs';
 import { createBrain, brainScales, applyClassPhysiology, BRAIN_DEFAULTS } from '../src/brainmodel.js';
 import { graphBytes, brainBytes, writeGraph, LIFWasm } from '../src/lifwasm.js';
 import { DEFAULTS as LIF_DEFAULTS } from '../src/lif.js';
+import { FlyVis, parseFlyVis, flyvisBytes } from '../src/flyvis.js';
 const D = loadAll(); const SIZE = new Float32Array(fs.readFileSync('public/data/neuron_size.bin').buffer.slice(0));
 const SIGN = new Float32Array(fs.readFileSync('public/data/ntsign.bin').buffer.slice(0));
 const T = (...ts) => ts.flatMap(t => D.byType(t));
 const DATA = { ...D, superclass: D.sc };
 const WASM = fs.readFileSync('public/lif.wasm');
-const MEM = new WebAssembly.Memory({ initial: Math.ceil((graphBytes(D.N, D.E) + brainBytes(D.N, 20) + (1 << 20)) / 65536), maximum: Math.ceil((graphBytes(D.N, D.E) + brainBytes(D.N, 20) + (1 << 20)) / 65536), shared: true });
+const FVB = fs.readFileSync('public/vision/flyvis.bin'); const FVM = parseFlyVis(FVB.buffer.slice(FVB.byteOffset, FVB.byteOffset + FVB.byteLength), JSON.parse(fs.readFileSync('public/vision/flyvis.json')), JSON.parse(fs.readFileSync('public/vision/flyvis_inputs.json')));
+const FVMAP = JSON.parse(fs.readFileSync('public/vision/flyvis_map.json'));
+const MEMB = graphBytes(D.N, D.E) + brainBytes(D.N, 20) + flyvisBytes(FVM.N, FVM.E) + FVM.N * 4 * 8 + (4 << 20);
+const MEM = new WebAssembly.Memory({ initial: Math.ceil(MEMB / 65536), maximum: Math.ceil(MEMB / 65536), shared: true });
 const INST = (await WebAssembly.instantiate(WASM, { env: { memory: MEM } })).instance;
-let graphKey = null, GRAPH = null;
+let graphKey = null, GRAPH = null, BRAIN_END = 0;
 function makeBrain(cfg) {
   const o = { ...BRAIN_DEFAULTS, ...cfg }; const key = JSON.stringify(o);
-  if (key !== graphKey) { const { inScale, sensoryMask } = brainScales(DATA, SIZE, o); GRAPH = writeGraph(MEM, 1024, DATA, { ...LIF_DEFAULTS, ...o }, inScale, sensoryMask, SIGN); graphKey = key; }
+  if (key !== graphKey) { const { inScale, sensoryMask } = brainScales(DATA, SIZE, o); for (const sd of ['L', 'R']) for (const [i] of FVMAP.eyes[sd].pairs) sensoryMask[i] = 1; GRAPH = writeGraph(MEM, 1024, DATA, { ...LIF_DEFAULTS, ...o }, inScale, sensoryMask, SIGN); graphKey = key; }
   const b = new LIFWasm({ instance: INST, memory: MEM, graph: GRAPH, base: (GRAPH.end + 4095) & ~4095, N: D.N, params: o, seed: (Math.random() * 1e9) | 0 });
+  BRAIN_END = b.end;
   return applyClassPhysiology(b, DATA, o);
 }
 const S = D.bodymap.sensors, SN = Object.fromEntries(S.map(s => [s.name, s.idx]));
@@ -28,7 +33,22 @@ const LEGSUGAR = (legs) => legs.flatMap(k => (SN[`taste ${k}`] || []).filter(i =
 const FRONT_SUGAR = LEGSUGAR(['T1 left', 'T1 right']), ALL_SUGAR = LEGSUGAR(['T1 left', 'T1 right', 'T2 left', 'T2 right', 'T3 left', 'T3 right']);
 const FWD_POP = Object.entries({ DNg100: 1, DNg97: 1, DNp09: 1, DNa05: 0.7, DNa07: 0.7, DNp26: 0.7, DNg25: 0.7, DNa01: 0.4, DNa02: 0.4 }).flatMap(([t, w]) => D.byType(t).map(i => [i, w]));
 const fwdRate = (net, ms) => FWD_POP.reduce((a, [i, w]) => a + w * net.spikeCount[i], 0) / FWD_POP.reduce((a, [, w]) => a + w, 0) / (ms / 1000);
-const MDN = T('MDN');
+const MDN = T('MDN'); const GF = T('DNp01');
+const PHOTO = D.bodymap.eyes.flatMap(e => e.idx);
+// looming: expanding dark disc centred at az 30 deg, el 10 deg (frontal-left), radius 5 -> 70 deg over 300 ms
+const EYE_DIRS = D.bodymap.eyes.flatMap(e => e.idx.map((i, k) => [i, e.az[k] * Math.PI / 180, e.el[k] * Math.PI / 180]));
+const LC = [Math.cos(0.17) * Math.cos(0.52), Math.cos(0.17) * Math.sin(0.52), Math.sin(0.17)];
+const ANG = EYE_DIRS.map(([i, az, el]) => [i, Math.acos(Math.min(1, Math.cos(el) * Math.cos(az) * LC[0] + Math.cos(el) * Math.sin(az) * LC[1] + Math.sin(el) * LC[2])) * 180 / Math.PI]);
+const VPN = []; for (let i = 0; i < D.N; i++) if (D.meta.superclasses[D.sc[i]] === 'visual_projection') VPN.push(i);
+const COLDIRS = ['L', 'R'].map(sd => FVMAP.eyes[sd].dirs);
+function makeEyes() { let base = (BRAIN_END + 65535) & ~65535; const e0 = new FlyVis(INST, MEM, base, FVM); const e1 = new FlyVis(INST, MEM, (e0.end + 4095) & ~4095, { ...FVM, shared: e0.sharedParts, bias: e0.bias });
+  const grey = new Float32Array(721).fill(0.5); for (const e of [e0, e1]) { e.setInput(grey); for (let k = 0; k < 150; k++) e.step(); } return [e0, e1, e0.v.slice(0)]; }
+const FVPAIRS = ['L', 'R'].map(sd => ({ n: Int32Array.from(FVMAP.eyes[sd].pairs, p => p[0]), node: Int32Array.from(FVMAP.eyes[sd].pairs, p => p[1]) }));
+function driveFromEyes(net, eyes, vRest, gain = 250) { for (let s = 0; s < 2; s++) { const v = eyes[s].v, P = FVPAIRS[s]; for (let k = 0; k < P.n.length; k++) { const a = v[P.node[k]] - vRest[P.node[k]]; net.setDriveOne(P.n[k], a > 0.02 ? Math.min(200, gain * a) : 0); } } }
+// visual stimuli on the flyvis columns: loom = dark disc expanding at (az 40, el 10) on the left eye; flow = front-to-back grating on both eyes
+function lumLoom(eye, t) { const c = [Math.cos(0.17) * Math.cos(0.7), Math.cos(0.17) * Math.sin(0.7), Math.sin(0.17)]; const rad = (5 + 70 * Math.max(0, Math.min(1, t / 0.4)) ** 2) * Math.PI / 180;
+  return Float32Array.from(COLDIRS[eye], d => Math.acos(Math.min(1, d[0] * c[0] + d[1] * c[1] + d[2] * c[2])) < rad ? 0.05 : 0.5); }
+function lumFlow(eye, t) { return Float32Array.from(COLDIRS[eye], d => { const th = Math.atan2(Math.abs(d[1]), d[0]) * 180 / Math.PI; return 0.5 + 0.35 * Math.sin(2 * Math.PI * (th - 60 * t) / 30); }); }
 const legGroups = D.bodymap.muscles.filter(m => /T[123]/.test(m.name) && !/ltm/.test(m.name));
 const mean = a => a.length ? a.reduce((x, y) => x + y, 0) / a.length : 0;
 function sim(cfg, drives, ms, off = 0, bins = null) {
@@ -53,6 +73,19 @@ export function evaluate(cfg) {
   const ka = new Set(KC.filter(i => a.net.spikeCount[i] > 1)), kb = new Set(KC.filter(i => b.net.spikeCount[i] > 1)); let inter = 0; for (const x of ka) if (kb.has(x)) inter++;
   o.kcFrac = ka.size / KC.length; o.kcJaccard = inter / Math.max(1, ka.size + kb.size - inter);
   o.dm1PN = rate(a.net, DM1PN, 400); o.pnFrac = PN.filter(i => a.net.spikeCount[i] > 1).length / PN.length;
+  for (const [label, stim] of [['loom', lumLoom], ['flow', lumFlow]]) { const net = makeBrain(cfg); net.setDrive(ORN_ALL, 6); const [e0, e1, vRest] = makeEyes(); const eyes = [e0, e1];
+    const prev = new Uint32Array(D.N); const TK = pop => pop.reduce((a, [i, w]) => a + w * net.spikeCount[i], 0);
+    for (let s = 0; s < 1200; s++) {                        // 200 ms grey, then 400 ms stimulus
+      if (s % 40 === 0) { const t = (s - 400) / 2000; for (let e = 0; e < 2; e++) { eyes[e].setInput(t < 0 ? new Float32Array(721).fill(0.5) : stim(e, t)); eyes[e].step(); } driveFromEyes(net, eyes, vRest); }
+      if (s === 400) prev.set(net.spikeCount); net.step(); }
+    const gf = GF.reduce((a, i) => a + net.spikeCount[i] - prev[i], 0), to = ['DNp02', 'DNp04'].flatMap(t => D.byType(t)).reduce((a, i) => a + net.spikeCount[i] - prev[i], 0) / 4 / 0.4;
+    o[label + 'GF'] = gf; o[label + 'TO'] = to; }
+  { const net = makeBrain(cfg); net.setDrive(ORN_ALL, 6); net.setDrive(PHOTO, 40);
+    const prevGF = new Uint32Array(D.N); let vpnBase = 0;
+    for (let s = 1; s <= 1400; s++) {       // 400 ms adapted static scene, then 300 ms loom
+      if (s > 800) { const rad = 5 + 65 * (s - 800) / 600; for (const [i, a] of ANG) if (a < rad) net.setDriveOne(i, 0); }
+      net.step(); if (s === 800) { vpnBase = VPN.filter(i => net.spikeCount[i] > 0).length; prevGF.set(net.spikeCount); } }
+    o.loomGF = GF.reduce((a, i) => a + net.spikeCount[i] - prevGF[i], 0) / GF.length / 0.3; o.vpnBase = vpnBase; o.staticGF = GF.reduce((a, i) => a + prevGF[i], 0) / GF.length / 0.4; }
   const net = makeBrain(cfg); net.setDrive(BDN2, 150); const series = legGroups.map(() => []); let prev = new Uint32Array(D.N);
   for (let s = 1; s <= 1600; s++) { net.step(); if (s % 40 === 0) { legGroups.forEach((g, k) => series[k].push(g.idx.reduce((x, i) => x + net.spikeCount[i] - prev[i], 0) / g.idx.length / 0.02)); prev = net.spikeCount.slice(); } }
   const act = series.map(mean); const on = act.map((v, k) => [v, rhythm(series[k])]).filter(([v]) => v > 3);
@@ -67,8 +100,9 @@ export function evaluate(cfg) {
     legs: clamp(o.legActive / 25), rhythm: clamp(o.legRhythm / 0.6),
     tarsalPER: clamp(o.tarsalMN9 / 30), sugarStop: o.baseFwd > 1 ? clamp((o.baseFwd - o.sugarFwd) / o.baseFwd * 2) : 0,
     noMDN: clamp(1 - o.sugarMDN / 10), quietMN9: clamp(1 - o.baseMN9 / 10),
+    loom: 0.6 * clamp(o.loomGF / 2) + 0.4 * clamp((o.loomTO - o.flowTO) / 30), noFalseAlarm: clamp(1 - o.flowGF / 2),
   };
-  const W = { sugar: 2, bitter: 1, mix: 1, kcSparse: 1, kcSpecific: 0.5, pnSpecific: 0.5, dm1PN: 1, baseline: 1.5, offset: 1, legs: 1.5, rhythm: 1, tarsalPER: 1.5, sugarStop: 1, noMDN: 0.5, quietMN9: 0.5 };
+  const W = { sugar: 2, bitter: 1, mix: 1, kcSparse: 1, kcSpecific: 0.5, pnSpecific: 0.5, dm1PN: 1, baseline: 1.5, offset: 1, legs: 1.5, rhythm: 1, tarsalPER: 1.5, sugarStop: 1, noMDN: 0.5, quietMN9: 0.5, loom: 2, noFalseAlarm: 1 };
   o.score = Object.entries(terms).reduce((s, [k, v]) => s + W[k] * v, 0) / Object.values(W).reduce((a, b) => a + b, 0);
   o.terms = terms; return o;
 }

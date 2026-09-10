@@ -1,0 +1,14 @@
+gen 0 best 0.715 gen-best 0.715 (33s) mu wSyn=0.526 sizeAlpha=0.58 kcThreshold=8.195 inhGain=0.633 eInh=-73.497 minSyn=5 adaptInc=0.261 tRef=3.063
+   terms {"sugar":0.58,"bitter":1,"mix":1,"kcSparse":0.85,"kcSpecific":0,"pnSpecific":0,"dm1PN":1,"baseline":0.68,"offset":1,"legs":1,"rhythm":0.43,"tarsalPER":0.75,"sugarStop":1,"noMDN":0,"quietMN9":0}
+gen 1 best 0.715 gen-best 0.683 (37s) mu wSyn=0.475 sizeAlpha=0.495 kcThreshold=8.255 inhGain=0.623 eInh=-71.639 minSyn=5 adaptInc=0.209 tRef=3.001
+   terms {"sugar":0.44,"bitter":1,"mix":1,"kcSparse":0.86,"kcSpecific":0,"pnSpecific":0,"dm1PN":1,"baseline":0.69,"offset":1,"legs":1,"rhythm":0.42,"tarsalPER":0.58,"sugarStop":1,"noMDN":0,"quietMN9":0}
+gen 2 best 0.715 gen-best 0.715 (37s) mu wSyn=0.507 sizeAlpha=0.57 kcThreshold=7.911 inhGain=0.639 eInh=-70.844 minSyn=5 adaptInc=0.131 tRef=3.083
+   terms {"sugar":0.64,"bitter":1,"mix":1,"kcSparse":0.95,"kcSpecific":0,"pnSpecific":0,"dm1PN":1,"baseline":0.58,"offset":1,"legs":1,"rhythm":0.34,"tarsalPER":0.88,"sugarStop":0.64,"noMDN":0.38,"quietMN9":0}
+gen 3 best 0.715 gen-best 0.713 (33s) mu wSyn=0.47 sizeAlpha=0.532 kcThreshold=8.197 inhGain=0.612 eInh=-72.105 minSyn=5 adaptInc=0.12 tRef=3.212
+   terms {"sugar":0.86,"bitter":1,"mix":1,"kcSparse":0.95,"kcSpecific":0,"pnSpecific":0,"dm1PN":1,"baseline":0.41,"offset":1,"legs":1,"rhythm":0.44,"tarsalPER":0.33,"sugarStop":0.7,"noMDN":1,"quietMN9":0.25}
+gen 4 best 0.749 gen-best 0.749 (29s) mu wSyn=0.462 sizeAlpha=0.529 kcThreshold=7.151 inhGain=0.627 eInh=-71.154 minSyn=5 adaptInc=0.123 tRef=3.226
+   terms {"sugar":0.76,"bitter":1,"mix":1,"kcSparse":0.95,"kcSpecific":0,"pnSpecific":0,"dm1PN":1,"baseline":0.6,"offset":1,"legs":1,"rhythm":0.42,"tarsalPER":0.67,"sugarStop":0.96,"noMDN":0.75,"quietMN9":0}
+gen 5 best 0.749 gen-best 0.727 (27s) mu wSyn=0.451 sizeAlpha=0.519 kcThreshold=7.128 inhGain=0.645 eInh=-71.377 minSyn=5 adaptInc=0.103 tRef=3.134
+   terms {"sugar":0.68,"bitter":1,"mix":1,"kcSparse":0.96,"kcSpecific":0,"pnSpecific":0,"dm1PN":1,"baseline":0.6,"offset":1,"legs":1,"rhythm":0.42,"tarsalPER":0.54,"sugarStop":1,"noMDN":0.63,"quietMN9":0}
+gen 6 best 0.749 gen-best 0.732 (30s) mu wSyn=0.44 sizeAlpha=0.516 kcThreshold=6.924 inhGain=0.646 eInh=-72.295 minSyn=5 adaptInc=0.081 tRef=3.127
+   terms {"sugar":0.76,"bitter":1,"mix":1,"kcSparse":0.82,"kcSpecific":0,"pnSpecific":0,"dm1PN":1,"baseline":0.63,"offset":1,"legs":1,"rhythm":0.37,"tarsalPER":0.63,"sugarStop":1,"noMDN":0.5,"quietMN9":0}

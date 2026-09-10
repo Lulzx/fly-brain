@@ -13,7 +13,12 @@ export class FlyBrain {
       else if (m.type === 'state' && this._stateCb) { this._stateCb(m); this._stateCb = null; }
     };
     // Share graph arrays via structured clone (copy). For many flies, move to SharedArrayBuffer.
-    this.worker.postMessage({ type: 'init', N: data.N, indptr: data.indptr, indices: data.indices, weights: data.weights, nt: data.nt });
+    Promise.all([fetch('/data/neuron_size.bin').then(r => r.arrayBuffer()), fetch('/data/ntsign.bin').then(r => r.arrayBuffer()),
+      fetch('/data/brain_params.json').then(r => r.json()), fetch('/lif.wasm').then(r => r.arrayBuffer()).then(b => WebAssembly.compile(b))]).then(([sz, sg, params, wasm]) => {
+      this.params = params;
+      this.worker.postMessage({ type: 'init', N: data.N, E: data.E, meta: data.meta, indptr: data.indptr, indices: data.indices, weights: data.weights, nt: data.nt,
+        superclass: data.superclass, cls: data.cls, side: data.side, size: new Float32Array(sz), sign: new Float32Array(sg), params, wasm });
+    });
   }
   onFrame(fn) { this.listeners.add(fn); return () => this.listeners.delete(fn); }
   setParams(p) { this.worker.postMessage({ type: 'params', params: p }); }

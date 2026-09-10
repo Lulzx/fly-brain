@@ -12,11 +12,14 @@ export const DN_ROLES = {
   turn: { DNa02: 1.0, DNa01: 0.6, DNp09: 0.5 },   // ipsilateral steering
   groom: { DNg07: 1, DNg08: 1, DNg12: 1 },         // head grooming with the front legs
   escape: { DNp01: 1 },                            // giant fibre
+  takeoff: { DNp02: 1, DNp04: 1 },                 // looming-sensitive non-GF escape DNs (von Reyn 2014, Namiki 2018)
 };
-export const READOUT = { fwdThreshold: 2.5, fwdScale: 10, turnScale: 12, groomScale: 40, turnTau: 150, muscleHalf: 17 };
+export const READOUT = { takeoffThreshold: 50, fwdThreshold: 2.5, fwdScale: 10, turnScale: 12, groomScale: 40, turnTau: 150, muscleHalf: 17 };
 // fwd: walking needs weighted DN drive above threshold (Hz); command saturates fwdScale Hz above it.
 // muscles: activation = 1 - exp(-rate * ln2 / muscleHalf), i.e. half-maximal at ~17 Hz (insect force-frequency curves saturate early)
 const LEGS = ['T1', 'T2', 'T3'], SIDES = ['left', 'right'];
+// jump program selected by scripts/jump_test2.py: lands upright from any walking phase, >=1.1 mm hop
+const JUMP = { push: 20, f2: 1.0, t2: 1.0, f3: 0.4, f1: 0.5, fly: 80 };
 const PHASE = { T1_left: 0, T2_right: 0, T3_left: 0, T1_right: Math.PI, T2_left: Math.PI, T3_right: Math.PI };
 
 export class Motor {
@@ -26,11 +29,11 @@ export class Motor {
     this.range = {}; const cr = model.actuator_ctrlrange; for (let i = 0; i < model.nu; i++) this.range[model.actuator(i).name] = [cr[2 * i], cr[2 * i + 1]];
     const byType = (t, s) => { const o = []; for (let i = 0; i < typeOf.length; i++) if (typeOf[i] === t && (s === undefined || sideOf[i] === s)) o.push(i); return o; };
     const pop = (roles, s) => Object.entries(roles).flatMap(([t, w]) => byType(t, s).map(i => [i, w]));
-    this.dn = { forward: pop(DN_ROLES.forward), backward: pop(DN_ROLES.backward), escape: pop(DN_ROLES.escape).map(x => x[0]), groom: pop(DN_ROLES.groom),
+    this.dn = { forward: pop(DN_ROLES.forward), backward: pop(DN_ROLES.backward), escape: pop(DN_ROLES.escape).map(x => x[0]), takeoff: pop(DN_ROLES.takeoff), groom: pop(DN_ROLES.groom),
       turnL: pop(DN_ROLES.turn, 1), turnR: pop(DN_ROLES.turn, 2) };
     this.muscles = bodymap.muscles; this.ttmn = bodymap.jump;
     this.rate = new Float32Array(typeOf.length);    // low-pass filtered firing rate per neuron (Hz), only for used neurons
-    this.used = new Set([...this.dn.forward.map(x => x[0]), ...this.dn.backward.map(x => x[0]), ...this.dn.escape, ...this.dn.groom.map(x => x[0]), ...this.dn.turnL.map(x => x[0]), ...this.dn.turnR.map(x => x[0]), ...bodymap.jump, ...bodymap.feeding]);
+    this.used = new Set([...this.dn.forward.map(x => x[0]), ...this.dn.backward.map(x => x[0]), ...this.dn.escape, ...this.dn.takeoff.map(x => x[0]), ...this.dn.groom.map(x => x[0]), ...this.dn.turnL.map(x => x[0]), ...this.dn.turnR.map(x => x[0]), ...bodymap.jump, ...bodymap.feeding]);
     for (const m of this.muscles) for (const i of m.idx) this.used.add(i);
     this.used = Int32Array.from(this.used);
     this.lastCount = new Uint32Array(typeOf.length);
@@ -40,6 +43,7 @@ export class Motor {
   /** update filtered rates from brain spike counts; dtMs since last call */
   readBrain(spikeCount, dtMs, tau = 40) {
     const k = dtMs / tau, inv = 1000 / dtMs;
+    this.gfSpike = false; for (const i of this.dn.escape) if (spikeCount[i] !== this.lastCount[i]) this.gfSpike = true;
     for (const i of this.used) { const n = spikeCount[i] - this.lastCount[i]; this.lastCount[i] = spikeCount[i]; this.rate[i] += k * (n * inv - this.rate[i]); }
   }
   mean(ix) { let s = 0; for (const i of ix) s += this.rate[i]; return ix.length ? s / ix.length : 0; }
@@ -62,7 +66,7 @@ export class Motor {
     const net = fwd - 2 * back;
     const v = grooming ? 0 : (net > R0.fwdThreshold ? Math.min(1, (net - R0.fwdThreshold) / R0.fwdScale) : back > R0.fwdThreshold ? -Math.min(1, (back - R0.fwdThreshold) / R0.fwdScale) : 0);
     this.turnF = (this.turnF || 0) + dtMs / R0.turnTau * (turn - (this.turnF || 0));
-    this.cmd = { v, turn: Math.max(-0.6, Math.min(0.6, this.turnF / R0.turnScale)), drive: fwd, back, groom, grooming, escape: this.mean(this.dn.escape) };
+    this.cmd = { v, turn: Math.max(-0.6, Math.min(0.6, this.turnF / R0.turnScale)), drive: fwd, back, groom, grooming, escape: this.mean(this.dn.escape), takeoff: this.wmean(this.dn.takeoff) };
     if (this.mode === 'connectome') {
       for (const leg of LEGS) for (const sd of SIDES) {
         for (const j of ['coxa', 'coxa_abduct', 'coxa_twist', 'femur', 'femur_twist', 'tibia', 'tarsus', 'tarsus2']) set(`${j}_${leg}_${sd}`, muscleCtrl(`${j}_${leg}_${sd}`));
@@ -93,11 +97,24 @@ export class Motor {
     }
     // --- giant fibre escape: GF spikes -> TTM (electrical synapse) -> middle legs extend explosively ---
     const gf = this.cmd.escape, ttm = this.mean(this.ttmn);
-    if (gf > 20 && this.jumpT < 0) this.jumpT = tMs;   // escape jumps are launched by giant-fibre spikes
+    // escape: giant-fibre spikes (fast jump) or strong activity of looming-sensitive takeoff DNs (slower escape)
+    // a single GF spike drives TTMn 1:1 through the GF-TTMn electrical synapse -> jump
+    if ((this.gfSpike || this.cmd.takeoff > READOUT.takeoffThreshold) && this.jumpT < 0 && tMs > 200) this.jumpT = tMs;
     if (this.jumpT >= 0) {
-      const dtj = tMs - this.jumpT;
-      if (dtj < 25) for (const sd of SIDES) { set(`femur_T2_${sd}`, R[`femur_T2_${sd}`][1]); set(`tibia_T2_${sd}`, R[`tibia_T2_${sd}`][1]); set(`adhere_claw_T2_${sd}`, 0); set(`adhere_claw_T1_${sd}`, 0); set(`adhere_claw_T3_${sd}`, 0); }
-      if (dtj > 400) this.jumpT = -1;
+      // jump program (tested in scripts/jump_test.py): TTM drives both middle legs to full extension for 20 ms,
+      // hind femora half-extended, all tarsi released; ~2.5 mm hop that lands upright
+      const dtj = tMs - this.jumpT, J = JUMP;
+      const all = ['coxa', 'coxa_abduct', 'coxa_twist', 'femur', 'femur_twist', 'tibia', 'tarsus', 'tarsus2'];
+      if (dtj < J.push + J.fly + 190) for (const leg of LEGS) for (const sd of SIDES) {
+        for (const j of all) set(`${j}_${leg}_${sd}`, 0);                      // symmetric posture
+        if (dtj < J.push) {                                                     // TTM push
+          if (leg === 'T2') { set(`femur_T2_${sd}`, J.f2 * R[`femur_T2_${sd}`][1]); set(`tibia_T2_${sd}`, J.t2 * R[`tibia_T2_${sd}`][1]); }
+          if (leg === 'T3') set(`femur_T3_${sd}`, J.f3 * R[`femur_T3_${sd}`][1]);
+          if (leg === 'T1') set(`femur_T1_${sd}`, J.f1 * R[`femur_T1_${sd}`][1]);
+        }
+        set(`adhere_claw_${leg}_${sd}`, dtj < J.push + J.fly ? 0 : 0.8);
+      }
+      if (dtj > 1000) this.jumpT = -1;   // refractory period
     }
     return this.cmd;
   }

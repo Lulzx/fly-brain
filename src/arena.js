@@ -3,13 +3,14 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { loadConnectome } from './data.js';
 import { DEFAULT_ENV } from './sim/world.js';
 import { allocBrainMemory, MAX_FLIES } from './brainsetup.js';
+import { parseFlyVis } from './flyvis.js';
 
 const $ = s => document.querySelector(s);
 const status = s => { $('#status').textContent = s; };
 const FLY_COLORS = ['#ffb347', '#5ac8fa', '#a3e635', '#f472b6', '#c084fc', '#facc15', '#fb7185', '#2dd4bf'];
 const env = structuredClone(DEFAULT_ENV);
 const flies = [];          // {id, worker, group, bodies[], last, color, ready}
-let shared, meta, bodymap, flyXML, gait, visual, running = false, selected = 0, tool = 'none', speed = 1, brainMem, wasmModule, brainParams;
+let flyvisMap, shared, meta, bodymap, flyXML, gait, visual, running = false, selected = 0, tool = 'none', speed = 1, brainMem, wasmModule, brainParams;
 
 function toShared(ta) { const sab = new SharedArrayBuffer(ta.byteLength); const out = new ta.constructor(sab); out.set(ta); return out; }
 
@@ -18,17 +19,21 @@ async function main() {
   const data = await loadConnectome(status);
   meta = data.meta;
   status('loading body model');
-  const [bm, xml, g, vj, vb, sz, sg, bp, wasmBytes] = await Promise.all([
+  const [bm, xml, g, vj, vb, sz, sg, bp, wasmBytes, fvb, fvj, fvi, fvm] = await Promise.all([
     fetch('/data/bodymap.json').then(r => r.json()), fetch('/body/fly_physics.xml').then(r => r.text()), fetch('/body/gait.json').then(r => r.json()),
     fetch('/body/fly_visual.json').then(r => r.json()), fetch('/body/fly_visual.bin').then(r => r.arrayBuffer()),
     fetch('/data/neuron_size.bin').then(r => r.arrayBuffer()), fetch('/data/ntsign.bin').then(r => r.arrayBuffer()),
-    fetch('/data/brain_params.json').then(r => r.ok ? r.json() : {}).catch(() => ({})), fetch('/lif.wasm').then(r => r.arrayBuffer())]);
+    fetch('/data/brain_params.json').then(r => r.ok ? r.json() : {}).catch(() => ({})), fetch('/lif.wasm').then(r => r.arrayBuffer()),
+    fetch('/vision/flyvis.bin').then(r => r.arrayBuffer()), fetch('/vision/flyvis.json').then(r => r.json()), fetch('/vision/flyvis_inputs.json').then(r => r.json()), fetch('/vision/flyvis_map.json').then(r => r.json())]);
+  const vision = { model: parseFlyVis(fvb, fvj, fvi), map: fvm };
   bodymap = bm; flyXML = xml; gait = g; visual = { json: vj, bin: vb };
   shared = { N: data.N, E: data.E, indptr: toShared(data.indptr), indices: toShared(data.indices), weights: toShared(data.weights), nt: toShared(data.nt),
     side: toShared(data.side), superclass: toShared(data.superclass), cls: toShared(data.cls), size: toShared(new Float32Array(sz)), sign: toShared(new Float32Array(sg)) };
   brainParams = bp; wasmModule = await WebAssembly.compile(wasmBytes);
   status('writing connectome into shared memory');
-  brainMem = allocBrainMemory({ ...data, superclass: data.superclass }, shared.size, shared.sign, brainParams, MAX_FLIES);
+  status('writing connectome and optic-lobe model into shared memory');
+  brainMem = allocBrainMemory({ ...data, superclass: data.superclass }, shared.size, shared.sign, brainParams, MAX_FLIES, vision);
+  flyvisMap = fvm;
   window.__data = data;
   buildScene(data);
   buildUI();
@@ -125,7 +130,7 @@ async function addFly(pos, yaw) {
   worker.onmessage = e => onWorker(f, e.data);
   if (id >= MAX_FLIES) { alert(`At most ${MAX_FLIES} flies`); return; }
   worker.postMessage({ type: 'init', id, graph: shared, meta, bodymap, flyXML, gait, env, pos, yaw, nProxies: 7, mode: $('#mode').value, brainOpts: brainParams, vision: true,
-    brainMem: { memory: brainMem.memory, graph: brainMem.graph, bases: brainMem.bases, opts: brainMem.opts }, wasmModule, slot: id });
+    brainMem: { memory: brainMem.memory, graph: brainMem.graph, bases: brainMem.bases, opts: brainMem.opts, fv: brainMem.fv }, wasmModule, slot: id, flyvisMap });
   await new Promise(res => { f.onReady = res; });
   if (running) worker.postMessage({ type: 'run' });
   worker.postMessage({ type: 'speed', speed });
@@ -154,6 +159,9 @@ function buildUI() {
   $('#mode').onchange = e => { for (const f of flies) f.worker.postMessage({ type: 'mode', mode: e.target.value }); };
   document.querySelectorAll('.tools button').forEach(b => b.onclick = () => { tool = b.dataset.tool; document.querySelectorAll('.tools button').forEach(x => x.classList.toggle('on', x === b)); });
   setInterval(() => { const f = flies.find(x => x.id === selected); if (f?.ready) f.worker.postMessage({ type: 'activity' }); }, 120);
+  $('#wind').oninput = e => { const v = +e.target.value; $('#windv').textContent = v; env.wind = [v, 0]; syncEnv(); };
+  $('#light').oninput = e => { env.light.sky = +e.target.value; scene.background = new THREE.Color().setHSL(0.6, 0.3, 0.02 + 0.05 * env.light.sky); syncEnv(); };
+  $('#threat').onclick = () => launchThreat();
   setInterval(() => { if (foodDirty) { foodDirty = false; syncEnv(); envGroup.children.forEach(m => { if (m.userData.food) m.material.opacity = 0.35 + 0.65 * Math.min(1, m.userData.food.amount / 5); }); } renderFlyList(); }, 500);
 }
 function onClick(e) {
@@ -174,18 +182,35 @@ function renderFlyList() {
   $('#nfly').textContent = flies.length;
   $('#flies').innerHTML = flies.map(f => { const s = f.last || {}; const e = s.energy ?? 0, h = s.health ?? 1;
     return `<div class="fly ${f.id === selected ? 'sel' : ''}" data-id="${f.id}"><i class="dot" style="background:${f.color}"></i>
-      <div>fly ${f.id}${s.alive === false ? ' · dead' : ''}<div class="bar"><i style="width:${e * 100}%;background:#f2c14e"></i></div><div class="bar"><i style="width:${h * 100}%;background:#4ade80"></i></div></div>
+      <div>fly ${f.id} <span style="color:var(--acc)">${s.behavior || ''}</span><div class="bar"><i style="width:${e * 100}%;background:#f2c14e"></i></div><div class="bar"><i style="width:${h * 100}%;background:#4ade80"></i></div></div>
       <span style="color:var(--dim)">${s.t ? (s.t / 1000).toFixed(1) + 's' : '…'}</span></div>`; }).join('');
   $('#flies').querySelectorAll('.fly').forEach(el => el.onclick = () => { selected = +el.dataset.id; renderFlyList(); });
   const f = flies.find(x => x.id === selected); $('#selsec').hidden = !f;
   if (f?.last) { const s = f.last, c = s.cmd || {};
-    $('#sel').innerHTML = `<div class="kv"><span>energy</span><span>${(s.energy * 100).toFixed(0)}%</span><span>health</span><span>${(s.health * 100).toFixed(0)}%</span>
+    $('#sel').innerHTML = `<div class="kv"><span>behaviour</span><span style="color:var(--acc)">${s.behavior || ''}</span><span>energy</span><span>${(s.energy * 100).toFixed(0)}%</span><span>health</span><span>${(s.health * 100).toFixed(0)}%</span>
       <span>food eaten</span><span>${(s.eaten * 1000).toFixed(1)} mg·eq</span><span>walk drive (BDN2/oDN1/P9)</span><span>${(c.drive || 0).toFixed(0)} Hz</span>
       <span>backward (MDN)</span><span>${(c.back || 0).toFixed(0)} Hz</span><span>steering (DNa01/02)</span><span>${(c.turn || 0).toFixed(2)}</span>
       <span>giant fibre</span><span>${(c.escape || 0).toFixed(0)} Hz</span><span>MN9 (proboscis)</span><span>${(s.mn9 || 0).toFixed(0)} Hz</span>
       <span>pharyngeal pump</span><span>${((s.feeding || 0) * 100).toFixed(0)}%</span><span>sensory neurons driven</span><span>${s.nSensory}</span></div>`; }
 }
 
+// ---------------- looming threat: a dark sphere swoops toward the selected fly's head from the front-side ----------------
+let threatMesh = null, threatAnim = null;
+function launchThreat() {
+  const f = flies.find(x => x.id === selected); if (!f?.last) return;
+  const p = f.last.pos, yaw = f.last.yaw, a = yaw + 0.6;
+  const start = [p[0] + 3.0 * Math.cos(a), p[1] + 3.0 * Math.sin(a), 1.6], end = [p[0] + 0.25 * Math.cos(a), p[1] + 0.25 * Math.sin(a), 0.45];
+  if (!threatMesh) { threatMesh = new THREE.Mesh(new THREE.SphereGeometry(0.35, 32, 16), new THREE.MeshStandardMaterial({ color: '#0d0d10', roughness: 0.6 })); threatMesh.castShadow = true; scene.add(threatMesh); }
+  threatAnim = { t0: performance.now(), start, end, dur: 700 / speed };
+}
+function updateThreat() {
+  if (!threatAnim) return;
+  const u = Math.min(1, (performance.now() - threatAnim.t0) / threatAnim.dur), k = u * u;   // accelerating approach
+  const pos = threatAnim.start.map((s, i) => s + (threatAnim.end[i] - s) * k);
+  if (u >= 1 && performance.now() - threatAnim.t0 > threatAnim.dur + 600) { threatAnim = null; env.threat = null; threatMesh.visible = false; syncEnv(); return; }
+  threatMesh.visible = true; threatMesh.position.set(...pos); env.threat = { x: pos[0], y: pos[1], z: pos[2] };
+  for (const fl of flies) if (fl.ready) fl.worker.postMessage({ type: 'env', env: { threat: env.threat } });
+}
 // ---------------- render loop ----------------
 let lastFrame = performance.now(), fpsN = 0, fpsT = 0, lastSim = 0, lastSimReal = performance.now();
 const q = new THREE.Quaternion();
@@ -201,7 +226,7 @@ function animate() {
   const sf = flies.find(x => x.id === selected);
   if (sf?.last && $('#follow').checked) { const p = sf.last.pos; const tgt = new THREE.Vector3(p[0], p[1], 0.08); const d = tgt.clone().sub(controls.target); controls.target.add(d.multiplyScalar(0.1)); camera.position.add(d); }
   if (sf?.last) { const t = sf.last.t / 1000; $('#simt').textContent = t.toFixed(2); if (now - lastSimReal > 1000) { $('#rt').textContent = ((t - lastSim) / ((now - lastSimReal) / 1000)).toFixed(2); lastSim = t; lastSimReal = now; } }
-  controls.update(); renderer.render(scene, camera);
+  updateThreat(); controls.update(); renderer.render(scene, camera);
   // brain inset
   const col = brainPts.geometry.attributes.color; const a = col.array; const base = new THREE.Color(sf?.color || '#888');
   for (let i = 0; i < brainAct.length; i++) { const v = Math.min(1, brainAct[i] * 1.6); a[i * 3] = 0.1 + v * (base.r - 0.1); a[i * 3 + 1] = 0.11 + v * (base.g - 0.11); a[i * 3 + 2] = 0.14 + v * (base.b - 0.14); }

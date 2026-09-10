@@ -36,7 +36,7 @@ async function main() {
   buildScene();
   buildUI();
   $('#loading').remove();
-  $('#summary').textContent = `${N.toLocaleString()} traced neurons · ${data.E.toLocaleString()} connections (≥${data.meta.minWeight} syn)`;
+  $('#summary').textContent = `${N.toLocaleString()} traced neurons · ${data.E.toLocaleString()} connections (model uses ≥5-synapse connections)`;
   brain.onFrame(onFrame);
   animate();
 }
@@ -262,10 +262,7 @@ function buildUI() {
   $('#reset').onclick = () => brain.reset();
   $('#speed').oninput = (e) => { brain.setParams({ speed: +e.target.value }); $('#speedv').textContent = `${(+e.target.value).toFixed(2)}×`; };
   brain.setParams({ speed: 0.5 });
-  $('#wSyn').onchange = (e) => brain.setParams({ wSyn: +e.target.value });
-  $('#noise').onchange = (e) => brain.setParams({ noise: +e.target.value });
-  $('#adaptInc').onchange = (e) => brain.setParams({ adaptInc: +e.target.value });
-  $('#depU').onchange = (e) => brain.setParams({ depU: +e.target.value });
+  $('#bgRate').onchange = (e) => brain.setParams({ bgRate: +e.target.value, bgAmp: 1 });
   $('#opacity').oninput = (e) => uniforms.opacity.value = +e.target.value;
   $('#colorMode').onchange = (e) => { colorMode = e.target.value; hidden.clear(); applyColors(); };
   $('#showMode').onchange = (e) => showMode = e.target.value;

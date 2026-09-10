@@ -46,6 +46,16 @@ Global parameters were fitted by a cross-entropy search (scripts/calib_search.mj
 behaviours: sugar GRNs → MN9 (Shiu et al.), bitter suppression of MN9, KC sparseness and odour specificity,
 DM1 PN responses, bounded baseline activity, return to baseline after stimulus, BDN2 → leg MN activity.
 
+## Vision (src/sim/vision.js, src/flyvis.js, scripts/prep_flyvis_map.py)
+- flyvis (Lappalainen et al. 2024, MIT): trained connectome-constrained model of 65 optic-lobe cell types on
+  721 columns per eye, exported (45,669 nodes, 1.5 M synapses) and run in WebAssembly; matches PyTorch to 2e-6.
+- Lattice orientation fixed by the trained direction selectivity (T4a front-to-back, T4b back-to-front, T4c up).
+- Male-CNS optic-lobe neurons get retinotopic directions by propagating photoreceptor directions through the
+  connectome (correlation with the dataset's own hex column coordinates |r| up to 0.87), then each is matched to
+  the flyvis node of its type in its column (~62k neurons). These neurons are driven by flyvis (rate ∝ deviation
+  from resting activity) and masked from recurrent input; everything downstream (LC/LPLC, LPTCs, central brain,
+  DNs) is the spiking connectome. Result: looming → LC4/LPLC2 → DNp02/DNp04 (+GF) → escape.
+
 ## Motor output (src/sim/motor.js)
 - 'descending' (default): the brain's real DNs set locomotion: BDN2/oDN1/P9 forward, MDN backward,
   DNa01/DNa02/P9/DNg13 steering (ipsilateral), GF escape. A tripod stepping pattern generator (CMA-ES
@@ -53,6 +63,13 @@ DM1 PN responses, bounded baseline activity, return to baseline after stimulus, 
   This is a stand-in for the VNC's own pattern generator; decisions remain the brain's.
 - 'connectome': every leg muscle is driven by its motor neurons through the full VNC wiring.
 - Proboscis (MN9, MN11/12, MN6-8, retractors), antennae and the jump are always driven by their MNs.
+- DN readout (Cande et al. 2018 phenotypes + Bidaye/Sapkal/Rayshubskiy/Namiki): forward population
+  {BDN2, oDN1, P9, DNa05, DNa07, DNp26, DNg25, DNa01/02}, backward {MDN}, steering ipsilateral {DNa02, DNa01, P9},
+  head grooming {DNg07, DNg08, DNg12}, escape {GF spike → TTMn, or looming takeoff DNs DNp02/DNp04}.
+- Stepping pattern generator: tripod (confirmed by FlySuite real-fly data: L1/R2/L3 vs R1/L2/R3, 9.5 Hz),
+  optimised for straight walking, ±turning, slow and backward walking; jump program chosen to land upright
+  from any stride phase (scripts/jump_test2.py).
+- Muscle activation from MN rate saturates (half-maximal ~17 Hz).
 
 ## Physiology
 Energy (hunger) decays; ingestion when the extended labellum touches food and pharyngeal pump MNs fire.
@@ -67,4 +84,6 @@ Hunger raises sugar-GRN and lowers bitter-GRN gain (Inagaki 2012, LeDue 2016). H
   rhythms in a front-leg subnetwork for ~3% of DNs); hence the descending-command mode.
 - Proboscis servos in flybody are weak; the labellum counts as touching food within 0.65 mm when extended.
 - The brain has no intrinsic drives (circadian, hunger peptides); spontaneous behaviour comes only from
-  background synaptic noise and sensory input.
+  sensory input (vision drives the forward-walking DNs through their visual inputs).
+- flyvis covers 65 columnar optic-lobe types; its column lattice is a regular hexagon, so ~410 of 721 model
+  columns are used by the real (non-hexagonal) male-CNS eye map. No flight yet (wing-beat generator exists in FlySuite).

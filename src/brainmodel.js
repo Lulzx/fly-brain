@@ -3,7 +3,7 @@
 // connections >= 5 synapses (Pugliese et al. 2025), sensory neurons driven only by their receptors.
 import { LIFNetwork } from './lif.js';
 import { regionSizeRef } from './ratenet.js';
-export const BRAIN_DEFAULTS = { kcThreshold: 0, wSyn: 0.3, sizeAlpha: 0.5, minSyn: 5, adaptInc: 0, depU: 0, maxSizeScale: 20, boostCap: 1 };
+export const BRAIN_DEFAULTS = { laminaBias: 9, kcThreshold: 0, wSyn: 0.3, sizeAlpha: 0.5, minSyn: 5, adaptInc: 0, depU: 0, maxSizeScale: 20, boostCap: 1 };
 export function brainScales(data, size, opts = {}) {
   const o = { ...BRAIN_DEFAULTS, ...opts };
   const { ref, region } = regionSizeRef(data.meta.superclasses, data.superclass ?? data.sc, size);
@@ -20,7 +20,11 @@ export function brainScales(data, size, opts = {}) {
 //  Kenyon cells need coincident input from several PNs (high spike threshold; Turner et al. 2008, Gruntman & Turner 2013).
 export function applyClassPhysiology(net, data, o) {
   const cls = data.cls, classes = data.meta.classes;
-  for (let i = 0; i < data.N; i++) { if (classes[cls[i]] === 'Kenyon_Cell') net.thr[i] = o.kcThreshold; }
+  //  Lamina monopolar cells (L1-L5) are graded neurons with a depolarised resting potential; histaminergic
+  //  photoreceptor input hyperpolarises them (light) and releases them (dark), modelled as a tonic bias.
+  const types = data.meta.types; const lam = [];
+  for (let i = 0; i < data.N; i++) { if (classes[cls[i]] === 'Kenyon_Cell') net.thr[i] = o.kcThreshold; if (/^L[1-5]$/.test(types[i])) lam.push(i); }
+  net.setBias(lam, o.laminaBias);
   return net;
 }
 export function createBrain(data, size, opts = {}, preSign = null) {

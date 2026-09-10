@@ -71,3 +71,16 @@ int32_t lif_step(Brain *b) {
   b->head = (b->head + 1) % b->nslots;
   return nf;
 }
+
+// ---------------------------------------------------------------------------------------------
+// flyvis optic-lobe network (Lappalainen et al. 2024): passive point neurons, graded synapses.
+//   v += dt/max(tau,dt) * (-v + bias + sum_j w_ij relu(v_j) + x)
+// Graph stored by source (CSR): indptr[N+1], target[E], weight[E]. `acc` is scratch (N floats).
+__attribute__((export_name("fv_step")))
+void fv_step(int32_t N, const float *bias, const float *kdt /* dt/max(tau,dt) */, const int32_t *indptr, const int32_t *target,
+             const float *weight, float *v, float *acc, const float *x) {
+  for (int32_t i = 0; i < N; i++) acc[i] = 0.f;
+  for (int32_t j = 0; j < N; j++) { float r = v[j]; if (r <= 0.f) continue;
+    for (int32_t k = indptr[j], e = indptr[j + 1]; k < e; k++) acc[target[k]] += weight[k] * r; }
+  for (int32_t i = 0; i < N; i++) v[i] += kdt[i] * (-v[i] + bias[i] + acc[i] + x[i]);
+}

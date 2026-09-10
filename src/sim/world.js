@@ -12,6 +12,7 @@ export const DEFAULT_ENV = {
   hazards: [{ x: -1.4, y: 0.6, r: 0.35, heat: 1.0 }],   // hot floor: damages the fly
   light: { sky: 1.0, sun: [0.3, 0.2, 1.0] },
   wind: [0, 0],
+  threat: null,   // { x, y, z } position of the looming object (set by the host), or null
 };
 
 export function buildWorldXML(flyXML, env, { flyPos = [0, 0, 0.13], flyYaw = 0, nProxies = 0 } = {}) {
@@ -34,9 +35,13 @@ export function buildWorldXML(flyXML, env, { flyPos = [0, 0, 0.13], flyYaw = 0, 
   env.hazards.forEach((h, k) => parts.push(`<geom name="hazard${k}" type="cylinder" size="${h.r} 0.002" pos="${h.x} ${h.y} 0.002" rgba=".85 .3 .2 1" contype="0" conaffinity="0" group="0"/>`));
   // other flies: kinematic ellipsoid proxies (body + head), collide with this fly and are visible
   for (let k = 0; k < nProxies; k++) parts.push(`<body name="proxy${k}" mocap="true" pos="${50 + k} 50 -5"><geom name="proxy${k}_body" type="ellipsoid" size="0.14 0.05 0.05" pos="-0.03 0 0" rgba=".2 .15 .1 1" group="0"/><geom name="proxy${k}_head" type="sphere" size="0.045" pos="0.08 0 0.01" rgba=".5 .1 .08 1" group="0"/></body>`);
+  // a looming threat (predator / swatter): kinematic dark sphere, parked far away until launched
+  parts.push(`<body name="threat" mocap="true" pos="0 0 -20"><geom name="threat_geom" type="sphere" size="0.35" rgba=".05 .05 .06 1" contype="0" conaffinity="0" group="0"/></body>`);
   const q = [Math.cos(flyYaw / 2), 0, 0, Math.sin(flyYaw / 2)];
   let xml = flyXML.replace('<worldbody>', `<worldbody>\n${parts.join('\n')}`);
   xml = xml.replace('<body name="thorax" childclass="body">', `<body name="thorax" childclass="body" pos="${flyPos.join(' ')}" quat="${q.map(v => v.toFixed(6)).join(' ')}">`);
   xml = xml.replace(/<size [^>]*\/>/, '<size njmax="600" nconmax="200" nkey="1"/>');
+  // 0.2 ms physics step without no-slip iterations: same gait quality as flybody's 0.1 ms (tested), half the cost
+  xml = xml.replace('timestep="0.0001"', 'timestep="0.0002"').replace('noslip_iterations="3"', 'noslip_iterations="0"');
   return xml;
 }

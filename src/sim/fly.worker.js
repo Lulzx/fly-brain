@@ -1,7 +1,7 @@
 // One embodied fly per worker: its own connectome brain + MuJoCo physics world.
 import loadMujoco from '@mujoco/mujoco';
 import { FlyAgent } from './fly.js';
-import { attachBrain } from '../brainsetup.js';
+import { attachBrain, attachEyes } from '../brainsetup.js';
 
 let fly = null, running = false, speed = 1, others = [], env = null, lastReal = 0, simAhead = 0;
 const POSE_EVERY = 16; // ms of sim between pose messages (renderer interpolates)
@@ -14,7 +14,8 @@ onmessage = async (e) => {
     const data = { N: g.N, E: g.E, meta: m.meta, indptr: g.indptr, indices: g.indices, weights: g.weights, nt: g.nt, side: g.side, superclass: g.superclass, cls: g.cls };
     env = m.env;
     const brain = await attachBrain(m.wasmModule, m.brainMem, m.slot, data, 101 + m.id);
-    fly = new FlyAgent({ brain, mj, flyXML: m.flyXML, env, data, size: g.size, sign: g.sign, bodymap: m.bodymap, gait: m.gait, id: m.id,
+    const flyvis = m.brainMem.fv ? { eyes: attachEyes(brain.instance, m.brainMem, m.slot), map: m.flyvisMap, gain: 250 } : null;
+    fly = new FlyAgent({ brain, flyvis, mj, flyXML: m.flyXML, env, data, size: g.size, sign: g.sign, bodymap: m.bodymap, gait: m.gait, id: m.id,
       pos: m.pos, yaw: m.yaw, nProxies: m.nProxies, mode: m.mode, brainOpts: m.brainOpts, vision: m.vision });
     postMessage({ type: 'ready', id: m.id, nbody: fly.model.nbody, bodyNames: [...Array(fly.model.nbody).keys()].map(i => fly.model.body(i).name) });
     postPose();
@@ -37,7 +38,7 @@ function postPose() {
   const p = fly.pose(); const st = fly.state();
   postMessage({ type: 'pose', id: fly.id, t: fly.t, xpos: p.xpos, xquat: p.xquat, cmd: fly.cmd, energy: fly.energy, health: fly.health, alive: fly.alive, eaten: fly.eaten,
     mn9: fly.motor.mean(fly.motor.muscles.find(x => x.name.startsWith('MN9'))?.idx || []), feeding: fly.motor.feeding(), heat: st.heat || 0, nSensory: fly.driven.length,
-    foodEaten: fly.foodEaten.splice(0, fly.foodEaten.length, ...fly.foodEaten.map(() => 0)), pos: st.pos, yaw: Math.atan2(fly.mjd.xmat[fly.bid.thorax * 9 + 3], fly.mjd.xmat[fly.bid.thorax * 9]) });
+    foodEaten: fly.foodEaten.splice(0, fly.foodEaten.length, ...fly.foodEaten.map(() => 0)), behavior: fly.behavior(st), pos: st.pos, yaw: Math.atan2(fly.mjd.xmat[fly.bid.thorax * 9 + 3], fly.mjd.xmat[fly.bid.thorax * 9]) });
 }
 function loop() {
   if (!running) return;

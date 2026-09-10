@@ -62,13 +62,20 @@ def score(x):
     s = run(x, blend=0.5, fscale=0.5); tot += -3 if s is None else 0.5 * min(s['x'], 1.5 * s['dur']) - s['stab']
     b = run(x, direction=-1.0); tot += -3 if b is None else 0.5 * min(-b['x'], 1.5 * b['dur']) - b['stab']
     return float(tot)
+XDATA = None; LAM = 0.0
+def score_reg(x):
+    s = score(x)
+    if XDATA is not None: s -= LAM * float(np.sum((np.asarray(x[:-2]) - XDATA[:-2]) ** 2))   # stay near real-fly kinematics
+    return s
 if __name__ == '__main__':
     iters = int(sys.argv[1]) if len(sys.argv) > 1 else 60
-    x0 = np.array(json.load(open('body/gait/best.json'))['x'])
+    src = sys.argv[2] if len(sys.argv) > 2 else 'body/gait/best.json'
+    x0 = np.array(json.load(open(src))['x'])
+    if 'data_gait' in src: XDATA = x0.copy(); LAM = float(sys.argv[3]) if len(sys.argv) > 3 else 2.0
     pool = mp.Pool(mp.cpu_count(), initializer=setup)
-    print('start score', pool.apply(score, (x0,)), flush=True)
+    print('start score', pool.apply(score, (x0,)), 'regularised', pool.apply(score_reg, (x0,)), flush=True)
     es = cma.CMAEvolutionStrategy(x0, 0.05, {'popsize': 24, 'seed': 5, 'verbose': -9}); best = (-1e9, None); t0 = time.time()
     for it in range(iters):
-        X = es.ask(); F = pool.map(score, X); es.tell(X, [-f for f in F]); i = int(np.argmax(F))
-        if F[i] > best[0]: best = (F[i], X[i]); json.dump({'x': list(map(float, X[i])), 'score': float(F[i]), 'freq': FREQ, 'joints': J, 'legs': LEGS}, open('body/gait/best_multi.json', 'w'))
+        X = es.ask(); F = pool.map(score_reg, X); es.tell(X, [-f for f in F]); i = int(np.argmax(F))
+        if F[i] > best[0]: best = (F[i], X[i]); json.dump({'x': list(map(float, X[i])), 'score': float(F[i]), 'freq': FREQ, 'joints': J, 'legs': LEGS}, open('body/gait/best_data.json' if XDATA is not None else 'body/gait/best_multi.json', 'w'))
         print(f'iter {it} best {best[0]:.3f} gen-best {max(F):.3f} ({time.time()-t0:.0f}s)', flush=True)
