@@ -1,0 +1,46 @@
+{
+ "s": 0.7183206996528703,
+ "cfg": {
+  "coba": true,
+  "wSyn": 0.539,
+  "sizeAlpha": 0.406,
+  "kcThreshold": 21.518,
+  "inhGain": 0.769,
+  "eInh": -70.224,
+  "minSyn": 5,
+  "adaptInc": 0.263,
+  "tRef": 3.314
+ },
+ "out": {
+  "sugarMN9": 51.25,
+  "relay": 18.750000000000004,
+  "relay2": 55,
+  "sugarPeak": 10467,
+  "afterSugar": 5969,
+  "bitterMN9": 0,
+  "mixMN9": 0,
+  "baseActive": 8934.666666666666,
+  "baseKC": 0,
+  "basePN": 455,
+  "kcFrac": 0,
+  "kcJaccard": 0,
+  "dm1PN": 246.25,
+  "pnFrac": 0.6705539358600583,
+  "legActive": 48,
+  "legRhythm": 0.237461457292388,
+  "score": 0.7183206996528703,
+  "terms": {
+   "sugar": 0.80625,
+   "bitter": 1,
+   "mix": 1,
+   "kcSparse": 0,
+   "kcSpecific": 1,
+   "pnSpecific": 0,
+   "dm1PN": 1,
+   "baseline": 0.5532666666666667,
+   "offset": 1,
+   "legs": 1,
+   "rhythm": 0.3957690954873133
+  }
+ }
+}

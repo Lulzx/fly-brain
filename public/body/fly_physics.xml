@@ -1,0 +1,812 @@
+<mujoco model="fruitfly">
+  <compiler angle="radian" autolimits="true" inertiafromgeom="false"/>
+
+  <option timestep="0.0001" gravity="0 0 -981" density="0.00128" viscosity="0.000185" cone="elliptic" noslip_iterations="3"/>
+
+  <size njmax="300" nconmax="100" nkey="1"/>
+
+  <statistic meansize="0.02"/>
+
+  <visual>
+    <global offwidth="3840" offheight="2160"/>
+    <quality shadowsize="8192" offsamples="24"/>
+    <headlight ambient="0.4 0.4 0.4" diffuse="0.8 0.8 0.8" specular="0.1 0.1 0.1"/>
+    <map stiffness="10000" stiffnessrot="50000" force="2e-05"/>
+    <scale jointwidth="0.01" framewidth="0.01"/>
+  </visual>
+
+  <default>
+    <mesh scale="0.1 0.1 0.1"/>
+    <geom friction="0.5" solref="0.0002" solimp="0.95 0.99 0.01"/>
+    <general ctrllimited="true"/>
+    <default class="body">
+      <joint solreflimit="0.001" armature="1e-06" limited="true"/>
+      <geom type="mesh" contype="0" conaffinity="0" group="1" density="0.478" material="body"/>
+      <site size="0.01 0.005 0.005" group="3"/>
+      <default class="collision">
+        <geom type="capsule" contype="1" conaffinity="1" condim="1" group="4" density="0" material="blue"/>
+        <default class="adhesion-collision">
+          <geom friction="0.6" margin="0.0005" gap="0.0005" material="pink"/>
+          <site type="capsule"/>
+        </default>
+        <default class="collision-membrane">
+          <geom group="5"/>
+        </default>
+      </default>
+      <default class="adhesion">
+        <default class="adhesion_claw">
+          <general group="3" ctrlrange="0 1" gainprm="0.985"/>
+        </default>
+        <default class="adhesion_labrum">
+          <general group="3" ctrlrange="0 1"/>
+        </default>
+      </default>
+      <default class="head">
+        <joint stiffness="0.03" damping="0.001"/>
+        <geom density="0.713"/>
+        <general forcerange="-0.1 0.1" biastype="affine" gainprm="0.1" biasprm="0 -0.1"/>
+        <default class="labrum">
+          <general forcerange="-0.01 0.01" gainprm="0.01" biasprm="0 -0.01"/>
+        </default>
+      </default>
+      <default class="antenna">
+        <joint damping="0.0003"/>
+        <general forcerange="-0.01 0.01" biastype="affine" gainprm="0.01" biasprm="0 -0.01"/>
+        <default class="antenna_extend">
+          <joint range="-0.2 0.5" axis="1 0 0"/>
+        </default>
+        <default class="antenna_twist">
+          <joint range="-0.1 0.09" axis="0 1 0"/>
+        </default>
+        <default class="antenna_abduct">
+          <joint range="-0.4 0.8"/>
+        </default>
+      </default>
+      <default class="wing">
+        <joint stiffness="0.01" damping="0.0005"/>
+        <general ctrlrange="-1 1"/>
+        <default class="yaw">
+          <joint range="-1.5 1.5" springref="1.5"/>
+          <general gainprm="3"/>
+        </default>
+        <default class="roll">
+          <joint range="-1 1.5" springref="0.7" axis="1 0 0"/>
+          <general gainprm="2"/>
+        </default>
+        <default class="pitch">
+          <joint range="-1.27 2.92" springref="-1" axis="0 1 0"/>
+        </default>
+        <default class="wing-inertial">
+          <geom type="box" rgba="0 0 0 0"/>
+        </default>
+        <default class="wing-fluid">
+          <geom type="ellipsoid" group="3"/>
+        </default>
+      </default>
+      <default class="abdomen">
+        <joint group="3" stiffness="0.05" damping="0.01"/>
+        <geom density="0.555"/>
+        <general biastype="affine" gainprm="0.1" biasprm="0 -0.1"/>
+        <default class="abduct_abdomen">
+          <joint range="-0.1 0.1"/>
+        </default>
+        <default class="extend_abdomen">
+          <joint range="-0.15 0.1" axis="1 0 0"/>
+        </default>
+      </default>
+      <default class="haltere">
+        <joint range="-0.2 0.2" axis="1 0 0"/>
+      </default>
+      <default class="leg">
+        <joint stiffness="0.01" damping="0.01"/>
+        <geom density="1.18"/>
+        <default class="coxa">
+          <general biastype="affine" gainprm="0.8" biasprm="0 -0.8"/>
+          <default class="twist_coxa_T1">
+            <joint range="-0.8 0.8" axis="0 1 0"/>
+            <general ctrlrange="-0.8 0.8"/>
+          </default>
+          <default class="abduct_coxa_T1">
+            <joint range="-1 0.7"/>
+            <general ctrlrange="-1 0.7"/>
+          </default>
+          <default class="extend_coxa_T1">
+            <joint range="-0.2 1.7" springref="0.0584" axis="1 0 0"/>
+            <general ctrlrange="-0.2 1.7"/>
+          </default>
+          <default class="twist_coxa_T2">
+            <joint range="-0.75 0.8" springref="-0.742" axis="0 1 0"/>
+            <general ctrlrange="-0.75 0.8"/>
+          </default>
+          <default class="abduct_coxa_T2">
+            <joint range="-0.5 0.3" springref="-0.292"/>
+            <general ctrlrange="-0.5 0.3"/>
+          </default>
+          <default class="extend_coxa_T2">
+            <joint range="-0.2 0.9" springref="0.408" axis="1 0 0"/>
+            <general ctrlrange="-0.2 0.9"/>
+          </default>
+          <default class="twist_coxa_T3">
+            <joint range="-0.15 0.8" springref="0.00841" axis="0 1 0"/>
+            <general ctrlrange="-0.15 0.8"/>
+          </default>
+          <default class="abduct_coxa_T3">
+            <joint range="-0.9 0.25"/>
+            <general ctrlrange="-0.9 0.25"/>
+          </default>
+          <default class="extend_coxa_T3">
+            <joint range="-0.3 1.3" springref="0.158" axis="1 0 0"/>
+            <general ctrlrange="-0.3 1.3"/>
+          </default>
+        </default>
+        <default class="femur">
+          <general biastype="affine" gainprm="0.8" biasprm="0 -0.8"/>
+          <default class="twist_femur">
+            <joint range="-1 1" axis="0 1 0"/>
+            <general ctrlrange="-1 1"/>
+            <default class="twist_femur_T2">
+              <joint springref="0.608"/>
+            </default>
+            <default class="twist_femur_T3">
+              <joint springref="0.558"/>
+            </default>
+          </default>
+          <default class="extend_femur">
+            <joint range="-0.15 2" axis="1 0 0"/>
+            <general ctrlrange="-0.15 2"/>
+            <default class="extend_femur_T1">
+              <joint springref="-0.142"/>
+            </default>
+            <default class="extend_femur_T2">
+              <joint springref="0.208"/>
+            </default>
+          </default>
+          <default class="extend_femur_T3">
+            <joint range="-0.7 1.5" springref="0.258" axis="1 0 0"/>
+            <general ctrlrange="-0.7 1.5"/>
+          </default>
+        </default>
+        <default class="tibia">
+          <joint damping="0.004"/>
+          <general biastype="affine" gainprm="0.4" biasprm="0 -0.4"/>
+          <default class="extend_tibia">
+            <joint range="-1.35 1.3" springref="-1.29" axis="1 0 0"/>
+            <general ctrlrange="-1.35 1.3"/>
+            <default class="extend_tibia_T2">
+              <joint springref="-1.34"/>
+            </default>
+            <default class="extend_tibia_T3">
+              <joint springref="-0.292"/>
+            </default>
+          </default>
+        </default>
+        <default class="tarsus">
+          <joint axis="1 0 0"/>
+          <general biastype="affine" gainprm="0.4" biasprm="0 -0.4"/>
+          <default class="extend_tarsus_T1">
+            <joint range="-0.7 1.2" springref="-0.242"/>
+            <general ctrlrange="-0.7 1.2"/>
+          </default>
+          <default class="extend_tarsus_T2">
+            <joint range="-1 1.8" springref="0.608"/>
+            <general ctrlrange="-1 1.8"/>
+          </default>
+          <default class="extend_tarsus_T3">
+            <joint range="-0.8 1.2" springref="0.258"/>
+            <general ctrlrange="-0.8 1.2"/>
+          </default>
+          <default class="extend_tarsus">
+            <joint group="3" stiffness="0.1" range="-0.36 0.36" damping="0.002"/>
+            <general ctrlrange="-0.36 0.36"/>
+          </default>
+        </default>
+      </default>
+    </default>
+  </default>
+
+  <asset>
+    <material name="body" shininess="0.6" rgba="0.674 0.35 0.143 1"/>
+    <material name="red" shininess="0.692" rgba="0.8 0.0279 0.00154 1"/>
+    <material name="ocelli" shininess="1" rgba="0.128 0.0488 0.0154 1"/>
+    <material name="black" shininess="0.727" rgba="0 0 0 1"/>
+    <material name="bristle-brown" shininess="0.907" rgba="0 0 0 1"/>
+    <material name="lower" shininess="0.6" rgba="0.799 0.61 0.386 1"/>
+    <material name="brown" shininess="0.6" rgba="0.202 0.0782 0.0262 1"/>
+    <material name="membrane" specular="0.62" shininess="0.907" rgba="0.539 0.686 0.8 0.4"/>
+    <material name="blue" shininess="0.6" rgba="0.2 0.3 1 1"/>
+    <material name="pink" rgba="0.6 0.3 1 1"/>
+  </asset>
+
+  <worldbody>
+    <body name="thorax" childclass="body">
+      <inertial pos="1.7749687005463866e-06 3.780967347267487e-07 9.602004012242149e-05" quat="0.3925764283107469 0.5881188212723499 -0.5881188212723499 -0.3925764283107469" mass="0.00034" diaginertia="3.7198918313821914e-07 3.536256335745402e-07 2.7739046201359303e-07"/>
+      <joint name="free" type="free" solreflimit="0.02" armature="0"/>
+      <geom name="thorax_collision" class="collision" size="0.0437 0.0437 0.0551" pos="0.00168 0 -0.00262" quat="0 -0.478922 0 -0.877857" type="ellipsoid"/>
+      <geom name="thorax_collision2" class="collision" size="0.0499 0.028 0.0114" pos="-0.00445 0 0.0219" quat="0 -0.199 0 -0.98" type="ellipsoid"/>
+      <site name="thorax"/>
+      <site name="hover_up_dir" pos="0.0262 0 0.0262" quat="0.915167 0 0.403074 0"/>
+      <camera name="track1" quat="0.312189 0.221134 0.533323 0.754457" pos="0.6 0.6 0.22" mode="trackcom"/>
+      <camera name="track2" quat="0.707107 0.707107 0 0" pos="0 -1.1 0.1" mode="trackcom"/>
+      <camera name="track3" quat="0.820164 0.425085 -0.176035 -0.340068" pos="-0.9 -0.9 0.9" mode="trackcom"/>
+      <camera name="back" quat="0.653281 0.270598 -0.270598 -0.653281" pos="-0.462 0 0.297" mode="track"/>
+      <camera name="side" quat="0 0 0.707107 0.707107" pos="-0.045 0.424 -0.035" mode="track"/>
+      <camera name="bottom" quat="0.0481814 0.705463 0.705463 0.0481814" pos="0.01 0 -0.516" mode="track"/>
+      <camera name="hero" quat="0.308074 0.290615 0.621616 0.658959" pos="0.271 0.27 -0.044" mode="track"/>
+      <light name="right" pos="0 -1 1" dir="0 0.707107 -0.707107" diffuse="0.3 0.3 0.3" mode="trackcom"/>
+      <light name="left" pos="0 1 1" dir="0 -0.707107 -0.707107" diffuse="0.3 0.3 0.3" mode="trackcom"/>
+      <light name="tracking" pos="0 0 1" mode="trackcom"/>
+      <body name="head" childclass="head" pos="0.0567 3.81e-07 -0.00305" quat="0.701738 -0.0869676 0.0869676 -0.701738">
+        <inertial pos="3.1200498124275974e-08 0.016750815325854353 0.0012510150064862248" quat="0.46514513432736526 0.532578636458109 0.46514513432736526 0.532578636458109" mass="0.00012532986996108747" diaginertia="8.222292189083061e-08 7.100079278148777e-08 3.8270386306177266e-08"/>
+        <joint name="head_abduct" range="-0.2 0.2"/>
+        <joint name="head_twist" range="-3 3" axis="0 1 0"/>
+        <joint name="head" range="-0.5 0.3" axis="1 0 0"/>
+        <geom name="head_collision" class="collision" size="0.0455 0.0262 0.0324" pos="0 0.0149 0.000875" quat="0.988771 0.149438 0 0" type="ellipsoid"/>
+        <site name="head" pos="0 0.015 0" quat="0 0 0 1"/>
+        <camera name="eye_right" quat="0.473906 0.687863 -0.343932 -0.428915" pos="0.0219 0.0131 0" fovy="140"/>
+        <camera name="eye_left" quat="0.473906 0.687863 0.343932 0.428915" pos="-0.0219 0.0131 0" fovy="140"/>
+        <body name="rostrum" pos="0 0.0368 -0.0235" quat="2.20085e-07 -1.21047e-07 0.192074 -0.98138">
+          <inertial pos="-2.0886342261255903e-08 0.019582994357398544 -0.0006177269350318059" quat="0.8077995792226703 0.5894572417128136 0.0 0.0" mass="1.4341904203538517e-05" diaginertia="2.436001080200512e-09 1.95742837401034e-09 1.7073177013555558e-09"/>
+          <joint name="rostrum" range="-1.24 0.183" springref="0.8" axis="1 0 0"/>
+          <geom name="rostrum_collision_right" class="collision" size="0.0035 0.0127195" pos="0.008765 0.02845 -0.0118" quat="0.981761 -0.158158 -0.105505 0"/>
+          <geom name="rostrum_collision_left" class="collision" size="0.0035 0.0127195" pos="-0.008765 0.02845 -0.0118" quat="0.981761 -0.158158 0.105505 0"/>
+          <geom name="rostrum_collision" class="collision" size="0.0131 0.0219 0.0131" pos="0 0.0175 0.00263" quat="0.99875 0.0499792 0 0" type="ellipsoid"/>
+          <body name="haustellum" pos="0 0.0377 0" quat="2.32971e-07 -1.5598e-07 -0.346956 0.937881">
+            <inertial pos="4.608989257126066e-08 0.0123668828375727 -0.001222779912298591" quat="0.6329555227129742 0.7741881594723267 2.1296637460803064e-17 -1.0628411803648643e-17" mass="3.183927485626191e-06" diaginertia="1.826245533101448e-10 1.8055525897911605e-10 1.0058179605163029e-10"/>
+            <joint name="haustellum_abduct" range="-0.0873 0.0873"/>
+            <joint name="haustellum" range="-1.59 0.7" springref="0.8" axis="1 0 0"/>
+            <geom name="haustellum_collision" class="collision" size="0.00788 0.00788" pos="0 0.0123 -0.000948" quat="0.633074 0.774091 0 0"/>
+            <body name="labrum_left" childclass="labrum" pos="-0.00263 0.0182 0" quat="0.74088 -0.0141977 -0.590904 0.318948">
+              <inertial pos="-0.0002775277564039669 0.008731486092332832 -0.004082493977932228" quat="-0.17502402588195154 -0.7161160385765653 0.08765712822758659 0.6699706243772009" mass="2.08585070931353e-06" diaginertia="1.172341908758381e-10 8.872374718386483e-11 5.2723493389275655e-11"/>
+              <joint name="labrum_left" range="-0.00524 1.05" axis="1 0 0"/>
+              <geom name="labrum_left_lower_collision" class="adhesion-collision" size="0.0035 0.00875 0.0131" pos="-0.000603 0.0106 -0.00438" quat="-0.173934 -0.714729 0.0875668 0.671745" type="ellipsoid"/>
+            </body>
+            <body name="labrum_right" childclass="labrum" pos="0.00263 0.0182 0" quat="0.69878 0.00273914 0.641798 -0.315901">
+              <inertial pos="0.0006742070519171195 0.008919207443570715 -0.003993541242645304" quat="-0.17623525052622957 -0.6700674007043613 -0.07188409584104108 -0.7174841404173175" mass="2.085851221637398e-06" diaginertia="1.1723419541765943e-10 8.872377370769412e-11 5.272349935756409e-11"/>
+              <joint name="labrum_right" range="-0.00524 1.05" axis="1 0 0"/>
+              <geom name="labrum_right_lower_collision" class="adhesion-collision" size="0.0035 0.00875 0.0131" pos="0.00116 0.0106 -0.00414" quat="-0.175083 -0.668317 -0.0724344 -0.719341" type="ellipsoid"/>
+            </body>
+          </body>
+        </body>
+        <body name="antenna_left" pos="-0.00795 0.0378 0.0129" quat="0.78447 -0.589601 -0.0127914 0.19187">
+          <inertial pos="-0.0033311751622732873 0.011952353721236833 0.0024279448400325587" quat="-0.19116664744481407 0.6181537058635244 -0.3826049801517716 -0.6595109839835612" mass="1.4407579138438792e-06" diaginertia="1.3237827330401782e-10 9.34702332505727e-11 5.085371071530828e-11"/>
+          <joint name="antenna_abduct_left" class="antenna_abduct"/>
+          <joint name="antenna_twist_left" class="antenna_twist"/>
+          <joint name="antenna_left" class="antenna_extend"/>
+          <geom name="antenna_left_collision" class="collision" size="0.00481 0.00875" pos="0 0.0114 0.00263" quat="0.634163 -0.773199 0 0"/>
+        </body>
+        <body name="antenna_right" pos="0.00861 0.038 0.0129" quat="0.589601 0.78447 -0.19187 -0.0127914">
+          <inertial pos="0.0028304997999250552 -0.011952136890566192 -0.0024277987119602634" quat="-0.6595100635507648 0.38260555937332086 0.6181539992894074 0.19116771478052066" mass="1.4407618832232005e-06" diaginertia="1.323791263179763e-10 9.347106099663901e-11 5.085379501344448e-11"/>
+          <joint name="antenna_abduct_right" class="antenna_abduct"/>
+          <joint name="antenna_twist_right" class="antenna_twist"/>
+          <joint name="antenna_right" class="antenna_extend"/>
+          <geom name="antenna_right_collision" class="collision" size="0.00481 0.00875" pos="-0.000616 -0.0114 -0.00231" quat="0.78177 0.622817 -0.0257924 -0.0163952"/>
+        </body>
+      </body>
+      <body name="wing_left" childclass="wing" pos="-0.00694 0.0432 0.0091" quat="0 -0.403074 0 -0.915167">
+        <inertial pos="0.0263 -0.148 -0.0289" quat="-0.684844215659391 -0.6338558142015386 0.2649397330653119 -0.24294473635800293" mass="8e-06" diaginertia="4.275202666666666e-08 3.465666666666667e-08 8.096693333333333e-09"/>
+        <joint name="wing_yaw_left" class="yaw"/>
+        <joint name="wing_roll_left" class="roll"/>
+        <joint name="wing_pitch_left" class="pitch"/>
+        <geom name="wing_left_brown_collision" class="collision" size="0.00219 0.0175 0.114" pos="0.00186 -0.11 -0.00166" quat="-0.672784 -0.646792 0.259917 -0.24792" type="ellipsoid"/>
+        <geom name="wing_left_membrane_collision" class="collision-membrane" size="0.00306 0.0551 0.114" pos="0.0263 -0.148 -0.0289" quat="-0.684844 -0.633856 0.26494 -0.242945" type="ellipsoid"/>
+        <geom name="wing_left_fluid" class="wing-fluid" size="0.0005 0.0551 0.114" pos="0.0263 -0.148 -0.0289" quat="-0.684844 -0.633856 0.26494 -0.242945" mass="0"/>
+        <geom name="wing_left_inertial" class="wing-inertial" size="0.0005 0.0551 0.114" pos="0.0263 -0.148 -0.0289" quat="-0.684844 -0.633856 0.26494 -0.242945" mass="0"/>
+      </body>
+      <body name="wing_right" childclass="wing" pos="-0.00694 -0.0432 0.0091" quat="0 0.915167 0 -0.403074">
+        <inertial pos="-0.0263 0.148 0.0289" quat="0.24294473635800293 0.2649397330653119 0.6338558142015386 -0.684844215659391" mass="8e-06" diaginertia="4.275202666666666e-08 3.465666666666667e-08 8.096693333333333e-09"/>
+        <joint name="wing_yaw_right" class="yaw"/>
+        <joint name="wing_roll_right" class="roll"/>
+        <joint name="wing_pitch_right" class="pitch"/>
+        <geom name="wing_right_brown_collision" class="collision" size="0.00219 0.0175 0.114" pos="-0.00186 0.11 0.00166" quat="0.24792 0.259917 0.646792 -0.672784" type="ellipsoid"/>
+        <geom name="wing_right_membrane_collision" class="collision-membrane" size="0.00306 0.0551 0.114" pos="-0.0263 0.148 0.0289" quat="0.242945 0.26494 0.633856 -0.684844" type="ellipsoid"/>
+        <geom name="wing_right_fluid" class="wing-fluid" size="0.0005 0.0551 0.114" pos="-0.0263 0.148 0.0289" quat="0.242945 0.26494 0.633856 -0.684844" mass="0"/>
+        <geom name="wing_right_inertial" class="wing-inertial" size="0.0005 0.0551 0.114" pos="-0.0263 0.148 0.0289" quat="0.242945 0.26494 0.633856 -0.684844" mass="0"/>
+      </body>
+      <body name="abdomen" childclass="abdomen" pos="-0.0447 -0.000555 0.00428" quat="-0.703905 -0.0858884 -0.0852884 -0.699905">
+        <inertial pos="-0.0001716762511879435 0.0064354375792720015 -0.00955137190490732" quat="0.5898564287758641 0.3862302597579416 0.5749586675530993 0.41511216614869767" mass="1.576669812804061e-05" diaginertia="6.894053269977926e-09 4.389102925096291e-09 2.9903878920230087e-09"/>
+        <joint name="abdomen_abduct" class="abduct_abdomen"/>
+        <joint name="abdomen" class="extend_abdomen"/>
+        <geom name="abdomen_collision" class="collision" size="0.0281 0.0102" pos="-0.000187 0.00646 -0.0146" quat="0.0104007 -0.0205014 0.824058 0.56604" type="cylinder"/>
+        <body name="abdomen_2" pos="0 0.0119 0" quat="0.981379 -0.192074 -0.000269104 0.00144056">
+          <inertial pos="-0.00016311616039237737 0.016574785941691105 -0.013897979248207896" quat="0.48364874115833456 0.5157333069295347 0.49923473034748383 0.5008669836537069" mass="5.5575764557409146e-05" diaginertia="3.9945503835633806e-08 2.431519538425315e-08 2.3127054958974585e-08"/>
+          <joint name="abdomen_abduct_2" class="abduct_abdomen"/>
+          <joint name="abdomen_2" class="extend_abdomen"/>
+          <geom name="abdomen_2_collision" class="collision" size="0.0367 0.0142" pos="-0.000182 0.0166 -0.0177" quat="-0.0110988 0.0102989 0.694925 0.718923" type="cylinder"/>
+          <body name="abdomen_3" pos="0 0.0212 0" quat="0.995861 -0.0908873 6.68907e-05 0.000524927">
+            <inertial pos="-1.6207016759275245e-05 0.01989731072405114 -0.014479012686215625" quat="0.6703948502937918 -0.2056916886320045 -0.3325992653656583 0.6305865544122431" mass="8.829489115771655e-05" diaginertia="7.242435763155413e-08 4.775299546940504e-08 4.6776636030765956e-08"/>
+            <joint name="abdomen_abduct_3" class="abduct_abdomen"/>
+            <joint name="abdomen_3" class="extend_abdomen"/>
+            <geom name="abdomen_3_collision" class="collision" size="0.0389 0.0194" pos="3.29e-05 0.0198 -0.0174" quat="0.709822 -0.590852 0.23894 0.299925" type="cylinder"/>
+            <body name="abdomen_4" pos="0 0.0313 0" quat="0.999448 -0.0332149 0.000147066 -0.000229103">
+              <inertial pos="-5.2758134177469833e-05 0.014915607924619063 -0.01413863593585767" quat="0.4637850784914614 0.5278407226470683 0.43687030027060736 0.5616332550922902" mass="8.211519790384686e-05" diaginertia="7.011968330780174e-08 4.3751469698182735e-08 4.335578327285791e-08"/>
+              <joint name="abdomen_abduct_4" class="abduct_abdomen"/>
+              <joint name="abdomen_4" class="extend_abdomen"/>
+              <geom name="abdomen_4_collision" class="collision" size="0.0396 0.0176" pos="9.67e-05 0.015 -0.0192" quat="0.018604 -0.0235051 0.637138 0.770167" type="cylinder"/>
+              <body name="abdomen_5" pos="0 0.0262 0" quat="0.999322 -0.0368119 -4.72152e-05 -0.000327105">
+                <inertial pos="0.0003456276120053112 0.01047296132882858 -0.014066789640106795" quat="0.4594803924055964 0.5380126330601572 0.42235004644173413 0.5666044598599124" mass="6.441399132616309e-05" diaginertia="4.7070867574213745e-08 2.9803529792483065e-08 2.8252208294518617e-08"/>
+                <joint name="abdomen_abduct_5" class="abduct_abdomen"/>
+                <joint name="abdomen_5" class="extend_abdomen"/>
+                <geom name="abdomen_5_collision" class="collision" size="0.0371 0.016" pos="0.000282 0.0105 -0.0187" quat="0.0261941 -0.0205954 0.62386 0.780825" type="cylinder"/>
+                <body name="abdomen_6" pos="0 0.0213 0" quat="0.997807 -0.0661872 0.00015597 -0.000350932">
+                  <inertial pos="-0.00012016725414263633 0.009393455456771681 -0.01326488137302318" quat="0.4164682945473827 0.5712897474567998 0.4209148384525227 0.5683422233637319" mass="4.2752834966058655e-05" diaginertia="2.380154911197741e-08 1.590141370766894e-08 1.3570328332975693e-08"/>
+                  <joint name="abdomen_abduct_6" class="abduct_abdomen"/>
+                  <joint name="abdomen_6" class="extend_abdomen"/>
+                  <geom name="abdomen_6_collision" class="collision" size="0.0334 0.0141" pos="-0.000157 0.00942 -0.017" quat="-0.00291984 0.00200989 0.591967 0.805955" type="cylinder"/>
+                  <body name="abdomen_7" pos="0 0.0182 0" quat="0.994787 -0.101978 -1.78962e-06 -0.00018696">
+                    <inertial pos="-9.343232042634088e-05 0.013495588013666064 -0.01099499069749935" quat="0.6781174324296031 0.16111002366564808 -0.13731740666293735 0.7038069607050674" mass="3.12857153785067e-05" diaginertia="9.197891589214969e-09 7.322208975482606e-09 7.094017724658097e-09"/>
+                    <joint name="abdomen_abduct_7" class="abduct_abdomen"/>
+                    <joint name="abdomen_7" class="extend_abdomen"/>
+                    <geom name="abdomen_7_collision" class="collision" size="0.0262" pos="-3.83e-05 0.0134 -0.0108" type="sphere"/>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="haltere_left" childclass="haltere" pos="-0.0386 0.0247 -0.00866" quat="0.290812 -0.203868 0.825466 0.438716">
+        <inertial pos="0.0005009166839697599 0.017188874245579272 0.00112267434163206" quat="-0.6708567716918574 0.7006214865960882 -0.16098218092275668 -0.18211387047784094" mass="8.217042644201275e-07" diaginertia="5.491870740176277e-11 5.137389593375152e-11 9.278299019840972e-12"/>
+        <joint name="haltere_left" stiffness="4.00119" damping="0.000400119"/>
+      </body>
+      <body name="haltere_right" childclass="haltere" pos="-0.0386 -0.0247 -0.00866" quat="-0.438017 -0.829033 0.206008 -0.280011">
+        <inertial pos="-0.0004471760308013134 0.017512736241926424 0.0011318951153424864" quat="0.16107081594405884 -0.14451599320857153 0.7075279270820655 0.6727373576344713" mass="8.217035482130969e-07" diaginertia="5.4918628802888366e-11 5.136918851506412e-11 9.282911382445245e-12"/>
+        <joint name="haltere_right" stiffness="4.00123" damping="0.000400123"/>
+      </body>
+      <body name="coxa_T1_left" childclass="leg" pos="0.0317 0.0209 -0.0272" quat="-0.532096 0.787142 -0.311056 -0.0229041">
+        <inertial pos="4.915691413644521e-06 0.02569612879310311 -0.0004036431057169044" quat="-0.4176097470935029 -0.3833584147363096 -0.531380088391462 0.6295026819994068" mass="5.756338242472067e-06" diaginertia="6.269299051332929e-10 6.135830796004738e-10 1.3124499290638845e-10"/>
+        <joint name="coxa_abduct_T1_left" class="abduct_coxa_T1"/>
+        <joint name="coxa_twist_T1_left" class="twist_coxa_T1"/>
+        <joint name="coxa_T1_left" class="extend_coxa_T1"/>
+        <geom name="coxa_T1_left_collision" class="collision" size="0.00679 0.00752 0.0208" pos="-2.04e-05 0.0261 -0.000454" quat="-0.416895 -0.382904 -0.531867 0.629842" type="ellipsoid"/>
+        <body name="femur_T1_left" pos="0 0.0437 0" quat="0 0 0.251933 0.967745">
+          <inertial pos="0.0021492072176334705 0.033346185373163605 0.0027763612000164736" quat="0.6666657489050323 -0.6760131218642567 0.2260225599108936 0.21789180965691057" mass="7.869657864999862e-06" diaginertia="2.8666627941799905e-09 2.852899735869841e-09 1.1917956281912298e-10"/>
+          <joint name="femur_twist_T1_left" class="twist_femur"/>
+          <joint name="femur_T1_left" class="extend_femur_T1"/>
+          <geom name="femur_T1_left_collision" class="collision" size="0.005 0.0318875" pos="0.001315 0.034415 0.00219" quat="0.730985 0.68181 0.0282076 0"/>
+          <body name="tibia_T1_left" pos="0 0.0697 0" quat="0.185925 0.161935 0.676728 -0.693721">
+            <inertial pos="-0.0005340188533659728 -0.02879134333179661 -0.0005850542607918202" quat="-0.2979965288330995 0.3031253241017304 0.660505807618377 0.6189064426826082" mass="1.976835926823295e-06" diaginertia="4.287508596144515e-10 4.288552114052842e-10 1.1565671799184283e-11"/>
+            <joint name="tibia_T1_left" class="extend_tibia"/>
+            <geom name="tibia_T1_left_collision" class="collision" size="0.00362 0.025515" pos="0 -0.0255 0.000875" quat="0.694876 -0.719129 0 0"/>
+            <body name="tarsus_T1_left" pos="0 -0.051 0.00175" quat="0.0390036 0.998091 0.00674062 0.0474043">
+              <inertial pos="-0.0004833566248915299 0.0130962780137325 0.0011179996662386282" quat="-0.32110646039986623 -0.33942121208752896 -0.6250298636653029 0.6253171606481264" mass="2.6682787838755923e-07" diaginertia="1.1285669214562374e-11 1.1285146216782075e-11 4.943994341163815e-13"/>
+              <joint name="tarsus_T1_left" class="extend_tarsus_T1"/>
+              <geom name="tarsus_T1_left_collision" class="collision" size="0.00204 0.0117825" pos="-8.25e-05 0.01175 0.00087" quat="0.6805 0.73273 0.0051447 0"/>
+              <site name="tarsus_T1_left"/>
+              <body name="tarsus2_T1_left" pos="-0.000165 0.0235 0.00174">
+                <inertial pos="-6.699739015980644e-05 0.007986347053126324 -0.00020914342294321708" quat="0.37303674592930014 0.2310227568623816 0.4680461048120978 -0.7670755606642714" mass="1.0449381858099854e-07" diaginertia="1.5196309954126858e-12 1.5957245359855373e-12 4.7630856793885e-13"/>
+                <joint name="tarsus2_T1_left" class="extend_tarsus"/>
+                <geom name="tarsus2_T1_left_collision" class="collision" size="0.00159 0.00680591" pos="5.65e-05 0.0068 0.000278" quat="0.692515 0.721379 -0.00599381 0"/>
+                <body name="tarsus3_T1_left" pos="0.000113 0.0136 0.000556">
+                  <inertial pos="-0.00023223239177918437 0.005555880571250872 -0.0006766538666189287" quat="-0.37303674592930014 -0.2310227568623816 -0.4680461048120978 0.7670755606642714" mass="6.371977426555017e-08" diaginertia="4.43381090287285e-13 4.5196942165028567e-13 1.400426022106957e-13"/>
+                  <joint name="tarsus3_T1_left" class="extend_tarsus"/>
+                  <geom name="tarsus3_T1_left_collision" class="collision" size="0.00149 0.00454789" pos="-0.0001275 0.004545 0.0001" quat="0.69929 0.714557 0.0200453 0"/>
+                  <body name="tarsus4_T1_left" pos="-0.000255 0.00909 0.0002">
+                    <inertial pos="-0.00020806992776341467 0.0047920966526682485 -0.0007145506218422942" quat="0.37303674592930014 0.2310227568623816 0.4680461048120978 -0.7670755606642714" mass="4.977357420193319e-08" diaginertia="2.378677020687958e-13 2.3524267118192553e-13 7.085737113188376e-14"/>
+                    <joint name="tarsus4_T1_left" class="extend_tarsus"/>
+                    <geom name="tarsus4_T1_left_collision" class="collision" size="0.00148 0.00454821" pos="-3.56e-05 0.00453 -0.000405" quat="0.737918 0.674869 0.00530361 0"/>
+                    <body name="claw_T1_left" pos="-7.12e-05 0.00906 -0.00081">
+                      <inertial pos="-0.0005457329522813945 0.004973107707562978 1.0991275453398064e-06" quat="-0.37303674592930014 -0.2310227568623816 -0.4680461048120978 0.7670755606642714" mass="9.329424346268681e-08" diaginertia="8.332024074996322e-13 8.018888348308458e-13 3.048385477853517e-13"/>
+                      <joint name="tarsus5_T1_left" class="extend_tarsus"/>
+                      <geom name="tarsal_claw_T1_left_collision" class="adhesion-collision" size="0.00199 0.00454821" pos="-3.56e-05 0.00453 -0.000405" quat="0.737918 0.674869 0.00530361 0"/>
+                      <site name="claw_T1_left" class="adhesion-collision" size="0.00219 0.00500502" pos="-3.92e-05 0.004985 -0.0004455" quat="0.737906 0.674883 0.005307 0"/>
+                    </body>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="coxa_T1_right" childclass="leg" pos="0.0317 -0.0209 -0.0272" quat="0.318927 0.0109975 -0.542875 -0.776821">
+        <inertial pos="0.0007126369004723694 -0.025952692346030343 0.0014655471013240882" quat="-0.5074590757726702 0.6280089725028736 0.44686919180568085 0.38522453489720776" mass="5.756348975866323e-06" diaginertia="6.269315352283881e-10 6.135845873006946e-10 1.3124545496071795e-10"/>
+        <joint name="coxa_abduct_T1_right" class="abduct_coxa_T1"/>
+        <joint name="coxa_twist_T1_right" class="twist_coxa_T1"/>
+        <joint name="coxa_T1_right" class="extend_coxa_T1"/>
+        <geom name="coxa_T1_right_collision" class="collision" size="0.00679 0.00752 0.0208" pos="0.00061 -0.026 0.00153" quat="-0.507878 0.627849 0.446892 0.384907" type="ellipsoid"/>
+        <body name="femur_T1_right" pos="0 -0.0436 0" quat="0 0 0.261085 0.965316">
+          <inertial pos="-0.0021911887191155797 -0.033235149559641984 -0.002646159234780572" quat="0.23172073036758906 -0.23911007440246787 -0.6715199543973868 -0.661961348028185" mass="7.874594801640188e-06" diaginertia="2.8692088990998198e-09 2.855286706765668e-09 1.193319233812926e-10"/>
+          <joint name="femur_twist_T1_right" class="twist_femur"/>
+          <joint name="femur_T1_right" class="extend_femur_T1"/>
+          <geom name="femur_T1_right_collision" class="collision" size="0.005 0.0319373" pos="-0.001315 -0.034465 -0.00219" quat="0.682432 -0.730326 -0.0301674 0"/>
+          <body name="tibia_T1_right" pos="0 -0.0698 0" quat="0.162945 0.14795 0.687766 -0.691764">
+            <inertial pos="-7.308922611645209e-05 0.028558173050548898 0.0002653917732504396" quat="-0.6661047174572844 -0.6111641363103817 -0.2997411238863823 0.30485761023872315" mass="1.975459264920404e-06" diaginertia="4.2811397309411265e-10 4.282903283033068e-10 1.1553385071939404e-11"/>
+            <joint name="tibia_T1_right" class="extend_tibia"/>
+            <geom name="tibia_T1_right_collision" class="collision" size="0.00362 0.0257649" pos="0 0.02575 -0.000875" quat="0.719014 0.694996 0 0"/>
+            <body name="tarsus_T1_right" pos="0 0.0515 -0.00175" quat="-0.0744736 -0.994648 0.0132953 0.0703751">
+              <inertial pos="-0.000275701316291236 -0.012473717533745793 -0.0006912814940119999" quat="-0.6745485370911526 0.6442557135603392 0.23511920372003742 0.2731992069810957" mass="2.668283053871247e-07" diaginertia="1.128592006037852e-11 1.128499837310251e-11 4.944000358536134e-13"/>
+              <joint name="tarsus_T1_right" class="extend_tarsus_T1"/>
+              <geom name="tarsus_T1_right_collision" class="collision" size="0.00204 0.0113887" pos="-0.0004825 -0.01135 -0.000805" quat="0.731671 -0.681043 0.0289518 0"/>
+              <site name="tarsus_T1_right"/>
+              <body name="tarsus2_T1_right" pos="-0.000965 -0.0227 -0.00161">
+                <inertial pos="0.00034993968477390475 -0.008065596213288076 -0.0003164142574472173" quat="0.5289666761490709 -0.7779509906313368 -0.2989811647799096 -0.15998992095245998" mass="1.0449368601016074e-07" diaginertia="1.5645222255806852e-12 1.5632863713585872e-12 4.63852558291332e-13"/>
+                <joint name="tarsus2_T1_right" class="extend_tarsus"/>
+                <geom name="tarsus2_T1_right_collision" class="collision" size="0.00159 0.00685206" pos="7.15e-05 -0.0068 -0.00084" quat="0.749197 -0.662311 -0.00696401 0"/>
+                <body name="tarsus3_T1_right" pos="0.000143 -0.0136 -0.00168">
+                  <inertial pos="0.00035547792547341306 -0.00548258304815389 0.000471595728403329" quat="-0.5289666761490709 0.7779509906313368 0.2989811647799096 0.15998992095245998" mass="6.371981478798838e-08" diaginertia="4.563291513129015e-13 4.4031666491565994e-13 1.3874757111552307e-13"/>
+                  <joint name="tarsus3_T1_right" class="extend_tarsus"/>
+                  <geom name="tarsus3_T1_right_collision" class="collision" size="0.00149 0.00451132" pos="0.0002185 -0.004495 -0.000315" quat="0.731377 -0.681169 -0.0331113 0"/>
+                  <body name="tarsus4_T1_right" pos="0.000437 -0.00899 -0.00063">
+                    <inertial pos="0.0005037076841029921 -0.004884572042096448 -7.212486400060003e-05" quat="0.5289666761490709 -0.7779509906313368 -0.2989811647799096 -0.15998992095245998" mass="4.977332613008165e-08" diaginertia="2.425823883409526e-13 2.296974681520074e-13 7.168625629487796e-14"/>
+                    <joint name="tarsus4_T1_right" class="extend_tarsus"/>
+                    <geom name="tarsus4_T1_right_collision" class="collision" size="0.00148 0.00451174" pos="0.0003825 -0.004495 6.7e-05" quat="0.701837 -0.709773 -0.0603978 0"/>
+                    <body name="claw_T1_right" pos="0.000765 -0.00899 0.000134">
+                      <inertial pos="0.0005620400300617376 -0.0050302852542937135 -0.0004800606105445637" quat="-0.5289666761490709 0.7779509906313368 0.2989811647799096 0.15998992095245998" mass="9.329463419478235e-08" diaginertia="8.571067108153917e-13 7.79193585022482e-13 3.0363665736396515e-13"/>
+                      <joint name="tarsus5_T1_right" class="extend_tarsus"/>
+                      <geom name="tarsal_claw_T1_right_collision" class="adhesion-collision" size="0.00199 0.00451174" pos="0.0003825 -0.004495 6.7e-05" quat="0.701837 -0.709773 -0.0603978 0"/>
+                      <site name="claw_T1_right" class="adhesion-collision" size="0.00219 0.00495842" pos="0.0004205 -0.00494 7.4e-05" quat="0.70181 -0.709797 -0.0604189 0"/>
+                    </body>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="coxa_T2_left" childclass="leg" pos="-0.0144 0.0241 -0.0425" quat="-0.371071 0.917175 -0.126024 -0.0722138">
+        <inertial pos="0.00045196652068692916 0.018079895773854944 -0.0027485210881670608" quat="-0.6388970761057454 -0.46465893153068205 -0.46115441515471944 0.4040287228349067" mass="2.360089148925598e-06" diaginertia="1.2741855073379574e-10 1.1361445463109366e-10 5.1920387926186885e-11"/>
+        <joint name="coxa_abduct_T2_left" class="abduct_coxa_T2"/>
+        <joint name="coxa_twist_T2_left" class="twist_coxa_T2"/>
+        <joint name="coxa_T2_left" class="extend_coxa_T2"/>
+        <geom name="coxa_T2_left_collision" class="collision" size="0.00788 0.007 0.0149" pos="0.000349 0.0143 -0.00216" quat="0.707107 -0.707107 0 0" type="ellipsoid"/>
+        <body name="femur_T2_left" pos="0 0.0281 0" quat="0 0 0.127971 0.991778">
+          <inertial pos="-0.0013424348192292261 0.040544583035264106 0.0022867287547588475" quat="0.6682126846336581 -0.6907002635499532 -0.20186475481579821 -0.18887978925725088" mass="8.00233072240022e-06" diaginertia="4.168942789115175e-09 4.154341726240527e-09 1.0685300647344874e-10"/>
+          <joint name="femur_twist_T2_left" class="twist_femur_T2"/>
+          <joint name="femur_T2_left" class="extend_femur_T2"/>
+          <geom name="femur_T2_left_collision" class="collision" size="0.00469 0.0381978" pos="0 0.040765 0.00219" quat="0.727095 0.686537 0 0"/>
+          <body name="tibia_T2_left" pos="0 0.083 0" quat="0.107037 0.083429 0.656228 -0.742258">
+            <inertial pos="3.413587007491253e-05 -0.03364347928345446 -0.0008630157765161794" quat="-0.11311665219884094 0.1069757052871644 0.7151912320017497 0.6813679792457666" mass="2.6215351392104033e-06" diaginertia="1.0963207744064545e-09 1.094974160429732e-09 1.4509364903469146e-11"/>
+            <joint name="tibia_T2_left" class="extend_tibia_T2"/>
+            <geom name="tibia_T2_left_collision" class="collision" size="0.00352 0.0334115" pos="0 -0.0334 0.000875" quat="0.697786 -0.716306 0 0"/>
+            <body name="tarsus_T2_left" pos="0 -0.0668 0.00175" quat="-0.148052 0.978341 -0.0216075 -0.14305">
+              <inertial pos="-6.45537948342767e-05 0.016665601560337293 2.3372803439600243e-05" quat="-0.014606482151938827 0.019570508833519778 0.6940173984070356 0.7195439504098925" mass="4.870658311894134e-07" diaginertia="5.068388395593155e-11 5.069168528214866e-11 9.374923503230765e-13"/>
+              <joint name="tarsus_T2_left" class="extend_tarsus_T2"/>
+              <geom name="tarsus_T2_left_collision" class="collision" size="0.00208 0.0171151" pos="0.0002355 0.0171 0.00068" quat="0.692917 0.720949 -0.00992885 0"/>
+              <site name="tarsus_T2_left"/>
+              <body name="tarsus2_T2_left" pos="0.000471 0.0342 0.00136">
+                <inertial pos="-0.0001554285335281947 0.010042487873546155 -3.072624930630652e-05" quat="0.07880202055959978 0.04799580466153662 -0.6944350088685848 -0.7136152063600566" mass="1.3623078338452123e-07" diaginertia="3.2627648382906385e-12 3.3770735288739735e-12 2.684945624696905e-13"/>
+                <joint name="tarsus2_T2_left" class="extend_tarsus"/>
+                <geom name="tarsus2_T2_left_collision" class="collision" size="0.00162 0.00890059" pos="1.21e-05 0.0089 0.0001015" quat="0.703063 0.711127 -0.000966812 0"/>
+                <body name="tarsus3_T2_left" pos="2.42e-05 0.0178 0.000203">
+                  <inertial pos="-0.00013197207934463433 0.005833056996263533 -0.0005454365732769223" quat="-0.0774116203563887 0.05020753671693427 -0.34205134576078733 0.935140375106246" mass="6.806818845077291e-08" diaginertia="5.839238552109985e-13 3.0541381514565074e-13 3.826065613291539e-13"/>
+                  <joint name="tarsus3_T2_left" class="extend_tarsus"/>
+                  <geom name="tarsus3_T2_left_collision" class="collision" size="0.00149 0.00495717" pos="-1.555e-05 0.004955 0.000146" quat="0.696616 0.717441 0.0022515 0"/>
+                  <body name="tarsus4_T2_left" pos="-3.11e-05 0.00991 0.000292">
+                    <inertial pos="2.6320159582770425e-06 0.005213291560365985 -0.00042653848131492256" quat="0.0774116203563887 -0.05020753671693427 0.34205134576078733 -0.935140375106246" mass="5.50947939700621e-08" diaginertia="3.0840217384352196e-13 1.8691789843980302e-13 1.9186575720337477e-13"/>
+                    <joint name="tarsus4_T2_left" class="extend_tarsus"/>
+                    <geom name="tarsus4_T2_left_collision" class="collision" size="0.00146 0.00495666" pos="1.8e-05 0.004955 -0.000127" quat="0.716108 0.697985 -0.00253556 0"/>
+                    <body name="claw_T2_left" pos="3.6e-05 0.00991 -0.000254">
+                      <inertial pos="1.606533595167013e-05 0.00510416685238832 0.0005907056943940253" quat="-0.0774116203563887 0.05020753671693427 -0.34205134576078733 0.935140375106246" mass="9.94609699951671e-08" diaginertia="9.61799751818464e-13 4.635113951052507e-13 7.901857067546393e-13"/>
+                      <joint name="tarsus5_T2_left" class="extend_tarsus"/>
+                      <geom name="tarsal_claw_T2_left_collision" class="adhesion-collision" size="0.002 0.00495666" pos="1.8e-05 0.004955 -0.000127" quat="0.716108 0.697985 -0.00253556 0"/>
+                      <site name="claw_T2_left" class="adhesion-collision" size="0.0022 0.00545183" pos="1.98e-05 0.00545 -0.00014" quat="0.716128 0.697964 -0.00253572 0"/>
+                    </body>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="coxa_T2_right" childclass="leg" pos="-0.0144 -0.0241 -0.0425" quat="0.12601 -0.0709059 -0.374031 -0.916076">
+        <inertial pos="-0.0003735735400835251 -0.0180654098774111 0.002560371515933711" quat="-0.40483189643775225 -0.4596143135388188 0.46259257270916776 -0.6409944852267989" mass="2.3600899335951104e-06" diaginertia="1.2741864090061608e-10 1.1361467712406202e-10 5.19203367575462e-11"/>
+        <joint name="coxa_abduct_T2_right" class="abduct_coxa_T2"/>
+        <joint name="coxa_twist_T2_right" class="twist_coxa_T2"/>
+        <joint name="coxa_T2_right" class="extend_coxa_T2"/>
+        <geom name="coxa_T2_right_collision" class="collision" size="0.00788 0.007 0.0149" pos="-0.000335 -0.0143 0.00206" quat="0.707107 0.707107 0 0" type="ellipsoid"/>
+        <body name="femur_T2_right" pos="0 -0.0282 0" quat="0 0 0.133998 0.990982">
+          <inertial pos="0.001371136891915755 -0.04052450041932615 -0.001967868551150616" quat="-0.18677388517636534 0.2025967160889473 -0.6934228400269428 -0.6657588537714467" mass="8.00584158989953e-06" diaginertia="4.173779671997355e-09 4.1591900774099775e-09 1.068742997767609e-10"/>
+          <joint name="femur_twist_T2_right" class="twist_femur_T2"/>
+          <joint name="femur_T2_right" class="extend_femur_T2"/>
+          <geom name="femur_T2_right_collision" class="collision" size="0.00469 0.0386471" pos="0 -0.041215 -0.00219" quat="0.68678 -0.726865 0 0"/>
+          <body name="tibia_T2_right" pos="0 -0.084 0" quat="0.0902385 0.103044 0.659281 -0.739315">
+            <inertial pos="-0.00031825237630851363 0.03308133926783945 -0.00025817857799884103" quat="-0.7150349390511198 -0.6873562102322769 -0.09278056232164672 0.08751139038183704" mass="2.6223281396998385e-06" diaginertia="1.0968493279634072e-09 1.0955004965745667e-09 1.4518615391476848e-11"/>
+            <joint name="tibia_T2_right" class="extend_tibia_T2"/>
+            <geom name="tibia_T2_right_collision" class="collision" size="0.00353 0.0332615" pos="0 0.03325 -0.000875" quat="0.716347 0.697744 0 0"/>
+            <body name="tarsus_T2_right" pos="0 0.0665 -0.00175" quat="0.150008 -0.982055 0.017201 0.113006">
+              <inertial pos="6.035209894124198e-05 -0.016471627097396017 0.0005475720080786312" quat="-0.7212806948046372 0.6922964279519439 -0.017344784424063567 -0.013378101524634537" mass="4.870698837853532e-07" diaginertia="5.0684469802149314e-11 5.069227822302556e-11 9.375077988112872e-13"/>
+              <joint name="tarsus_T2_right" class="extend_tarsus_T2"/>
+              <geom name="tarsus_T2_right_collision" class="collision" size="0.00208 0.0169588" pos="-0.0001835 -0.01695 -0.000515" quat="0.717763 -0.696247 0.00753754 0"/>
+              <site name="tarsus_T2_right"/>
+              <body name="tarsus2_T2_right" pos="-0.000367 -0.0339 -0.00103">
+                <inertial pos="0.00016292171896437925 -0.010142547907742064 0.0004664725781871326" quat="0.7151750407642501 -0.6928304029077935 -0.05026628702251954 0.07735628134449625" mass="1.3623218859411975e-07" diaginertia="3.262790117238901e-12 3.377106185409762e-12 2.6850474793604577e-13"/>
+                <joint name="tarsus2_T2_right" class="extend_tarsus"/>
+                <geom name="tarsus2_T2_right_collision" class="collision" size="0.00162 0.00885432" pos="8.6e-06 -0.00885 -0.0002765" quat="0.718063 -0.695978 -0.000676318 0"/>
+                <body name="tarsus3_T2_right" pos="1.72e-05 -0.0177 -0.000553">
+                  <inertial pos="5.5429151676314806e-05 -0.006330952852813945 -8.630076603070858e-05" quat="-0.34413839727472206 0.9343757646935769 0.07883170263153516 -0.04791927101586973" mass="6.806869153331257e-08" diaginertia="5.839250130956213e-13 3.053853298417411e-13 3.826440811086834e-13"/>
+                  <joint name="tarsus3_T2_right" class="extend_tarsus"/>
+                  <geom name="tarsus3_T2_right_collision" class="collision" size="0.00149 0.00494224" pos="2.535e-05 -0.00494 -0.0001465" quat="0.71751 -0.696539 -0.00357434 0"/>
+                  <body name="tarsus4_T2_right" pos="5.07e-05 -0.00988 -0.000293">
+                    <inertial pos="3.031773396023653e-05 -0.005710361767147981 0.0007480174457924482" quat="0.34413839727472206 -0.9343757646935769 -0.07883170263153516 0.04791927101586973" mass="5.5095179502932654e-08" diaginertia="3.084030340287294e-13 1.8690013194881302e-13 1.9188891515144491e-13"/>
+                    <joint name="tarsus4_T2_right" class="extend_tarsus"/>
+                    <geom name="tarsus4_T2_right_collision" class="collision" size="0.00146 0.00494184" pos="-4.83e-05 -0.00494 0.000126" quat="0.698034 -0.71603 0.00700086 0"/>
+                    <body name="claw_T2_right" pos="-9.66e-05 -0.00988 0.000252">
+                      <inertial pos="3.1575438379382106e-05 -0.005596172169474223 -0.001319287281433268" quat="-0.34413839727472206 0.9343757646935769 0.07883170263153516 -0.04791927101586973" mass="9.946179003722756e-08" diaginertia="9.618024482880314e-13 4.634619136730713e-13 7.902576129121365e-13"/>
+                      <joint name="tarsus5_T2_right" class="extend_tarsus"/>
+                      <geom name="tarsal_claw_T2_right_collision" class="adhesion-collision" size="0.002 0.00494184" pos="-4.83e-05 -0.00494 0.000126" quat="0.698034 -0.71603 0.00700086 0"/>
+                      <site name="claw_T2_right" class="adhesion-collision" size="0.0022 0.00545202" pos="-5.3e-05 -0.00545 0.0001385" quat="0.698068 -0.715998 0.00696292 0"/>
+                    </body>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="coxa_T3_left" childclass="leg" pos="-0.0377 0.0192 -0.0402" quat="0.681209 -0.529163 -0.0882271 0.498153">
+        <inertial pos="-0.0034683722518361326 0.013337380265120422 -0.006870516590692835" quat="0.3837385995869283 0.05909561691911177 0.5102369122145668 -0.767405165907657" mass="2.9934674433911526e-06" diaginertia="1.4648695888678546e-10 1.2956429944743491e-10 7.147440262765327e-11"/>
+        <joint name="coxa_abduct_T3_left" class="abduct_coxa_T3"/>
+        <joint name="coxa_twist_T3_left" class="twist_coxa_T3"/>
+        <joint name="coxa_T3_left" class="extend_coxa_T3"/>
+        <geom name="coxa_T3_left_collision" class="collision" size="0.007 0.00875 0.0166" pos="-0.00348 0.0116 -0.00687" quat="0.603112 -0.786145 -0.135025 0" type="ellipsoid"/>
+        <body name="femur_T3_left" pos="-0.00398 0.0232 -0.00668" quat="0 0 -0.66808 -0.744089">
+          <inertial pos="-0.0024758545308787086 0.03318836025286291 0.001156056509308185" quat="0.6704990393153101 -0.7045245541300101 -0.17807202486151696 -0.1495544879529781" mass="1.0745586048610761e-05" diaginertia="5.3475658930291975e-09 5.3251922966472225e-09 1.926327295605762e-10"/>
+          <joint name="femur_twist_T3_left" class="twist_femur_T3"/>
+          <joint name="femur_T3_left" class="extend_femur_T3"/>
+          <geom name="femur_T3_left_collision" class="collision" size="0.00544 0.0370498" pos="-0.00263 0.039615 0.00219008" quat="0.727704 0.685891 0 0"/>
+          <body name="tibia_T3_left" pos="0 0.0779 1.6e-07" quat="-0.117044 -0.104039 -0.711266 0.685257">
+            <inertial pos="0.00016220359096084241 -0.03676131714425069 -0.001829991573541856" quat="0.12775498596329185 -0.11138018583554936 -0.7128067186315622 -0.6805730670827812" mass="3.640007848779772e-06" diaginertia="1.5684316983314856e-09 1.562359849524243e-09 2.9629049130276874e-11"/>
+            <joint name="tibia_T3_left" class="extend_tibia_T3"/>
+            <geom name="tibia_T3_left_collision" class="collision" size="0.00365 0.0344159" pos="0 -0.03725 -0.001625" quat="0.671541 -0.740967 0 0"/>
+            <body name="tarsus_T3_left" pos="0 -0.0715 0.00175" quat="-0.229954 0.962806 -0.0329934 -0.137972">
+              <inertial pos="3.1341145463954084e-05 0.015347038476086747 0.0004606769804631483" quat="-0.10414212022807261 0.10023359892025847 -0.6851236816024432 -0.7139420041918051" mass="6.340769568769509e-07" diaginertia="6.752115551409248e-11 6.725313425889587e-11 1.559036745777244e-12"/>
+              <joint name="tarsus_T3_left" class="extend_tarsus_T3"/>
+              <geom name="tarsus_T3_left_collision" class="collision" size="0.00234 0.0168583" pos="0.000135 0.01685 0.00051" quat="0.696329 0.7177 -0.00575012 0"/>
+              <site name="tarsus_T3_left"/>
+              <body name="tarsus2_T3_left" pos="0.00027 0.0337 0.00102">
+                <inertial pos="-0.00018023736423494752 0.01013431591576966 0.001386962571042108" quat="0.10363681353746737 -0.0978009315654214 0.6817806169320808 0.717544130378369" mass="1.7409397431184665e-07" diaginertia="5.680770691885062e-12 5.684983546151978e-12 2.1833748242830156e-13"/>
+                <joint name="tarsus2_T3_left" class="extend_tarsus"/>
+                <geom name="tarsus2_T3_left_collision" class="collision" size="0.00168 0.00988171" pos="-3.985e-05 0.00985 0.00079" quat="0.678253 0.734822 0.00297286 0"/>
+                <body name="tarsus3_T3_left" pos="-7.97e-05 0.0197 0.00158">
+                  <inertial pos="-8.123545244607087e-05 0.005739087249016145 -0.00017257870907268213" quat="-0.49012892086150983 -0.13803630832426195 0.2510660390535489 -0.8232165344265766" mass="7.253923956526812e-08" diaginertia="4.151403817547015e-13 6.672085113149146e-13 5.309108478311286e-13"/>
+                  <joint name="tarsus3_T3_left" class="extend_tarsus"/>
+                  <geom name="tarsus3_T3_left_collision" class="collision" size="0.00145 0.00555016" pos="4e-05 0.00555 -1.39e-05" quat="0.707992 0.706202 -0.00508975 0"/>
+                  <body name="tarsus4_T3_left" pos="8e-05 0.0111 -2.78e-05">
+                    <inertial pos="-0.0001427782254897602 0.005092615929957689 -0.0006670391642135814" quat="0.49012892086150983 0.13803630832426195 -0.2510660390535489 0.8232165344265766" mass="5.942883197889836e-08" diaginertia="2.496248769609478e-13 3.581850375425673e-13 2.5781901356260654e-13"/>
+                    <joint name="tarsus4_T3_left" class="extend_tarsus"/>
+                    <geom name="tarsus4_T3_left_collision" class="collision" size="0.00145 0.00557731" pos="0.000111 0.00555 -0.00054" quat="0.740547 0.67187 -0.0134374 0"/>
+                    <body name="claw_T3_left" pos="0.000222 0.0111 -0.00108">
+                      <inertial pos="-0.0004166688721782309 0.005487030668448883 2.2788464923567675e-05" quat="-0.49012892086150983 -0.13803630832426195 0.2510660390535489 -0.8232165344265766" mass="9.698418027994114e-08" diaginertia="6.859919415911589e-13 1.0837533058021661e-12 9.102588797975435e-13"/>
+                      <joint name="tarsus5_T3_left" class="extend_tarsus"/>
+                      <geom name="tarsal_claw_T3_left_collision" class="adhesion-collision" size="0.0019 0.00557731" pos="0.000111 0.00555 -0.00054" quat="0.740547 0.67187 -0.0134374 0"/>
+                      <site name="claw_T3_left" class="adhesion-collision" size="0.00209 0.00612968" pos="0.000122 0.0061 -0.00059" quat="0.740356 0.672081 -0.0134416 0"/>
+                    </body>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="coxa_T3_right" childclass="leg" pos="-0.0377 -0.0192 -0.0402" quat="-0.0853828 -0.504898 -0.672864 -0.533892">
+        <inertial pos="0.00336391149331651 -0.013465432490172492 0.006789757541741506" quat="0.06668743582052562 -0.3751805237235371 0.7685757177648176 0.5138907730097052" mass="2.993471208510935e-06" diaginertia="1.4648729304567142e-10 1.2956458044362893e-10 7.147457435484226e-11"/>
+        <joint name="coxa_abduct_T3_right" class="abduct_coxa_T3"/>
+        <joint name="coxa_twist_T3_right" class="twist_coxa_T3"/>
+        <joint name="coxa_T3_right" class="extend_coxa_T3"/>
+        <geom name="coxa_T3_right_collision" class="collision" size="0.007 0.00875 0.0166" pos="0.00338 -0.0117 0.00678" quat="0.796965 0.595974 0.0982957 0" type="ellipsoid"/>
+        <body name="femur_T3_right" pos="0.00383 -0.0232 0.0066" quat="0 0 0.660695 0.750654">
+          <inertial pos="0.002677742574187035 -0.03330442329853732 -0.0012428474430339308" quat="0.15753814279484574 -0.18354641511740766 0.700687059834817 0.6712153836454734" mass="1.0749289577834701e-05" diaginertia="5.353343989177931e-09 5.3310300049893445e-09 1.9265480836236693e-10"/>
+          <joint name="femur_twist_T3_right" class="twist_femur_T3"/>
+          <joint name="femur_T3_right" class="extend_femur_T3"/>
+          <geom name="femur_T3_right_collision" class="collision" size="0.00544 0.0366505" pos="0.00263 -0.039215 -0.00218991" quat="0.685654 -0.727927 0 0"/>
+          <body name="tibia_T3_right" pos="0 -0.077 1.96e-07" quat="-0.121071 -0.111065 -0.708417 0.686404">
+            <inertial pos="-0.0001688282274254667 0.03745900979646976 0.002819612585944542" quat="-0.11025198203463048 -0.12893168620571888 0.6752578362715997 -0.7178077565082341" mass="3.6384557741057773e-06" diaginertia="1.5669575641206387e-09 1.5609171030554893e-09 2.9596440380185057e-11"/>
+            <joint name="tibia_T3_right" class="extend_tibia_T3"/>
+            <geom name="tibia_T3_right_collision" class="collision" size="0.00365 0.0347145" pos="0 0.03755 0.001625" quat="0.740683 0.671855 0 0"/>
+            <body name="tarsus_T3_right" pos="0 0.0721 -0.00175" quat="0.222952 -0.964793 0.0312933 0.135971">
+              <inertial pos="-0.0005935042432757762 -0.015369035826276703 -0.000432258031787508" quat="-0.10139229812383367 -0.10604320361067547 -0.713486865162435 0.6851357048715506" mass="6.340795449254632e-07" diaginertia="6.752151867983011e-11 6.725353710805722e-11 1.5590443023299429e-12"/>
+              <joint name="tarsus_T3_right" class="extend_tarsus_T3"/>
+              <geom name="tarsus_T3_right_collision" class="collision" size="0.00234 0.0169149" pos="-0.000365 -0.0169 -0.00061" quat="0.719744 -0.694078 0.0149904 0"/>
+              <site name="tarsus_T3_right"/>
+              <body name="tarsus2_T3_right" pos="-0.00073 -0.0338 -0.00122">
+                <inertial pos="3.832983450918585e-05 -0.01015679239690051 -0.000367889097284968" quat="0.09883186891604116 0.1055767838028474 0.7172160331335607 -0.6816795187069736" mass="1.740944427889903e-07" diaginertia="5.680814520449522e-12 5.685026683108931e-12 2.183384688436159e-13"/>
+                <joint name="tarsus2_T3_right" class="extend_tarsus"/>
+                <geom name="tarsus2_T3_right_collision" class="collision" size="0.00168 0.00988166" pos="9.25e-05 -0.00985 -0.000785" quat="0.734656 -0.678409 -0.00637085 0"/>
+                <body name="tarsus3_T3_right" pos="0.000185 -0.0197 -0.00157">
+                  <inertial pos="-0.00019228344346419908 -0.00576184962237361 0.00019138071883417762" quat="-0.25207197682554267 0.823235067172308 -0.4901399549385552 -0.13603884463600718" mass="7.253899217392921e-08" diaginertia="4.150214364768826e-13 6.669799495942163e-13 5.312529184865797e-13"/>
+                  <joint name="tarsus3_T3_right" class="extend_tarsus"/>
+                  <geom name="tarsus3_T3_right_collision" class="collision" size="0.00145 0.00550002" pos="9.9e-06 -0.0055 9.75e-06" quat="0.70648 -0.707732 -0.00127392 0"/>
+                  <body name="tarsus4_T3_right" pos="1.98e-05 -0.011 1.95e-05">
+                    <inertial pos="-0.00024957400904338824 -0.005115435778429461 0.0006827003378154367" quat="0.25207197682554267 -0.823235067172308 0.4901399549385552 0.13603884463600718" mass="5.9429005914632576e-08" diaginertia="2.4951677835325403e-13 3.580489130143901e-13 2.580668375848146e-13"/>
+                    <joint name="tarsus4_T3_right" class="extend_tarsus"/>
+                    <geom name="tarsus4_T3_right_collision" class="collision" size="0.00145 0.00553544" pos="2.15e-05 -0.0055 0.000625" quat="0.665992 -0.745953 -0.002916 0"/>
+                    <body name="claw_T3_right" pos="4.3e-05 -0.011 0.00125">
+                      <inertial pos="-0.0002556682218435892 -0.005510150913604794 -1.1706215926027275e-05" quat="-0.25207197682554267 0.823235067172308 -0.4901399549385552 -0.13603884463600718" mass="9.69843473209264e-08" diaginertia="6.856860313478396e-13 1.0833191560983715e-12 9.110162331662177e-13"/>
+                      <joint name="tarsus5_T3_right" class="extend_tarsus"/>
+                      <geom name="tarsal_claw_T3_right_collision" class="adhesion-collision" size="0.0019 0.00553544" pos="2.15e-05 -0.0055 0.000625" quat="0.665992 -0.745953 -0.002916 0"/>
+                      <site name="claw_T3_right" class="adhesion-collision" size="0.00209 0.00608927" pos="2.365e-05 -0.00605 0.00069" quat="0.66584 -0.746089 -0.00291653 0"/>
+                    </body>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+
+  <contact>
+    <exclude name="rostrum_labrum_left" body1="rostrum" body2="labrum_left"/>
+    <exclude name="rostrum_labrum_right" body1="rostrum" body2="labrum_right"/>
+    <exclude name="wing_left_wing_right" body1="wing_left" body2="wing_right"/>
+    <exclude name="wing_left_abdomen" body1="wing_left" body2="abdomen"/>
+    <exclude name="wing_left_abdomen_2" body1="wing_left" body2="abdomen_2"/>
+    <exclude name="wing_left_abdomen_3" body1="wing_left" body2="abdomen_3"/>
+    <exclude name="wing_right_abdomen" body1="wing_right" body2="abdomen"/>
+    <exclude name="wing_right_abdomen_2" body1="wing_right" body2="abdomen_2"/>
+    <exclude name="wing_right_abdomen_3" body1="wing_right" body2="abdomen_3"/>
+    <exclude name="abdomen_abdomen_3" body1="abdomen" body2="abdomen_3"/>
+    <exclude name="abdomen_2_abdomen_4" body1="abdomen_2" body2="abdomen_4"/>
+    <exclude name="abdomen_3_abdomen_5" body1="abdomen_3" body2="abdomen_5"/>
+    <exclude name="abdomen_4_abdomen_6" body1="abdomen_4" body2="abdomen_6"/>
+    <exclude name="abdomen_5_abdomen_7" body1="abdomen_5" body2="abdomen_7"/>
+    <exclude name="coxa_T1_left_coxa_T1_right" body1="coxa_T1_left" body2="coxa_T1_right"/>
+    <exclude name="coxa_T1_left_femur_T1_right" body1="coxa_T1_left" body2="femur_T1_right"/>
+    <exclude name="femur_T1_left_coxa_T1_right" body1="femur_T1_left" body2="coxa_T1_right"/>
+    <exclude name="femur_T1_left_femur_T1_right" body1="femur_T1_left" body2="femur_T1_right"/>
+    <exclude name="coxa_T2_left_coxa_T2_right" body1="coxa_T2_left" body2="coxa_T2_right"/>
+    <exclude name="coxa_T2_left_femur_T2_right" body1="coxa_T2_left" body2="femur_T2_right"/>
+    <exclude name="femur_T2_left_coxa_T2_right" body1="femur_T2_left" body2="coxa_T2_right"/>
+    <exclude name="femur_T2_left_femur_T2_right" body1="femur_T2_left" body2="femur_T2_right"/>
+    <exclude name="coxa_T3_left_coxa_T3_right" body1="coxa_T3_left" body2="coxa_T3_right"/>
+    <exclude name="coxa_T3_left_femur_T3_right" body1="coxa_T3_left" body2="femur_T3_right"/>
+    <exclude name="femur_T3_left_coxa_T3_right" body1="femur_T3_left" body2="coxa_T3_right"/>
+    <exclude name="femur_T3_left_femur_T3_right" body1="femur_T3_left" body2="femur_T3_right"/>
+  </contact>
+
+  <tendon>
+    <fixed name="abduct_abdomen">
+      <joint joint="abdomen_abduct" coef="1"/>
+      <joint joint="abdomen_abduct_2" coef="1"/>
+      <joint joint="abdomen_abduct_3" coef="1"/>
+      <joint joint="abdomen_abduct_4" coef="1"/>
+      <joint joint="abdomen_abduct_5" coef="1"/>
+      <joint joint="abdomen_abduct_6" coef="1"/>
+      <joint joint="abdomen_abduct_7" coef="1"/>
+    </fixed>
+    <fixed name="abdomen">
+      <joint joint="abdomen" coef="1"/>
+      <joint joint="abdomen_2" coef="1"/>
+      <joint joint="abdomen_3" coef="1"/>
+      <joint joint="abdomen_4" coef="1"/>
+      <joint joint="abdomen_5" coef="1"/>
+      <joint joint="abdomen_6" coef="1"/>
+      <joint joint="abdomen_7" coef="1"/>
+    </fixed>
+    <fixed name="tarsus2_T1_left" class="extend_tarsus">
+      <joint joint="tarsus2_T1_left" coef="1"/>
+      <joint joint="tarsus3_T1_left" coef="0.5"/>
+      <joint joint="tarsus4_T1_left" coef="0.5"/>
+      <joint joint="tarsus5_T1_left" coef="0.5"/>
+    </fixed>
+    <fixed name="tarsus2_T1_right" class="extend_tarsus">
+      <joint joint="tarsus2_T1_right" coef="1"/>
+      <joint joint="tarsus3_T1_right" coef="0.5"/>
+      <joint joint="tarsus4_T1_right" coef="0.5"/>
+      <joint joint="tarsus5_T1_right" coef="0.5"/>
+    </fixed>
+    <fixed name="tarsus2_T2_left" class="extend_tarsus">
+      <joint joint="tarsus2_T2_left" coef="1"/>
+      <joint joint="tarsus3_T2_left" coef="0.5"/>
+      <joint joint="tarsus4_T2_left" coef="0.5"/>
+      <joint joint="tarsus5_T2_left" coef="0.5"/>
+    </fixed>
+    <fixed name="tarsus2_T2_right" class="extend_tarsus">
+      <joint joint="tarsus2_T2_right" coef="1"/>
+      <joint joint="tarsus3_T2_right" coef="0.5"/>
+      <joint joint="tarsus4_T2_right" coef="0.5"/>
+      <joint joint="tarsus5_T2_right" coef="0.5"/>
+    </fixed>
+    <fixed name="tarsus2_T3_left" class="extend_tarsus">
+      <joint joint="tarsus2_T3_left" coef="1"/>
+      <joint joint="tarsus3_T3_left" coef="0.5"/>
+      <joint joint="tarsus4_T3_left" coef="0.5"/>
+      <joint joint="tarsus5_T3_left" coef="0.5"/>
+    </fixed>
+    <fixed name="tarsus2_T3_right" class="extend_tarsus">
+      <joint joint="tarsus2_T3_right" coef="1"/>
+      <joint joint="tarsus3_T3_right" coef="0.5"/>
+      <joint joint="tarsus4_T3_right" coef="0.5"/>
+      <joint joint="tarsus5_T3_right" coef="0.5"/>
+    </fixed>
+  </tendon>
+
+  <actuator>
+    <general name="head_abduct" class="head" joint="head_abduct" ctrlrange="-0.2 0.2"/>
+    <general name="head_twist" class="head" joint="head_twist" ctrlrange="-3 3"/>
+    <general name="head" class="head" joint="head" ctrlrange="-0.5 0.3"/>
+    <general name="rostrum" class="head" joint="rostrum" ctrlrange="-1.24 0.183"/>
+    <general name="haustellum_abduct" class="head" joint="haustellum_abduct" ctrlrange="-0.0873 0.0873"/>
+    <general name="haustellum" class="head" joint="haustellum" ctrlrange="-1.59 0.7"/>
+    <general name="labrum_left" class="labrum" joint="labrum_left" ctrlrange="-0.00524 1.05"/>
+    <general name="labrum_right" class="labrum" joint="labrum_right" ctrlrange="-0.00524 1.05"/>
+    <general name="antenna_abduct_left" class="antenna_abduct" joint="antenna_abduct_left" ctrlrange="-0.4 0.8"/>
+    <general name="antenna_twist_left" class="antenna_twist" joint="antenna_twist_left" ctrlrange="-0.1 0.09"/>
+    <general name="antenna_left" class="antenna_extend" joint="antenna_left" ctrlrange="-0.2 0.5"/>
+    <general name="antenna_abduct_right" class="antenna_abduct" joint="antenna_abduct_right" ctrlrange="-0.4 0.8"/>
+    <general name="antenna_twist_right" class="antenna_twist" joint="antenna_twist_right" ctrlrange="-0.1 0.09"/>
+    <general name="antenna_right" class="antenna_extend" joint="antenna_right" ctrlrange="-0.2 0.5"/>
+    <general name="wing_yaw_left" class="yaw" joint="wing_yaw_left"/>
+    <general name="wing_roll_left" class="roll" joint="wing_roll_left"/>
+    <general name="wing_pitch_left" class="pitch" joint="wing_pitch_left"/>
+    <general name="wing_yaw_right" class="yaw" joint="wing_yaw_right"/>
+    <general name="wing_roll_right" class="roll" joint="wing_roll_right"/>
+    <general name="wing_pitch_right" class="pitch" joint="wing_pitch_right"/>
+    <general name="abdomen_abduct" class="abduct_abdomen" tendon="abduct_abdomen" ctrlrange="-0.7 0.7"/>
+    <general name="abdomen" class="extend_abdomen" tendon="abdomen" ctrlrange="-1.05 0.7"/>
+    <general name="coxa_abduct_T1_left" class="abduct_coxa_T1" joint="coxa_abduct_T1_left"/>
+    <general name="coxa_twist_T1_left" class="twist_coxa_T1" joint="coxa_twist_T1_left"/>
+    <general name="coxa_T1_left" class="extend_coxa_T1" joint="coxa_T1_left"/>
+    <general name="femur_twist_T1_left" class="twist_femur" joint="femur_twist_T1_left"/>
+    <general name="femur_T1_left" class="extend_femur_T1" joint="femur_T1_left"/>
+    <general name="tibia_T1_left" class="extend_tibia" joint="tibia_T1_left"/>
+    <general name="tarsus_T1_left" class="extend_tarsus_T1" joint="tarsus_T1_left"/>
+    <general name="tarsus2_T1_left" class="extend_tarsus" tendon="tarsus2_T1_left" ctrlrange="-0.9 0.9"/>
+    <general name="coxa_abduct_T1_right" class="abduct_coxa_T1" joint="coxa_abduct_T1_right"/>
+    <general name="coxa_twist_T1_right" class="twist_coxa_T1" joint="coxa_twist_T1_right"/>
+    <general name="coxa_T1_right" class="extend_coxa_T1" joint="coxa_T1_right"/>
+    <general name="femur_twist_T1_right" class="twist_femur" joint="femur_twist_T1_right"/>
+    <general name="femur_T1_right" class="extend_femur_T1" joint="femur_T1_right"/>
+    <general name="tibia_T1_right" class="extend_tibia" joint="tibia_T1_right"/>
+    <general name="tarsus_T1_right" class="extend_tarsus_T1" joint="tarsus_T1_right"/>
+    <general name="tarsus2_T1_right" class="extend_tarsus" tendon="tarsus2_T1_right" ctrlrange="-0.9 0.9"/>
+    <general name="coxa_abduct_T2_left" class="abduct_coxa_T2" joint="coxa_abduct_T2_left"/>
+    <general name="coxa_twist_T2_left" class="twist_coxa_T2" joint="coxa_twist_T2_left"/>
+    <general name="coxa_T2_left" class="extend_coxa_T2" joint="coxa_T2_left"/>
+    <general name="femur_twist_T2_left" class="twist_femur_T2" joint="femur_twist_T2_left"/>
+    <general name="femur_T2_left" class="extend_femur_T2" joint="femur_T2_left"/>
+    <general name="tibia_T2_left" class="extend_tibia_T2" joint="tibia_T2_left"/>
+    <general name="tarsus_T2_left" class="extend_tarsus_T2" joint="tarsus_T2_left"/>
+    <general name="tarsus2_T2_left" class="extend_tarsus" tendon="tarsus2_T2_left" ctrlrange="-0.9 0.9"/>
+    <general name="coxa_abduct_T2_right" class="abduct_coxa_T2" joint="coxa_abduct_T2_right"/>
+    <general name="coxa_twist_T2_right" class="twist_coxa_T2" joint="coxa_twist_T2_right"/>
+    <general name="coxa_T2_right" class="extend_coxa_T2" joint="coxa_T2_right"/>
+    <general name="femur_twist_T2_right" class="twist_femur_T2" joint="femur_twist_T2_right"/>
+    <general name="femur_T2_right" class="extend_femur_T2" joint="femur_T2_right"/>
+    <general name="tibia_T2_right" class="extend_tibia_T2" joint="tibia_T2_right"/>
+    <general name="tarsus_T2_right" class="extend_tarsus_T2" joint="tarsus_T2_right"/>
+    <general name="tarsus2_T2_right" class="extend_tarsus" tendon="tarsus2_T2_right" ctrlrange="-0.9 0.9"/>
+    <general name="coxa_abduct_T3_left" class="abduct_coxa_T3" joint="coxa_abduct_T3_left"/>
+    <general name="coxa_twist_T3_left" class="twist_coxa_T3" joint="coxa_twist_T3_left"/>
+    <general name="coxa_T3_left" class="extend_coxa_T3" joint="coxa_T3_left"/>
+    <general name="femur_twist_T3_left" class="twist_femur_T3" joint="femur_twist_T3_left"/>
+    <general name="femur_T3_left" class="extend_femur_T3" joint="femur_T3_left"/>
+    <general name="tibia_T3_left" class="extend_tibia_T3" joint="tibia_T3_left"/>
+    <general name="tarsus_T3_left" class="extend_tarsus_T3" joint="tarsus_T3_left"/>
+    <general name="tarsus2_T3_left" class="extend_tarsus" tendon="tarsus2_T3_left" ctrlrange="-0.9 0.9"/>
+    <general name="coxa_abduct_T3_right" class="abduct_coxa_T3" joint="coxa_abduct_T3_right"/>
+    <general name="coxa_twist_T3_right" class="twist_coxa_T3" joint="coxa_twist_T3_right"/>
+    <general name="coxa_T3_right" class="extend_coxa_T3" joint="coxa_T3_right"/>
+    <general name="femur_twist_T3_right" class="twist_femur_T3" joint="femur_twist_T3_right"/>
+    <general name="femur_T3_right" class="extend_femur_T3" joint="femur_T3_right"/>
+    <general name="tibia_T3_right" class="extend_tibia_T3" joint="tibia_T3_right"/>
+    <general name="tarsus_T3_right" class="extend_tarsus_T3" joint="tarsus_T3_right"/>
+    <general name="tarsus2_T3_right" class="extend_tarsus" tendon="tarsus2_T3_right" ctrlrange="-0.9 0.9"/>
+    <general name="adhere_labrum_left" class="adhesion_labrum" body="labrum_left"/>
+    <general name="adhere_labrum_right" class="adhesion_labrum" body="labrum_right"/>
+    <general name="adhere_claw_T1_left" class="adhesion_claw" body="claw_T1_left"/>
+    <general name="adhere_claw_T1_right" class="adhesion_claw" body="claw_T1_right"/>
+    <general name="adhere_claw_T2_left" class="adhesion_claw" body="claw_T2_left"/>
+    <general name="adhere_claw_T2_right" class="adhesion_claw" body="claw_T2_right"/>
+    <general name="adhere_claw_T3_left" class="adhesion_claw" body="claw_T3_left"/>
+    <general name="adhere_claw_T3_right" class="adhesion_claw" body="claw_T3_right"/>
+  </actuator>
+
+  <sensor>
+    <accelerometer site="thorax" name="accelerometer"/>
+    <gyro site="thorax" name="gyro"/>
+    <velocimeter site="thorax" name="velocimeter"/>
+    <force site="tarsus_T1_left" name="force_tarsus_T1_left"/>
+    <force site="tarsus_T1_right" name="force_tarsus_T1_right"/>
+    <force site="tarsus_T2_left" name="force_tarsus_T2_left"/>
+    <force site="tarsus_T2_right" name="force_tarsus_T2_right"/>
+    <force site="tarsus_T3_left" name="force_tarsus_T3_left"/>
+    <force site="tarsus_T3_right" name="force_tarsus_T3_right"/>
+    <touch site="claw_T1_left" name="touch_claw_T1_left"/>
+    <touch site="claw_T1_right" name="touch_claw_T1_right"/>
+    <touch site="claw_T2_left" name="touch_claw_T2_left"/>
+    <touch site="claw_T2_right" name="touch_claw_T2_right"/>
+    <touch site="claw_T3_left" name="touch_claw_T3_left"/>
+    <touch site="claw_T3_right" name="touch_claw_T3_right"/>
+  </sensor>
+</mujoco>

@@ -1,0 +1,18 @@
+gen 0 best 0.705 gen-best 0.705 (37s) mu wSyn=0.59 sizeAlpha=0.486 kcThreshold=9.923 inhGain=1.803 eInh=-67.816 minSyn=5
+   terms {"sugar":1,"bitter":1,"mix":0.76,"kcSparse":0.68,"kcSpecific":0,"pnSpecific":0.26,"dm1PN":1,"baseline":0.35,"offset":1,"legs":1,"rhythm":0.44}
+gen 1 best 0.705 gen-best 0.641 (44s) mu wSyn=0.574 sizeAlpha=0.556 kcThreshold=7.219 inhGain=2.603 eInh=-68.701 minSyn=5
+   terms {"sugar":0,"bitter":1,"mix":0,"kcSparse":0.61,"kcSpecific":0.87,"pnSpecific":0.55,"dm1PN":1,"baseline":0.93,"offset":1,"legs":1,"rhythm":0.42}
+gen 2 best 0.705 gen-best 0.668 (36s) mu wSyn=0.577 sizeAlpha=0.64 kcThreshold=6.282 inhGain=3.064 eInh=-67.082 minSyn=4
+   terms {"sugar":0,"bitter":1,"mix":0,"kcSparse":0.7,"kcSpecific":0.97,"pnSpecific":0.73,"dm1PN":1,"baseline":0.94,"offset":1,"legs":1,"rhythm":0.38}
+gen 3 best 0.705 gen-best 0.658 (37s) mu wSyn=0.598 sizeAlpha=0.685 kcThreshold=7.828 inhGain=3.616 eInh=-65.829 minSyn=4
+   terms {"sugar":0,"bitter":1,"mix":0,"kcSparse":0.53,"kcSpecific":0.97,"pnSpecific":0.76,"dm1PN":1,"baseline":0.94,"offset":1,"legs":1,"rhythm":0.39}
+gen 4 best 0.705 gen-best 0.689 (39s) mu wSyn=0.67 sizeAlpha=0.722 kcThreshold=2.358 inhGain=3.704 eInh=-66.693 minSyn=4
+   terms {"sugar":0.02,"bitter":1,"mix":0,"kcSparse":0.63,"kcSpecific":0.95,"pnSpecific":1,"dm1PN":1,"baseline":0.93,"offset":1,"legs":1,"rhythm":0.43}
+gen 5 best 0.705 gen-best 0.684 (39s) mu wSyn=0.679 sizeAlpha=0.733 kcThreshold=1.852 inhGain=3.571 eInh=-66.708 minSyn=4
+   terms {"sugar":0,"bitter":1,"mix":0,"kcSparse":0.61,"kcSpecific":0.98,"pnSpecific":1,"dm1PN":1,"baseline":0.93,"offset":1,"legs":0.96,"rhythm":0.46}
+gen 6 best 0.705 gen-best 0.676 (42s) mu wSyn=0.698 sizeAlpha=0.767 kcThreshold=1.493 inhGain=3.881 eInh=-66.573 minSyn=4
+   terms {"sugar":0,"bitter":1,"mix":0,"kcSparse":0.72,"kcSpecific":0.95,"pnSpecific":0.75,"dm1PN":1,"baseline":0.94,"offset":1,"legs":1,"rhythm":0.46}
+gen 7 best 0.705 gen-best 0.689 (40s) mu wSyn=0.714 sizeAlpha=0.737 kcThreshold=0.725 inhGain=4.033 eInh=-66.556 minSyn=4
+   terms {"sugar":0.02,"bitter":1,"mix":0,"kcSparse":0.61,"kcSpecific":0.95,"pnSpecific":1,"dm1PN":1,"baseline":0.93,"offset":1,"legs":1,"rhythm":0.44}
+gen 8 best 0.705 gen-best 0.692 (48s) mu wSyn=0.767 sizeAlpha=0.737 kcThreshold=0.529 inhGain=4.391 eInh=-65.933 minSyn=4
+   terms {"sugar":0,"bitter":1,"mix":0,"kcSparse":0.68,"kcSpecific":0.95,"pnSpecific":1,"dm1PN":1,"baseline":0.93,"offset":1,"legs":1,"rhythm":0.47}

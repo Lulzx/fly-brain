@@ -1,0 +1,45 @@
+/Users/lulzx/work/fly-brain/.venv/lib/python3.12/site-packages/cma/s.py:16: UserWarning: Could not import matplotlib.pyplot, therefore ``cma.plot()`` etc. is not available
+  _warnings.warn('Could not import matplotlib.pyplot, therefore'
+/Users/lulzx/work/fly-brain/.venv/lib/python3.12/site-packages/cma/s.py:16: UserWarning: Could not import matplotlib.pyplot, therefore ``cma.plot()`` etc. is not available
+  _warnings.warn('Could not import matplotlib.pyplot, therefore'
+/Users/lulzx/work/fly-brain/.venv/lib/python3.12/site-packages/cma/s.py:16: UserWarning: Could not import matplotlib.pyplot, therefore ``cma.plot()`` etc. is not available
+  _warnings.warn('Could not import matplotlib.pyplot, therefore'
+/Users/lulzx/work/fly-brain/.venv/lib/python3.12/site-packages/cma/s.py:16: UserWarning: Could not import matplotlib.pyplot, therefore ``cma.plot()`` etc. is not available
+  _warnings.warn('Could not import matplotlib.pyplot, therefore'
+/Users/lulzx/work/fly-brain/.venv/lib/python3.12/site-packages/cma/s.py:16: UserWarning: Could not import matplotlib.pyplot, therefore ``cma.plot()`` etc. is not available
+  _warnings.warn('Could not import matplotlib.pyplot, therefore'
+/Users/lulzx/work/fly-brain/.venv/lib/python3.12/site-packages/cma/s.py:16: UserWarning: Could not import matplotlib.pyplot, therefore ``cma.plot()`` etc. is not available
+  _warnings.warn('Could not import matplotlib.pyplot, therefore'
+/Users/lulzx/work/fly-brain/.venv/lib/python3.12/site-packages/cma/s.py:16: UserWarning: Could not import matplotlib.pyplot, therefore ``cma.plot()`` etc. is not available
+  _warnings.warn('Could not import matplotlib.pyplot, therefore'
+/Users/lulzx/work/fly-brain/.venv/lib/python3.12/site-packages/cma/s.py:16: UserWarning: Could not import matplotlib.pyplot, therefore ``cma.plot()`` etc. is not available
+  _warnings.warn('Could not import matplotlib.pyplot, therefore'
+/Users/lulzx/work/fly-brain/.venv/lib/python3.12/site-packages/cma/s.py:16: UserWarning: Could not import matplotlib.pyplot, therefore ``cma.plot()`` etc. is not available
+  _warnings.warn('Could not import matplotlib.pyplot, therefore'
+/Users/lulzx/work/fly-brain/.venv/lib/python3.12/site-packages/cma/s.py:16: UserWarning: Could not import matplotlib.pyplot, therefore ``cma.plot()`` etc. is not available
+  _warnings.warn('Could not import matplotlib.pyplot, therefore'
+/Users/lulzx/work/fly-brain/.venv/lib/python3.12/site-packages/cma/s.py:16: UserWarning: Could not import matplotlib.pyplot, therefore ``cma.plot()`` etc. is not available
+  _warnings.warn('Could not import matplotlib.pyplot, therefore'
+/Users/lulzx/work/fly-brain/.venv/lib/python3.12/site-packages/cma/s.py:16: UserWarning: Could not import matplotlib.pyplot, therefore ``cma.plot()`` etc. is not available
+  _warnings.warn('Could not import matplotlib.pyplot, therefore'
+/Users/lulzx/work/fly-brain/.venv/lib/python3.12/site-packages/cma/s.py:16: UserWarning: Could not import matplotlib.pyplot, therefore ``cma.plot()`` etc. is not available
+  _warnings.warn('Could not import matplotlib.pyplot, therefore'
+start score 3.396222405120887
+iter 0 best 3.705 gen-best 3.705 (16s)
+iter 1 best 3.843 gen-best 3.843 (32s)
+iter 2 best 3.857 gen-best 3.857 (49s)
+iter 3 best 3.871 gen-best 3.871 (68s)
+iter 4 best 3.871 gen-best 3.856 (94s)
+iter 5 best 3.967 gen-best 3.967 (114s)
+iter 6 best 3.976 gen-best 3.976 (131s)
+iter 7 best 4.077 gen-best 4.077 (149s)
+iter 8 best 4.077 gen-best 4.075 (167s)
+iter 9 best 4.077 gen-best 3.996 (184s)
+iter 10 best 4.078 gen-best 4.078 (202s)
+iter 11 best 4.349 gen-best 4.349 (221s)
+iter 12 best 4.349 gen-best 4.337 (240s)
+iter 13 best 4.412 gen-best 4.412 (258s)
+iter 14 best 4.500 gen-best 4.500 (276s)
+iter 15 best 4.500 gen-best 4.441 (293s)
+iter 16 best 4.500 gen-best 4.483 (311s)
+iter 17 best 4.572 gen-best 4.572 (329s)

@@ -1,0 +1,8 @@
+gen 0 best 0.665 gen-best 0.665 (65s) mu wSyn=0.476 sizeAlpha=0.37 kcThreshold=10.889 inhGain=0.942 eInh=-68.123 minSyn=6 adaptInc=0.647 tRef=2.806
+   terms {"sugar":0.32,"bitter":1,"mix":1,"kcSparse":0,"kcSpecific":1,"pnSpecific":0,"dm1PN":1,"baseline":0.7,"offset":1,"legs":1,"rhythm":0.46}
+gen 1 best 0.675 gen-best 0.675 (62s) mu wSyn=0.589 sizeAlpha=0.335 kcThreshold=14.834 inhGain=0.788 eInh=-76.204 minSyn=6 adaptInc=0.638 tRef=2.894
+   terms {"sugar":0.71,"bitter":0.88,"mix":0.83,"kcSparse":0,"kcSpecific":1,"pnSpecific":0,"dm1PN":1,"baseline":0.48,"offset":1,"legs":1,"rhythm":0.43}
+gen 2 best 0.716 gen-best 0.716 (63s) mu wSyn=0.507 sizeAlpha=0.392 kcThreshold=13.725 inhGain=0.753 eInh=-79.032 minSyn=6 adaptInc=0.536 tRef=3.13
+   terms {"sugar":0.73,"bitter":1,"mix":1,"kcSparse":0,"kcSpecific":1,"pnSpecific":0,"dm1PN":1,"baseline":0.62,"offset":1,"legs":1,"rhythm":0.41}
+gen 3 best 0.718 gen-best 0.718 (64s) mu wSyn=0.48 sizeAlpha=0.402 kcThreshold=15.246 inhGain=0.734 eInh=-78.768 minSyn=5 adaptInc=0.372 tRef=3.302
+   terms {"sugar":0.81,"bitter":1,"mix":1,"kcSparse":0,"kcSpecific":1,"pnSpecific":0,"dm1PN":1,"baseline":0.55,"offset":1,"legs":1,"rhythm":0.4}
