@@ -13,7 +13,7 @@ const presetKey = new URLSearchParams(location.search).get('env') || 'foraging';
 const PRESET = PRESETS[presetKey] || PRESETS.foraging;
 const env = PRESET.env();
 const flies = [];          // {id, worker, group, bodies[], last, color, ready}
-let flyvisMap, shared, meta, bodymap, flyXML, gait, visual, running = false, selected = 0, tool = 'none', speed = 1, brainMem, wasmModule, brainParams;
+let flyvisMap, shared, meta, bodymap, flyXML, gait, visual, running = false, selected = 0, tool = 'none', speed = 2, brainMem, wasmModule, brainParams;
 
 function toShared(ta) { const sab = new SharedArrayBuffer(ta.byteLength); const out = new ta.constructor(sab); out.set(ta); return out; }
 
