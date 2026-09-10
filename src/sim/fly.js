@@ -120,10 +120,10 @@ export class FlyAgent {
     if (m.jumpT >= 0) return 'escape jump';
     if (c.grooming) return 'grooming';
     if (st && st.proboscisOut && st.labellumZ < 0.065 && this.env.food.some(f => f.amount > 0 && Math.hypot(st.labellum[0] - f.x, st.labellum[1] - f.y) < f.r)) return 'feeding';
-    if (st && st.proboscisOut) return 'proboscis extended';
-    if (c.v < -0.05) return 'walking backward';
-    if (c.v > 0.05) return Math.abs(c.turn) > 0.3 ? (c.turn > 0 ? 'turning left' : 'turning right') : 'walking';
-    return 'standing';
+    const pe = st && st.proboscisOut ? ' (proboscis out)' : '';
+    if (c.v < -0.05) return 'walking backward' + pe;
+    if (c.v > 0.05) return (Math.abs(c.turn) > 0.3 ? (c.turn > 0 ? 'turning left' : 'turning right') : 'walking') + pe;
+    return pe ? 'proboscis extended' : 'standing';
   }
   pose() { const d = this.mjd; return { xpos: d.xpos.slice(0), xquat: d.xquat.slice(0) }; }
 }
