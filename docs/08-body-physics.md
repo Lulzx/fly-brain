@@ -12,8 +12,10 @@ units of cm, g, and s. Total mass 0.98 mg.
   MuJoCo stores meshes as triangle soup, which must be welded before decimation.
 
 ## World
-`src/sim/world.js` builds one MuJoCo world per fly: floor, a 48-segment circular wall, obstacles, food and
-patch discs, a looming threat body, and mocap proxies for other flies.
+`src/sim/world.js` builds one MuJoCo world per fly: floor, a 48-segment circular wall 1.2 cm high (tall
+enough to fly inside), obstacles, food and patch discs, a looming threat body, and mocap proxies for other
+flies. In flight the aerodynamic force and torque are applied through `xfrc_applied` on the thorax
+([Flight](24-flight.md)).
 
 ## Contact layers
 | Geoms | Touch |

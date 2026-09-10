@@ -2,7 +2,7 @@
 // obstacles and food discs, and kinematic (mocap) proxies standing in for the other flies.
 // Units follow flybody: cm, g, s. The floor is z = 0; a standing fly's thorax sits at z ~ 0.13.
 export const DEFAULT_ENV = {
-  arena: { radius: 2.5, wallHeight: 0.4, segments: 48, wallFriction: 1 },    // head/body grip walls; legs slide along them (see buildWorldXML)
+  arena: { radius: 2.5, wallHeight: 1.2, segments: 48, wallFriction: 1 },    // head/body grip walls; legs slide along them (see buildWorldXML); tall enough to fly in
   food: [
     { x: 1.0, y: 0.6, r: 0.25, sugar: 1.0, bitter: 0, water: 0.2, amount: 5 },
   ],

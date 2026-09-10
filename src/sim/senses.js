@@ -10,6 +10,7 @@ export const ODORANTS = {
   pheromone: { DA1: 1.0, VA1v: 0.7, VA1d: 0.5 },                                        // cVA (Or67d), fly odours
 };
 export const ORN_SPONTANEOUS = 6;   // Hz, ORN baseline firing
+export const REAFFERENCE = 0.85;    // fraction of footfall touch signal cancelled while stepping
 
 export class Senses {
   constructor(bodymap, mj, model) {
@@ -26,7 +27,8 @@ export class Senses {
     // tactile bristles are rapidly adapting: burst at contact onset/offset (tau ~15 ms); only tarsal bristles
     // (a fixed ~25% subset of each leg's tactile neurons) touch the substrate
     this.tarsal = {}; this.touchPrev = {}; this.touchBurst = {};
-    for (const s of bodymap.sensors) if (s.kind === 'contact') { const key = s.name.replace('tactile ', '').replace(' ', '_'); this.tarsal[key] = s.idx.filter((_, k) => k % 4 === 0); this.touchPrev[key] = 0; this.touchBurst[key] = 0; }
+    this.legBristle = {};   // the other ~75%: femur/tibia bristles, touched when a leg meets an obstacle
+    for (const s of bodymap.sensors) if (s.kind === 'contact') { const key = s.name.replace('tactile ', '').replace(' ', '_'); this.tarsal[key] = s.idx.filter((_, k) => k % 4 === 0); this.legBristle[key] = s.idx.filter((_, k) => k % 4 !== 0); this.touchPrev[key] = 0; this.touchBurst[key] = 0; }
     this.photo = null;
   }
   /** called once the brain metadata is available: map taste types to neuron indices per location */
@@ -65,10 +67,10 @@ export class Senses {
     }
     // --- taste: labellum and taste pegs (when proboscis touches the floor on food), tarsi ---
     const onPatch = (p, list) => { let best = null; for (const f of list) { const d = Math.hypot(p[0] - f.x, p[1] - f.y); if (d < f.r && (!best || f.sugar > best.sugar)) best = f; } return best; };
-    const labTouch = st.labellumZ < 0.065;   // extended labellum within 0.65 mm of the substrate (see PLAN.md)
+    const labTouch = st.labellumZ < 0.065; st.sugar = 0;   // strongest sugar taste anywhere this step (0..1)   // extended labellum within 0.65 mm of the substrate (see PLAN.md)
     if (labTouch) {
       const f = onPatch(st.labellum, env.food), b = onPatch(st.labellum, env.bitterPatches);
-      if (f && f.amount > 0) { this.set(this.taste.labellum.sugar, 180 * H(f.sugar * st.sugarGain, 0.2)); this.set(this.taste.labellum.water, 120 * H(f.water, 0.2)); if (st.proboscisOut) this.set(this.taste.peg.sugar, 150 * H(f.sugar, 0.2)); }
+      if (f && f.amount > 0) { st.sugar = Math.max(st.sugar, f.sugar); this.set(this.taste.labellum.sugar, 180 * H(f.sugar * st.sugarGain, 0.2)); this.set(this.taste.labellum.water, 120 * H(f.water, 0.2)); if (st.proboscisOut) this.set(this.taste.peg.sugar, 150 * H(f.sugar, 0.2)); }
       if (b) this.set(this.taste.labellum.bitter, 180 * H(b.bitter * st.bitterGain, 0.2));
     }
     for (const leg of ['T1', 'T2', 'T3']) for (const sd of ['left', 'right']) {
@@ -76,9 +78,12 @@ export class Senses {
       const on = touch > 0 ? 1 : 0;
       if (on !== this.touchPrev[key]) this.touchBurst[key] = 1; this.touchPrev[key] = on;
       this.touchBurst[key] *= Math.exp(-dtMs / 15);
-      if (this.touchBurst[key] > 0.05) this.set(this.tarsal[key] || [], 180 * this.touchBurst[key]);
+      // reafference: the stepping generator's efference copy presynaptically inhibits tarsal afferents during
+      // self-generated steps, so footfalls are not mistaken for external touch (st.stepping: 0 still .. 1 walking)
+      if (this.touchBurst[key] > 0.05) this.set(this.tarsal[key] || [], 180 * this.touchBurst[key] * (1 - REAFFERENCE * (st.stepping || 0)));
       if (touch > 0) {
         const p = st.claw[key], f = onPatch(p, env.food), b = onPatch(p, env.bitterPatches);
+        if (f && f.amount > 0) st.sugar = Math.max(st.sugar, f.sugar);
         if (f && f.amount > 0) this.set(this.taste.legs[key].sugar, 150 * H(f.sugar * st.sugarGain, 0.2));
         if (b) this.set(this.taste.legs[key].bitter, 150 * H(b.bitter * st.bitterGain, 0.2));
         for (const other of st.otherFlies) if (Math.hypot(p[0] - other.x, p[1] - other.y) < 0.18) this.set(this.taste.legs[key].pheromone, 120);
@@ -91,15 +96,16 @@ export class Senses {
     }
     // body bristles: contact of thorax/wings/abdomen with walls, obstacles or other flies
     for (const sd of ['left', 'right']) if (st.bodyContact[sd]) this.set(this.S[`wing/notum bristles ${sd}`] || [], 150);
+    // an obstacle ahead: it deflects the antenna (Johnston's organ) and touches the front leg's bristles
+    for (const sd of ['left', 'right']) if (st.frontTouch?.[sd]) { this.set(this.S[`JO wind/gravity ${sd}`] || [], 120); this.set(this.legBristle[`T1_${sd}`] || [], 150); }
     // halteres/gyro: angular velocity magnitude drives haltere campaniform populations (mostly relevant in flight)
     const w = Math.hypot(st.gyro[0], st.gyro[1], st.gyro[2]);
     for (const sd of ['left', 'right']) if (w > 2) this.set(this.S[`haltere ${sd}`] || [], Math.min(200, 10 * w));
     // antennal mechanosensation (JO): wind and self-motion air flow
     for (const sd of ['left', 'right']) { const air = Math.hypot(env.wind[0] - st.vel[0], env.wind[1] - st.vel[1]); if (air > 0.5) this.set(this.S[`JO wind/gravity ${sd}`] || [], Math.min(150, 20 * air)); }
     // temperature: hot floor patches heat the fly (thermosensory neurons of the arista)
-    let heat = 0; for (const h of env.hazards) { const d = Math.hypot(st.pos[0] - h.x, st.pos[1] - h.y); heat = Math.max(heat, h.heat * Math.max(0, 1 - Math.max(0, d - h.r) / 0.4)); }
-    st.heat = heat;
-    if (heat > 0.05) for (const sd of ['left', 'right']) this.set(this.S[`thermosensory ${sd}`] || [], 200 * heat);
+    st.heat = heatAt(st.pos, env);
+    for (const sd of ['left', 'right']) { const h = heatAt(st.antenna[sd], env); if (h > 0.05) this.set(this.S[`thermosensory ${sd}`] || [], 200 * h); }
     return this.rates;
   }
 }
@@ -154,4 +160,22 @@ export class CompoundEye {
     }
     return this.lum;
   }
+}
+
+/** horizontal clearance (cm) from point p to the nearest wall, obstacle or other fly; negative = inside.
+ *  With a height z, obstacles and flies that are not at that height are ignored. */
+export function clearance(p, env, others = [], z = null) {
+  const [x, y] = p; let d = env.arena.radius - Math.hypot(x, y);
+  for (const o of env.obstacles) {
+    if (z !== null && z > o.sz + 0.05) continue;
+    if (o.type === 'box') { const qx = Math.abs(x - o.x) - o.sx, qy = Math.abs(y - o.y) - o.sy; d = Math.min(d, Math.hypot(Math.max(qx, 0), Math.max(qy, 0)) + Math.min(Math.max(qx, qy), 0)); }
+    else d = Math.min(d, Math.hypot(x - o.x, y - o.y) - o.r);
+  }
+  for (const f of others) if (z === null || Math.abs(z - (f.z ?? 0.13)) < 0.15) d = Math.min(d, Math.hypot(x - f.x, y - f.y) - 0.1);
+  return d;
+}
+/** floor heat 0..1 at point p: full over a hot patch, fading over 4 mm around it */
+export function heatAt(p, env) {
+  let heat = 0; for (const h of env.hazards) { const d = Math.hypot(p[0] - h.x, p[1] - h.y); heat = Math.max(heat, h.heat * Math.max(0, 1 - Math.max(0, d - h.r) / 0.4)); }
+  return heat;
 }

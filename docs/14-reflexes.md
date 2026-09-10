@@ -13,7 +13,8 @@ Triggered by a giant-fibre burst or a sharp rise in the takeoff neurons, see [Mo
 Refractory period: 1 s. Landed upright in 24 of 24 trials from full-speed walking and hard turns, hopping
 at least 1 mm (`scripts/jump_test3.py`). Without the pre-posture, jumps from mid-stride flipped the fly.
 
-The real giant-fibre jump launches flight, which this body does not yet do, so a hop is the equivalent.
+After the push, the wings take over and the fly flies ([Flight](24-flight.md)). The airborne and landing
+phases above now apply only if flight does not start. See [Motor](12-motor.md) for escape gating.
 
 ## Righting
 A nerve-cord-level reflex, not a brain decision. It starts after 150 ms inverted and runs until upright:

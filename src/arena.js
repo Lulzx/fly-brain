@@ -131,6 +131,29 @@ function buildFlyMesh(color) {
   return { group, bodies, ring };
 }
 
+// beating wings: at 218 Hz a wing sweeps its whole stroke every 4.6 ms, far faster than any frame, so a flying
+// fly is drawn with faint copies of each wing across the stroke cycle (poses from the worker), like motion blur
+function buildWingBlur(f, poses) {
+  if (!poses) return;
+  f.wingBlur = ['left', 'right'].map(sd => {
+    const src = f.bodies[`wing_${sd}`]; if (!src) return null;
+    const ghosts = poses[sd].map(() => { const g = new THREE.Group();
+      src.traverse(o => { if (o.isMesh) g.add(new THREE.Mesh(o.geometry, new THREE.MeshStandardMaterial({ color: '#dfe6ee', transparent: true, opacity: 0.16, depthWrite: false, side: THREE.DoubleSide, roughness: 0.4 }))); });
+      g.visible = false; f.group.add(g); return g; });
+    return { src, ghosts, poses: poses[sd] };
+  });
+}
+const _tq = new THREE.Quaternion(), _rq = new THREE.Quaternion(), _v = new THREE.Vector3();
+function updateWingBlur(f, s) {
+  if (!f.wingBlur) return;
+  const th = f.bodyNames.indexOf('thorax'), on = !!s.flying;
+  _tq.set(s.xquat[th * 4 + 1], s.xquat[th * 4 + 2], s.xquat[th * 4 + 3], s.xquat[th * 4]);
+  for (const w of f.wingBlur) { if (!w) continue; w.src.visible = !on;
+    w.ghosts.forEach((g, k) => { g.visible = on; if (!on) return; const p = w.poses[k];
+      _v.set(p[0], p[1], p[2]).applyQuaternion(_tq); g.position.set(s.xpos[th * 3] + _v.x, s.xpos[th * 3 + 1] + _v.y, s.xpos[th * 3 + 2] + _v.z);
+      _rq.set(p[4], p[5], p[6], p[3]); g.quaternion.copy(_tq).multiply(_rq); }); }
+}
+
 // ---------------- flies ----------------
 let nextId = 0;
 async function addFly(pos, yaw) {
@@ -148,7 +171,7 @@ async function addFly(pos, yaw) {
   renderFlyList();
 }
 function onWorker(f, m) {
-  if (m.type === 'ready') { f.ready = true; f.bodyNames = m.bodyNames; f.bodyGroups = m.bodyNames.map(n => f.bodies[n] || null); f.onReady?.(); }
+  if (m.type === 'ready') { f.ready = true; f.bodyNames = m.bodyNames; f.bodyGroups = m.bodyNames.map(n => f.bodies[n] || null); buildWingBlur(f, m.wingPoses); f.onReady?.(); }
   else if (m.type === 'pose') {
     f.prev = f.last; f.last = m; f.recvAt = performance.now();
     m.foodEaten?.forEach((d, k) => { if (d > 0 && env.food[k]) { env.food[k].amount = Math.max(0, env.food[k].amount - d); foodDirty = true; } });
@@ -171,10 +194,12 @@ function buildUI() {
   $('#preset').onchange = e => { location.search = '?env=' + e.target.value; };
   $('#mode').onchange = e => { for (const f of flies) f.worker.postMessage({ type: 'mode', mode: e.target.value }); };
   document.querySelectorAll('.tools button').forEach(b => b.onclick = () => { tool = b.dataset.tool; document.querySelectorAll('.tools button').forEach(x => x.classList.toggle('on', x === b)); });
-  setInterval(() => { const f = flies.find(x => x.id === selected); if (f?.ready) f.worker.postMessage({ type: 'activity' }); }, 120);
+  setupFolds();
+  setInterval(() => { const f = flies.find(x => x.id === selected); if (f?.ready && !$('#brainpanel').classList.contains('folded')) f.worker.postMessage({ type: 'activity' }); }, 120);
   $('#wind').oninput = e => { const v = +e.target.value; $('#windv').textContent = v; env.wind = [v, 0]; syncEnv(); };
   $('#light').oninput = e => { env.light.sky = +e.target.value; scene.background = new THREE.Color().setHSL(0.6, 0.3, 0.02 + 0.05 * env.light.sky); syncEnv(); };
   $('#threat').onclick = () => launchThreat();
+  $('#takeoff').onclick = () => flies.find(x => x.id === selected)?.worker.postMessage({ type: 'takeoff' });
   setInterval(() => { if (foodDirty) { foodDirty = false; syncEnv(); envGroup.children.forEach(m => { if (m.userData.food) m.material.opacity = 0.35 + 0.65 * Math.min(1, m.userData.food.amount / 5); }); } renderFlyList(); }, 500);
 }
 function onClick(e) {
@@ -201,7 +226,7 @@ function renderFlyList() {
   const f = flies.find(x => x.id === selected); $('#selsec').hidden = !f;
   if (f?.last) { const s = f.last, c = s.cmd || {};
     $('#sel').innerHTML = `<div class="kv"><span>behaviour</span><span style="color:var(--acc)">${s.behavior || ''}</span><span>energy</span><span>${(s.energy * 100).toFixed(0)}%</span><span>health</span><span>${(s.health * 100).toFixed(0)}%</span>
-      <span>food eaten</span><span>${(s.eaten * 1000).toFixed(1)} mg·eq</span><span>distance walked</span><span>${(s.dist || 0).toFixed(1)} cm</span><span>escape jumps</span><span>${s.jumps || 0}</span><span>walk drive (BDN2/oDN1/P9)</span><span>${(c.drive || 0).toFixed(0)} Hz</span>
+      <span>food eaten</span><span>${(s.eaten * 1000).toFixed(1)} mg·eq</span><span>distance travelled</span><span>${(s.dist || 0).toFixed(1)} cm</span><span>takeoffs / flights</span><span>${s.jumps || 0} / ${s.flights || 0}</span><span>endogenous state</span><span>${s.drive || '–'}</span><span>walk drive (BDN2/oDN1/P9)</span><span>${(c.drive || 0).toFixed(0)} Hz</span>
       <span>backward (MDN)</span><span>${(c.back || 0).toFixed(0)} Hz</span><span>steering (DNa01/02)</span><span>${(c.turn || 0).toFixed(2)}</span>
       <span>giant fibre</span><span>${(c.escape || 0).toFixed(0)} Hz</span><span>MN9 (proboscis)</span><span>${(s.mn9 || 0).toFixed(0)} Hz</span>
       <span>pharyngeal pump</span><span>${((s.feeding || 0) * 100).toFixed(0)}%</span><span>sensory neurons driven</span><span>${s.nSensory}</span></div>`; }
@@ -229,7 +254,6 @@ function buildBrainPanel(data) {
     el.onmouseenter = () => { hover = j; }; el.onmouseleave = () => { hover = -1; };
     el.querySelector('.q').onclick = () => { const i = el.querySelector('.info'); i.hidden = !i.hidden; };
   });
-  $('#bpFold').onclick = () => { const p = $('#brainpanel'); p.classList.toggle('folded'); $('#bpFold').textContent = p.classList.contains('folded') ? '+' : '–'; };
   // eye columns: azimuth/elevation of each column's viewing direction; the front of each eye faces the middle
   const W = 168, H = 116;
   eyeDots = ['L', 'R'].map(sd => flyvisMap.eyes[sd].dirs.map(([x, y, z]) => {
@@ -286,12 +310,14 @@ function animate() {
     for (let b = 1; b < f.bodyGroups.length; b++) { const g = f.bodyGroups[b]; if (!g) continue;
       g.position.set(s.xpos[b * 3], s.xpos[b * 3 + 1], s.xpos[b * 3 + 2]); q.set(s.xquat[b * 4 + 1], s.xquat[b * 4 + 2], s.xquat[b * 4 + 3], s.xquat[b * 4]); g.quaternion.copy(q); }
     f.ring.position.set(s.pos[0], s.pos[1], 0.003); f.ring.visible = f.id === selected;
+    updateWingBlur(f, s);
   }
   const sf = flies.find(x => x.id === selected);
   if (sf?.last && $('#follow').checked) { const p = sf.last.pos; const tgt = new THREE.Vector3(p[0], p[1], 0.08); const d = tgt.clone().sub(controls.target); controls.target.add(d.multiplyScalar(0.1)); camera.position.add(d); }
   if (sf?.last) { const t = sf.last.t / 1000; $('#simt').textContent = t.toFixed(2); if (now - lastSimReal > 1000) { $('#rt').textContent = ((t - lastSim) / ((now - lastSimReal) / 1000)).toFixed(2); lastSim = t; lastSimReal = now; } }
   updateThreat(); controls.update(); renderer.render(scene, camera);
-  // brain inset
+  // brain inset (skipped while the brain panel is folded)
+  if ($('#brainpanel').classList.contains('folded')) return;
   const col = brainPts.geometry.attributes.color; const a = col.array; const base = new THREE.Color(sf?.color || '#888');
   const dim = hover >= 0 ? 0.08 : 1;   // fade the rest of the brain while a group is highlighted
   for (let i = 0; i < brainAct.length; i++) { const v = Math.min(1, brainAct[i] * 1.6); a[i * 3] = dim * (0.1 + v * (base.r - 0.1)); a[i * 3 + 1] = dim * (0.11 + v * (base.g - 0.11)); a[i * 3 + 2] = dim * (0.14 + v * (base.b - 0.14)); }
@@ -299,3 +325,22 @@ function animate() {
   col.needsUpdate = true; brainPts.rotation.y += 0.002; hlPts.rotation.copy(brainPts.rotation); brainRenderer.render(brainScene, brainCam);
 }
 main().catch(e => { status('error: ' + e.message); console.error(e); });
+
+// side panels fold to their title bar (chevron button, or the [ and ] keys); the choice persists
+function setupFolds() {
+  const folds = [['#panel', '#panelFold', '[', '‹', '›', 'controls'], ['#brainpanel', '#bpFold', ']', '›', '‹', 'brain panel']];
+  const apply = ([panel, btn, key, open, shut, what], folded) => {
+    $(panel).classList.toggle('folded', folded); const b = $(btn);
+    b.textContent = folded ? shut : open; b.title = `${folded ? 'Show' : 'Hide'} ${what} (${key})`; b.setAttribute('aria-expanded', String(!folded));
+    try { localStorage.setItem(`fold${panel}`, folded ? '1' : ''); } catch {}
+  };
+  for (const f of folds) {
+    let saved = false; try { saved = localStorage.getItem(`fold${f[0]}`) === '1'; } catch {}
+    apply(f, saved);
+    $(f[1]).onclick = () => apply(f, !$(f[0]).classList.contains('folded'));
+  }
+  addEventListener('keydown', e => {
+    if (e.target.closest?.('input, select, textarea') || e.metaKey || e.ctrlKey || e.altKey) return;
+    const f = folds.find(x => x[2] === e.key); if (f) apply(f, !$(f[0]).classList.contains('folded'));
+  });
+}

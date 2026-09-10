@@ -3,13 +3,17 @@
 //   physics state -> Senses (+ CompoundEye every 10 ms) -> sensory neuron drive -> brain (2 x 0.5 ms LIF steps)
 //   -> Motor (descending commands / motor neurons) -> actuators -> physics (10 x 0.1 ms MuJoCo steps)
 import { buildWorldXML } from './world.js';
-import { Senses, CompoundEye } from './senses.js';
+import { Senses, CompoundEye, clearance, heatAt } from './senses.js';
+import { Intrinsic } from './intrinsic.js';
+import { Flight } from './flight.js';
 import { FlyVisionFV } from './vision.js';
 import { Motor } from './motor.js';
 import { createBrain } from '../brainmodel.js';
 
+const Rt9 = (xm, b) => [xm[b * 9], xm[b * 9 + 3], xm[b * 9 + 6]];   // body x axis (heading) in world frame
+
 export class FlyAgent {
-  constructor({ mj, flyXML, env, data, size, sign, bodymap, gait, id = 0, pos = [0, 0], yaw = 0, nProxies = 0, mode = 'descending', brainOpts = {}, vision = true, brain = null, flyvis = null }) {
+  constructor({ mj, flyXML, env, data, size, sign, bodymap, gait, id = 0, pos = [0, 0], yaw = 0, nProxies = 0, mode = 'descending', brainOpts = {}, vision = true, brain = null, flyvis = null, intrinsic = true, seed = 0 }) {
     this.id = id; this.mj = mj; this.env = env; this.data = data; this.vision = vision;
     this.model = mj.MjModel.from_xml_string(buildWorldXML(flyXML, env, { flyPos: [pos[0], pos[1], 0.132], flyYaw: yaw, nProxies }));
     this.mjd = new mj.MjData(this.model);
@@ -32,6 +36,9 @@ export class FlyAgent {
     this.fv = vision && flyvis ? new FlyVisionFV(mj, M, this.mjd, bodymap, flyvis.map, flyvis.eyes, this.bid.head, this.bid.thorax, flyvis.gain ?? 150) : null;
     this.eye = vision && !this.fv ? new CompoundEye(mj, M, this.mjd, bodymap, this.bid.head, this.bid.thorax) : null;
     this.motor = new Motor(mj, M, this.mjd, bodymap, typeOf, sideOf, gait, mode);
+    this.intrinsic = intrinsic ? new Intrinsic(typeOf, sideOf, id + 1 + (seed || 0), bodymap.feeding) : null;
+    this.flight = new Flight({ model: M, data: this.mjd, thorax: this.bid.thorax, jointAdr: this.jointAdr, act: this.motor.act, range: this.motor.range, rand: this.intrinsic?.rand });
+    this.flights = 0;
     this.driven = new Int32Array(0);
     // physiology
     this.energy = 0.6; this.health = 1; this.alive = true; this.eaten = 0; this.t = 0; this.foodEaten = env.food.map(() => 0); this.dist = 0; this.jumps = 0; this._lastPos = null; this._wasJumping = false;
@@ -46,7 +53,8 @@ export class FlyAgent {
       gyro: [sd[sa.gyro], sd[sa.gyro + 1], sd[sa.gyro + 2]], vel: [sd[sa.velocimeter], sd[sa.velocimeter + 1], sd[sa.velocimeter + 2]],
       bodyContact: { left: false, right: false }, otherFlies: this.others, sugarGain: 0.6 + 0.9 * (1 - this.energy), bitterGain: 0.6 + 0.8 * this.energy };
     st.labellumZ = st.labellum[2];
-    st.proboscisOut = this.motor.proboscisOut();
+    st.pitchUp = d.xmat[B.thorax * 9 + 6];   // sine of nose-up pitch (body x axis z component)
+    st.proboscisOut = this.motor.proboscisOut(); st.stepping = this.motor.stepAmp || 0;
     for (const [k, b] of Object.entries(this.claw)) { st.claw[k] = P(b); st.touch[k] = sd[sa[`touch_claw_${k}`]]; const f = sa[`force_tarsus_${k}`]; st.load[k] = Math.hypot(sd[f], sd[f + 1], sd[f + 2]); }
     for (const [n, a] of Object.entries(this.jointAdr)) if (/^(tibia|coxa)_T/.test(n)) st.joint[n] = d.qpos[a];
     // body contacts with anything other than the floor (walls, obstacles, other flies) -> bristles by side (every 10 ms)
@@ -61,6 +69,19 @@ export class FlyAgent {
       cv.delete(); this._bodyContact = bc;
     }
     st.bodyContact = this._bodyContact || st.bodyContact;
+    // obstacle ahead: antenna tips (~0.2 mm in front of the antenna bases) or a front claw reach a wall, block
+    // or fly. Both reach the brain as touch; antennal contact is what makes the fly turn away (st.antTouch)
+    const fx = Rt9(d.xmat, B.thorax);
+    st.frontTouch = {}; st.antTouch = {};
+    for (const sd of ['left', 'right']) { const a = st.antenna[sd], tip = [a[0] + 0.02 * fx[0], a[1] + 0.02 * fx[1]];
+      st.antTouch[sd] = clearance(tip, this.env, this.others, a[2]) < 0.003;
+      st.frontTouch[sd] = st.antTouch[sd] || clearance(st.claw[`T1_${sd}`], this.env, this.others) < 0; }
+    // a static surface just ahead (~1.7 mm): its looming matches the fly's own translation
+    const hp = P(B.head); st.nearAhead = clearance([hp[0] + 0.12 * fx[0], hp[1] + 0.12 * fx[1]], this.env, this.others, hp[2]) < 0.05;
+    if (this.flight.active) {   // flight: clearance at the lookahead point ahead and 40 degrees to each side
+      const L = 0.9, yaw = Math.atan2(fx[1], fx[0]), at = a => clearance([st.pos[0] + L * Math.cos(yaw + a), st.pos[1] + L * Math.sin(yaw + a)], this.env, this.others, st.pos[2]);
+      st.ahead = { center: at(0), left: at(0.7), right: at(-0.7) };
+    }
     return st;
   }
   albedo = (g, x, y) => {
@@ -78,12 +99,15 @@ export class FlyAgent {
     const th = this.env.threat, tm = this.threatMocap * 3;
     if (th) { d.mocap_pos[tm] = th.x; d.mocap_pos[tm + 1] = th.y; d.mocap_pos[tm + 2] = th.z; } else if (d.mocap_pos[tm + 2] > -10) d.mocap_pos[tm + 2] = -20;
     const st = this.state();
-    const rates = this.senses.update(st, this.env, 1);
+    const rates = this.senses.update(st, this.env, 1); this._sugar = st.sugar;
     if (this.eye && (this.t % 10 === 0)) { this._eyeRates = new Map(); const er = this._eyeRates; this.eye.update({ set: (ix, hz) => { for (const i of ix) er.set(i, hz); } }, this.env, 10, this.albedo); }
     if (this.fv && (this.t % 20 === 0)) { this._eyeRates = new Map(); const er = this._eyeRates; this.fv.update((ix, hz) => { for (const i of ix) er.set(i, hz); }, this.env, this.albedo, 20); }
     if (this._eyeRates) for (const [i, hz] of this._eyeRates) rates.set(i, hz);
     // apply sensory drive (clear neurons no longer driven)
     const B = this.brain; for (const i of this.driven) B.drive[i] = 0;
+    if (this.intrinsic) this.intrinsic.update(1, B, { energy: this.energy, touch: st.antTouch, rearing: st.pitchUp > 0.45 && this.motor.jumpT < 0 && !this.motor.righting,
+      heat: { left: heatAt(st.antenna.left, this.env), right: heatAt(st.antenna.right, this.env) }, sugar: this._sugar || 0, flying: this.flight.active, ahead: st.ahead,
+      mouthOnFood: this.env.food.some(f => f.amount > 0 && Math.hypot(st.labellum[0] - f.x, st.labellum[1] - f.y) < f.r - 0.02) });
     const nd = new Int32Array(rates.size); let k = 0; for (const [i, hz] of rates) { B.setDriveOne(i, hz); nd[k++] = i; } this.driven = nd;
     // GF -> TTMn electrical synapse (not in the chemical connectome): GF spikes depolarise TTMn directly
     const before = this.brain.spikeCount[this.motor.dn.escape[0]] + this.brain.spikeCount[this.motor.dn.escape[1]];
@@ -91,7 +115,24 @@ export class FlyAgent {
     const after = this.brain.spikeCount[this.motor.dn.escape[0]] + this.brain.spikeCount[this.motor.dn.escape[1]];
     if (after > before) this.brain.pulse(this.motor.ttmn, 20);
     this.motor.readBrain(this.brain.spikeCount, 1);
-    this.cmd = this.motor.apply(this.t, 1, { up: this.mjd.xmat[this.bid.thorax * 9 + 8] });
+    // escape gating: a static surface the fly is walking up to, touching, or backing away from looms on the eye,
+    // its own pivots sweep the scene across the eye, and grooming legs pass over it. Touch, optic flow that matches
+    // its own translation, and efference copies of its movements (Kim et al. 2015) tell the brain none is a predator.
+    if (st.frontTouch.left || st.frontTouch.right || st.nearAhead || st.bodyContact.left || st.bodyContact.right || this.intrinsic?.avoid || this.cmd?.grooming) this.lastTouch = this.t;
+    if (this.motor.pivot) this.lastPivot = this.t;
+    const gated = this.t - (this.lastTouch ?? -1e9) < 500 || this.t - (this.lastPivot ?? -1e9) < 300;
+    this.motor.flying = this.flight.active;
+    this.cmd = this.motor.apply(this.t, 1, { up: this.mjd.xmat[this.bid.thorax * 9 + 8], touching: gated, voluntary: this.intrinsic && this.t < this.intrinsic.takeoffUntil,
+      contact: st.bodyContact.left || st.bodyContact.right || st.antTouch.left || st.antTouch.right });   // no takeoff while pressed against something
+    // takeoff: once the jump has pushed off, the wings start (tarsal reflex); an escape banks away from the threat
+    if (this.motor.launchT === this.t && !this.flight.active) {
+      const th = this.env.threat; this.flight.start(this.t, { cause: this.motor.jumpCause, awayFrom: th ? [th.x, th.y] : null }); this.flights++;
+    }
+    if (this.flight.active) {
+      const legTouch = Object.values(st.touch).some(x => x > 0);
+      if (this.flight.update(this.t, 1, { turn: this.cmd.turn, env: this.env, others: this.others, legTouch }) === 'landed') this.motor.recoverUntil = this.t + 300;
+      this.cmd.flying = this.flight.active; this.cmd.flight = this.flight.label();
+    }
     for (let s = 0; s < this.physPerMs; s++) mj.mj_step(M, d);
     this.t += 1;
     this.physiology(st);
@@ -99,9 +140,9 @@ export class FlyAgent {
   physiology(st) {
     const dt = 0.001;
     if (this._lastPos) this.dist += Math.hypot(st.pos[0] - this._lastPos[0], st.pos[1] - this._lastPos[1]); this._lastPos = st.pos;
-    const jumping = this.motor.jumpT >= 0; if (jumping && !this._wasJumping) this.jumps++; this._wasJumping = jumping;
+    const jumping = this.motor.jumping; if (jumping && !this._wasJumping) this.jumps++; this._wasJumping = jumping;
     const walking = Math.abs(this.cmd.v);
-    this.energy -= dt * (1 / 240 + walking / 180);                 // compressed timescale: ~4 min to starve at rest
+    this.energy -= dt * (1 / 240 + walking / 180 + (this.flight.active ? 1 / 40 : 0));   // compressed timescale: ~4 min to starve at rest; flight is costly
     // ingestion: labellum on food + proboscis extended + pharyngeal pump motor neurons active
     if (st.labellumZ < 0.065 && st.proboscisOut) for (const f of this.env.food) {
       if (f.amount > 0 && Math.hypot(st.labellum[0] - f.x, st.labellum[1] - f.y) < f.r) {
@@ -117,7 +158,8 @@ export class FlyAgent {
     const c = this.cmd || {}; const m = this.motor;
     if (!this.alive) return 'dead';
     if (c.righting) return 'righting';
-    if (m.jumpT >= 0) return 'escape jump';
+    if (this.flight.active) return this.flight.label();
+    if (m.jumping) return m.jumpCause === 'voluntary' ? 'taking off' : 'escape jump';
     if (c.grooming) return 'grooming';
     if (st && st.proboscisOut && st.labellumZ < 0.065 && this.env.food.some(f => f.amount > 0 && Math.hypot(st.labellum[0] - f.x, st.labellum[1] - f.y) < f.r)) return 'feeding';
     const pe = st && st.proboscisOut ? ' (proboscis out)' : '';

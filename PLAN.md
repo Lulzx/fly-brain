@@ -101,7 +101,8 @@ Hunger raises sugar-GRN and lowers bitter-GRN gain (Inagaki 2012, LeDue 2016). H
 - No connectome-only model today produces coordinated walking from the whole VNC (Pugliese et al. found
   rhythms in a front-leg subnetwork for ~3% of DNs); hence the descending-command mode.
 - Proboscis servos in flybody are weak; the labellum counts as touching food within 0.65 mm when extended.
-- The brain has no intrinsic drives (circadian, hunger peptides); spontaneous behaviour comes only from
-  sensory input (vision drives the forward-walking DNs through their visual inputs).
+- The brain has no intrinsic drives (circadian, hunger peptides). Spontaneous behaviour (bouts, saccades,
+  takeoff) comes from an endogenous-activity module acting as synaptic input to DNs (docs/23-behaviour.md).
 - flyvis covers 65 columnar optic-lobe types; its column lattice is a regular hexagon, so ~410 of 721 model
-  columns are used by the real (non-hexagonal) male-CNS eye map. No flight yet (wing-beat generator exists in FlySuite).
+  columns are used by the real (non-hexagonal) male-CNS eye map. Flight is quasi-steady, with FlySuite wing
+  kinematics drawn and net forces applied (docs/24-flight.md).

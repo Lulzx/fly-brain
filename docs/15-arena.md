@@ -26,6 +26,15 @@ The right-hand panel follows the selected fly. Every 120 ms the page asks that f
 Group membership is defined once in `src/sim/groups.js` and used by both the worker (`GroupMeter`)
 and the page.
 
+## Panels
+Both side panels fold to their title bar with the chevron button, or the `[` and `]` keys. The choice is
+remembered. While the brain panel is folded, the page stops polling activity and drawing the inset.
+
+## Flight
+A flying fly's wings are drawn as faint copies across the wing-beat cycle, from poses the worker computes
+at startup. Its shadow on the floor shows its height. "Activate takeoff DNs" excites the selected fly's
+DNp02 and DNp04.
+
 ## World presets
 
 | Preset | Contents |
@@ -37,6 +46,7 @@ and the page.
 | Social | Five flies, one food patch |
 
 ## Controls
-Run and pause, speed, add fly, motor mode, follow camera, placement tools, looming threat, wind, light.
-The panel shows each fly's behaviour label, energy, health, food eaten, distance, jumps, and live
-descending-neuron commands.
+Run and pause, speed, add fly, motor mode, follow camera, placement tools, looming threat, takeoff DN
+activation, wind, light.
+The panel shows each fly's behaviour label, energy, health, food eaten, distance, takeoffs and flights,
+its endogenous state (walk, stop, groom, feed, search, avoiding, fly), and live descending-neuron commands.

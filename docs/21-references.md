@@ -22,5 +22,16 @@
   Namiki et al. 2018; Turner et al. 2008; Gruntman and Turner 2013; Olsen and Wilson 2008;
   Inagaki et al. 2012; LeDue et al. 2016.
 
+## Behaviour and flight
+- Maye et al. 2007, order in spontaneous behavior, PLoS ONE 2:e443.
+- Brembs 2011, spontaneous variability as the basis of free will, Proc R Soc B 278:930.
+- Geurten et al. 2014, saccadic body turns in walking Drosophila, Front Behav Neurosci.
+- Seeds et al. 2014, grooming sequences, eLife.
+- Yang et al. 2015, octopamine and starvation-induced hyperactivity, PNAS.
+- Dethier 1957; Kim and Dickinson 2017, local search after feeding, Curr Biol.
+- Kim et al. 2015, efference copy in Drosophila visuomotor processing, Nat Neurosci.
+- Tammero and Dickinson 2002, collision-avoidance saccades in free flight, J Exp Biol.
+- Dickinson 1999, haltere-mediated equilibrium reflexes, Phil Trans R Soc B.
+
 ## Precedent
 - Eon Systems, embodied brain emulation: https://eon.systems/updates/embodied-brain-emulation

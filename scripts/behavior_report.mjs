@@ -19,7 +19,7 @@ const only = process.argv[2];
 const scenarios = {
   forage: { secs: 12, setup: env => [[-0.2, 0.6], 0], note: 'food + vinegar 1.2 cm ahead' },
   onfood: { secs: 4, setup: env => [[env.food[0].x - 0.05, env.food[0].y], 0], note: 'standing on sugar' },
-  threat: { secs: 2.5, setup: env => [[0, 0], 0], threat: 600, note: 'dark object looms from front-left at 0.6 s' },
+  threat: { secs: 4, setup: env => [[0, 0], 0], threat: 2000, note: 'dark object looms from front-left at 2 s (escapes are off for the first 1.5 s)' },
   heat: { secs: 4, setup: env => [[env.hazards[0].x, env.hazards[0].y], 0], note: 'placed on a hot patch' },
   bitter: { secs: 4, setup: env => [[env.bitterPatches[0].x - 0.05, env.bitterPatches[0].y], 0], note: 'standing on bitter' },
 };

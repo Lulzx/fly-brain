@@ -2,7 +2,8 @@
 
 An embodied simulation of the male *Drosophila* central nervous system connectome, running in the browser.
 Each fly is a 165,122-neuron spiking brain inside a physics-simulated body, seeing through a trained
-compound-eye model. The brain alone decides what the fly does.
+compound-eye model. The brain turns what the fly senses into what it does. An endogenous-activity module
+supplies the spontaneous drive the model lacks.
 
 ## Index
 
@@ -42,13 +43,17 @@ compound-eye model. The brain alone decides what the fly does.
 ### Delivery
 22. [Data codecs](22-codecs.md): how the connectome, skeletons and neuron table are packed for the browser
 
+### Behaviour
+23. [Endogenous behaviour](23-behaviour.md): bouts, saccades, obstacle and heat avoidance, feeding, search
+24. [Flight](24-flight.md): takeoff, quasi-steady flight, collision avoidance, landing
+
 ## Repository layout
 
 | Path | Contents |
 |---|---|
 | `index.html`, `src/main.js` | Connectome viewer |
 | `arena.html`, `src/arena.js` | Embodied arena |
-| `src/sim/` | Fly agent, world, senses, vision, motor, worker |
+| `src/sim/` | Fly agent, world, senses, vision, motor, endogenous behaviour, flight, worker |
 | `src/lif.js`, `src/lifwasm.js`, `src/wasm/lif.c` | Brain model in JS and WebAssembly |
 | `src/brainmodel.js`, `src/brainsetup.js` | Calibrated brain construction, shared memory |
 | `src/flyvis.js` | flyvis optic-lobe runtime |

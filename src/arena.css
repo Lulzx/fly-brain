@@ -12,15 +12,22 @@ a { color: var(--acc); }
 :root { --left:#6cb6ff; --right:#ff9f5a; }
 #brainpanel { position: fixed; top: 12px; right: 12px; bottom: 12px; width: 360px; display: flex; flex-direction: column; gap: 0; background: var(--panel); backdrop-filter: blur(10px); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
 #brainpanel[hidden] { display: none; }
-#brainpanel.folded { bottom: auto; }
-#brainpanel.folded #bpBody, #brainpanel.folded #brain { display: none; }
+#brainpanel.folded { bottom: auto; width: auto; }
+#brainpanel.folded #bpBody, #brainpanel.folded #brain, #brainpanel.folded .lr { display: none; }
+
+/* collapsible side panels: folded to their title bar, toggled by the chevron or the [ and ] keys */
+.fold { flex: none; padding: 0 8px; line-height: 20px; font-size: 14px; }
+#panel .hrow { display: flex; align-items: center; gap: 10px; }
+#panel .hrow h1 { flex: 1; }
+#panel.folded { width: auto; overflow: hidden; padding-bottom: 0; }
+#panel.folded section, #panel.folded .sub { display: none; }
+#panel.folded header { border-bottom: 0; padding-bottom: 14px; }
 #brainpanel header { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-bottom: 1px solid var(--line); }
 #brainpanel h2 { margin: 0; font-size: 13px; font-weight: 600; flex: 1; }
 #brainpanel .lr { color: var(--dim); font-size: 11px; display: inline-flex; align-items: center; gap: 4px; }
 #brainpanel .lr i { width: 10px; height: 3px; border-radius: 2px; display: inline-block; margin-left: 4px; }
 #brainpanel .lr .l, #groups .v .l { background: var(--left); color: var(--left); }
 #brainpanel .lr .r, #groups .v .r { background: var(--right); color: var(--right); }
-#bpFold { padding: 0 8px; line-height: 20px; }
 #bpBody { flex: 1; min-height: 0; overflow: auto; padding: 10px 12px 6px; }
 .eyes { display: flex; gap: 8px; }
 .eyes figure { margin: 0; flex: 1; }

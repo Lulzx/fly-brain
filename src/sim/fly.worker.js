@@ -19,7 +19,7 @@ onmessage = async (e) => {
     fly = new FlyAgent({ brain, flyvis, mj, flyXML: m.flyXML, env, data, size: g.size, sign: g.sign, bodymap: m.bodymap, gait: m.gait, id: m.id,
       pos: m.pos, yaw: m.yaw, nProxies: m.nProxies, mode: m.mode, brainOpts: m.brainOpts, vision: m.vision });
     meter = new GroupMeter(buildGroups(m.bodymap, data.meta.types, data.side), g.N);
-    postMessage({ type: 'ready', id: m.id, nbody: fly.model.nbody, bodyNames: [...Array(fly.model.nbody).keys()].map(i => fly.model.body(i).name) });
+    postMessage({ type: 'ready', id: m.id, nbody: fly.model.nbody, bodyNames: [...Array(fly.model.nbody).keys()].map(i => fly.model.body(i).name), wingPoses: fly.flight.wingPoses(mj) });
     postPose();
     if (running) { lastReal = performance.now(); loop(); }
   } else if (m.type === 'run') { if (running) return; running = true; lastReal = performance.now(); if (fly) loop(); }   // before init: loop starts once ready
@@ -29,6 +29,7 @@ onmessage = async (e) => {
   else if (m.type === 'others') { others = m.others; fly.others = others; setProxies(); }
   else if (m.type === 'mode') fly.motor.mode = m.mode;
   else if (m.type === 'stimulate') fly.brain.setDrive(m.indices, m.rate);
+  else if (m.type === 'takeoff') { if (fly.intrinsic) fly.intrinsic.takeoffUntil = fly.intrinsic.t + 80; }   // takeoff DN activation (see Intrinsic)
   else if (m.type === 'activity') {
     const eyes = fly.fv ? fly.fv.lumEye.map(e => e.slice(0)) : null;
     postMessage({ type: 'activity', id: fly.id, trace: fly.brain.trace.slice(0), t: fly.t, groups: meter.read(fly.brain.spikeCount, fly.t), eyes });
@@ -44,7 +45,7 @@ function postPose() {
   const p = fly.pose(); const st = fly.state();
   postMessage({ type: 'pose', id: fly.id, t: fly.t, xpos: p.xpos, xquat: p.xquat, cmd: fly.cmd, energy: fly.energy, health: fly.health, alive: fly.alive, eaten: fly.eaten,
     mn9: fly.motor.mean(fly.motor.muscles.find(x => x.name.startsWith('MN9'))?.idx || []), feeding: fly.motor.feeding(), heat: st.heat || 0, nSensory: fly.driven.length,
-    foodEaten: fly.foodEaten.splice(0, fly.foodEaten.length, ...fly.foodEaten.map(() => 0)), behavior: fly.behavior(st), dist: fly.dist, jumps: fly.jumps, pos: st.pos, yaw: Math.atan2(fly.mjd.xmat[fly.bid.thorax * 9 + 3], fly.mjd.xmat[fly.bid.thorax * 9]) });
+    foodEaten: fly.foodEaten.splice(0, fly.foodEaten.length, ...fly.foodEaten.map(() => 0)), behavior: fly.behavior(st), drive: fly.intrinsic?.label(), flying: fly.flight.active, flights: fly.flights, dist: fly.dist, jumps: fly.jumps, pos: st.pos, yaw: Math.atan2(fly.mjd.xmat[fly.bid.thorax * 9 + 3], fly.mjd.xmat[fly.bid.thorax * 9]) });
 }
 function loop() {
   if (!running) return;

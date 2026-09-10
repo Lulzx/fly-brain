@@ -2,7 +2,9 @@
 
 ## Goal
 Put the male fruit fly connectome in a physically realistic body, place it in environments, and let the
-brain decide what the fly does. Nothing about the fly's choices is scripted.
+brain decide what the fly does. Sensory responses come from the connectome. The spontaneous part of
+behaviour, which the model has no neuromodulation to produce, comes from an endogenous-activity module
+that acts only as synaptic input to identified descending neurons ([Endogenous behaviour](23-behaviour.md)).
 
 ## The closed loop
 Every simulated millisecond, for each fly:
@@ -10,9 +12,11 @@ Every simulated millisecond, for each fly:
 1. The physics state is read: joint angles, foot contacts, body position, head orientation.
 2. Senses convert that state into firing rates of identified sensory neurons.
 3. The eyes cast rays, run the flyvis optic-lobe model, and drive matching optic-lobe neurons.
-4. The brain advances two 0.5 ms spiking steps over 10.5 million connections.
+4. The endogenous-activity module adds its synaptic input to descending neurons, then the brain advances
+   two 0.5 ms spiking steps over 10.5 million connections.
 5. The motor layer reads descending and motor neurons and sets actuator targets.
-6. MuJoCo advances the body five 0.2 ms physics steps.
+6. In flight, the flight model sets the aerodynamic force and torque and the leg posture.
+7. MuJoCo advances the body five 0.2 ms physics steps.
 
 ## Components
 
