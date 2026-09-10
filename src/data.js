@@ -1,4 +1,5 @@
 // Loads the preprocessed connectome files from /data.
+const BASE = import.meta.env.BASE_URL; // "/" in dev, "/fly-brain/" on GitHub Pages
 async function fetchBuf(url, onProgress) {
   const r = await fetch(url);
   if (!r.ok) throw new Error(`${url}: ${r.status}`);
@@ -10,10 +11,10 @@ async function fetchBuf(url, onProgress) {
 }
 
 export async function loadConnectome(onStatus) {
-  const meta = await (await fetch('/data/meta.json')).json();
+  const meta = await (await fetch(`${BASE}data/meta.json`)).json();
   const N = meta.N;
   onStatus?.('loading neurons');
-  const nb = await fetchBuf('/data/neurons.bin');
+  const nb = await fetchBuf(`${BASE}data/neurons.bin`);
   let off = 8;
   const bodyIds = new BigInt64Array(nb, off, N); off += N * 8;
   const soma = new Float32Array(nb, off, N * 3); off += N * 12;
@@ -25,7 +26,7 @@ export async function loadConnectome(onStatus) {
   const side = new Uint8Array(nb, off, N); off += N;
 
   onStatus?.('loading connectivity');
-  const gb = await fetchBuf(`/data/graph_w${meta.minWeight}.bin`, (g, t) => onStatus?.(`loading connectivity ${(g / 1e6).toFixed(0)} / ${(t / 1e6).toFixed(0)} MB`));
+  const gb = await fetchBuf(`${BASE}data/graph_w${meta.minWeight}.bin`, (g, t) => onStatus?.(`loading connectivity ${(g / 1e6).toFixed(0)} / ${(t / 1e6).toFixed(0)} MB`));
   const hdr = new Uint32Array(gb, 0, 2); const E = hdr[1];
   const indptr = new Uint32Array(gb, 8, N + 1);
   const indices = new Uint32Array(gb, 8 + (N + 1) * 4, E);
@@ -34,7 +35,7 @@ export async function loadConnectome(onStatus) {
   let skel = null;
   try {
     onStatus?.('loading skeletons');
-    const sb = await fetchBuf('/data/skeletons_lo.bin', (g, t) => onStatus?.(`loading skeletons ${(g / 1e6).toFixed(0)} / ${(t / 1e6).toFixed(0)} MB`));
+    const sb = await fetchBuf(`${BASE}data/skeletons_lo.bin`, (g, t) => onStatus?.(`loading skeletons ${(g / 1e6).toFixed(0)} / ${(t / 1e6).toFixed(0)} MB`));
     const h = new Uint32Array(sb, 0, 4); const V = h[1], P = h[2];
     const bbox = new Float32Array(sb, 16, 6);
     let o = 40;

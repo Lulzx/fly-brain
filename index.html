@@ -4,6 +4,7 @@
 <meta charset="utf-8" />
 <title>Male CNS connectome — live simulation</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<script src="coi-serviceworker.js"></script><!-- COOP/COEP via service worker (static hosts such as GitHub Pages cannot set headers) -->
 <link rel="stylesheet" href="/src/style.css" />
 </head>
 <body>
@@ -54,7 +55,7 @@
   <section>
     <h2>Model</h2>
     <div class="row"><label>background synaptic activity <input id="bgRate" type="number" step="10" value="0" min="0"> Hz/neuron</label></div>
-    <div class="note">Conductance-based leaky integrate-and-fire (WebAssembly), 0.5 ms steps, parameters calibrated against published behaviours (see PLAN.md). Signs from predicted transmitters; unclear neurons use per-synapse probabilities. Connections ≥5 synapses. Open the <a href="/arena.html" style="color:var(--acc)">embodied arena</a>.</div>
+    <div class="note">Conductance-based leaky integrate-and-fire (WebAssembly), 0.5 ms steps, parameters calibrated against published behaviours (see PLAN.md). Signs from predicted transmitters; unclear neurons use per-synapse probabilities. Connections ≥5 synapses. Open the <a href="arena.html" style="color:var(--acc)">embodied arena</a>.</div>
   </section>
   <section id="selection" hidden>
     <h2>Selected neuron</h2>

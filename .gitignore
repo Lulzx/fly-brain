@@ -1,7 +1,6 @@
 node_modules
 data/raw
 data/skeletons
-public/data
 .venv
 dist
 body/flybody-src

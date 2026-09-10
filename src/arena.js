@@ -4,6 +4,7 @@ import { loadConnectome } from './data.js';
 import { DEFAULT_ENV, PRESETS } from './sim/world.js';
 import { allocBrainMemory, MAX_FLIES } from './brainsetup.js';
 import { parseFlyVis } from './flyvis.js';
+const BASE = import.meta.env.BASE_URL; // "/" in dev, "/fly-brain/" on GitHub Pages
 
 const $ = s => document.querySelector(s);
 const status = s => { $('#status').textContent = s; };
@@ -22,11 +23,11 @@ async function main() {
   meta = data.meta;
   status('loading body model');
   const [bm, xml, g, vj, vb, sz, sg, bp, wasmBytes, fvb, fvj, fvi, fvm] = await Promise.all([
-    fetch('/data/bodymap.json').then(r => r.json()), fetch('/body/fly_physics.xml').then(r => r.text()), fetch('/body/gait.json').then(r => r.json()),
-    fetch('/body/fly_visual.json').then(r => r.json()), fetch('/body/fly_visual.bin').then(r => r.arrayBuffer()),
-    fetch('/data/neuron_size.bin').then(r => r.arrayBuffer()), fetch('/data/ntsign.bin').then(r => r.arrayBuffer()),
-    fetch('/data/brain_params.json').then(r => r.ok ? r.json() : {}).catch(() => ({})), fetch('/lif.wasm').then(r => r.arrayBuffer()),
-    fetch('/vision/flyvis.bin').then(r => r.arrayBuffer()), fetch('/vision/flyvis.json').then(r => r.json()), fetch('/vision/flyvis_inputs.json').then(r => r.json()), fetch('/vision/flyvis_map.json').then(r => r.json())]);
+    fetch(`${BASE}data/bodymap.json`).then(r => r.json()), fetch(`${BASE}body/fly_physics.xml`).then(r => r.text()), fetch(`${BASE}body/gait.json`).then(r => r.json()),
+    fetch(`${BASE}body/fly_visual.json`).then(r => r.json()), fetch(`${BASE}body/fly_visual.bin`).then(r => r.arrayBuffer()),
+    fetch(`${BASE}data/neuron_size.bin`).then(r => r.arrayBuffer()), fetch(`${BASE}data/ntsign.bin`).then(r => r.arrayBuffer()),
+    fetch(`${BASE}data/brain_params.json`).then(r => r.ok ? r.json() : {}).catch(() => ({})), fetch(`${BASE}lif.wasm`).then(r => r.arrayBuffer()),
+    fetch(`${BASE}vision/flyvis.bin`).then(r => r.arrayBuffer()), fetch(`${BASE}vision/flyvis.json`).then(r => r.json()), fetch(`${BASE}vision/flyvis_inputs.json`).then(r => r.json()), fetch(`${BASE}vision/flyvis_map.json`).then(r => r.json())]);
   const vision = { model: parseFlyVis(fvb, fvj, fvi), map: fvm };
   bodymap = bm; flyXML = xml; gait = g; visual = { json: vj, bin: vb };
   shared = { N: data.N, E: data.E, indptr: toShared(data.indptr), indices: toShared(data.indices), weights: toShared(data.weights), nt: toShared(data.nt),

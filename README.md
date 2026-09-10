@@ -1,5 +1,7 @@
 # fly-brain
 
+**Live demo:** [arena](https://lulzx.github.io/fly-brain/arena.html) · [connectome viewer](https://lulzx.github.io/fly-brain/) (desktop Chrome/Edge/Firefox; downloads ~190 MB of data)
+
 Full documentation: [docs/README.md](docs/README.md).
 
 Embodied, whole-CNS simulation of the **male *Drosophila* connectome** in the browser.
