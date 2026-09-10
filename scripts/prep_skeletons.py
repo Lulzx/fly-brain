@@ -8,7 +8,7 @@ OUT='public/data'; SK='data/skeletons'
 TARGET=int(sys.argv[1]) if len(sys.argv)>1 else 48      # target vertices per neuron after simplification
 meta=json.load(open(f'{OUT}/meta.json')); N=meta['N']
 nb=open(f'{OUT}/neurons.bin','rb').read()
-body_ids=np.frombuffer(nb,dtype=np.int64,count=N,offset=4)
+body_ids=np.frombuffer(nb,dtype=np.int64,count=N,offset=8)
 
 def read_sk(path):
     b=open(path,'rb').read()

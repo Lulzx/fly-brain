@@ -58,7 +58,7 @@ function buildScene() {
   actTex = new THREE.DataTexture(new Float32Array(texW * texH), texW, texH, THREE.RedFormat, THREE.FloatType);
   actTex.magFilter = actTex.minFilter = THREE.NearestFilter;
   uniforms = { colorTex: { value: colorTex }, actTex: { value: actTex }, texW: { value: texW }, texH: { value: texH },
-    opacity: { value: 0.25 }, selected: { value: -1 }, activeOnly: { value: 0 }, pointSize: { value: 2.5 * devicePixelRatio } };
+    opacity: { value: 0.02 }, selected: { value: -1 }, activeOnly: { value: 0 }, pointSize: { value: 2.5 * devicePixelRatio } };
 
   const glsl = {
     vert: (isPoint) => `
@@ -79,8 +79,8 @@ function buildScene() {
         if (activeOnly > 0.5 && a < 0.02) discard;
         vec3 hot = mix(vec3(1.0, 0.85, 0.3), vec3(1.0), vSel);
         vec3 col = mix(vColor.rgb, hot, a);
-        float alpha = mix(opacity, 1.0, a);
-        gl_FragColor = vec4(col * (0.6 + 1.4 * a), alpha);
+        float alpha = mix(opacity, 0.4, a);
+        gl_FragColor = vec4(col * (0.5 + 1.5 * a), alpha);
       }`,
   };
   const mat = (isPoint) => new THREE.ShaderMaterial({ uniforms, vertexShader: glsl.vert(isPoint), fragmentShader: glsl.frag,
@@ -122,7 +122,8 @@ function buildScene() {
     center.set((bbox[0] + bbox[3]) / 2000, (bbox[1] + bbox[4]) / 2000, (bbox[2] + bbox[5]) / 2000);
   }
   controls.target.copy(center);
-  camera.position.copy(center).add(new THREE.Vector3(0, 0, -1400));
+  const camDist = (data.skel ? Math.max(data.skel.bbox[3] - data.skel.bbox[0], data.skel.bbox[4] - data.skel.bbox[1], data.skel.bbox[5] - data.skel.bbox[2]) / 1000 * 1.9 : 1400);
+  camera.position.copy(center).add(new THREE.Vector3(-0.55, -0.45, -0.7).normalize().multiplyScalar(camDist));
   camera.up.set(0, -1, 0); // EM y axis points down (dorsal up)
   controls.update();
   raycaster = new THREE.Raycaster(); raycaster.params.Points.threshold = 3;
