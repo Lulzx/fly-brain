@@ -21,7 +21,8 @@ onmessage = async (e) => {
     meter = new GroupMeter(buildGroups(m.bodymap, data.meta.types, data.side), g.N);
     postMessage({ type: 'ready', id: m.id, nbody: fly.model.nbody, bodyNames: [...Array(fly.model.nbody).keys()].map(i => fly.model.body(i).name) });
     postPose();
-  } else if (m.type === 'run') { running = true; lastReal = performance.now(); loop(); }
+    if (running) { lastReal = performance.now(); loop(); }
+  } else if (m.type === 'run') { if (running) return; running = true; lastReal = performance.now(); if (fly) loop(); }   // before init: loop starts once ready
   else if (m.type === 'pause') running = false;
   else if (m.type === 'speed') speed = m.speed;
   else if (m.type === 'env') { Object.assign(env, m.env); fly.env = env; if (fly.foodEaten.length !== env.food.length) fly.foodEaten = env.food.map(() => 0); }
