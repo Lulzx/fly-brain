@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Male CNS connectome — live simulation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="loading"><div class="title">Male fruit fly CNS connectome</div><div id="status">loading…</div></div>
+<aside id="panel">
+  <header>
+    <h1>Drosophila male CNS</h1>
+    <div class="sub" id="summary"></div>
+  </header>
+  <section>
+    <div class="row">
+      <button id="play" class="primary">▶ Run</button>
+      <button id="reset">Reset</button>
+      <label>speed <input id="speed" type="range" min="0.05" max="2" step="0.05" value="0.5"><span id="speedv">0.5×</span></label>
+    </div>
+    <div class="stats">
+      <div><b id="simt">0</b><span>sim ms</span></div>
+      <div><b id="rate">0</b><span>spikes / s</span></div>
+      <div><b id="active">0</b><span>active neurons</span></div>
+      <div><b id="fps">0</b><span>fps</span></div>
+    </div>
+  </section>
+  <section>
+    <h2>Stimulate</h2>
+    <div class="row">
+      <select id="groupKind"><option value="superclass">superclass</option><option value="class">class</option><option value="type">type</option></select>
+      <input id="groupQuery" list="groupList" placeholder="e.g. olfactory, DNp01, MBON…">
+      <datalist id="groupList"></datalist>
+    </div>
+    <div class="row">
+      <select id="groupSide"><option value="0">both sides</option><option value="1">left</option><option value="2">right</option></select>
+      <label>rate <input id="rateHz" type="number" value="150" min="0" step="10"> Hz</label>
+      <button id="addDrive" class="primary">Add</button>
+      <button id="pulse">Pulse</button>
+    </div>
+    <ul id="drives"></ul>
+  </section>
+  <section>
+    <h2>View</h2>
+    <div class="row">
+      <label>color <select id="colorMode"><option value="superclass">superclass</option><option value="nt">neurotransmitter</option><option value="side">side</option><option value="activity">activity only</option></select></label>
+      <label>show <select id="showMode"><option value="skeletons">skeletons</option><option value="somas">somas</option><option value="active">active only</option></select></label>
+    </div>
+    <div class="row"><label>opacity <input id="opacity" type="range" min="0.02" max="1" step="0.02" value="0.25"></label></div>
+    <div id="legend"></div>
+  </section>
+  <section>
+    <h2>Model</h2>
+    <div class="row"><label>synapse PSP <input id="wSyn" type="number" step="0.025" value="0.275"> mV</label>
+    <label>noise <input id="noise" type="number" step="0.1" value="0"></label></div>
+    <div class="row"><label>adaptation <input id="adaptInc" type="number" step="0.5" value="2"> mV/spike</label>
+    <label>depression <input id="depU" type="number" step="0.05" value="0.2" min="0" max="1"></label></div>
+    <div class="note">Leaky integrate-and-fire (Shiu et al. 2024 parameters) plus spike-frequency adaptation and short-term synaptic depression, 0.5 ms steps. Excitatory: ACh &amp; monoamines. Inhibitory: GABA, glutamate, histamine. Connections ≥3 synapses.</div>
+  </section>
+  <section id="selection" hidden>
+    <h2>Selected neuron</h2>
+    <div id="selinfo"></div>
+  </section>
+</aside>
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>

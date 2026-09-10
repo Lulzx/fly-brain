@@ -1,0 +1,28 @@
+// FlyBrain: one simulated male-CNS connectome instance running in its own worker.
+// Designed to be instantiated once per fly. Inputs: drive(indices, rateHz) / pulse. Outputs: onFrame(trace, spikes).
+export class FlyBrain {
+  constructor(data) {
+    this.data = data; this.N = data.N;
+    this.worker = new Worker(new URL('./sim.worker.js', import.meta.url), { type: 'module' });
+    this.listeners = new Set();
+    this.ready = new Promise(res => { this._resolveReady = res; });
+    this.worker.onmessage = (e) => {
+      const m = e.data;
+      if (m.type === 'ready') this._resolveReady();
+      else if (m.type === 'frame') this.listeners.forEach(fn => fn(m));
+      else if (m.type === 'state' && this._stateCb) { this._stateCb(m); this._stateCb = null; }
+    };
+    // Share graph arrays via structured clone (copy). For many flies, move to SharedArrayBuffer.
+    this.worker.postMessage({ type: 'init', N: data.N, indptr: data.indptr, indices: data.indices, weights: data.weights, nt: data.nt });
+  }
+  onFrame(fn) { this.listeners.add(fn); return () => this.listeners.delete(fn); }
+  setParams(p) { this.worker.postMessage({ type: 'params', params: p }); }
+  run() { this.worker.postMessage({ type: 'run' }); }
+  pause() { this.worker.postMessage({ type: 'pause' }); }
+  reset() { this.worker.postMessage({ type: 'reset' }); }
+  drive(indices, rate) { this.worker.postMessage({ type: 'drive', indices: Uint32Array.from(indices), rate }); }
+  clearDrive() { this.worker.postMessage({ type: 'clearDrive' }); }
+  pulse(indices, amount) { this.worker.postMessage({ type: 'pulse', indices: Uint32Array.from(indices), amount }); }
+  getState() { return new Promise(res => { this._stateCb = res; this.worker.postMessage({ type: 'getState' }); }); }
+  destroy() { this.worker.terminate(); }
+}
