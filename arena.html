@@ -10,7 +10,15 @@
 </head>
 <body>
 <canvas id="c"></canvas>
-<canvas id="brain"></canvas>
+<aside id="brainpanel" hidden>
+  <header><h2 id="bpTitle">Inside fly 0</h2><span class="lr"><i class="l"></i>left <i class="r"></i>right</span><button id="bpFold" title="collapse">–</button></header>
+  <div id="bpBody">
+    <div class="eyes"><figure><canvas id="eyeL" width="168" height="116"></canvas><figcaption>left eye</figcaption></figure><figure><canvas id="eyeR" width="168" height="116"></canvas><figcaption>right eye</figcaption></figure></div>
+    <div class="note">What each eye sees: brightness in its 721 columns, as fed to the optic-lobe model.</div>
+    <div id="groups"></div>
+  </div>
+  <canvas id="brain"></canvas>
+</aside>
 <div id="loading"><div class="title">Embodied male fly connectome</div><div id="status">loading…</div></div>
 <aside id="panel">
   <header>

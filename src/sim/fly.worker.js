@@ -2,8 +2,9 @@
 import loadMujoco from '@mujoco/mujoco';
 import { FlyAgent } from './fly.js';
 import { attachBrain, attachEyes } from '../brainsetup.js';
+import { buildGroups, GroupMeter } from './groups.js';
 
-let fly = null, running = false, speed = 1, others = [], env = null, lastReal = 0, simAhead = 0;
+let fly = null, meter = null, running = false, speed = 1, others = [], env = null, lastReal = 0, simAhead = 0;
 const POSE_EVERY = 16; // ms of sim between pose messages (renderer interpolates)
 
 onmessage = async (e) => {
@@ -17,6 +18,7 @@ onmessage = async (e) => {
     const flyvis = m.brainMem.fv ? { eyes: attachEyes(brain.instance, m.brainMem, m.slot), map: m.flyvisMap, gain: 150 } : null;
     fly = new FlyAgent({ brain, flyvis, mj, flyXML: m.flyXML, env, data, size: g.size, sign: g.sign, bodymap: m.bodymap, gait: m.gait, id: m.id,
       pos: m.pos, yaw: m.yaw, nProxies: m.nProxies, mode: m.mode, brainOpts: m.brainOpts, vision: m.vision });
+    meter = new GroupMeter(buildGroups(m.bodymap, data.meta.types, data.side), g.N);
     postMessage({ type: 'ready', id: m.id, nbody: fly.model.nbody, bodyNames: [...Array(fly.model.nbody).keys()].map(i => fly.model.body(i).name) });
     postPose();
   } else if (m.type === 'run') { running = true; lastReal = performance.now(); loop(); }
@@ -26,7 +28,10 @@ onmessage = async (e) => {
   else if (m.type === 'others') { others = m.others; fly.others = others; setProxies(); }
   else if (m.type === 'mode') fly.motor.mode = m.mode;
   else if (m.type === 'stimulate') fly.brain.setDrive(m.indices, m.rate);
-  else if (m.type === 'activity') postMessage({ type: 'activity', id: fly.id, trace: fly.brain.trace.slice(0), t: fly.t });
+  else if (m.type === 'activity') {
+    const eyes = fly.fv ? fly.fv.lumEye.map(e => e.slice(0)) : null;
+    postMessage({ type: 'activity', id: fly.id, trace: fly.brain.trace.slice(0), t: fly.t, groups: meter.read(fly.brain.spikeCount, fly.t), eyes });
+  }
 };
 function setProxies() {
   const d = fly.mjd, M = fly.model;

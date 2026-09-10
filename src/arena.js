@@ -4,6 +4,7 @@ import { loadConnectome } from './data.js';
 import { DEFAULT_ENV, PRESETS } from './sim/world.js';
 import { allocBrainMemory, MAX_FLIES } from './brainsetup.js';
 import { parseFlyVis } from './flyvis.js';
+import { buildGroups } from './sim/groups.js';
 const BASE = import.meta.env.BASE_URL; // "/" in dev, "/fly-brain/" on GitHub Pages
 
 const $ = s => document.querySelector(s);
@@ -38,6 +39,7 @@ async function main() {
   brainMem = allocBrainMemory({ ...data, superclass: data.superclass }, shared.size, shared.sign, brainParams, MAX_FLIES, vision);
   flyvisMap = fvm;
   window.__data = data;
+  buildBrainPanel(data);
   buildScene(data);
   buildUI();
   $('#loading').remove();
@@ -69,16 +71,19 @@ function buildScene(data) {
   renderer.domElement.addEventListener('pointerup', e => { if (pd && Math.hypot(e.clientX - pd[0], e.clientY - pd[1]) < 4) onClick(e); });
   addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
   // brain inset: soma point cloud colored by activity of the selected fly
+  const bw = $('#brain').clientWidth || 358, bh = $('#brain').clientHeight || 220;
   brainRenderer = new THREE.WebGLRenderer({ canvas: $('#brain'), antialias: false, alpha: true }); brainRenderer.setPixelRatio(devicePixelRatio);
-  brainRenderer.setSize(360, 260, false);
-  brainScene = new THREE.Scene(); brainCam = new THREE.PerspectiveCamera(40, 360 / 260, 1, 20000);
+  brainRenderer.setSize(bw, bh, false);
+  brainScene = new THREE.Scene(); brainCam = new THREE.PerspectiveCamera(40, bw / bh, 1, 20000);
   const pos = new Float32Array(data.N * 3), col = new Float32Array(data.N * 3); const c = new THREE.Vector3(); let n = 0;
   for (let i = 0; i < data.N; i++) { const x = data.soma[i * 3]; if (!Number.isFinite(x)) { pos[i * 3] = 1e6; continue; } pos[i * 3] = x * 8e-3; pos[i * 3 + 1] = data.soma[i * 3 + 1] * 8e-3; pos[i * 3 + 2] = data.soma[i * 3 + 2] * 8e-3; c.x += pos[i * 3]; c.y += pos[i * 3 + 1]; c.z += pos[i * 3 + 2]; n++; }
   c.divideScalar(n); for (let i = 0; i < data.N; i++) { pos[i * 3] -= c.x; pos[i * 3 + 1] -= c.y; pos[i * 3 + 2] -= c.z; col[i * 3] = col[i * 3 + 1] = col[i * 3 + 2] = 0.12; }
   const bg = new THREE.BufferGeometry(); bg.setAttribute('position', new THREE.BufferAttribute(pos, 3)); bg.setAttribute('color', new THREE.BufferAttribute(col, 3));
   brainPts = new THREE.Points(bg, new THREE.PointsMaterial({ size: 1.3, sizeAttenuation: false, vertexColors: true, transparent: true, opacity: 0.85, depthWrite: false }));
   brainPts.rotation.x = Math.PI; brainScene.add(brainPts);
-  brainCam.position.set(0, 0, 1400); brainCam.lookAt(0, 0, 0); brainAct = new Float32Array(data.N);
+  hlPts = new THREE.Points(new THREE.BufferGeometry(), new THREE.PointsMaterial({ size: 7, sizeAttenuation: false, transparent: true, opacity: 1, depthWrite: false, depthTest: false }));
+  hlPts.visible = false; brainScene.add(hlPts);
+  brainCam.position.set(0, 0, 1050); brainCam.lookAt(0, 0, 0); brainAct = new Float32Array(data.N);
 }
 let pd = null;
 function discMesh(r, color, opacity = 1, z = 0.0015) { const m = new THREE.Mesh(new THREE.CircleGeometry(r, 48), new THREE.MeshStandardMaterial({ color, transparent: opacity < 1, opacity, roughness: 0.8 })); m.position.z = z; m.receiveShadow = true; return m; }
@@ -148,7 +153,7 @@ function onWorker(f, m) {
     f.prev = f.last; f.last = m; f.recvAt = performance.now();
     m.foodEaten?.forEach((d, k) => { if (d > 0 && env.food[k]) { env.food[k].amount = Math.max(0, env.food[k].amount - d); foodDirty = true; } });
     broadcastOthers();
-  } else if (m.type === 'activity') { if (f.id === selected) brainAct.set(m.trace); }
+  } else if (m.type === 'activity') { if (f.id === selected) { brainAct.set(m.trace); onActivity(f, m); } }
 }
 let foodDirty = false, lastEnvSync = 0, lastOthers = 0;
 function broadcastOthers() {
@@ -202,6 +207,57 @@ function renderFlyList() {
       <span>pharyngeal pump</span><span>${((s.feeding || 0) * 100).toFixed(0)}%</span><span>sensory neurons driven</span><span>${s.nSensory}</span></div>`; }
 }
 
+// ---------------- brain panel: what the selected fly sees, and its named neuron groups ----------------
+const HIST = 150;                    // samples kept per trace (~18 s at the 120 ms poll)
+let groups = [], hist = [], histFly = -1, hover = -1, hlShown = -1, hlPts = null, eyeDots = null;
+// hovered group's neurons as large points over the inset (small groups vanish among 165k somas otherwise)
+function showGroupInInset(j) {
+  hlShown = j; hlPts.visible = j >= 0; if (j < 0) return;
+  const g = groups[j], src = brainPts.geometry.attributes.position.array, pos = [];
+  for (const ix of [g.L, g.R]) for (const i of ix) if (src[i * 3] < 1e5) pos.push(src[i * 3], src[i * 3 + 1], src[i * 3 + 2]);
+  hlPts.geometry.dispose(); hlPts.geometry = new THREE.BufferGeometry(); hlPts.geometry.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  hlPts.material.color.set(g.color);
+}
+function buildBrainPanel(data) {
+  groups = buildGroups(bodymap, meta.types, data.side);
+  $('#groups').innerHTML = groups.map((g, j) => `<div class="g" data-j="${j}">
+      <span class="name"><i style="background:${g.color}"></i>${g.label} <small>${g.L.length + g.R.length}</small><button class="q" title="what is this?">?</button></span>
+      <canvas width="236" height="48"></canvas><span class="v"><b class="l">–</b><b class="r">–</b></span>
+      <div class="info" hidden>${g.info}</div></div>`).join('');
+  $('#groups').querySelectorAll('.g').forEach(el => {
+    const j = +el.dataset.j;
+    el.onmouseenter = () => { hover = j; }; el.onmouseleave = () => { hover = -1; };
+    el.querySelector('.q').onclick = () => { const i = el.querySelector('.info'); i.hidden = !i.hidden; };
+  });
+  $('#bpFold').onclick = () => { const p = $('#brainpanel'); p.classList.toggle('folded'); $('#bpFold').textContent = p.classList.contains('folded') ? '+' : '–'; };
+  // eye columns: azimuth/elevation of each column's viewing direction; the front of each eye faces the middle
+  const W = 168, H = 116;
+  eyeDots = ['L', 'R'].map(sd => flyvisMap.eyes[sd].dirs.map(([x, y, z]) => {
+    const az = Math.atan2(y, x) * 180 / Math.PI, el = Math.asin(Math.max(-1, Math.min(1, z))) * 180 / Math.PI;
+    return [(sd === 'L' ? 165 - az : 10 - az) / 175 * (W - 8) + 4, (69 - el) / 129 * (H - 8) + 4];
+  }));
+  $('#brainpanel').hidden = false;
+}
+function onActivity(f, m) {
+  if (histFly !== f.id) { histFly = f.id; hist = groups.map(() => [[], []]); $('#bpTitle').innerHTML = `Inside fly ${f.id} <i style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${f.color}"></i>`; }
+  const rows = $('#groups').children;
+  groups.forEach((g, j) => {
+    const h = hist[j]; h[0].push(m.groups[j * 2]); h[1].push(m.groups[j * 2 + 1]); if (h[0].length > HIST) { h[0].shift(); h[1].shift(); }
+    const row = rows[j], cv = row.querySelector('canvas'), cx = cv.getContext('2d'), w = cv.width, hh = cv.height;
+    const peak = Math.max(5, ...h[0], ...h[1]);
+    cx.clearRect(0, 0, w, hh);
+    [[h[0], '#6cb6ff'], [h[1], '#ff9f5a']].forEach(([ys, c]) => { cx.strokeStyle = c; cx.lineWidth = 2; cx.beginPath();
+      ys.forEach((y, i) => { const px = w - (ys.length - 1 - i) * w / (HIST - 1), py = hh - 3 - y / peak * (hh - 6); i ? cx.lineTo(px, py) : cx.moveTo(px, py); }); cx.stroke(); });
+    const fmt = (x) => x >= 100 ? x.toFixed(0) : x.toFixed(1);
+    const v = row.querySelector('.v'); v.children[0].textContent = g.L.length ? fmt(m.groups[j * 2]) + ' Hz' : '–'; v.children[1].textContent = g.R.length ? fmt(m.groups[j * 2 + 1]) + ' Hz' : '–';
+  });
+  if (m.eyes) ['#eyeL', '#eyeR'].forEach((id, s) => {
+    const cx = $(id).getContext('2d'), lum = m.eyes[s], dots = eyeDots[s];
+    cx.fillStyle = '#05070c'; cx.fillRect(0, 0, 168, 116);
+    for (let c = 0; c < dots.length; c++) { const v = Math.round(255 * Math.min(1, lum[c])); cx.fillStyle = `rgb(${v},${v},${v})`; cx.beginPath(); cx.arc(dots[c][0], dots[c][1], 3, 0, 6.2832); cx.fill(); }
+  });
+}
+
 // ---------------- looming threat: a dark sphere swoops toward the selected fly's head from the front-side ----------------
 let threatMesh = null, threatAnim = null;
 function launchThreat() {
@@ -237,7 +293,9 @@ function animate() {
   updateThreat(); controls.update(); renderer.render(scene, camera);
   // brain inset
   const col = brainPts.geometry.attributes.color; const a = col.array; const base = new THREE.Color(sf?.color || '#888');
-  for (let i = 0; i < brainAct.length; i++) { const v = Math.min(1, brainAct[i] * 1.6); a[i * 3] = 0.1 + v * (base.r - 0.1); a[i * 3 + 1] = 0.11 + v * (base.g - 0.11); a[i * 3 + 2] = 0.14 + v * (base.b - 0.14); }
-  col.needsUpdate = true; brainPts.rotation.y += 0.002; brainRenderer.render(brainScene, brainCam);
+  const dim = hover >= 0 ? 0.08 : 1;   // fade the rest of the brain while a group is highlighted
+  for (let i = 0; i < brainAct.length; i++) { const v = Math.min(1, brainAct[i] * 1.6); a[i * 3] = dim * (0.1 + v * (base.r - 0.1)); a[i * 3 + 1] = dim * (0.11 + v * (base.g - 0.11)); a[i * 3 + 2] = dim * (0.14 + v * (base.b - 0.14)); }
+  if (hover !== hlShown) showGroupInInset(hover);
+  col.needsUpdate = true; brainPts.rotation.y += 0.002; hlPts.rotation.copy(brainPts.rotation); brainRenderer.render(brainScene, brainCam);
 }
 main().catch(e => { status('error: ' + e.message); console.error(e); });
