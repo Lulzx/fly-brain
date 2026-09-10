@@ -1,6 +1,6 @@
 # fly-brain
 
-**Live demo:** [arena](https://lulzx.com/fly-brain/arena.html) · [connectome viewer](https://lulzx.com/fly-brain/) (desktop Chrome/Edge/Firefox; downloads ~190 MB of data)
+**Live demo:** [arena](https://lulzx.com/fly-brain/arena.html) · [connectome viewer](https://lulzx.com/fly-brain/) (desktop Chrome/Edge/Firefox; the viewer downloads about 30 MB, the arena about 23 MB)
 
 Full documentation: [docs/README.md](docs/README.md).
 
@@ -18,7 +18,8 @@ Lappalainen et al. 2024). The brain alone decides what the fly does.
 npm install
 npm run dev            # http://localhost:5173/arena.html  (needs cross-origin isolation, set in vite.config.js)
 ```
-The preprocessed data in `public/` (~190 MB) is produced by the scripts below.
+The preprocessed data in `public/` is produced by the scripts below. The browser loads compact packed
+versions of the connectome, skeletons and neuron table (27 MB in total, see [docs/22-codecs.md](docs/22-codecs.md)).
 
 ## What happens every simulated millisecond (per fly, in its own Web Worker)
 1. **Senses** (`src/sim/senses.js`, `src/sim/vision.js`): taste (labellum, taste pegs, each leg), odour plumes
@@ -36,11 +37,12 @@ The preprocessed data in `public/` (~190 MB) is produced by the scripts below.
 ```sh
 uv venv .venv && uv pip install --python .venv/bin/python pyarrow pandas numpy scipy mujoco trimesh fast-simplification cma h5py
 .venv/bin/python scripts/prep_graph.py 3        # neurons.bin, graph_w3.bin, meta.json   (flat connectome tables)
-.venv/bin/python scripts/prep_skeletons.py 40   # skeletons_lo.bin                        (5.5 GB of skeletons)
+node --max-old-space-size=16000 scripts/prep_skel_tree.mjs   # skeletons.flys          (5.5 GB of skeletons -> 12 MB)
 .venv/bin/python scripts/prep_body.py 0.25      # fly_physics.xml, fly_visual.*           (flybody model)
 .venv/bin/python scripts/prep_bodymap.py        # bodymap.json: motor/sensory/eye neuron maps
 .venv-flyvis/bin/python ...                     # flyvis export (see session notes) -> public/vision/
 .venv/bin/python scripts/prep_flyvis_map.py     # flyvis node <-> male-CNS neuron map (retinotopy via connectome)
+node scripts/pack_data.mjs                      # graph.flyg, neurons.flyn                 (packed for the browser)
 node scripts/calib_search.mjs '{"coba":true}'   # fit brain parameters to behavioural benchmarks
 .venv/bin/python scripts/gait_opt2.py 60        # stepping pattern generator (multi-condition CMA-ES)
 ```

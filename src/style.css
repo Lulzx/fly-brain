@@ -38,3 +38,4 @@ button.primary:hover { filter:brightness(1.1); }
 #selinfo .partners { max-height:180px; overflow:auto; margin-top:6px; }
 #selinfo .partners div { display:flex; justify-content:space-between; cursor:pointer; padding:1px 4px; border-radius:4px; }
 #selinfo .partners div:hover { background:rgba(255,255,255,.08); }
+#bgload { position:fixed; right:14px; bottom:14px; padding:8px 12px; border-radius:8px; background:rgba(12,14,20,.85); color:var(--dim); font-size:12px; font-variant-numeric: tabular-nums; z-index:5; pointer-events:none; }

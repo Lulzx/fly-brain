@@ -39,6 +39,9 @@ compound-eye model. The brain alone decides what the fly does.
 20. [Roadmap](20-roadmap.md): recommended next steps
 21. [References](21-references.md): datasets, models, and papers used
 
+### Delivery
+22. [Data codecs](22-codecs.md): how the connectome, skeletons and neuron table are packed for the browser
+
 ## Repository layout
 
 | Path | Contents |

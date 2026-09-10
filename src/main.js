@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { loadConnectome } from './data.js';
+import { loadNeurons, loadGraph, loadSkeletons } from './data.js';
 import { FlyBrain } from './brain.js';
 
 const $ = (s) => document.querySelector(s);
@@ -27,18 +27,33 @@ let colorMode = 'superclass', showMode = 'skeletons';
 let selected = -1;
 const drives = []; // {label, indices, rate}
 
+// Staged start: somas as soon as the neuron table arrives (~1 MB), then the connectome (simulation)
+// and the skeletons stream in behind it, each decoded in its own worker.
 async function main() {
-  data = await loadConnectome(status);
+  data = await loadNeurons(status);
   N = data.N;
-  status('starting simulation');
+  buildScene();
+  buildViewUI();
+  $('#loading').remove();
+  animate();
+  const bg = document.createElement('div'); bg.id = 'bgload'; document.body.append(bg);
+  const lines = { graph: 'connectome…', skel: 'skeletons…' };
+  const show = (k) => (s) => { lines[k] = s; bg.innerHTML = Object.values(lines).filter(Boolean).map(x => `<div>${x}</div>`).join(''); };
+  const done = (k) => { lines[k] = ''; show(k)(''); if (!lines.graph && !lines.skel) bg.remove(); };
+  show('graph')(lines.graph);
+  const skelP = loadSkeletons(show('skel')).then(sk => { addSkeletons(sk); done('skel'); }).catch(e => show('skel')('skeletons failed: ' + e.message));
+  $('#play').disabled = true;
+  await loadGraph(data, show('graph'));
+  show('graph')('starting simulation');
   brain = new FlyBrain(data);
   await brain.ready;
-  buildScene();
-  buildUI();
-  $('#loading').remove();
+  buildSimUI();
+  $('#play').disabled = false;
+  if (selected >= 0) renderSelection();
   $('#summary').textContent = `${N.toLocaleString()} traced neurons · ${data.E.toLocaleString()} connections (model uses ≥5-synapse connections)`;
   brain.onFrame(onFrame);
-  animate();
+  done('graph');
+  await skelP;
 }
 
 // ---------- scene ----------
@@ -100,29 +115,12 @@ function buildScene() {
   pg.boundingSphere = new THREE.Sphere(center.clone(), 5000);
   points = new THREE.Points(pg, mat(true)); points.frustumCulled = false;
   scene.add(points);
+  lineMat = mat(false);
 
-  // --- skeletons as line segments ---
-  if (data.skel) {
-    const { V, P, bbox, neuronPathOff, pathOff, q } = data.skel;
-    const pos = new Float32Array(V * 3), nid = new Float32Array(V);
-    const sx = (bbox[3] - bbox[0]) / 65535 / 1000, sy = (bbox[4] - bbox[1]) / 65535 / 1000, sz = (bbox[5] - bbox[2]) / 65535 / 1000;
-    for (let v = 0; v < V; v++) { pos[v * 3] = bbox[0] / 1000 + q[v * 3] * sx; pos[v * 3 + 1] = bbox[1] / 1000 + q[v * 3 + 1] * sy; pos[v * 3 + 2] = bbox[2] / 1000 + q[v * 3 + 2] * sz; }
-    let nseg = 0; for (let p = 0; p < P; p++) nseg += Math.max(0, pathOff[p + 1] - pathOff[p] - 1);
-    const idx = new Uint32Array(nseg * 2); let k = 0;
-    for (let n = 0; n < N; n++) for (let p = neuronPathOff[n]; p < neuronPathOff[n + 1]; p++) {
-      for (let v = pathOff[p]; v < pathOff[p + 1]; v++) nid[v] = n;
-      for (let v = pathOff[p]; v + 1 < pathOff[p + 1]; v++) { idx[k++] = v; idx[k++] = v + 1; }
-    }
-    const lg = new THREE.BufferGeometry();
-    lg.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-    lg.setAttribute('nid', new THREE.BufferAttribute(nid, 1));
-    lg.setIndex(new THREE.BufferAttribute(idx, 1));
-    lines = new THREE.LineSegments(lg, mat(false)); lines.frustumCulled = false;
-    scene.add(lines);
-    center.set((bbox[0] + bbox[3]) / 2000, (bbox[1] + bbox[4]) / 2000, (bbox[2] + bbox[5]) / 2000);
-  }
+  const bb = data.meta.bbox;   // nm, same frame as the skeletons
+  center.set((bb[0][0] + bb[1][0]) / 2000, (bb[0][1] + bb[1][1]) / 2000, (bb[0][2] + bb[1][2]) / 2000);
+  const camDist = Math.max(...[0, 1, 2].map(k => bb[1][k] - bb[0][k])) / 1000 * 1.9;
   controls.target.copy(center);
-  const camDist = (data.skel ? Math.max(data.skel.bbox[3] - data.skel.bbox[0], data.skel.bbox[4] - data.skel.bbox[1], data.skel.bbox[5] - data.skel.bbox[2]) / 1000 * 1.9 : 1400);
   camera.position.copy(center).add(new THREE.Vector3(-0.55, -0.45, -0.7).normalize().multiplyScalar(camDist));
   camera.up.set(0, -1, 0); // EM y axis points down (dorsal up)
   controls.update();
@@ -133,6 +131,17 @@ function buildScene() {
   applyColors();
 }
 let pdown = null;
+let lineMat;
+function addSkeletons({ V, pos, seg, vOff }) {
+  const nid = new Float32Array(V);
+  for (let n = 0; n < N; n++) for (let v = vOff[n]; v < vOff[n + 1]; v++) nid[v] = n;
+  const lg = new THREE.BufferGeometry();
+  lg.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  lg.setAttribute('nid', new THREE.BufferAttribute(nid, 1));
+  lg.setIndex(new THREE.BufferAttribute(seg, 1));
+  lines = new THREE.LineSegments(lg, lineMat); lines.frustumCulled = false;
+  scene.add(lines);
+}
 function pick(e) {
   const m = new THREE.Vector2((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1);
   raycaster.setFromCamera(m, camera);
@@ -221,6 +230,7 @@ function select(i) {
 }
 function renderSelection() {
   const i = selected; const m = data.meta;
+  if (!data.indptr) { $('#selinfo').innerHTML = `<div><b>${m.types[i] || '(untyped)'}</b></div><div style="color:var(--dim)">loading connectivity…</div>`; return; }
   const partners = (dir) => {
     const list = [];
     if (dir === 'out') { for (let j = data.indptr[i]; j < data.indptr[i + 1]; j++) list.push([data.indices[j], data.weights[j]]); }
@@ -256,20 +266,22 @@ function addDrive(label, indices, rate) {
 }
 
 // ---------- UI ----------
-function buildUI() {
+function buildViewUI() {
+  $('#opacity').oninput = (e) => uniforms.opacity.value = +e.target.value;
+  $('#colorMode').onchange = (e) => { colorMode = e.target.value; hidden.clear(); applyColors(); };
+  $('#showMode').onchange = (e) => showMode = e.target.value;
+  window.addEventListener('keydown', (e) => { if (e.key === ' ' && e.target === document.body) { e.preventDefault(); $('#play').click(); } if (e.key === 'Escape') select(-1); });
+}
+function buildSimUI() {
   let running = false;
   $('#play').onclick = () => { running = !running; running ? brain.run() : brain.pause(); $('#play').textContent = running ? '❚❚ Pause' : '▶ Run'; };
   $('#reset').onclick = () => brain.reset();
   $('#speed').oninput = (e) => { brain.setParams({ speed: +e.target.value }); $('#speedv').textContent = `${(+e.target.value).toFixed(2)}×`; };
   brain.setParams({ speed: 0.5 });
   $('#bgRate').onchange = (e) => brain.setParams({ bgRate: +e.target.value, bgAmp: 1 });
-  $('#opacity').oninput = (e) => uniforms.opacity.value = +e.target.value;
-  $('#colorMode').onchange = (e) => { colorMode = e.target.value; hidden.clear(); applyColors(); };
-  $('#showMode').onchange = (e) => showMode = e.target.value;
   $('#groupKind').onchange = fillDatalist; fillDatalist();
   const grp = () => groupIndices($('#groupKind').value, $('#groupQuery').value, +$('#groupSide').value);
   $('#addDrive').onclick = () => addDrive(`${$('#groupQuery').value}${['', ' L', ' R'][+$('#groupSide').value]}`, grp(), +$('#rateHz').value);
   $('#pulse').onclick = () => brain.pulse(grp(), 10);
-  window.addEventListener('keydown', (e) => { if (e.key === ' ' && e.target === document.body) { e.preventDefault(); $('#play').click(); } if (e.key === 'Escape') select(-1); });
 }
 main().catch(e => { status('error: ' + e.message); console.error(e); });

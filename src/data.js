@@ -1,50 +1,38 @@
-// Loads the preprocessed connectome files from /data.
+// Loads the packed connectome files (src/codec) from /data. Each file is fetched and decoded in its own
+// worker, so the viewer can show somas while the connectivity and skeletons are still arriving.
 const BASE = import.meta.env.BASE_URL; // "/" in dev, "/fly-brain/" on GitHub Pages
-async function fetchBuf(url, onProgress) {
-  const r = await fetch(url);
-  if (!r.ok) throw new Error(`${url}: ${r.status}`);
-  // content-length is the compressed size when the host gzips (GitHub Pages), so only trust it for identity encoding
-  const total = r.headers.get('content-encoding') ? 0 : +r.headers.get('content-length') || 0;
-  const reader = r.body.getReader(); const chunks = []; let got = 0;
-  for (;;) { const { done, value } = await reader.read(); if (done) break; chunks.push(value); got += value.length; onProgress?.(got, total); }
-  const out = new Uint8Array(got); let o = 0; for (const c of chunks) { out.set(c, o); o += c.length; }
-  return out.buffer;
+const FILES = __DATA_FILES__;          // { name: { v: content hash, size: bytes } }, injected by vite.config.js
+
+function decodeInWorker(name, kind, onStatus, label) {
+  const f = FILES[name], url = new URL(`${BASE}data/${name}?v=${f.v}`, location.href).href;
+  return new Promise((resolve, reject) => {
+    const w = new Worker(new URL('./codec/decode.worker.js', import.meta.url), { type: 'module' });
+    w.onmessage = ({ data: m }) => {
+      if (m.progress) onStatus?.(`${label} ${(m.progress[0] / 1e6).toFixed(1)} / ${(m.progress[1] / 1e6).toFixed(1)} MB`);
+      else if (m.decoding) onStatus?.(`decoding ${label}`);
+      else { w.terminate(); m.error ? reject(new Error(m.error)) : resolve(m.result); }
+    };
+    w.onerror = (e) => { w.terminate(); reject(e); };
+    w.postMessage({ url, kind, size: f.size });
+  });
 }
 
-export async function loadConnectome(onStatus) {
-  const meta = await (await fetch(`${BASE}data/meta.json`)).json();
-  const N = meta.N;
-  onStatus?.('loading neurons');
-  const nb = await fetchBuf(`${BASE}data/neurons.bin`);
-  let off = 8;
-  const bodyIds = new BigInt64Array(nb, off, N); off += N * 8;
-  const soma = new Float32Array(nb, off, N * 3); off += N * 12;
-  const indeg = new Uint32Array(nb, off, N); off += N * 4;
-  const outdeg = new Uint32Array(nb, off, N); off += N * 4;
-  const cls = new Uint16Array(nb, off, N); off += N * 2;
-  const nt = new Uint8Array(nb, off, N); off += N;
-  const superclass = new Uint8Array(nb, off, N); off += N;
-  const side = new Uint8Array(nb, off, N); off += N;
-
-  onStatus?.('loading connectivity');
-  const gb = await fetchBuf(`${BASE}data/graph_w${meta.minWeight}.bin`, (g, t) => onStatus?.(`loading connectivity ${(g / 1e6).toFixed(0)}${t ? ` / ${(t / 1e6).toFixed(0)}` : ''} MB`));
-  const hdr = new Uint32Array(gb, 0, 2); const E = hdr[1];
-  const indptr = new Uint32Array(gb, 8, N + 1);
-  const indices = new Uint32Array(gb, 8 + (N + 1) * 4, E);
-  const weights = new Uint16Array(gb, 8 + (N + 1) * 4 + E * 4, E);
-
-  let skel = null;
-  try {
-    onStatus?.('loading skeletons');
-    const sb = await fetchBuf(`${BASE}data/skeletons_lo.bin`, (g, t) => onStatus?.(`loading skeletons ${(g / 1e6).toFixed(0)}${t ? ` / ${(t / 1e6).toFixed(0)}` : ''} MB`));
-    const h = new Uint32Array(sb, 0, 4); const V = h[1], P = h[2];
-    const bbox = new Float32Array(sb, 16, 6);
-    let o = 40;
-    const neuronPathOff = new Uint32Array(sb, o, N + 1); o += (N + 1) * 4;
-    const pathOff = new Uint32Array(sb, o, P + 1); o += (P + 1) * 4;
-    const q = new Uint16Array(sb, o, V * 3);
-    skel = { V, P, bbox, neuronPathOff, pathOff, q };
-  } catch (e) { console.warn('no skeleton bundle yet', e.message); }
-
-  return { meta, N, E, bodyIds, soma, nt, superclass, cls, side, indeg, outdeg, indptr, indices, weights, skel };
+/** meta + per-neuron table (types, classes, somas): small, enough to draw the brain */
+export async function loadNeurons(onStatus) {
+  const [meta, t] = await Promise.all([fetch(`${BASE}data/meta.json?v=${FILES['meta.json'].v}`).then(r => r.json()), decodeInWorker('neurons.flyn', 'neurons', onStatus, 'neurons')]);
+  return { meta, ...t };
 }
+
+/** adds the synaptic graph (indptr/indices/weights, E, in/out degree) to `data` */
+export async function loadGraph(data, onStatus) {
+  const g = await decodeInWorker('graph.flyg', 'graph', onStatus, 'connectome');
+  const { N } = data, indeg = new Uint32Array(N), outdeg = new Uint32Array(N);
+  for (let i = 0; i < N; i++) outdeg[i] = g.indptr[i + 1] - g.indptr[i];
+  for (let k = 0; k < g.E; k++) indeg[g.indices[k]]++;
+  return Object.assign(data, { E: g.E, indptr: g.indptr, indices: g.indices, weights: g.weights, indeg, outdeg });
+}
+
+/** skeleton line geometry: { V, pos (µm), seg (vertex pairs), vOff (per neuron), bbox (µm) } */
+export const loadSkeletons = (onStatus) => decodeInWorker('skeletons.flys', 'skel', onStatus, 'skeletons');
+
+export async function loadConnectome(onStatus) { return loadGraph(await loadNeurons(onStatus), onStatus); }

@@ -3,7 +3,8 @@
 `index.html` renders every traced neuron and runs the calibrated brain model live.
 
 ## Features
-- 3D skeletons of all 165,122 neurons, about 13 M vertices, drawn as line segments in Three.js.
+- 3D skeletons of all 165,122 neurons, one tree each (5.3 M vertices), drawn as line segments in Three.js.
+  Somas appear first, and the skeletons and connectome stream in behind them.
 - Colour by superclass, neurotransmitter, or side. Click legend entries to hide groups.
 - Show skeletons, somas only, or active neurons only.
 - Stimulate any superclass, class, or cell type, on one side or both, at a chosen rate, or pulse it.
