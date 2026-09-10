@@ -3,7 +3,8 @@ const BASE = import.meta.env.BASE_URL; // "/" in dev, "/fly-brain/" on GitHub Pa
 async function fetchBuf(url, onProgress) {
   const r = await fetch(url);
   if (!r.ok) throw new Error(`${url}: ${r.status}`);
-  const total = +r.headers.get('content-length') || 0;
+  // content-length is the compressed size when the host gzips (GitHub Pages), so only trust it for identity encoding
+  const total = r.headers.get('content-encoding') ? 0 : +r.headers.get('content-length') || 0;
   const reader = r.body.getReader(); const chunks = []; let got = 0;
   for (;;) { const { done, value } = await reader.read(); if (done) break; chunks.push(value); got += value.length; onProgress?.(got, total); }
   const out = new Uint8Array(got); let o = 0; for (const c of chunks) { out.set(c, o); o += c.length; }
@@ -26,7 +27,7 @@ export async function loadConnectome(onStatus) {
   const side = new Uint8Array(nb, off, N); off += N;
 
   onStatus?.('loading connectivity');
-  const gb = await fetchBuf(`${BASE}data/graph_w${meta.minWeight}.bin`, (g, t) => onStatus?.(`loading connectivity ${(g / 1e6).toFixed(0)} / ${(t / 1e6).toFixed(0)} MB`));
+  const gb = await fetchBuf(`${BASE}data/graph_w${meta.minWeight}.bin`, (g, t) => onStatus?.(`loading connectivity ${(g / 1e6).toFixed(0)}${t ? ` / ${(t / 1e6).toFixed(0)}` : ''} MB`));
   const hdr = new Uint32Array(gb, 0, 2); const E = hdr[1];
   const indptr = new Uint32Array(gb, 8, N + 1);
   const indices = new Uint32Array(gb, 8 + (N + 1) * 4, E);
@@ -35,7 +36,7 @@ export async function loadConnectome(onStatus) {
   let skel = null;
   try {
     onStatus?.('loading skeletons');
-    const sb = await fetchBuf(`${BASE}data/skeletons_lo.bin`, (g, t) => onStatus?.(`loading skeletons ${(g / 1e6).toFixed(0)} / ${(t / 1e6).toFixed(0)} MB`));
+    const sb = await fetchBuf(`${BASE}data/skeletons_lo.bin`, (g, t) => onStatus?.(`loading skeletons ${(g / 1e6).toFixed(0)}${t ? ` / ${(t / 1e6).toFixed(0)}` : ''} MB`));
     const h = new Uint32Array(sb, 0, 4); const V = h[1], P = h[2];
     const bbox = new Float32Array(sb, 16, 6);
     let o = 40;
