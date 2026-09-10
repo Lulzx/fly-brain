@@ -1,5 +1,7 @@
 # fly-brain
 
+Full documentation: [docs/README.md](docs/README.md).
+
 Embodied, whole-CNS simulation of the **male *Drosophila* connectome** in the browser.
 Each fly is a 165,122-neuron connectome brain (male CNS v1.0, Janelia FlyEM + Google, CC-BY 4.0) living in a
 physics-simulated flybody body (MuJoCo, Janelia/DeepMind) with a trained compound-eye front end (flyvis,
