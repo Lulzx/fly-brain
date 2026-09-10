@@ -65,7 +65,7 @@ export class Senses {
     }
     // --- taste: labellum and taste pegs (when proboscis touches the floor on food), tarsi ---
     const onPatch = (p, list) => { let best = null; for (const f of list) { const d = Math.hypot(p[0] - f.x, p[1] - f.y); if (d < f.r && (!best || f.sugar > best.sugar)) best = f; } return best; };
-    const labTouch = st.labellumZ < 0.012;
+    const labTouch = st.labellumZ < 0.065;   // extended labellum within 0.65 mm of the substrate (see PLAN.md)
     if (labTouch) {
       const f = onPatch(st.labellum, env.food), b = onPatch(st.labellum, env.bitterPatches);
       if (f && f.amount > 0) { this.set(this.taste.labellum.sugar, 180 * H(f.sugar * st.sugarGain, 0.2)); this.set(this.taste.labellum.water, 120 * H(f.water, 0.2)); if (st.proboscisOut) this.set(this.taste.peg.sugar, 150 * H(f.sugar, 0.2)); }

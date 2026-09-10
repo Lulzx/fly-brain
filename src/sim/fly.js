@@ -29,12 +29,12 @@ export class FlyAgent {
     const typeOf = data.meta.types, sideOf = data.side;
     this.senses = new Senses(bodymap, mj, M); this.senses.bindTypes(typeOf, sideOf);
     // vision: flyvis optic-lobe model driving the male-CNS optic lobe (if provided), else the simple photoreceptor eye
-    this.fv = vision && flyvis ? new FlyVisionFV(mj, M, this.mjd, bodymap, flyvis.map, flyvis.eyes, this.bid.head, this.bid.thorax, flyvis.gain ?? 250) : null;
+    this.fv = vision && flyvis ? new FlyVisionFV(mj, M, this.mjd, bodymap, flyvis.map, flyvis.eyes, this.bid.head, this.bid.thorax, flyvis.gain ?? 150) : null;
     this.eye = vision && !this.fv ? new CompoundEye(mj, M, this.mjd, bodymap, this.bid.head, this.bid.thorax) : null;
     this.motor = new Motor(mj, M, this.mjd, bodymap, typeOf, sideOf, gait, mode);
     this.driven = new Int32Array(0);
     // physiology
-    this.energy = 0.6; this.health = 1; this.alive = true; this.eaten = 0; this.t = 0; this.foodEaten = env.food.map(() => 0);
+    this.energy = 0.6; this.health = 1; this.alive = true; this.eaten = 0; this.t = 0; this.foodEaten = env.food.map(() => 0); this.dist = 0; this.jumps = 0; this._lastPos = null; this._wasJumping = false;
     this.others = [];   // [{x,y,yaw}] of other flies (set by the host)
     this.log = [];
   }
@@ -91,13 +91,15 @@ export class FlyAgent {
     const after = this.brain.spikeCount[this.motor.dn.escape[0]] + this.brain.spikeCount[this.motor.dn.escape[1]];
     if (after > before) this.brain.pulse(this.motor.ttmn, 20);
     this.motor.readBrain(this.brain.spikeCount, 1);
-    this.cmd = this.motor.apply(this.t, 1);
+    this.cmd = this.motor.apply(this.t, 1, { up: this.mjd.xmat[this.bid.thorax * 9 + 8] });
     for (let s = 0; s < this.physPerMs; s++) mj.mj_step(M, d);
     this.t += 1;
     this.physiology(st);
   }
   physiology(st) {
     const dt = 0.001;
+    if (this._lastPos) this.dist += Math.hypot(st.pos[0] - this._lastPos[0], st.pos[1] - this._lastPos[1]); this._lastPos = st.pos;
+    const jumping = this.motor.jumpT >= 0; if (jumping && !this._wasJumping) this.jumps++; this._wasJumping = jumping;
     const walking = Math.abs(this.cmd.v);
     this.energy -= dt * (1 / 240 + walking / 180);                 // compressed timescale: ~4 min to starve at rest
     // ingestion: labellum on food + proboscis extended + pharyngeal pump motor neurons active
@@ -114,6 +116,7 @@ export class FlyAgent {
   behavior(st) {
     const c = this.cmd || {}; const m = this.motor;
     if (!this.alive) return 'dead';
+    if (c.righting) return 'righting';
     if (m.jumpT >= 0) return 'escape jump';
     if (c.grooming) return 'grooming';
     if (st && st.proboscisOut && st.labellumZ < 0.065 && this.env.food.some(f => f.amount > 0 && Math.hypot(st.labellum[0] - f.x, st.labellum[1] - f.y) < f.r)) return 'feeding';

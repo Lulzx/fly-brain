@@ -8,3 +8,38 @@ gen 3 best 0.673 gen-best 0.663 (33s) mu wSyn=0.574 sizeAlpha=0.605 kcThreshold=
    terms {"sugar":0.69,"bitter":1,"mix":1,"kcSparse":0.84,"kcSpecific":0,"pnSpecific":0,"dm1PN":1,"baseline":0.38,"offset":1,"legs":1,"rhythm":0.34,"tarsalPER":0.33,"sugarStop":0.55,"noMDN":0,"quietMN9":0,"loom":0.8,"noFalseAlarm":1}
 gen 4 best 0.707 gen-best 0.707 (29s) mu wSyn=0.567 sizeAlpha=0.629 kcThreshold=11.492 inhGain=0.642 eInh=-75.176 minSyn=5 adaptInc=0.095 tRef=2.752 laminaBias=3.934
    terms {"sugar":0.61,"bitter":1,"mix":1,"kcSparse":0.91,"kcSpecific":0,"pnSpecific":0,"dm1PN":1,"baseline":0.42,"offset":1,"legs":1,"rhythm":0.42,"tarsalPER":0.79,"sugarStop":1,"noMDN":1,"quietMN9":0,"loom":0.36,"noFalseAlarm":1}
+gen 5 best 0.767 gen-best 0.767 (26s) mu wSyn=0.566 sizeAlpha=0.592 kcThreshold=11.456 inhGain=0.666 eInh=-74.021 minSyn=5 adaptInc=0.072 tRef=2.843 laminaBias=3.83
+   terms {"sugar":0.93,"bitter":1,"mix":1,"kcSparse":0.83,"kcSpecific":0,"pnSpecific":0,"dm1PN":1,"baseline":0.42,"offset":1,"legs":1,"rhythm":0.49,"tarsalPER":0.5,"sugarStop":1,"noMDN":0.63,"quietMN9":0.13,"loom":0.88,"noFalseAlarm":1}
+gen 6 best 0.767 gen-best 0.708 (26s) mu wSyn=0.55 sizeAlpha=0.593 kcThreshold=10.737 inhGain=0.663 eInh=-74.634 minSyn=5 adaptInc=0.05 tRef=2.789 laminaBias=4.188
+   terms {"sugar":0.76,"bitter":1,"mix":1,"kcSparse":0.89,"kcSpecific":0,"pnSpecific":0,"dm1PN":1,"baseline":0.5,"offset":1,"legs":1,"rhythm":0.47,"tarsalPER":0.71,"sugarStop":1,"noMDN":0.25,"quietMN9":0,"loom":0.4,"noFalseAlarm":1}
+gen 7 best 0.767 gen-best 0.702 (29s) mu wSyn=0.545 sizeAlpha=0.605 kcThreshold=11.213 inhGain=0.664 eInh=-74.739 minSyn=5 adaptInc=0.035 tRef=2.91 laminaBias=4.071
+   terms {"sugar":0.96,"bitter":1,"mix":1,"kcSparse":0.87,"kcSpecific":0,"pnSpecific":0,"dm1PN":1,"baseline":0.44,"offset":1,"legs":1,"rhythm":0.38,"tarsalPER":0.29,"sugarStop":1,"noMDN":0.88,"quietMN9":0,"loom":0.4,"noFalseAlarm":1}
+gen 8 best 0.767 gen-best 0.727 (26s) mu wSyn=0.526 sizeAlpha=0.6 kcThreshold=10.932 inhGain=0.658 eInh=-76.227 minSyn=5 adaptInc=0.023 tRef=2.955 laminaBias=3.643
+   terms {"sugar":0.88,"bitter":1,"mix":1,"kcSparse":0.82,"kcSpecific":0,"pnSpecific":0,"dm1PN":1,"baseline":0.39,"offset":1,"legs":1,"rhythm":0.35,"tarsalPER":0.25,"sugarStop":1,"noMDN":0.25,"quietMN9":0.25,"loom":0.9,"noFalseAlarm":1}
+gen 9 best 0.767 gen-best 0.701 (26s) mu wSyn=0.517 sizeAlpha=0.615 kcThreshold=10.885 inhGain=0.635 eInh=-76.363 minSyn=5 adaptInc=0.036 tRef=2.891 laminaBias=3.479
+   terms {"sugar":0.79,"bitter":0.94,"mix":1,"kcSparse":0.91,"kcSpecific":0,"pnSpecific":0,"dm1PN":1,"baseline":0.38,"offset":1,"legs":1,"rhythm":0.4,"tarsalPER":0.83,"sugarStop":0.83,"noMDN":0.88,"quietMN9":0,"loom":0.28,"noFalseAlarm":1}
+gen 10 best 0.767 gen-best 0.716 (26s) mu wSyn=0.53 sizeAlpha=0.609 kcThreshold=11.199 inhGain=0.628 eInh=-77.222 minSyn=5 adaptInc=0.05 tRef=2.888 laminaBias=3.77
+   terms {"sugar":0.81,"bitter":1,"mix":1,"kcSparse":0.85,"kcSpecific":0,"pnSpecific":0,"dm1PN":1,"baseline":0.39,"offset":1,"legs":1,"rhythm":0.46,"tarsalPER":0.75,"sugarStop":1,"noMDN":0.63,"quietMN9":0,"loom":0.4,"noFalseAlarm":1}
+gen 11 best 0.767 gen-best 0.723 (28s) mu wSyn=0.518 sizeAlpha=0.62 kcThreshold=10.74 inhGain=0.63 eInh=-77.643 minSyn=5 adaptInc=0.06 tRef=2.816 laminaBias=4.024
+   terms {"sugar":0.83,"bitter":1,"mix":1,"kcSparse":0.94,"kcSpecific":0,"pnSpecific":0,"dm1PN":1,"baseline":0.58,"offset":1,"legs":1,"rhythm":0.39,"tarsalPER":0.88,"sugarStop":1,"noMDN":0.5,"quietMN9":0,"loom":0.23,"noFalseAlarm":1}
+gen 12 best 0.767 gen-best 0.717 (30s) mu wSyn=0.511 sizeAlpha=0.632 kcThreshold=10.341 inhGain=0.634 eInh=-78.035 minSyn=5 adaptInc=0.025 tRef=2.747 laminaBias=3.939
+   terms {"sugar":0.62,"bitter":1,"mix":1,"kcSparse":0.9,"kcSpecific":0,"pnSpecific":0,"dm1PN":1,"baseline":0.41,"offset":1,"legs":1,"rhythm":0.42,"tarsalPER":0.96,"sugarStop":1,"noMDN":0.75,"quietMN9":0,"loom":0.38,"noFalseAlarm":1}
+gen 13 best 0.767 gen-best 0.710 (26s) mu wSyn=0.495 sizeAlpha=0.616 kcThreshold=10.314 inhGain=0.656 eInh=-79.313 minSyn=5 adaptInc=0.02 tRef=2.694 laminaBias=3.909
+   terms {"sugar":0.86,"bitter":1,"mix":1,"kcSparse":0.65,"kcSpecific":0,"pnSpecific":0,"dm1PN":1,"baseline":0.6,"offset":1,"legs":1,"rhythm":0.4,"tarsalPER":1,"sugarStop":0.92,"noMDN":0,"quietMN9":0,"loom":0.27,"noFalseAlarm":1}
+gen 14 best 0.767 gen-best 0.709 (26s) mu wSyn=0.481 sizeAlpha=0.608 kcThreshold=10.504 inhGain=0.645 eInh=-77.33 minSyn=5 adaptInc=0.023 tRef=2.755 laminaBias=4.091
+   terms {"sugar":0.76,"bitter":1,"mix":1,"kcSparse":0.91,"kcSpecific":0,"pnSpecific":0,"dm1PN":1,"baseline":0.56,"offset":1,"legs":1,"rhythm":0.35,"tarsalPER":0.79,"sugarStop":1,"noMDN":0.69,"quietMN9":0,"loom":0.23,"noFalseAlarm":1}
+gen 15 best 0.767 gen-best 0.715 (27s) mu wSyn=0.486 sizeAlpha=0.618 kcThreshold=11.012 inhGain=0.625 eInh=-78.255 minSyn=5 adaptInc=0.034 tRef=2.853 laminaBias=3.082
+   terms {"sugar":0.83,"bitter":1,"mix":1,"kcSparse":0.98,"kcSpecific":0,"pnSpecific":0,"dm1PN":1,"baseline":0.49,"offset":1,"legs":1,"rhythm":0.36,"tarsalPER":0.58,"sugarStop":1,"noMDN":0.81,"quietMN9":0,"loom":0.36,"noFalseAlarm":1}
+gen 16 best 0.767 gen-best 0.720 (26s) mu wSyn=0.494 sizeAlpha=0.602 kcThreshold=10.991 inhGain=0.639 eInh=-77.046 minSyn=5 adaptInc=0.01 tRef=2.85 laminaBias=3.348
+   terms {"sugar":0.89,"bitter":1,"mix":1,"kcSparse":0.84,"kcSpecific":0,"pnSpecific":0,"dm1PN":1,"baseline":0.4,"offset":1,"legs":1,"rhythm":0.43,"tarsalPER":0.38,"sugarStop":0.82,"noMDN":0,"quietMN9":0,"loom":0.9,"noFalseAlarm":1}
+gen 17 best 0.767 gen-best 0.716 (27s) mu wSyn=0.483 sizeAlpha=0.613 kcThreshold=10.356 inhGain=0.638 eInh=-78.087 minSyn=5 adaptInc=0 tRef=2.857 laminaBias=3.624
+   terms {"sugar":0.64,"bitter":1,"mix":1,"kcSparse":0.98,"kcSpecific":0,"pnSpecific":0,"dm1PN":1,"baseline":0.56,"offset":1,"legs":1,"rhythm":0.5,"tarsalPER":0.83,"sugarStop":1,"noMDN":0.94,"quietMN9":0,"loom":0.21,"noFalseAlarm":1}
+gen 18 best 0.767 gen-best 0.716 (26s) mu wSyn=0.484 sizeAlpha=0.63 kcThreshold=10.239 inhGain=0.621 eInh=-78.27 minSyn=5 adaptInc=0.027 tRef=2.804 laminaBias=3.384
+   terms {"sugar":0.77,"bitter":1,"mix":1,"kcSparse":0.94,"kcSpecific":0,"pnSpecific":0,"dm1PN":1,"baseline":0.52,"offset":1,"legs":1,"rhythm":0.43,"tarsalPER":0.83,"sugarStop":1,"noMDN":0.44,"quietMN9":0,"loom":0.3,"noFalseAlarm":1}
+gen 19 best 0.767 gen-best 0.747 (28s) mu wSyn=0.478 sizeAlpha=0.609 kcThreshold=10.416 inhGain=0.646 eInh=-78.661 minSyn=5 adaptInc=0.008 tRef=2.753 laminaBias=4.417
+   terms {"sugar":0.81,"bitter":1,"mix":1,"kcSparse":0.96,"kcSpecific":0,"pnSpecific":0,"dm1PN":1,"baseline":0.44,"offset":1,"legs":1,"rhythm":0.44,"tarsalPER":0.96,"sugarStop":1,"noMDN":1,"quietMN9":0,"loom":0.35,"noFalseAlarm":1}
+gen 20 best 0.767 gen-best 0.705 (27s) mu wSyn=0.483 sizeAlpha=0.596 kcThreshold=10.099 inhGain=0.664 eInh=-78.454 minSyn=5 adaptInc=0.007 tRef=2.826 laminaBias=4.614
+   terms {"sugar":0.64,"bitter":1,"mix":1,"kcSparse":0.77,"kcSpecific":0,"pnSpecific":0,"dm1PN":1,"baseline":0.58,"offset":1,"legs":1,"rhythm":0.4,"tarsalPER":1,"sugarStop":1,"noMDN":0.44,"quietMN9":0,"loom":0.25,"noFalseAlarm":1}
+gen 21 best 0.767 gen-best 0.722 (27s) mu wSyn=0.493 sizeAlpha=0.591 kcThreshold=10.463 inhGain=0.67 eInh=-78.111 minSyn=5 adaptInc=0.014 tRef=2.882 laminaBias=4.269
+   terms {"sugar":0.96,"bitter":1,"mix":1,"kcSparse":0.66,"kcSpecific":0,"pnSpecific":0,"dm1PN":1,"baseline":0.57,"offset":1,"legs":1,"rhythm":0.4,"tarsalPER":0.88,"sugarStop":1,"noMDN":0.44,"quietMN9":0,"loom":0.24,"noFalseAlarm":1}
+BEST {"coba":true,"wSyn":0.6,"sizeAlpha":0.66,"kcThreshold":10.744,"inhGain":0.679,"eInh":-74.419,"minSyn":5,"adaptInc":0,"tRef":2.936,"laminaBias":3.415} 0.767

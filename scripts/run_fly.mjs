@@ -24,7 +24,7 @@ let vision = null;
 if (useFV) { const fb = fs.readFileSync('public/vision/flyvis.bin'); vision = { model: parseFlyVis(fb.buffer.slice(fb.byteOffset, fb.byteOffset + fb.byteLength), JSON.parse(fs.readFileSync('public/vision/flyvis.json')), JSON.parse(fs.readFileSync('public/vision/flyvis_inputs.json'))), map: JSON.parse(fs.readFileSync('public/vision/flyvis_map.json')) }; }
 const mem = allocBrainMemory(data, size, sign, brainOpts, 1, vision);
 const brain = await attachBrain(fs.readFileSync('public/lif.wasm'), mem, 0, data, 7);
-const flyvis = useFV ? { eyes: attachEyes(brain.instance, mem, 0), map: vision.map, gain: X.fvGain ?? 250 } : null;
+const flyvis = useFV ? { eyes: attachEyes(brain.instance, mem, 0), map: vision.map, gain: X.fvGain ?? 150 } : null;
 const fly = new FlyAgent({ mj, flyXML, env, data, size, sign, bodymap: D.bodymap, gait, pos, yaw, mode, brainOpts, vision: X.vision ?? true, brain, flyvis });
 const t0 = Date.now(); const steps = secs * 1000; const prev = new Uint32Array(D.N);
 console.log(`scenario ${scenario}, mode ${mode}, start pos ${pos}, ${extra}`);

@@ -75,7 +75,25 @@ DM1 PN responses, bounded baseline activity, return to baseline after stimulus, 
 Energy (hunger) decays; ingestion when the extended labellum touches food and pharyngeal pump MNs fire.
 Hunger raises sugar-GRN and lowers bitter-GRN gain (Inagaki 2012, LeDue 2016). Heat patches damage.
 
+## Physical robustness fixes (each tested headless)
+- Claws/labella and legs touch only the floor (contact bits); head/thorax/abdomen/wings collide with walls,
+  obstacles and other flies. Without this the fly climbed walls with its legs and flipped over backwards.
+- Jump = 30 ms symmetric pre-posture + 20 ms TTM push + 80 ms airborne: lands upright 24/24 from fast turning
+  gaits. Escape needs a GF burst (>=3 spikes / 50 ms) or takeoff-DN activity > 70 Hz and > 3x its baseline.
+- Righting reflex (VNC-level): inverted > 150 ms -> wing push + leg flailing; rights ~2/3 of inverted states.
+- flyvis -> brain gain 150: calm exploration without spurious escapes (250 gave frequent false jumps).
+
+## Behaviour report (scripts/behavior_report.mjs, gain 150)
+- Foraging: explores (walks/turns/stands), approaches food, occasional ingestion; no spurious jumps.
+- Heat: walks off the hot patch (health ~0.9 after 4 s).
+- Bitter: MN9 silenced, walks away.
+- Tarsal sugar: forward drive drops (stop signal) but visual drive often keeps the fly walking.
+- Looming threat: escape is intermittent (the loom->LC4/LPLC2->GF/DNp02/04 chain is weak relative to
+  natural-scene activity; higher visual gain makes escapes reliable but also frequent false alarms).
+
 ## Known limitations (honest list)
+- MN9 (proboscis) is partly driven by olfactory channels (downstream of the AL spread), so flies sometimes
+  extend the proboscis while walking in odour.
 - The connectome gives wiring, not synaptic strengths, neuromodulation, gap junctions or plasticity.
 - Antennal lobe: cholinergic LNs (e.g. lLN1_bc, ground truth ACh) make ~200k synapses onto PNs; in this
   chemical-only model one glomerulus recruits most PNs, so odour identity is poorly preserved downstream.
