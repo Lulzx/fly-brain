@@ -26,6 +26,8 @@ export const PRESETS = {
     obstacles: [{ type: 'box', x: -0.9, y: 0.5, sx: 0.08, sy: 1.1, sz: 0.3 }, { type: 'box', x: 0.2, y: -0.6, sx: 0.08, sy: 1.1, sz: 0.3 }, { type: 'box', x: 1.1, y: 0.7, sx: 0.08, sy: 0.9, sz: 0.3 }],
     food: [{ x: 1.8, y: -0.6, r: 0.25, sugar: 1, bitter: 0, water: 0.2, amount: 5 }], odors: [{ x: 1.8, y: -0.6, odor: 'vinegar', strength: 1, sigma: 1.0 }] }) },
   social: { label: 'Social: five flies, one food patch', flies: 5, env: () => ({ ...structuredClone(DEFAULT_ENV), obstacles: [], hazards: [] }) },
+  courtship: { label: 'Courtship: a male and a female', env: () => ({ ...structuredClone(DEFAULT_ENV), obstacles: [], hazards: [], bitterPatches: [], food: [], odors: [] }),
+    flySpots: [{ pos: [-0.6, 0], yaw: 0, sex: 'm' }, { pos: [0.4, 0.3], yaw: 2.4, sex: 'f' }] },
 };
 export function buildWorldXML(flyXML, env, { flyPos = [0, 0, 0.13], flyYaw = 0, nProxies = 0 } = {}) {
   const a = env.arena, parts = [];

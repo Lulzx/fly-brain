@@ -45,6 +45,8 @@ export class LIFNetwork {
   setBias(ix, mv) { for (let k = 0; k < ix.length; k++) { this.bias[ix[k]] = mv; if (mv !== 0) this.wake(ix[k]); } }
   setDrive(ix, rate) { for (let k = 0; k < ix.length; k++) { this.drive[ix[k]] = rate; if (rate > 0) this.wake(ix[k]); } }
   setDriveOne(i, rate) { this.drive[i] = rate; if (rate > 0) this.wake(i); }
+  setThr(i, mv) { this.thr[i] = mv; }
+  addG(i, e, ii) { this.gE[i] += e; this.gI[i] += ii || 0; this.wake(i); }
   pulse(ix, mv) { for (let k = 0; k < ix.length; k++) { this.gE[ix[k]] += mv; this.wake(ix[k]); } }
   gauss() { if (this._g2 !== null) { const r = this._g2; this._g2 = null; return r; }
     let u, s, w; do { u = Math.random() * 2 - 1; s = Math.random() * 2 - 1; w = u * u + s * s; } while (w >= 1 || w === 0);

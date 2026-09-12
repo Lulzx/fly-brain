@@ -14,8 +14,8 @@ import { createBrain } from '../brainmodel.js';
 const Rt9 = (xm, b) => [xm[b * 9], xm[b * 9 + 3], xm[b * 9 + 6]];   // body x axis (heading) in world frame
 
 export class FlyAgent {
-  constructor({ mj, flyXML, env, data, size, sign, bodymap, gait, id = 0, pos = [0, 0], yaw = 0, nProxies = 0, mode = 'descending', brainOpts = {}, vision = true, brain = null, flyvis = null, intrinsic = true, seed = 0, neuromod = null }) {
-    this.id = id; this.mj = mj; this.env = env; this.data = data; this.vision = vision;
+  constructor({ mj, flyXML, env, data, size, sign, bodymap, gait, id = 0, pos = [0, 0], yaw = 0, nProxies = 0, mode = 'descending', brainOpts = {}, vision = true, brain = null, flyvis = null, intrinsic = true, seed = 0, neuromod = null, sex = 'm' }) {
+    this.id = id; this.mj = mj; this.env = env; this.data = data; this.vision = vision; this.sex = sex;
     this.model = mj.MjModel.from_xml_string(buildWorldXML(flyXML, env, { flyPos: [pos[0], pos[1], 0.132], flyYaw: yaw, nProxies }));
     this.mjd = new mj.MjData(this.model);
     this.physPerMs = Math.round(0.001 / this.model.opt.timestep);
@@ -36,12 +36,17 @@ export class FlyAgent {
     this.neuromod = brainOpts.neuromod ? new Neuromod(data, this.brain, { calib: neuromod?.calib, block: neuromod?.block, params: neuromod?.params, minSyn: brainOpts.minSyn ?? 5 }) : null;
     const typeOf = data.meta.types, sideOf = data.side;
     this.senses = new Senses(bodymap, mj, M); this.senses.bindTypes(typeOf, sideOf);
+    // LC10 small-object visual projection neurons: the eye-to-courtship channel. A nearby fly is detected
+    // visually (LC10 responds to small moving objects; LC10a -> pC1/pIP10, Ribeiro et al. 2018), which is
+    // how a male starts courting before the cVA pheromone plume reaches him
+    this.lc10 = { left: [], right: [] };
+    for (let i = 0; i < typeOf.length; i++) if (/^LC10[ad]$/.test(typeOf[i])) this.lc10[sideOf[i] === 2 ? 'right' : 'left'].push(i);
     // vision: flyvis optic-lobe model driving the male-CNS optic lobe (if provided), else the simple photoreceptor eye
     this.fv = vision && flyvis ? new FlyVisionFV(mj, M, this.mjd, bodymap, flyvis.map, flyvis.eyes, this.bid.head, this.bid.thorax, flyvis.gain ?? 150) : null;
     this.eye = vision && !this.fv ? new CompoundEye(mj, M, this.mjd, bodymap, this.bid.head, this.bid.thorax) : null;
     this.motor = new Motor(mj, M, this.mjd, bodymap, typeOf, sideOf, gait, mode);
     this.intrinsic = intrinsic ? new Intrinsic(typeOf, sideOf, id + 1 + (seed || 0), bodymap.feeding) : null;
-    this.flight = new Flight({ model: M, data: this.mjd, thorax: this.bid.thorax, jointAdr: this.jointAdr, act: this.motor.act, range: this.motor.range, rand: this.intrinsic?.rand });
+    this.flight = new Flight({ mj, model: M, data: this.mjd, thorax: this.bid.thorax, jointAdr: this.jointAdr, act: this.motor.act, range: this.motor.range, rand: this.intrinsic?.rand });
     this.flights = 0;
     this.driven = new Int32Array(0);
     // physiology
@@ -108,10 +113,34 @@ export class FlyAgent {
     if (this.fv && (this.t % 20 === 0)) { this._eyeRates = new Map(); const er = this._eyeRates; this.fv.update((ix, hz) => { for (const i of ix) er.set(i, hz); }, this.env, this.albedo, 20); }
     if (this._eyeRates) for (const [i, hz] of this._eyeRates) rates.set(i, hz);
     // apply sensory drive (clear neurons no longer driven)
-    const B = this.brain; for (const i of this.driven) B.drive[i] = 0;
-    if (this.neuromod) this.neuromod.update(1, this.energy);
+    const B = this.brain; for (const i of this.driven) B.setDriveOne(i, 0);
+    if (this.neuromod) this.neuromod.update(1, this.energy, this.flight.active ? 1 : this.motor.stepAmp || 0);
+    // courtship context for a male: the nearest other fly's range and bearing in his head frame, plus the
+    // connectome's own courtship-circuit readout (pIP10, DNp13) from the previous step
+    let court = null;
+    if (this.sex !== 'f' && st.otherFlies.length) {
+      const fx = Rt9(d.xmat, this.bid.thorax), yaw = Math.atan2(fx[1], fx[0]);
+      for (const o of st.otherFlies) {
+        const dd = Math.hypot(o.x - st.pos[0], o.y - st.pos[1]);
+        if (!court || dd < court.dist) { const a = Math.atan2(o.y - st.pos[1], o.x - st.pos[0]) - yaw; court = { dist: dd, bearing: Math.atan2(Math.sin(a), Math.cos(a)) }; }
+      }
+      if (court) court.level = this.motor.cmd.court || 0;
+      // LC10 drive: a nearby fly subtends a small moving object on the eye. Salience ~ angular size,
+      // gated to the frontal-lateral field; the ipsilateral LC10 population carries it to pIP10
+      for (const o of st.otherFlies) {
+        const a = Math.atan2(o.y - st.pos[1], o.x - st.pos[0]) - Math.atan2(fx[1], fx[0]);
+        const bearing = Math.atan2(Math.sin(a), Math.cos(a));
+        const dd = Math.hypot(o.x - st.pos[0], o.y - st.pos[1]);
+        const angular = Math.atan2(0.13, dd);              // fly ~1.3 mm radius
+        if (Math.abs(bearing) < 2.2 && dd < 3 && angular > 0.04) {
+          const hz = Math.min(140, 200 * angular);         // saturating small-object response
+          const pool = this.lc10[bearing > 0 ? 'left' : 'right'];
+          for (let k = 0; k < pool.length; k += 4) if ((rates.get(pool[k]) || 0) < hz) rates.set(pool[k], hz);   // ~1/4 of the column: the object covers part of the visual field
+        }
+      }
+    }
     if (this.intrinsic) this.intrinsic.update(1, B, { energy: this.energy, arousal: this.neuromod?.arousal, touch: st.antTouch, rearing: st.pitchUp > 0.45 && this.motor.jumpT < 0 && !this.motor.righting,
-      heat: { left: heatAt(st.antenna.left, this.env), right: heatAt(st.antenna.right, this.env) }, sugar: this._sugar || 0, flying: this.flight.active, ahead: st.ahead,
+      heat: { left: heatAt(st.antenna.left, this.env), right: heatAt(st.antenna.right, this.env) }, sugar: this._sugar || 0, flying: this.flight.active, ahead: st.ahead, court,
       mouthOnFood: this.env.food.some(f => f.amount > 0 && Math.hypot(st.labellum[0] - f.x, st.labellum[1] - f.y) < f.r - 0.02) });
     const nd = new Int32Array(rates.size); let k = 0; for (const [i, hz] of rates) { B.setDriveOne(i, hz); nd[k++] = i; } this.driven = nd;
     // GF -> TTMn electrical synapse (not in the chemical connectome): GF spikes depolarise TTMn directly
@@ -128,6 +157,7 @@ export class FlyAgent {
     const gated = this.t - (this.lastTouch ?? -1e9) < 500 || this.t - (this.lastPivot ?? -1e9) < 300;
     this.motor.flying = this.flight.active;
     this.cmd = this.motor.apply(this.t, 1, { up: this.mjd.xmat[this.bid.thorax * 9 + 8], touching: gated, voluntary: this.intrinsic && this.t < this.intrinsic.takeoffUntil,
+      court: this.intrinsic?.state === 'court' ? { sing: !!this.intrinsic.courtSing, side: this.intrinsic.courtSide } : null,
       contact: st.bodyContact.left || st.bodyContact.right || st.antTouch.left || st.antTouch.right });   // no takeoff while pressed against something
     // takeoff: once the jump has pushed off, the wings start (tarsal reflex); an escape banks away from the threat
     if (this.motor.launchT === this.t && !this.flight.active) {
@@ -138,7 +168,8 @@ export class FlyAgent {
       if (this.flight.update(this.t, 1, { turn: this.cmd.turn, env: this.env, others: this.others, legTouch }) === 'landed') this.motor.recoverUntil = this.t + 300;
       this.cmd.flying = this.flight.active; this.cmd.flight = this.flight.label();
     }
-    for (let s = 0; s < this.physPerMs; s++) mj.mj_step(M, d);
+    const dtSub = 1000 * M.opt.timestep;
+    for (let s = 0; s < this.physPerMs; s++) { if (this.flight.active) this.flight.substep(dtSub); mj.mj_step(M, d); }
     this.t += 1;
     this.physiology(st);
   }
@@ -165,6 +196,7 @@ export class FlyAgent {
     if (c.righting) return 'righting';
     if (this.flight.active) return this.flight.label();
     if (m.jumping) return m.jumpCause === 'voluntary' ? 'taking off' : 'escape jump';
+    if (this.intrinsic?.state === 'court') return c.singing ? 'singing (courtship)' : 'courting';
     if (c.grooming) return 'grooming';
     if (st && st.proboscisOut && st.labellumZ < 0.065 && this.env.food.some(f => f.amount > 0 && Math.hypot(st.labellum[0] - f.x, st.labellum[1] - f.y) < f.r)) return 'feeding';
     const pe = st && st.proboscisOut ? ' (proboscis out)' : '';

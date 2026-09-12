@@ -63,6 +63,8 @@ export class LIFWasm {
   setDriveOne(i, rate) { this.drive[i] = rate; if (rate > 0) { if (!this.drivenSet.has(i)) { this.drivenSet.add(i); this._drivenDirty = true; } } else if (this.drivenSet.delete(i)) this._drivenDirty = true; }
   setDrive(ix, rate) { for (let k = 0; k < ix.length; k++) this.setDriveOne(ix[k], rate); }
   setBias(ix, mv) { for (let k = 0; k < ix.length; k++) this.bias[ix[k]] = mv; }
+  setThr(i, mv) { this.thr[i] = mv; }
+  addG(i, e, ii) { this.gE[i] += e; this.gI[i] += ii || 0; }
   pulse(ix, mv) { for (let k = 0; k < ix.length; k++) this.gE[ix[k]] += mv; }
   wake() {}
   reset() { this.v.fill(this.p.vRest); this.gE.fill(0); this.gI.fill(0); this.refr.fill(0); this.trace.fill(0); this.adapt.fill(0); this.res.fill(1); this.spikeCount.fill(0); this.ringCount.fill(0); this.t = 0; }

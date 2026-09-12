@@ -45,8 +45,10 @@ supplies the spontaneous drive the model lacks, and hunger reaches the brain as 
 
 ### Behaviour
 23. [Endogenous behaviour](23-behaviour.md): bouts, saccades, obstacle and heat avoidance, feeding, search
-24. [Flight](24-flight.md): takeoff, quasi-steady flight, collision avoidance, landing
-25. [Neuromodulation](25-neuromodulation.md): hunger through AKH, insulin and octopamine
+24. [Flight](24-flight.md): takeoff, blade-element flight on the 218 Hz stroke, collision avoidance, landing
+25. [Neuromodulation](25-neuromodulation.md): hunger through AKH, insulin and octopamine; OA optic-lobe gain
+26. [Courtship](26-courtship.md): LC10 detection, cVA pheromone, pIP10/DNp13 pursuit, wing display
+27. [WebGPU](27-webgpu.md): GPU LIF kernel with WASM fallback
 
 ## Repository layout
 
@@ -55,7 +57,7 @@ supplies the spontaneous drive the model lacks, and hunger reaches the brain as 
 | `index.html`, `src/main.js` | Connectome viewer |
 | `arena.html`, `src/arena.js` | Embodied arena |
 | `src/sim/` | Fly agent, world, senses, vision, motor, endogenous behaviour, neuromodulation, flight, worker |
-| `src/lif.js`, `src/lifwasm.js`, `src/wasm/lif.c` | Brain model in JS and WebAssembly |
+| `src/lif.js`, `src/lifwasm.js`, `src/lifgpu.js`, `src/wasm/lif.c` | Brain model in JS, WebAssembly and WebGPU |
 | `src/brainmodel.js`, `src/brainsetup.js` | Calibrated brain construction, shared memory |
 | `src/flyvis.js` | flyvis optic-lobe runtime |
 | `public/` | Preprocessed data served to the browser |

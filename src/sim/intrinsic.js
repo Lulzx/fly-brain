@@ -27,6 +27,9 @@ export const INTRINSIC = {
   feedBout: [6, 0.5], satiety: 0.9, searchMs: 12000, searchTurns: 3,   // feeding stop, then local search
   pTakeoff: 0.1, pTakeoffWall: 0.1, takeoffDrive: 20,   // chance a bout ends in a voluntary takeoff (more when hungry), via DNp02/DNp04
   flightSaccadeRate: 1.0, flightSaccadeMs: [80, 160], avoidAhead: 0.4, avoidDrive: 18,   // flight: avoid when the path 9 mm ahead (FlyAgent.state) comes within 4 mm of a surface
+  // courtship: the connectome's pIP10 + DNp13 rate (ctx.court.level, see motor.js) tells the male a fly is
+  // near; he chases it by steering on its bearing and sings with the wing on its side (Ewing & Bennet-Clark 1968)
+  courtEnter: 0.4, courtExit: 0.2, courtRange: 1.8, courtLostMs: 1500, courtSing: 0.45, courtDrive: 9, courtTurn: 12,
 };
 function mulberry(seed) { let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
 
@@ -53,13 +56,23 @@ export class Intrinsic {
     if (ctx.flying) return this.flightUpdate(t, dtMs, brain, ctx);
     if (this.state === 'fly') { this.state = 'stop'; this.left = 500 + 1000 * this.rand(); this.sacc = null; }   // landed
     if (ctx.touch.left) this.touchL = t; if (ctx.touch.right) this.touchR = t;
+    // courtship gating: the pheromone-driven courtship readout (pIP10, DNp13) must be high, another fly must
+    // be in range, and no avoidance in progress. While courting, contact with the other fly is not an obstacle.
+    const courting = this.state === 'court';
+    const court = ctx.court;
+    if (!this.courting && court && court.level > P.courtEnter && court.dist < P.courtRange && !this.avoid && this.state !== 'feed') { this.courting = { lost: 0 }; this.sacc = null; this.state = 'court'; }
+    if (this.courting) {
+      if (!court || court.level < P.courtExit || court.dist > P.courtRange * 1.5 || this.avoid) {
+        if ((this.courting.lost += dtMs) > P.courtLostMs) { this.courting = null; this.courtSing = false; if (this.state === 'court') { this.state = 'stop'; this.left = 400 + 600 * this.rand(); } }
+      } else this.courting.lost = 0;
+    }
     const headOn = ctx.rearing || (t - this.touchL < 150 && t - this.touchR < 150);
     const graze = ctx.touch.left !== ctx.touch.right;
-    if (!this.avoid && headOn) {
+    if (!courting && !this.avoid && headOn) {
       this.avoid = { t: 0, dir: this.touchL > this.touchR ? -1 : this.touchR > this.touchL ? 1 : (this.rand() < 0.5 ? 1 : -1), turn: 500 + 400 * this.rand(), why: ctx.rearing ? 'rear' : 'both' };
       this.sacc = null;
       this.avoid.fly = this.rand() < P.pTakeoffWall;   // or leave the wall by air, once turned away from it
-    } else if (!this.avoid && graze && t - this.lastGraze > P.grazeRefractory) {
+    } else if (!courting && !this.avoid && graze && t - this.lastGraze > P.grazeRefractory) {
       const dir = ctx.touch.left ? -1 : 1;   // +1 = turn left
       this.sacc = { t: 0, dur: P.grazeTurnMs[0] + (P.grazeTurnMs[1] - P.grazeTurnMs[0]) * this.rand(), dir }; this.lastDir = dir; this.sinceSacc = 0; this.lastGraze = t;
     }
@@ -87,6 +100,12 @@ export class Intrinsic {
       const a = this.avoid; a.t += dtMs;
       if (a.t > P.avoidMs && !this.sacc) this.sacc = { t: 0, dur: a.turn, dir: a.dir };   // pivot away
       if (a.t > P.avoidMs + a.turn) { if (a.fly) this.takeoffUntil = t + 80; this.avoid = null; this.lastDir = a.dir; this.sinceSacc = 0; this.state = 'walk'; this.left = Math.max(this.left, 1000); }
+    } else if (this.state === 'court' && court) {
+      // chasing: no spontaneous saccades or bout transitions; steering is set from the target's bearing below
+      const b = court.bearing;   // rad; >0 = target to the left
+      this.courtSing = court.dist < P.courtSing && Math.abs(b) < 0.9;
+      this.courtSide = b > 0 ? 'left' : 'right';
+      this.sinceSacc = 0;
     } else {
       this.left -= dtMs;
       if (this.left <= 0) {   // action selection at the end of a bout
@@ -112,12 +131,19 @@ export class Intrinsic {
     B.back = this.avoid && this.avoid.t < P.avoidMs ? P.backDrive : 0;
     B.groom = this.state === 'groom' && !this.avoid ? P.groomDrive : 0;
     B.turnL = this.sacc && this.sacc.dir > 0 ? P.turnDrive : 0; B.turnR = this.sacc && this.sacc.dir < 0 ? P.turnDrive : 0;
+    if (this.state === 'court' && court) {
+      // chase: steer onto the target's bearing; close to singing distance, then keep station and extend
+      // the wing facing her. Males keep walking while singing (Ewing & Bennet-Clark 1968).
+      const b = court.bearing;
+      B.turnL = b > 0.04 ? P.courtTurn * Math.min(1, b) : 0; B.turnR = b < -0.04 ? P.courtTurn * Math.min(1, -b) : 0;
+      B.fwd = court.dist > 0.6 ? P.courtDrive : court.dist > 0.4 ? P.courtDrive * 0.4 : P.courtDrive * 0.15;
+    }
     B.takeoff = t < this.takeoffUntil ? P.takeoffDrive : 0;
     // hunger gates the proboscis extension reflex: a hungry fly tasting sugar extends and pumps (MN9, pump MNs)
     B.feed = this.state === 'feed' ? P.feedDrive * (0.4 + hunger) : 0;
     for (const k in B) if (B[k] > 0) brain.pulse(this.ix[k], B[k] * dtMs);
     const brake = this.state === 'feed' ? P.feedBrake : this.state === 'stop' || this.state === 'groom' ? P.stopBrake : 0;
-    if (brake) for (const i of this.ix.brake) brain.gI[i] -= brake * dtMs;
+    if (brake) for (const i of this.ix.brake) brain.addG(i, 0, -brake * dtMs);
   }
   /** in flight: spontaneous saccades, and collision-avoidance saccades toward open space when a wall or block
    *  lies ahead (flies turn away from the side of visual expansion; Tammero & Dickinson 2002). ctx.ahead gives

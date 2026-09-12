@@ -14,8 +14,11 @@ export const DN_ROLES = {
   groom: { DNg07: 1, DNg08: 1, DNg12: 1 },         // head grooming with the front legs
   escape: { DNp01: 1 },                            // giant fibre
   takeoff: { DNp02: 1, DNp04: 1 },                 // looming-sensitive non-GF escape DNs (von Reyn 2014, Namiki 2018)
+  courtP: { pIP10: 1 },                            // P1->VNC courtship interneuron (fru+; Deutsch et al. 2020)
+  courtDN: { DNp13: 1 },                           // courtship pursuit descending neuron
 };
-export const READOUT = { takeoffThreshold: 70, takeoffRatio: 3, takeoffTauSlow: 3000, takeoffInit: 20, startupMs: 1500, gfSpikes: 4, gfWindow: 50, fwdThreshold: 4, fwdScale: 12, turnScale: 25, turnAdaptTau: 4000, backMax: 0.35, groomScale: 40, turnTau: 150, flightTurnTau: 50, muscleHalf: 17 };
+export const READOUT = { takeoffThreshold: 70, takeoffRatio: 3, takeoffTauSlow: 3000, takeoffInit: 20, startupMs: 1500, gfSpikes: 4, gfWindow: 50, fwdThreshold: 4, fwdScale: 12, turnScale: 25, turnAdaptTau: 4000, backMax: 0.35, groomScale: 40, turnTau: 150, flightTurnTau: 50, muscleHalf: 17,
+  courtPBase: 5, courtPScale: 4, courtDNBase: 12, courtDNScale: 8 };   // courtship readout: baseline-subtracted, normalised
 // fwd: walking needs weighted DN drive above threshold (Hz); speed = 1 - exp(-excess / fwdScale).
 // muscles: activation = 1 - exp(-rate * ln2 / muscleHalf), i.e. half-maximal at ~17 Hz (insect force-frequency curves saturate early)
 const LEGS = ['T1', 'T2', 'T3'], SIDES = ['left', 'right'];
@@ -35,10 +38,10 @@ export class Motor {
     const byType = (t, s) => { const o = []; for (let i = 0; i < typeOf.length; i++) if (typeOf[i] === t && (s === undefined || sideOf[i] === s)) o.push(i); return o; };
     const pop = (roles, s) => Object.entries(roles).flatMap(([t, w]) => byType(t, s).map(i => [i, w]));
     this.dn = { forward: pop(DN_ROLES.forward), backward: pop(DN_ROLES.backward), escape: pop(DN_ROLES.escape).map(x => x[0]), takeoff: pop(DN_ROLES.takeoff), groom: pop(DN_ROLES.groom),
-      turnL: pop(DN_ROLES.turn, 1), turnR: pop(DN_ROLES.turn, 2) };
+      turnL: pop(DN_ROLES.turn, 1), turnR: pop(DN_ROLES.turn, 2), courtP: pop(DN_ROLES.courtP), courtDN: pop(DN_ROLES.courtDN) };
     this.muscles = bodymap.muscles; this.ttmn = bodymap.jump;
     this.rate = new Float32Array(typeOf.length);    // low-pass filtered firing rate per neuron (Hz), only for used neurons
-    this.used = new Set([...this.dn.forward.map(x => x[0]), ...this.dn.backward.map(x => x[0]), ...this.dn.escape, ...this.dn.takeoff.map(x => x[0]), ...this.dn.groom.map(x => x[0]), ...this.dn.turnL.map(x => x[0]), ...this.dn.turnR.map(x => x[0]), ...bodymap.jump, ...bodymap.feeding]);
+    this.used = new Set([...this.dn.forward.map(x => x[0]), ...this.dn.backward.map(x => x[0]), ...this.dn.escape, ...this.dn.takeoff.map(x => x[0]), ...this.dn.groom.map(x => x[0]), ...this.dn.turnL.map(x => x[0]), ...this.dn.turnR.map(x => x[0]), ...this.dn.courtP.map(x => x[0]), ...this.dn.courtDN.map(x => x[0]), ...bodymap.jump, ...bodymap.feeding]);
     for (const m of this.muscles) for (const i of m.idx) this.used.add(i);
     this.used = Int32Array.from(this.used);
     this.lastCount = new Uint32Array(typeOf.length);
@@ -76,7 +79,10 @@ export class Motor {
     // slow adaptation removes standing left/right imbalances of the steering DNs (the model's DNa02 and P9
     // pairs receive unequal tonic input), keeping transient asymmetries: saccades, plumes, objects
     this.turnBase = (this.turnBase || 0) + dtMs / R0.turnAdaptTau * (this.turnF - (this.turnBase || 0));
-    this.cmd = { v, turn: Math.max(-0.6, Math.min(0.6, (this.turnF - this.turnBase) / R0.turnScale)), drive: fwd, back, groom, grooming, escape: this.mean(this.dn.escape), takeoff: this.wmean(this.dn.takeoff) };
+    // courtship circuit readout: pIP10 and DNp13 sit downstream of the pheromone pathways (2 hops from the
+    // cVA and tarsal pheromone receptors); both roughly double their rate near another fly
+    const court = Math.max(0, Math.min(1, 0.5 * Math.max(0, this.wmean(this.dn.courtP) - R0.courtPBase) / R0.courtPScale + 0.5 * Math.max(0, this.wmean(this.dn.courtDN) - R0.courtDNBase) / R0.courtDNScale));
+    this.cmd = { v, turn: Math.max(-0.6, Math.min(0.6, (this.turnF - this.turnBase) / R0.turnScale)), drive: fwd, back, groom, grooming, escape: this.mean(this.dn.escape), takeoff: this.wmean(this.dn.takeoff), court };
     if (this.mode === 'connectome') {
       for (const leg of LEGS) for (const sd of SIDES) {
         for (const j of ['coxa', 'coxa_abduct', 'coxa_twist', 'femur', 'femur_twist', 'tibia', 'tarsus', 'tarsus2']) set(`${j}_${leg}_${sd}`, muscleCtrl(`${j}_${leg}_${sd}`));
@@ -101,6 +107,13 @@ export class Motor {
         const stance = ((phi + g.adhPhase) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) < 2 * Math.PI * g.duty;
         set(`adhere_claw_${key}`, amp > 0.05 ? (stance ? 1 : 0) : 0.8);
       }
+    }
+    // --- courtship song: one wing (on the side facing the other fly) extended and vibrating ---
+    if (extra.court?.sing && !this.jumping && !this.flying && !this.righting) {
+      const sd = extra.court.side === 'right' ? 'right' : 'left';
+      const w = 0.5 + 0.5 * Math.sin(2 * Math.PI * 30 * tMs / 1000);   // song pulses rendered as a visible flutter
+      set(`wing_yaw_${sd}`, 1.35); set(`wing_roll_${sd}`, 0.5); set(`wing_pitch_${sd}`, -0.5 - 0.4 * w);
+      this.cmd.singing = true;
     }
     // --- head grooming (DNg07/08/12): front legs lift and sweep over the head/eyes in antiphase (~7 Hz) ---
     if (this.cmd.grooming && this.mode !== 'connectome') {

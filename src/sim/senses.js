@@ -11,6 +11,11 @@ export const ODORANTS = {
 };
 export const ORN_SPONTANEOUS = 6;   // Hz, ORN baseline firing
 export const REAFFERENCE = 0.85;    // fraction of footfall touch signal cancelled while stepping
+export const AL_NORM = 600;         // GABA_B presynaptic gain control: total evoked ORN drive per antenna (Hz)
+                                    // divisively normalises every ORN's output (Olsen & Wilson 2008, Curr Opin
+                                    // Neurobiol 18:83). The glomerular pattern is preserved; the total is bounded,
+                                    // so one strong odour cannot recruit the whole lobe.
+export const FLY_ODOR = { strength: 0.9, sigma: 0.28 };   // another fly is a short-range cVA/fly-odour source
 
 export class Senses {
   constructor(bodymap, mj, model) {
@@ -51,7 +56,7 @@ export class Senses {
   update(st, env, dtMs) {
     this.rates.clear();
     const H = Senses.hill;
-    // --- olfaction: concentration at each antenna from static plumes (+ wind advection) ---
+    // --- olfaction: concentration at each antenna from static plumes (+ wind advection) and other flies ---
     for (const sd of ['left', 'right']) {
       const p = st.antenna[sd];
       const act = {};
@@ -60,9 +65,16 @@ export class Senses {
         const c = o.strength * Math.exp(-(dx * dx + dy * dy) / (2 * o.sigma * o.sigma));
         for (const [g, sens] of Object.entries(ODORANTS[o.odor] || {})) act[g] = Math.max(act[g] || 0, c * sens);
       }
+      for (const f of st.otherFlies) {
+        const dx = p[0] - f.x, dy = p[1] - f.y;
+        const c = FLY_ODOR.strength * Math.exp(-(dx * dx + dy * dy) / (2 * FLY_ODOR.sigma * FLY_ODOR.sigma));
+        if (c > 0.02) for (const [g, sens] of Object.entries(ODORANTS.pheromone)) act[g] = Math.max(act[g] || 0, c * sens);
+      }
+      let evoked = 0; for (const g in act) evoked += 150 * H(act[g], 0.25, 1.4);
+      const gain = AL_NORM / (AL_NORM + evoked);
       for (const [g, ixs] of Object.entries(this.orn)) {
         const ix = ixs[sd]; if (!ix) continue;
-        this.set(ix, ORN_SPONTANEOUS + 150 * H(act[g] || 0, 0.25, 1.4));
+        this.set(ix, ORN_SPONTANEOUS + 150 * H(act[g] || 0, 0.25, 1.4) * gain);
       }
     }
     // --- taste: labellum and taste pegs (when proboscis touches the floor on food), tarsi ---

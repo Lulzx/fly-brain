@@ -1,12 +1,14 @@
 // Flight: takeoff, stabilised free flight and landing for the flybody fly.
-// The physics file has no aerodynamic model for the wings, and flapping flight in flybody needed a trained
-// controller, so flight here is quasi-steady: the wings beat with real kinematics (FlySuite wing-beat cycle,
-// 218 Hz), and the net aerodynamic force and torque of each stroke cycle are applied to the body. The
-// commands come from the fly: the brain's steering DNs set the yaw rate (collision-avoidance and spontaneous
-// saccades are delivered through them), and a haltere-like reflex holds roll and pitch, banking into turns
-// (halteres are gyroscopes that feed the wing steering muscles directly; Dickinson 1999). Speed and height
-// are held by the flight motor as a fly holds them from ventral optic flow. A loss of tarsal contact starts
-// the wings (the tarsal reflex); leg contact at touchdown stops them.
+// The wings beat the real FlySuite stroke (218 Hz) through their real hinge joints, and the aerodynamic
+// force on each wing is computed every millisecond by a blade-element quasi-steady model (Dickinson et al.
+// 1999, Science 284:1954): the wing's velocity at its effective radius, the instantaneous angle of attack,
+// and empirical CL(alpha)/CD(alpha) give the lift and drag applied to the wing body. Lift, thrust and drag
+// are therefore emergent — the fly accelerates by pitching the stroke plane, slows by pitching up, and
+// hovers only while the wings beat. The velocity loop commands a force demand: its vertical part scales the
+// stroke amplitude (lift ~ amp^2), its horizontal part tilts the body so the mean lift vector points the
+// right way. Roll is produced by the real mechanism — differential wingbeat amplitude (the steering-muscle
+// asymmetry); pitch and yaw torques remain a lumped haltere-reflex stand-in (documented in the docs).
+// A loss of tarsal contact starts the wings (the tarsal reflex); leg contact at touchdown stops them.
 import { clearance } from './senses.js';
 
 // wing yaw, roll, pitch joint angles (rad) over one stroke cycle: 50 samples of body/flysuite/wing_pattern_fmech.npy
@@ -18,32 +20,122 @@ export const FLIGHT = {
   duration: [1.5, 0.6],          // lognormal flight time: median s, log-sd
   climbMs: 250,
   yawGain: 14, yawMax: 12,       // rad/s per unit steering command, and the limit (saccades reach ~500 deg/s)
-  kv: 14, kz: 5, kp: 2500, kd: 90, kr: 60,   // velocity loop (1/s), height (1/s), attitude P (1/s^2) and D (1/s), yaw rate (1/s)
+  kv: 14, kz: 5, kp: 400000, kd: 2000, kr: 20000,   // velocity loop (1/s), height (1/s), attitude P (1/s^2) and D (1/s), yaw rate (1/s)
   pitch: 0.35, maxBank: 0.6,     // cruise body pitch nose-up (rad, ~20 deg as in slow forward flight); bank limit in turns
   fmax: 2.2,                     // peak aerodynamic force / body weight
   maxSpeed: 40,                  // cm/s, see the numerical guard in update()
   wallMargin: 0.45, wallPush: 25,   // centring near walls: cm, 1/s
   landSpeed: 2, sink: 4, touchdownMs: 80,   // cm/s, cm/s, ms of weight transfer to the legs
+  ampMin: 0.25, ampMax: 1.8, rollGain: 5e-7, pitchTrim: 0.2,
 };
 const G = 981;   // cm/s^2
+// blade-element quasi-steady aerodynamics (Dickinson et al. 1999). Translational lift/drag only; the
+// rotational circulation and added-mass terms that matter within ~10 ms of stroke reversal are omitted.
+const AERO = {
+  rho: 0.00128,                       // air density, g/cm^3 (option density in the physics XML)
+  area: Math.PI * 0.0551 * 0.114,     // wing planform area, cm^2 (the wing-fluid ellipsoid's chord x span)
+  rEff: 0.6,                          // effective blade radius as a fraction of span (2nd moment of area)
+  cl: a => 0.225 + 1.58 * Math.sin(2.13 * a - 7.2),      // alpha in degrees
+  cd: a => 1.92 - 1.55 * Math.cos(2.04 * a - 9.82),
+  unsteady: 1.6,                      // lumped stand-in for the omitted rotational-circulation and added-mass
+                                      // terms, which carry ~30-40% of Drosophila lift (Dickinson 1999)
+};
+const WING_RANGE = [[-1.45, 1.45], [-0.98, 1.45], [-1.25, 2.9]];   // yaw, roll, pitch joint limits (rad)
+const WING_MEAN = [0, 0, 0]; for (const s of WING_CYCLE) for (let a = 0; a < 3; a++) WING_MEAN[a] += s[a] / WING_CYCLE.length;
 const WING_SPREAD = 12;   // cycle sample used as the spread wing posture in the physics
 const LEG_JOINTS = ['coxa', 'coxa_abduct', 'coxa_twist', 'femur', 'femur_twist', 'tibia', 'tarsus', 'tarsus2'];
 // flight posture: legs drawn up under the body (fractions of each joint's range toward its upper (+) or lower (-) limit)
 export const FLIGHT_LEGS = { T1: { femur: -0.5, tibia: 0.6 }, T2: { femur: -0.5, tibia: 0.6 }, T3: { femur: -0.4, tibia: 0.6 } };
 
 export class Flight {
-  constructor({ model, data, thorax, jointAdr, act, range, rand = Math.random }) {
-    this.M = model; this.d = data; this.th = thorax; this.act = act; this.range = range; this.rand = rand;
+  constructor({ mj, model, data, thorax, jointAdr, act, range, rand = Math.random }) {
+    this.mj = mj; this.M = model; this.d = data; this.th = thorax; this.act = act; this.range = range; this.rand = rand;
     this.mass = model.body_subtreemass[thorax];
     this.bodies = []; for (let b = 1; b < model.nbody; b++) { let p = b; while (p > 0 && p !== thorax) p = model.body_parentid[p]; if (p === thorax) this.bodies.push(b); }
     const dof = {}; for (let j = 0; j < model.njnt; j++) dof[model.jnt(j).name] = model.jnt_dofadr[j];
     this.wing = ['left', 'right'].map(sd => ['yaw', 'roll', 'pitch'].map(ax => [jointAdr[`wing_${ax}_${sd}`], dof[`wing_${ax}_${sd}`]]));
-    this.active = false; this.phase = null; this.wingPhase = 0;
+    this.wingBody = ['left', 'right'].map(sd => model.body(`wing_${sd}`).id);
+    this.wingGeom = ['left', 'right'].map(sd => model.geom(`wing_${sd}_fluid`).id);
+    // wing actuators are torque sources (the power/steering muscles): joint-space servo gains for tracking
+    // the stroke cycle, divided out by each actuator's gainprm so ctrl stays in its +-1 range
+    this.wingAct = ['left', 'right'].map(sd => ['yaw', 'roll', 'pitch'].map(ax => {
+      const i = act[`wing_${ax}_${sd}`];
+      return i === undefined ? null : { i, gain: model.actuator_gainprm[i * 10] || 1 };
+    }));
+    // effective wing-joint inertia is dominated by armature (1e-6), not the wing mass — the feedforward
+    // and PD are sized for that so the 218 Hz trajectory tracks without saturating the +-1 ctrl range
+    this.servo = { kp: 4, kd: 3e-3, iw: 1.05e-6 };
+    // which way each wing-geom axis points (distal span, dorsal normal, leading edge) is a fixed property of
+    // the mesh — resolve the signs once; testing them every step lets a tumbled pose flip a sign and the
+    // blade point teleports, which explodes the force calculation
+    this.wingSign = [0, 1].map(s => {
+      const g = this.wingGeom[s], gm = data.geom_xmat, gp = data.geom_xpos, gb = g * 9, go = g * 3;
+      const th = [data.xpos[thorax * 3], data.xpos[thorax * 3 + 1], data.xpos[thorax * 3 + 2]];
+      const sp = [gm[gb + 2], gm[gb + 5], gm[gb + 8]];
+      const dP = (gp[go] + sp[0] - th[0]) ** 2 + (gp[go + 1] + sp[1] - th[1]) ** 2 + (gp[go + 2] + sp[2] - th[2]) ** 2;
+      const dM = (gp[go] - sp[0] - th[0]) ** 2 + (gp[go + 1] - sp[1] - th[1]) ** 2 + (gp[go + 2] - sp[2] - th[2]) ** 2;
+      return { sp: dP >= dM ? 1 : -1 };
+    });
+    this.active = false; this.phase = null; this.wingPhase = 0; this.liftUnit = null;
+  }
+  /** blade-element point on wing s: wing-fluid geom centre + rEff * semi-span along the distal span axis */
+  bladePoint(s) {
+    const d = this.d, g = this.wingGeom[s], gm = d.geom_xmat, gp = d.geom_xpos, gb = g * 9, go = g * 3;
+    const ss = this.wingSign[s].sp, sp = [gm[gb + 2] * ss, gm[gb + 5] * ss, gm[gb + 8] * ss];
+    return { bp: [gp[go] + sp[0] * AERO.rEff * 0.114, gp[go + 1] + sp[1] * AERO.rEff * 0.114, gp[go + 2] + sp[2] * AERO.rEff * 0.114], sp };
+  }
+  /** aerodynamic force on wing s (0 left, 1 right) for blade-point velocity vb (cm/s, inertial frame) and
+   *  ambient wind [wx, wy] cm/s. Blade-element quasi-steady (Dickinson 1999): relative air velocity at the
+   *  effective radius, alpha in the chord-normal plane, empirical CL/CD. Returns dynes, world frame. */
+  aeroForce(s, wind, vb) {
+    const d = this.d, g = this.wingGeom[s], gm = d.geom_xmat, gb = g * 9;
+    let n = [gm[gb], gm[gb + 3], gm[gb + 6]], c = [gm[gb + 1], gm[gb + 4], gm[gb + 7]];
+    const { sp } = this.bladePoint(s);
+    // quasi-steady convention: the chord frame follows whichever face is up relative to the body at this
+    // instant (lift is directed toward the surface meeting the flow) — fixed material signs instead
+    // mis-measure alpha once the wing pitches past 90 deg
+    const R = this.R();
+    const bx = [R[0], R[3], R[6]], bz = [R[2], R[5], R[8]];
+    if (n[0] * bz[0] + n[1] * bz[1] + n[2] * bz[2] < 0) { n = n.map(x => -x); c = c.map(x => -x); }
+    if (c[0] * bx[0] + c[1] * bx[1] + c[2] * bx[2] < 0) c = c.map(x => -x);
+    const vr = [(wind ? wind[0] : 0) - vb[0], (wind ? wind[1] : 0) - vb[1], -vb[2]];
+    const vs = vr[0] * sp[0] + vr[1] * sp[1] + vr[2] * sp[2];
+    let pl = [vr[0] - vs * sp[0], vr[1] - vs * sp[1], vr[2] - vs * sp[2]];
+    let V = Math.hypot(pl[0], pl[1], pl[2]);
+    if (V < 1) return [0, 0, 0];
+    if (V > 600) { pl = pl.map(p => p * 600 / V); V = 600; }   // cap: beyond this a transient is unphysical
+    const alpha = Math.atan2(pl[0] * n[0] + pl[1] * n[1] + pl[2] * n[2], pl[0] * c[0] + pl[1] * c[1] + pl[2] * c[2]) * 180 / Math.PI;
+    const q = 0.5 * AERO.rho * V * V * AERO.area;
+    const L = q * AERO.cl(alpha) * AERO.unsteady, D = q * AERO.cd(alpha);
+    // drag opposes the in-plane flow; lift is perpendicular to it, toward the dorsal normal for CL > 0
+    const ld = [sp[1] * pl[2] - sp[2] * pl[1], sp[2] * pl[0] - sp[0] * pl[2], sp[0] * pl[1] - sp[1] * pl[0]];
+    const ln = Math.hypot(ld[0], ld[1], ld[2]) || 1, sgn = (ld[0] * n[0] + ld[1] * n[1] + ld[2] * n[2]) * Math.sign(AERO.cl(alpha)) >= 0 ? 1 : -1;
+    return [L * sgn * ld[0] / ln - D * pl[0] / V, L * sgn * ld[1] / ln - D * pl[1] / V, L * sgn * ld[2] / ln - D * pl[2] / V];
+  }
+  /** mean cycle-averaged total lift of both wings at amplitude 1 with a still body: the lift scale used to
+   *  map the vertical force demand to a wingbeat amplitude. Measured once on the standing fly by stepping
+   *  the real joints through one cycle and finite-differencing the blade points. */
+  calibrateLift() {
+    const d = this.d, M = this.M, mj = this.mj;
+    const q0 = d.qpos.slice(0);
+    const prev = [null, null]; let L = 0; const dt = 1 / (WING_CYCLE.length * FLIGHT.wingHz);
+    for (let k = 0; k <= WING_CYCLE.length; k++) {
+      const kk = k % WING_CYCLE.length;
+      for (let s = 0; s < 2; s++) for (let a = 0; a < 3; a++) d.qpos[this.wing[s][a][0]] = WING_CYCLE[kk][a];
+      mj.mj_kinematics(M, d);
+      for (let s = 0; s < 2; s++) {
+        const { bp } = this.bladePoint(s);
+        if (prev[s]) { const vb = bp.map((x, i) => (x - prev[s][i]) / dt); L += this.aeroForce(s, null, vb)[2]; }
+        prev[s] = bp;
+      }
+    }
+    d.qpos.set(q0); mj.mj_kinematics(M, d);
+    this.liftUnit = Math.max(1e-3, L / WING_CYCLE.length);   // dynes at amplitude 1
   }
   gauss() { let u = 0; while (!u) u = this.rand(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * this.rand()); }
   start(tMs, { cause = 'takeoff', awayFrom = null } = {}) {
     const F = FLIGHT;
-    this.active = true; this.phase = 'climb'; this.t0 = tMs; this.cause = cause;
+    this.active = true; this.phase = 'climb'; this.t0 = tMs; this.cause = cause; this.bladePrev = [null, null];
     this.dur = 1000 * F.duration[0] * Math.exp(F.duration[1] * this.gauss());
     this.alt = F.alt[0] + (F.alt[1] - F.alt[0]) * this.rand();
     this.speed = F.speed * Math.max(0.4, 1 + F.speedJitter * this.gauss());
@@ -72,16 +164,18 @@ export class Flight {
   /** one ms of flight. ctx: { turn: brain steering command, env, others, legTouch: any claw on a surface } */
   update(tMs, dtMs, ctx) {
     if (!this.active) return;
-    const F = FLIGHT, d = this.d, m = this.mass, th = this.th, dt = dtMs / 1000;
+    if (this.liftUnit === null) this.calibrateLift();
+    const F = FLIGHT, d = this.d, m = this.mass, th = this.th, dt = dtMs / 1000, mj = this.mj, M = this.M;
     const R = this.R(), com = this.com(), v = [d.qvel[0], d.qvel[1], d.qvel[2]], w = [d.qvel[3], d.qvel[4], d.qvel[5]];   // free joint: world linear, body angular velocity
     const yaw = Math.atan2(R[3], R[0]), pitch = Math.asin(Math.max(-1, Math.min(1, R[6]))), roll = Math.atan2(R[7], R[8]);
     const age = tMs - this.t0;
     // numerical guard: a takeoff pressed into a wall can make the contact solver fling the body; no fly does that
     const sp = Math.hypot(v[0], v[1], v[2]); if (sp > F.maxSpeed) { const k = F.maxSpeed / sp; for (let i = 0; i < 3; i++) { d.qvel[i] *= k; v[i] *= k; } }
+    const wr = Math.hypot(w[0], w[1], w[2]); if (wr > 3000) { const k = 3000 / wr; for (let i = 3; i < 6; i++) { d.qvel[i] *= k; w[i - 3] *= k; } }   // contact kicks can fling the free body; a fly never spins at 3000 rad/s
     // --- phases: climb, cruise, land (descend onto the legs), touchdown (weight onto the legs) ---
     if (this.phase === 'climb' && age > F.climbMs) this.phase = 'cruise';
     if (this.phase === 'cruise' && age > this.dur && !this.overObstacle(com, ctx.env)) this.phase = 'land';
-    if (this.phase === 'land' && (ctx.legTouch || com[2] < 0.15)) { this.phase = 'touchdown'; this.tTouch = tMs; }
+    if ((this.phase === 'land' || (this.phase === 'cruise' && com[2] < 0.2)) && (ctx.legTouch || com[2] < 0.15)) { this.phase = 'touchdown'; this.tTouch = tMs; }
     if (this.phase === 'touchdown' && tMs - this.tTouch > F.touchdownMs) return this.end();
     const landing = this.phase === 'land' || this.phase === 'touchdown';
     // --- desired motion ---
@@ -97,28 +191,31 @@ export class Flight {
       const k = F.wallPush * (F.wallMargin - c0); vt[0] += k * gx / gn; vt[1] += k * gy / gn;
     }
     vt[2] = landing ? -F.sink : Math.max(-F.sink, Math.min(3, F.kz * (this.alt - com[2])));
-    let f = [m * F.kv * (vt[0] - v[0]), m * F.kv * (vt[1] - v[1]), m * (G + F.kv * (vt[2] - v[2]))];
-    const fn = Math.hypot(...f), fmax = F.fmax * m * G; if (fn > fmax) f = f.map(x => x * fmax / fn);
-    if (this.phase === 'touchdown') { const k = Math.max(0, 1 - (tMs - this.tTouch) / F.touchdownMs); f = f.map(x => x * k); }
-    // --- attitude: haltere reflex holds roll/pitch, banks into turns; yaw rate follows the command ---
+    // --- force demand: vertical part sets the stroke amplitude (lift ~ amp^2), forward part tilts the body ---
+    const fz = m * (G + F.kv * (vt[2] - v[2]));
+    const fx = m * F.kv * (vt[0] - v[0]), fy = m * F.kv * (vt[1] - v[1]);
+    const fFwd = fx * Math.cos(yaw) + fy * Math.sin(yaw);
+    let amp = Math.sqrt(Math.max(0.1 * m * G, fz) / this.liftUnit);
+    amp = Math.max(F.ampMin, Math.min(F.ampMax, amp));
+    // --- attitude: banking into turns; pitch tilts the lift vector for thrust (nose down to accelerate) ---
     const bank = Math.max(-F.maxBank, Math.min(F.maxBank, -Math.atan(spd * r / G)));
-    const pitchT = landing ? 0.05 : F.pitch;
+    // the stroke's mean force tilts ~55 deg forward of the body frame (measured on the blade-element
+    // model), so the body must pitch steeply nose-up to put lift under weight — Drosophila really do
+    // hover at ~50 deg. The bound needs room for that
+    const pitchT = landing ? 0.05 : Math.max(-0.5, Math.min(1.2, F.pitchTrim - Math.atan2(fFwd, Math.max(fz, 0.2 * m * G)) + 0.9));
     const alpha = [F.kp * (bank - roll) - F.kd * w[0], -F.kp * (pitchT - pitch) - F.kd * w[1], F.kr * (r - w[2])];   // body frame (y rotation: nose down)
+    // --- wingbeat control state for the substeps: amplitude from the force demand, roll from differential
+    // amplitude (the steering-muscle asymmetry), fading out through touchdown ---
+    const dAmp = Math.max(-0.35, Math.min(0.35, F.rollGain * alpha[0]));
+    this.ampS = [amp * (1 + dAmp), amp * (1 - dAmp)];
+    this.fade = this.phase === 'touchdown' ? Math.max(0, 1 - (tMs - this.tTouch) / F.touchdownMs) : 1;
+    this.wind = ctx.env.wind;
+    // attitude torque: the lumped haltere->steering-muscle moment (roll is assisted, not replaced, by the
+    // differential amplitude above — it adds a real roll moment but is too weak alone to recover a tumble)
     const Iw = this.inertia(com);
-    // tau_world = Iw * (R alpha)
     const aw = [0, 1, 2].map(i => R[i * 3] * alpha[0] + R[i * 3 + 1] * alpha[1] + R[i * 3 + 2] * alpha[2]);
     const tau = [0, 1, 2].map(i => Iw[i * 3] * aw[0] + Iw[i * 3 + 1] * aw[1] + Iw[i * 3 + 2] * aw[2]);
-    // the force acts at the thorax's centre of mass; remove the torque it makes about the fly's centre of mass
-    const ra = [d.xipos[th * 3] - com[0], d.xipos[th * 3 + 1] - com[1], d.xipos[th * 3 + 2] - com[2]];
-    const x = d.xfrc_applied, o = th * 6;
-    x[o] = f[0]; x[o + 1] = f[1]; x[o + 2] = f[2];
-    x[o + 3] = tau[0] - (ra[1] * f[2] - ra[2] * f[1]); x[o + 4] = tau[1] - (ra[2] * f[0] - ra[0] * f[2]); x[o + 5] = tau[2] - (ra[0] * f[1] - ra[1] * f[0]);
-    // --- wings: held spread in the physics (the renderer draws the 218 Hz stroke from wingPoses); driving the
-    // real stroke kinematically would add ~1000 rad/s joint velocities whose reaction torques the quasi-steady
-    // force model already accounts for ---
-    this.wingPhase = (this.wingPhase + F.wingHz * dt) % 1;
-    const spread = WING_CYCLE[WING_SPREAD];
-    for (let s = 0; s < 2; s++) for (let a = 0; a < 3; a++) { const [qa, da] = this.wing[s][a]; d.qpos[qa] = this.phase === 'touchdown' ? d.qpos[qa] : spread[a]; d.qvel[da] = 0; }
+    this.tauAtt = tau.map(t => t * this.fade);   // combined with the aero moment each substep
     // --- legs: tucked in flight, extended to land ---
     const set = (name, val) => { const i = this.act[name]; if (i === undefined) return; const [lo, hi] = this.range[name]; d.ctrl[i] = Math.min(hi, Math.max(lo, val)); };
     for (const leg of ['T1', 'T2', 'T3']) for (const sd of ['left', 'right']) {
@@ -126,6 +223,49 @@ export class Flight {
       set(`adhere_claw_${leg}_${sd}`, landing ? 0.8 : 0);
     }
     return this.phase;
+  }
+  /** one physics substep (~0.1 ms = ~8 deg of stroke): advance the wings through the real FlySuite stroke
+   *  and apply the instantaneous aerodynamic force they produce. Called before every mj_step while flying,
+   *  so the air sees the full 218 Hz beat and the oscillating lift cannot alias into the attitude loop.
+   *  The stroke is evaluated kinematically (wing qpos -> kinematics -> blade point -> restore): the wing
+   *  actuators cannot swing the real stroke against the joint armature, and teleporting qpos under the
+   *  constraint solver pumps energy into the free body. The wing's own dynamics are negligible anyway
+   *  (wing mass is 0.8% of the fly); the force it would transmit through the hinge is applied to the
+   *  thorax at the blade point, which is the same rigid-body load. */
+  substep(dtMs) {
+    const F = FLIGHT, d = this.d, M = this.M, mj = this.mj;
+    this.wingPhase = (this.wingPhase + F.wingHz * dtMs / 1000) % 1;
+    const ph = this.wingPhase * WING_CYCLE.length, i0 = Math.floor(ph) % WING_CYCLE.length, i1 = (i0 + 1) % WING_CYCLE.length, u = ph - Math.floor(ph);
+    const q = [0, 1, 2].map(a => WING_CYCLE[i0][a] + (WING_CYCLE[i1][a] - WING_CYCLE[i0][a]) * u);
+    const saved = [0, 1].map(s => [0, 1, 2].map(a => d.qpos[this.wing[s][a][0]]));
+    for (let s = 0; s < 2; s++) for (let a = 0; a < 3; a++) {
+      const qq = a === 2 ? q[a] : WING_MEAN[a] + this.ampS[s] * (q[a] - WING_MEAN[a]);
+      const [lo, hi] = WING_RANGE[a];
+      d.qpos[this.wing[s][a][0]] = Math.max(lo, Math.min(hi, qq));
+    }
+    mj.mj_kinematics(M, d);
+    // clamp the free body before every step: the leg launch and floor-contact kicks can push qvel to
+    // physically absurd values (10+ m/s), and one ballistic substep penetrates the floor and catapults
+    for (let i = 0; i < 3; i++) d.qvel[i] = Math.max(-F.maxSpeed, Math.min(F.maxSpeed, d.qvel[i]));
+    for (let i = 3; i < 6; i++) d.qvel[i] = Math.max(-3000, Math.min(3000, d.qvel[i]));
+    const x = d.xfrc_applied, dt = dtMs / 1000, com = this.com(), o = this.th * 6;
+    const tauA = this.tauAtt || [0, 0, 0];
+    x[o] = 0; x[o + 1] = 0; x[o + 2] = 0; x[o + 3] = tauA[0]; x[o + 4] = tauA[1]; x[o + 5] = tauA[2];
+    for (let s = 0; s < 2; s++) {
+      const { bp } = this.bladePoint(s);
+      const vb = this.bladePrev[s] ? bp.map((p, i) => (p - this.bladePrev[s][i]) / dt) : [0, 0, 0];
+      this.bladePrev[s] = bp;
+      const Fw = this.aeroForce(s, this.wind, vb).map(f => f * this.fade);
+      // the load transmits to the thorax through the wing hinge: equivalent force at the COM plus the
+      // moment about it. The moment arm is taken at the hinge, not the blade point — the beat-scale
+      // moment from our quasi-steady conventions is unreliable and injects a large oscillating torque
+      // the attitude loop cannot follow; the wing hinge keeps a smaller real coupling
+      const wb = this.wingBody[s] * 3;
+      const r = [d.xpos[wb] - com[0], d.xpos[wb + 1] - com[1], d.xpos[wb + 2] - com[2]];
+      x[o] += Fw[0]; x[o + 1] += Fw[1]; x[o + 2] += Fw[2];
+      x[o + 3] += r[1] * Fw[2] - r[2] * Fw[1]; x[o + 4] += r[2] * Fw[0] - r[0] * Fw[2]; x[o + 5] += r[0] * Fw[1] - r[1] * Fw[0];
+    }
+    for (let s = 0; s < 2; s++) for (let a = 0; a < 3; a++) d.qpos[this.wing[s][a][0]] = saved[s][a];   // restore parked wings
   }
   /** wing poses relative to the thorax at n phases of the stroke cycle, for drawing the beating wings:
    *  { left: [[px, py, pz, qw, qx, qy, qz], ...], right: [...] } */
@@ -148,7 +288,7 @@ export class Flight {
   }
   overObstacle(p, env) { return env.obstacles.some(o => o.type === 'box' ? Math.abs(p[0] - o.x) < o.sx + 0.15 && Math.abs(p[1] - o.y) < o.sy + 0.15 : Math.hypot(p[0] - o.x, p[1] - o.y) < o.r + 0.15); }
   end() {
-    const x = this.d.xfrc_applied, o = this.th * 6; for (let k = 0; k < 6; k++) x[o + k] = 0;
+    const x = this.d.xfrc_applied; for (const b of [this.th, ...this.wingBody]) for (let k = 0; k < 6; k++) x[b * 6 + k] = 0;
     this.active = false; this.phase = null; return 'landed';
   }
   label() { return { climb: 'taking off', cruise: 'flying', land: 'landing', touchdown: 'landing' }[this.phase] || null; }

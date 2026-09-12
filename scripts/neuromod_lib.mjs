@@ -15,11 +15,11 @@ const fb = fs.readFileSync('public/vision/flyvis.bin'); const vision = { model: 
 const mj = await loadMujoco(); const wasm = fs.readFileSync('public/lif.wasm');
 export const loadCalib = () => fs.existsSync('public/data/neuromod.json') ? JSON.parse(fs.readFileSync('public/data/neuromod.json')) : null;
 /** neuromod: false runs the old energy-driven rules on the unmodified graph */
-export async function makeFly({ seed = 1, calib = loadCalib(), block = null, nmParams = JSON.parse(process.env.NMPARAMS || '{}'), neuromod = true, env = null, pos = [0, 0], yaw = 0 } = {}) {
+export async function makeFly({ seed = 1, calib = loadCalib(), block = null, nmParams = JSON.parse(process.env.NMPARAMS || '{}'), neuromod = true, env = null, pos = [0, 0], yaw = 0, nProxies = 0, sex = 'm' } = {}) {
   const brainOpts = { ...params, neuromod };   // neuromod false: the old energy-driven rules
   const mem = allocBrainMemory(data, size, sign, brainOpts, 1, vision);
   const brain = await attachBrain(wasm, mem, 0, data, seed); brain.reset();
   if (!env) { env = structuredClone(DEFAULT_ENV); env.food = []; env.hazards = []; }   // the vinegar plume stays: it drives the OA neurons
-  return new FlyAgent({ mj, flyXML, env, data, size, sign, bodymap: D.bodymap, gait, brain, brainOpts, pos, yaw, vision: true, seed,
+  return new FlyAgent({ mj, flyXML, env, data, size, sign, bodymap: D.bodymap, gait, brain, brainOpts, pos, yaw, vision: true, seed, nProxies, sex,
     flyvis: { eyes: attachEyes(brain.instance, mem, 0), map: vision.map, gain: 150 }, neuromod: { calib, block, params: nmParams } });
 }

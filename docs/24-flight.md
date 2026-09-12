@@ -3,15 +3,40 @@
 File: `src/sim/flight.js`. Driven from `FlyAgent.step`; decisions come from `src/sim/intrinsic.js`.
 
 ## Approach
-flybody's physics file has no aerodynamic model for the wings, and flapping flight in flybody needs a
-trained controller. Flight here is quasi-steady:
-- The net aerodynamic force and torque of each stroke cycle are applied to the thorax.
-- In the physics the wings are held spread.
-- The renderer draws the real stroke. At 218 Hz a wing sweeps its stroke every 4.6 ms, so it is shown as
-  faint copies across the FlySuite wing-beat cycle.
+Blade-element quasi-steady aerodynamics on the real stroke. Every physics substep (~0.1 ms) the wing
+joints are set to the FlySuite 218 Hz stroke cycle, `mj_kinematics` is run, and each wing's blade point is
+finite-differenced for its true velocity (MuJoCo's `cvel`/`mj_objectVelocity` do not report prescribed-joint
+speeds). The Dickinson (1999) lift/drag fits act on the blade velocity and wing orientation; an empirical
+unsteady factor of 1.6 lumps in the rotational-circulation and added-mass terms the quasi-steady terms omit
+(they carry roughly a third of real fly lift).
 
-Driving the stroke kinematically in the physics was tried and dropped. It gives the wing joints about
-1,000 rad/s velocities that hit joint limits, and the resulting reaction torques rolled the fly over.
+Two approximations keep it stable in the browser:
+
+- **The stroke is virtual.** Writing wing joint angles directly destabilises the body (the solver reacts
+  to the teleports), and the wing actuators (gain 1–3, armature-dominated joints) cannot servo 218 Hz.
+  Applying the aero force to the 8 µg wing bodies flings them instead. So the force is evaluated on a
+  kinematic copy of the stroke and applied to the thorax with a reduced hinge-based moment arm — the
+  rigid-body-equivalent load, minus the wings' 0.8% mass deflection. The physical wings stay parked; the
+  renderer still draws the real stroke (at 218 Hz the cycle is shown as faint copies).
+- **The mean force points ~55° forward** of the body vertical for this stroke, so the hover solution is a
+  steep nose-up pitch, as in a real fly's inclined-stroke-plane hover.
+
+## Safeguards
+The blade forces made several numerical traps necessary:
+
+- The distal span sign is fixed from the mesh once (per-pose sign tests made the blade point teleport,
+  which the finite-difference read as million-cm/s gusts); chord and normal signs resolve against the
+  current body axes per pose.
+- Blade velocity is capped by rescaling the velocity vector itself (600 cm/s), not just its magnitude —
+  capping only the magnitude left the drag direction term enormous.
+- The free body's linear and angular velocities are clamped before every MuJoCo step; the contact solver
+  otherwise catapults a fast fly on floor penetration.
+- Flight ends on floor or leg contact (touchdown), and per-substep forces are written, not accumulated —
+  `xfrc_applied` persists between steps.
+
+Stability is best-effort: with these guards the fly takes off, climbs, cruises near the arena scale speed
+(9 cm/s) and lands, but attitude recovery after large kicks is not guaranteed — real flapping flight is
+open-loop unstable and this is a lumped controller, not a trained one.
 
 ## Sequence
 1. **Takeoff.** An escape jump (giant fibre or takeoff DNs) or a voluntary takeoff runs the jump program.

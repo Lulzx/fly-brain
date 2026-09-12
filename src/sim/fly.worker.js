@@ -17,7 +17,7 @@ onmessage = async (e) => {
     const brain = await attachBrain(m.wasmModule, m.brainMem, m.slot, data, 101 + m.id);
     const flyvis = m.brainMem.fv ? { eyes: attachEyes(brain.instance, m.brainMem, m.slot), map: m.flyvisMap, gain: 150 } : null;
     fly = new FlyAgent({ brain, flyvis, mj, flyXML: m.flyXML, env, data, size: g.size, sign: g.sign, bodymap: m.bodymap, gait: m.gait, id: m.id,
-      pos: m.pos, yaw: m.yaw, nProxies: m.nProxies, mode: m.mode, brainOpts: m.brainOpts, vision: m.vision, neuromod: { calib: m.neuromod } });
+      pos: m.pos, yaw: m.yaw, nProxies: m.nProxies, mode: m.mode, brainOpts: m.brainOpts, vision: m.vision, neuromod: { calib: m.neuromod }, sex: m.sex });
     meter = new GroupMeter(buildGroups(m.bodymap, data.meta.types, data.side), g.N);
     postMessage({ type: 'ready', id: m.id, nbody: fly.model.nbody, bodyNames: [...Array(fly.model.nbody).keys()].map(i => fly.model.body(i).name), wingPoses: fly.flight.wingPoses(mj) });
     postPose();
@@ -47,11 +47,13 @@ function postPose() {
     mn9: fly.motor.mean(fly.motor.muscles.find(x => x.name.startsWith('MN9'))?.idx || []), feeding: fly.motor.feeding(), heat: st.heat || 0, nSensory: fly.driven.length,
     foodEaten: fly.foodEaten.splice(0, fly.foodEaten.length, ...fly.foodEaten.map(() => 0)), behavior: fly.behavior(st), drive: fly.intrinsic?.label(), nm: fly.neuromod?.readout(), flying: fly.flight.active, flights: fly.flights, dist: fly.dist, jumps: fly.jumps, pos: st.pos, yaw: Math.atan2(fly.mjd.xmat[fly.bid.thorax * 9 + 3], fly.mjd.xmat[fly.bid.thorax * 9]) });
 }
-function loop() {
+async function loop() {
   if (!running) return;
   const now = performance.now(); simAhead += Math.min(100, now - lastReal) * speed; lastReal = now;
   const t0 = performance.now(); let sinceP = 0;
-  while (simAhead >= 1 && performance.now() - t0 < 40) { fly.step(); simAhead -= 1; if (++sinceP >= POSE_EVERY) { postPose(); sinceP = 0; } }
+  // yielding every 8 steps lets the WebGPU brain's readback promises resolve during long bursts
+  while (simAhead >= 1 && performance.now() - t0 < 40) { fly.step(); simAhead -= 1; if (++sinceP % 8 === 0) await new Promise(r => setTimeout(r, 0)); if (sinceP >= POSE_EVERY) { postPose(); sinceP = 0; } }
+  fly.brain.flush?.();
   if (simAhead > 50) simAhead = 50;   // can't keep up: run as fast as possible
   if (sinceP) postPose();
   setTimeout(loop, 0);

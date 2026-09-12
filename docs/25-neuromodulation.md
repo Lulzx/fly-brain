@@ -83,9 +83,17 @@ Arousal against held energy (15 s, two seeds): 0.85 → 0 to 0.1, 0.7 → 0.2, 0
 - Backward walking is unchanged (11% of the time, four seeds of 18 s).
 - The connectome viewer runs the module at the fed steady state.
 
+## Octopamine → optic-lobe gain (Suver et al. 2012)
+Walking and flight excite the optic-lobe octopamine neurons (OA-AL2i, OA-ASM) through a locomotor
+corollary discharge (`locoDrive`), and their release then lowers the spike thresholds of their
+optic-lobe targets — restoring in slow form the visual gain their removed fast synapses used to provide.
+Measured: optic-lobe OA release rises from ~124–194 Hz standing to ~396–424 Hz walking, a 2–3× gain
+increase on visual targets.
+
+**Negative result:** this did not rescue the looming response — walking giant-fibre rates did not recover
+and the jump rate was unchanged or slightly lower. The weak link in the loom chain sits upstream of, or
+parallel to, the OA gain mechanism rather than in it.
+
 ## Next
-- Octopamine's known effects on the optic lobe (motion-vision gain rising during walking and flight, Suver et
-  al. 2012) could come from the OA-AL2i and OA-ASM neurons' release, instead of from their former fast
-  synapses.
 - Dopamine and serotonin still act as fast excitatory transmitters. Hunger gating of feeding (dopaminergic
   TH-VUM onto the proboscis motor circuit, Marella et al. 2012) is the next candidate.

@@ -26,6 +26,12 @@ File: `src/sim/senses.js`. Rates are recomputed every millisecond and set as Poi
 | Pheromone | DA1, VA1v, VA1d |
 
 ## Design notes
+- **Antennal-lobe gain control (GABA_B).** Total ORN drive per antenna is divisively normalised
+  (`AL_NORM`): strong or many-channel odours compress total input instead of swamping the lobe, so the
+  glomerular pattern — the odour's identity — survives while the overall level is bounded. Stands in for
+  GABA_B presynaptic inhibition of receptor terminals.
+- **Pheromone.** Each other fly carries a short-range cVA-like plume (`FLY_ODOR`, σ = 0.28 cm) into DA1,
+  VA1v and VA1d — the courtship circuit's close-range channel (see [Courtship](26-courtship.md)).
 - Tactile bristles are rapidly adapting. Constant contact encoding drove the walking neurons and kept the
   fly from stopping on food.
 - **Reafference.** Even as bursts, every footfall drove the forward and steering DNs. Walking became

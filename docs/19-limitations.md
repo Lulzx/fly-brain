@@ -3,16 +3,18 @@
 ## Brain
 - The connectome gives wiring, not strengths, neuromodulation, gap junctions, or plasticity.
 - **Olfaction.** Cholinergic local neurons such as lLN1_bc make about 200,000 synapses onto projection
-  neurons. One glomerulus recruits most projection neurons, so odour identity is lost downstream.
-  GABA_B presynaptic inhibition, the main gain control, is not modelled.
+  neurons, so odour channels still bleed into each other downstream. Antennal-lobe gain is now bounded by
+  a divisive ORN normalisation standing in for GABA_B presynaptic inhibition ([Senses](10-senses.md)) —
+  the lateral-inhibitory sharpening of the real lobe is still not modelled.
 - **Proboscis.** MN9 is partly driven by olfactory channels, so flies often walk with the proboscis out.
 - **Tarsal reflex** is weak: 15 Hz, partial extension.
 - **Few intrinsic drives.** Hunger reaches the octopamine neurons through AKH and insulin
   ([Neuromodulation](25-neuromodulation.md)), but the bouts it lengthens are still rules
   ([Endogenous behaviour](23-behaviour.md)): octopamine's action on the connectome alone does not make starved
   flies walk more. No circadian state; dopamine and serotonin are still fast excitatory transmitters.
-- With octopamine's fast synapses removed, the tethered looming benchmark lost its giant-fibre response.
-  Brain parameters have not been refitted.
+- With octopamine's fast synapses removed, the tethered looming benchmark lost its giant-fibre response;
+  refitting recovered the takeoff-DN channel but the GF still does not spike to the loom, and the
+  locomotion-linked OA optic-lobe gain did not restore it either ([Neuromodulation](25-neuromodulation.md)).
 - Left/right imbalances: the right DNa02 and P9 get more tonic excitation than the left, so the steering
   readout adapts slowly to cancel standing asymmetry.
 
@@ -21,9 +23,10 @@
   rhythm in a front-leg subnetwork for about 3% of descending neurons. Hence the descending-command mode.
 - The full-connectome mode cannot hold posture.
 - Descending-neuron roles and readout thresholds are chosen from the literature, not derived.
-- Flight is quasi-steady. Net forces are applied and the wing stroke is drawn, not simulated
-  aerodynamically ([Flight](24-flight.md)). Speed and height are held by the flight motor, not by optic
-  flow through the brain.
+- Flight uses blade-element forces from the real 218 Hz stroke, but the stroke is evaluated on a
+  kinematic copy and applied to the thorax — the wing bodies carry no aerodynamic load and there is no
+  wing-inertia coupling. The controller is a lumped approximation, not a trained one; large attitude kicks
+  are not always recovered ([Flight](24-flight.md)).
 
 ## Behaviour
 - Looming escape is intermittent. The takeoff DNs reach their 70 Hz trigger during self-motion and

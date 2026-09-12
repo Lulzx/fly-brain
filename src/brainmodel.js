@@ -24,7 +24,7 @@ export function applyClassPhysiology(net, data, o) {
   //  Lamina monopolar cells (L1-L5) are graded neurons with a depolarised resting potential; histaminergic
   //  photoreceptor input hyperpolarises them (light) and releases them (dark), modelled as a tonic bias.
   const types = data.meta.types; const lam = [];
-  for (let i = 0; i < data.N; i++) { if (classes[cls[i]] === 'Kenyon_Cell') net.thr[i] = o.kcThreshold; if (/^L[1-5]$/.test(types[i])) lam.push(i); }
+  for (let i = 0; i < data.N; i++) { if (classes[cls[i]] === 'Kenyon_Cell') net.setThr(i, o.kcThreshold); if (/^L[1-5]$/.test(types[i])) lam.push(i); }
   net.setBias(lam, o.laminaBias);
   return net;
 }

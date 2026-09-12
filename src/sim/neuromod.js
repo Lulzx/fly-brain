@@ -33,8 +33,10 @@ export const NEUROMOD = {
   sfa: 0.5,                                     // slow AHP: threshold rise (mV) per Hz of recent firing, OA neurons and IPCs
   oaFed: 2, oaStarved: 12,                      // Hz: tonic rate targeted when fed (calibration), and the level that counts as fully aroused
   targetShift: 2, targetHalf: 400,              // max threshold decrease (mV) on OA targets; half-saturation in synapses x Hz
+  locoDrive: 6,                                 // locomotion excites the optic-lobe OA cells (corollary discharge; Suver et al. 2012)
 };
 export const AKHR_TYPES = /^OA-(VUMa|VPM)/;
+export const OPTIC_OA_TYPES = /^OA-(AL2i|ASM)/;   // octopamine neurons whose arbours are in the optic lobes
 export const isOctopaminergic = t => /^OA-/.test(t);
 const sig = (x, half, w) => 1 / (1 + Math.exp(-(x - half) / w));
 
@@ -47,6 +49,7 @@ export class Neuromod {
     // modulatory cells: OA neurons then IPCs, each with a resting threshold and a low-pass firing rate (Hz)
     this.cells = Int32Array.from([...oa, ...ipc]); this.nOA = oa.length; this.oa = this.cells.subarray(0, this.nOA); this.ipc = this.cells.subarray(this.nOA);
     this.akhrPos = Int32Array.from(oa.flatMap((i, n) => AKHR_TYPES.test(types[i]) ? [n] : [])); this.akhr = Int32Array.from(this.akhrPos, n => oa[n]);
+    this.opticPos = Int32Array.from(oa.flatMap((i, n) => OPTIC_OA_TYPES.test(types[i]) ? [n] : [])); this.optic = Int32Array.from(this.opticPos, n => oa[n]);
     const cal = calib ? { ...calib.oaThr, ...calib.ipcThr } : {};
     this.base = Float32Array.from(this.cells, i => cal[i] ?? brain.thr[i]);
     this.r = Float32Array.from(this.cells, (i, n) => n < this.nOA ? this.P.oaFed : this.P.ipcFed);
@@ -68,14 +71,17 @@ export class Neuromod {
   }
   /** after brain.reset() (spike counts cleared): back to the fed steady state */
   reset() { this.last.set(Array.from(this.cells, i => this.brain.spikeCount[i])); this.r.fill(this.P.oaFed, 0, this.nOA).fill(this.P.ipcFed, this.nOA); this.akh = 0; this.dilp = 1; this.t = 0; this.setCellThr(); }
-  /** one ms; sugar = haemolymph sugar (energy 0..1) */
-  update(dtMs, sugar) {
+  /** one ms; sugar = haemolymph sugar (energy 0..1); loco = locomotor state 0..1 (walking or flying) */
+  update(dtMs, sugar, loco = 0) {
     const P = this.P, B = this.brain; const t = this.t += dtMs;
     this.akh += (sig(-sugar, -P.akhHalf, P.akhWidth) - this.akh) * dtMs / P.akhTau;
-    const gIPC = P.ipcDrive * sig(sugar, P.ipcHalf, P.ipcWidth) * dtMs; for (const i of this.ipc) B.gE[i] += gIPC;
+    const gIPC = P.ipcDrive * sig(sugar, P.ipcHalf, P.ipcWidth) * dtMs; for (const i of this.ipc) B.addG(i, gIPC);
     const akh = this.block === 'AKHR' ? 0 : this.akh, ins = this.block === 'InR' ? 0 : this.dilp;
     const gA = P.akhDrive * akh * dtMs, gI = P.insDrive * ins * dtMs;
-    for (const i of this.akhr) { B.gE[i] += gA; B.gI[i] -= gI; }
+    for (const i of this.akhr) B.addG(i, gA, -gI);
+    // locomotor corollary discharge onto the optic-lobe OA cells (Suver et al. 2012): their release then
+    // raises visual gain on their targets (visual projection neurons and optic-lobe interneurons)
+    if (loco > 0) { const gL = P.locoDrive * loco * dtMs; for (const i of this.optic) B.addG(i, gL); }
     if (t % 10 === 0) this.release(10);
     if (t % 50 === 0 && this.block !== 'OA') this.modulate();
   }
@@ -88,12 +94,12 @@ export class Neuromod {
       for (let n = 0; n < nC; n++) this.base[n] += e * Math.log((this.r[n] + 0.5) / ((n < this.nOA ? P.oaFed : P.ipcFed) + 0.5)); }
     this.setCellThr();
   }
-  setCellThr() { for (let n = 0; n < this.cells.length; n++) { const m = this.cellTarget[n]; this.brain.thr[this.cells[n]] = this.base[n] + this.P.sfa * this.r[n] - (m < 0 ? 0 : this.shift[m]); } }
+  setCellThr() { for (let n = 0; n < this.cells.length; n++) { const m = this.cellTarget[n]; this.brain.setThr(this.cells[n], this.base[n] + this.P.sfa * this.r[n] - (m < 0 ? 0 : this.shift[m])); } }
   /** octopamine lowers the spike threshold of its synaptic targets, saturating */
   modulate() {
     const P = this.P, B = this.brain, x = this.x; x.fill(0);
     for (let n = 0; n < this.rows.length; n++) { const r = this.rows[n], c = this.c[n]; if (c <= 0) continue; for (let m = 0; m < r.length; m += 2) x[r[m]] += r[m + 1] * c; }
-    for (let m = 0; m < x.length; m++) { this.shift[m] = P.targetShift * x[m] / (x[m] + P.targetHalf); if (!this.isCell[m]) B.thr[this.targets[m]] = this.thr0[m] - this.shift[m]; }
+    for (let m = 0; m < x.length; m++) { this.shift[m] = P.targetShift * x[m] / (x[m] + P.targetHalf); if (!this.isCell[m]) B.setThr(this.targets[m], this.thr0[m] - this.shift[m]); }
   }
   /** mean octopamine release of the AKH-sensitive OA neurons (Hz) */
   get oaTone() { let s = 0; for (const n of this.akhrPos) s += this.c[n]; return s / this.akhrPos.length; }
