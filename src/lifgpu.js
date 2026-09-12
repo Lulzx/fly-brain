@@ -12,11 +12,12 @@
 // per-step queue ops. The delay ring lives on the GPU, so spikes never round-trip through the CPU.
 //
 // CPU->GPU writes (drive/bias/threshold sets, conductance adds) go into the delta buffer via writeBuffer;
-// they are applied by the next submitted batch's first dispatch (<= a batch early, ~4 ms worst case).
-// GPU->CPU: each submitted batch ends with a copy of spikeCount + trace + fired-count into a rotating
-// staging buffer; mapAsync updates the CPU shadows when it resolves, so the shadows lag by roughly one
-// submit boundary (~a few ms during bursts; the motor readout low-passes over 40 ms, and the GF->TTMn
-// shortcut in fly.js sees spikes ~1-4 ms late, an extra synaptic delay).
+// they are applied by the next submitted batch's first dispatch (<= a batch early, ~4 ms worst case). A
+// full delta queue is drained by a standalone apply pass rather than overflowing the buffer.
+// GPU->CPU: each submitted batch ends with a copy of spikeCount + trace + the last step's fired
+// count/indices into a rotating staging buffer; mapAsync updates the CPU shadows when it resolves, so the
+// shadows lag by roughly one submit boundary (~a few ms during bursts; the motor readout low-passes over
+// 40 ms, and the GF->TTMn shortcut in fly.js sees spikes ~1-4 ms late, an extra synaptic delay).
 //
 // Conductances are atomic<i32> fixed point (x1024): WGSL has no f32 atomics.
 // API mirrors LIFWasm: step(), setDriveOne/setDrive, setBias, setThr, addG, pulse, reset, setBackground,
@@ -59,6 +60,8 @@ fn spikeOut(i: u32) {
   st[2u * hdr.N + i] = 1.0; st[3u * hdr.N + i] = AD(i) + hdr.adaptInc;
 }
 
+// dispatched as 16 workgroups x 256 threads = 4096: the stride must equal the total thread count or
+// deltas past the first stride get applied more than once (gE/gI adds are not idempotent)
 @compute @workgroup_size(256) fn applyDeltas(@builtin(global_invocation_id) g: vec3u) {
   for (var k = g.x; k < deltas.n; k += 4096u) {
     let d = deltas.items[k];
@@ -85,7 +88,9 @@ fn spikeOut(i: u32) {
     if (s > 0.0) { for (var j = a; j < b; j++) { let w = bitcast<f32>(graph[hdr.wOff + j]); if (w != 0.0) { atomicAdd(&at[graph[hdr.ixOff + j]], i32(w * s * GS)); } } }
     else { for (var j = a; j < b; j++) { let w = bitcast<f32>(graph[hdr.wOff + j]); if (w != 0.0) { atomicAdd(&at[hdr.N + graph[hdr.ixOff + j]], i32(w * s * GS)); } } }
   }
-  atomicStore(&at[hdr.rcOff + hdr.head], 0);
+  // the count is NOT zeroed here: workgroups have no ordering, so a finished workgroup could store 0
+  // before a late-scheduled one has read it, silently dropping its share of the arriving spikes.
+  // tick clears it — one thread, after every reader of this step is done.
 }
 
 @compute @workgroup_size(64) fn driven(@builtin(global_invocation_id) g: vec3u) {
@@ -129,6 +134,9 @@ fn spikeOut(i: u32) {
 
 // advance the delay ring, RNG and background accumulator so a batch needs no per-step queue ops
 @compute @workgroup_size(1) fn tick() {
+  // the slot just delivered becomes spikeOut's write target next step; clear its count now that every
+  // deliver thread has read it (the spike list itself needs no clearing — it is overwritten in place)
+  atomicStore(&at[hdr.rcOff + hdr.head], 0);
   hdr.head = (hdr.head + 1u) % hdr.nslots;
   hdr.slot = (hdr.head + hdr.nslots - 1u) % hdr.nslots;
   hdr.rng = xs(hdr.rng);
@@ -138,7 +146,9 @@ fn spikeOut(i: u32) {
 `;
 
 const DELTA_DRIVE = 0, DELTA_BIAS = 1, DELTA_THR = 2, DELTA_GE = 3, DELTA_GI = 4;
+const DELTA_CAP = 65536;   // delta-buffer capacity; the queue drains mid-batch rather than overflowing
 const align = n => (n + 15) & ~15;
+const xs32 = x => { x ^= x << 13; x ^= x >>> 17; x ^= x << 5; return x >>> 0; };   // same stream as the WGSL xs()
 const BATCH_STEPS = 8, BATCH_MS = 2;
 
 export class LIFGpu {
@@ -167,7 +177,7 @@ export class LIFGpu {
     b.buf = {
       hdr: device.createBuffer({ size: 144, usage: S }),
       graph: mk(gArr, GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST),
-      st: mk(st), at: mk(new Int32Array(atWords)), deltas: device.createBuffer({ size: 16 + 16 * 65536, usage: S }),
+      st: mk(st), at: mk(new Int32Array(atWords)), deltas: device.createBuffer({ size: 16 + 16 * DELTA_CAP, usage: S }),
     };
     b._offs = { ipOff, ixOff, wOff, sOff, ringOff, rcOff, drvOff };
     // CPU shadows: spikeCount/trace update from the readback; drive/thr/bias are authoritative here.
@@ -176,8 +186,9 @@ export class LIFGpu {
     b.v = new Float32Array(N).fill(p.vRest); b.gE = new Float32Array(N); b.gI = new Float32Array(N);   // compat shadows (unused)
     b.drivenSet = new Set(); b._drivenDirty = true;
     b._deltas = []; b._rng = (seed * 2654435761) >>> 0 || 1; b.t = 0; b.head = 0;
-    b._lastFired = new Int32Array(0);
-    b._rbSize = N * 8 + 16;
+    b._lastFired = new Int32Array(0); b._lastSlot = 0;
+    b._fireCap = Math.min(65536, N);   // fired-index readback is capped; step() still reports the true count
+    b._rbSize = N * 8 + 16 + b._fireCap * 4;
     b._staging = [0, 1, 2, 3].map(() => device.createBuffer({ size: b._rbSize, usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.MAP_READ }));
     b._rbBusy = [false, false, false, false]; b._rbK = 0;
     b._enc = null; b._cp = null; b._stepsInPass = 0; b._lastSubmit = 0;
@@ -194,14 +205,16 @@ export class LIFGpu {
     return b;
   }
 
-  /** write the whole header (params + offsets + ring position). Safe any time: lands before the next submit. */
+  /** write the whole header (params + offsets + ring position). Submits any open batch first: head/slot/rng
+   *  must describe the state after the encoded steps run, not a mid-batch CPU count. */
   _writeParams() {
+    this._submit();
     const p = this.p, d = this._hd, L = true, o = this._offs;
     for (const [off, val] of [[0, this.N], [4, this.nslots], [8, this.head], [12, (this.head + this.nslots - 1) % this.nslots], [16, p.coba ? 1 : 0], [20, this.drivenSet.size], [24, 0], [28, 0]]) d.setUint32(off, val, L);
     for (const [off, val] of [[32, p.dt], [36, p.vRest], [40, p.vThresh], [44, p.vReset], [48, p.tRef], [52, p.adaptInc], [56, p.depU], [60, p.bgAmp || 0],
       [64, Math.exp(-p.dt / p.tauSyn)], [68, Math.exp(-p.dt / p.traceTau)], [72, Math.exp(-p.dt / p.adaptTau)], [76, p.dt / p.depTau], [80, p.dt / p.tauM], [84, p.dt / 1000],
       [88, p.eExc], [92, p.eInh], [96, 1 / (p.eExc - p.vRest)], [100, 1 / (p.vRest - p.eInh)]]) d.setFloat32(off, val, L);
-    d.setUint32(104, this._rng, L);
+    d.setUint32(104, this._rng, L); this._rng = xs32(this._rng);   // a mid-run rewrite must not replay the same stream
     for (const [off, val] of [[108, o.ipOff], [112, o.ixOff], [116, o.wOff], [120, o.sOff], [124, o.ringOff], [128, o.rcOff], [132, o.drvOff]]) d.setUint32(off, val, L);
     d.setFloat32(136, this.N * (p.bgRate || 0) * p.dt / 1000, L); d.setFloat32(140, 0, L);
     this.device.queue.writeBuffer(this.buf.hdr, 0, this._hdrBuf);
@@ -230,7 +243,7 @@ export class LIFGpu {
     if (!this._enc) { this._enc = dev.createCommandEncoder(); this._cp = this._enc.beginComputePass(); this._cp.setBindGroup(0, this._bg); this._stepsInPass = 0; this._flushDeltas(); this._flushDriven(); }
     const cp = this._cp;
     const disp = (n, wg) => { cp.setPipeline(this._pipes[n]); cp.dispatchWorkgroups(wg); };
-    if (this._stepsInPass === 0) disp('applyDeltas', 256);
+    if (this._stepsInPass === 0) disp('applyDeltas', 16);   // 16 x 256 = 4096 threads, matching the kernel stride
     disp('deliver', 64);        // 64 wg x 64 = 4096 threads, strided over the arriving-spike list
     disp('driven', 64);
     if (this.p.bgRate) disp('background', 64);
@@ -249,31 +262,53 @@ export class LIFGpu {
     if (!this._enc) return;
     this._cp.setPipeline(this._pipes.zeroDeltas); this._cp.dispatchWorkgroups(1);
     this._cp.end();
-    const k = this._rbK; this._rbK = (this._rbK + 1) % this._staging.length;
+    const k = this._rbK;
     let copied = false;
-    if (!this._rbBusy[k]) {
-      this._rbBusy[k] = true; copied = true;
+    if (this._stepsInPass > 0 && !this._rbBusy[k]) {
+      this._rbBusy[k] = true; copied = true; this._rbK = (k + 1) % this._staging.length;
       this._enc.copyBufferToBuffer(this.buf.at, 2 * this.N * 4, this._staging[k], 0, this.N * 4);                        // spikeC
       this._enc.copyBufferToBuffer(this.buf.st, 2 * this.N * 4, this._staging[k], this.N * 4, this.N * 4);               // trace
       this._enc.copyBufferToBuffer(this.buf.at, (this._offs.rcOff + this._lastSlot) * 4, this._staging[k], this.N * 8, 4);   // fired in the batch's last step
+      this._enc.copyBufferToBuffer(this.buf.at, (this._offs.ringOff + this._lastSlot * this.N) * 4, this._staging[k], this.N * 8 + 16, this._fireCap * 4);   // the fired indices themselves
     }
     this.device.queue.submit([this._enc.finish()]);
     this._enc = null; this._cp = null; this._lastSubmit = performance.now();
     if (copied) this._staging[k].mapAsync(GPUMapMode.READ).then(() => {
       const src = this._staging[k].getMappedRange();
       this.spikeCount.set(new Uint32Array(src, 0, this.N)); this.trace.set(new Float32Array(src, this.N * 4, this.N));
-      this._lastFired = new Int32Array(Math.max(0, new Int32Array(src, this.N * 8, 1)[0]));
+      const n = Math.max(0, Math.min(this.N, new Int32Array(src, this.N * 8, 1)[0])), fired = new Int32Array(n);
+      fired.set(new Int32Array(src, this.N * 8 + 16, Math.min(n, this._fireCap)));   // real indices; beyond the cap the tail stays 0
+      this._lastFired = fired;
       this._staging[k].unmap(); this._rbBusy[k] = false;
     }).catch(e => { console.warn('lifgpu readback:', e); this._rbBusy[k] = false; });
   }
 
+  _pushDelta(idx, kind, val) {
+    this._deltas.push([idx, kind, val]);
+    if (this._deltas.length >= DELTA_CAP) this._drainDeltas();
+  }
+  // a full queue is applied by a standalone pass now — the same batch-boundary semantics, just early —
+  // instead of letting writeBuffer overflow, which would drop the whole batch and leave the CPU shadows
+  // permanently ahead of GPU state
+  _drainDeltas() {
+    this._submit();
+    if (!this._deltas.length) return;
+    this._flushDeltas();
+    const enc = this.device.createCommandEncoder(), cp = enc.beginComputePass();
+    cp.setBindGroup(0, this._bg);
+    cp.setPipeline(this._pipes.applyDeltas); cp.dispatchWorkgroups(16);
+    cp.setPipeline(this._pipes.zeroDeltas); cp.dispatchWorkgroups(1);
+    cp.end();
+    this.device.queue.submit([enc.finish()]);
+  }
+
   get nAwake() { return this.N; }
-  setDriveOne(i, rate) { if (this.drive[i] !== rate) { this.drive[i] = rate; this._deltas.push([i, DELTA_DRIVE, rate]); } if (rate > 0) { if (!this.drivenSet.has(i)) { this.drivenSet.add(i); this._drivenDirty = true; } } else if (this.drivenSet.delete(i)) this._drivenDirty = true; }
+  setDriveOne(i, rate) { if (this.drive[i] !== rate) { this.drive[i] = rate; this._pushDelta(i, DELTA_DRIVE, rate); } if (rate > 0) { if (!this.drivenSet.has(i)) { this.drivenSet.add(i); this._drivenDirty = true; } } else if (this.drivenSet.delete(i)) this._drivenDirty = true; }
   setDrive(ix, rate) { for (const i of ix) this.setDriveOne(i, rate); }
-  setBias(ix, mv) { for (const i of ix) { this.bias[i] = mv; this._deltas.push([i, DELTA_BIAS, mv]); } }
-  setThr(i, mv) { if (this.thr[i] !== mv) { this.thr[i] = mv; this._deltas.push([i, DELTA_THR, mv]); } }
-  addG(i, e, ii) { this._deltas.push([i, DELTA_GE, e]); if (ii) this._deltas.push([i, DELTA_GI, ii]); }
-  pulse(ix, mv) { for (const i of ix) this._deltas.push([i, DELTA_GE, mv]); }
+  setBias(ix, mv) { for (const i of ix) { this.bias[i] = mv; this._pushDelta(i, DELTA_BIAS, mv); } }
+  setThr(i, mv) { if (this.thr[i] !== mv) { this.thr[i] = mv; this._pushDelta(i, DELTA_THR, mv); } }
+  addG(i, e, ii) { if (e) this._pushDelta(i, DELTA_GE, e); if (ii) this._pushDelta(i, DELTA_GI, ii); }
+  pulse(ix, mv) { for (const i of ix) this._pushDelta(i, DELTA_GE, mv); }
   wake() {}
   setBackground(rateHz, ampMv) { this.p.bgRate = rateHz; this.p.bgAmp = ampMv; this._writeParams(); }
   setParams(q) { Object.assign(this.p, q); this._writeParams(); }

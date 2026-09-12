@@ -52,19 +52,11 @@ export class Flight {
     this.mj = mj; this.M = model; this.d = data; this.th = thorax; this.act = act; this.range = range; this.rand = rand;
     this.mass = model.body_subtreemass[thorax];
     this.bodies = []; for (let b = 1; b < model.nbody; b++) { let p = b; while (p > 0 && p !== thorax) p = model.body_parentid[p]; if (p === thorax) this.bodies.push(b); }
-    const dof = {}; for (let j = 0; j < model.njnt; j++) dof[model.jnt(j).name] = model.jnt_dofadr[j];
-    this.wing = ['left', 'right'].map(sd => ['yaw', 'roll', 'pitch'].map(ax => [jointAdr[`wing_${ax}_${sd}`], dof[`wing_${ax}_${sd}`]]));
+    // wing joint qpos addresses — the stroke is applied kinematically (see substep), the actuators cannot
+    // swing the real 218 Hz cycle against the joint armature
+    this.wing = ['left', 'right'].map(sd => ['yaw', 'roll', 'pitch'].map(ax => jointAdr[`wing_${ax}_${sd}`]));
     this.wingBody = ['left', 'right'].map(sd => model.body(`wing_${sd}`).id);
     this.wingGeom = ['left', 'right'].map(sd => model.geom(`wing_${sd}_fluid`).id);
-    // wing actuators are torque sources (the power/steering muscles): joint-space servo gains for tracking
-    // the stroke cycle, divided out by each actuator's gainprm so ctrl stays in its +-1 range
-    this.wingAct = ['left', 'right'].map(sd => ['yaw', 'roll', 'pitch'].map(ax => {
-      const i = act[`wing_${ax}_${sd}`];
-      return i === undefined ? null : { i, gain: model.actuator_gainprm[i * 10] || 1 };
-    }));
-    // effective wing-joint inertia is dominated by armature (1e-6), not the wing mass — the feedforward
-    // and PD are sized for that so the 218 Hz trajectory tracks without saturating the +-1 ctrl range
-    this.servo = { kp: 4, kd: 3e-3, iw: 1.05e-6 };
     // which way each wing-geom axis points (distal span, dorsal normal, leading edge) is a fixed property of
     // the mesh — resolve the signs once; testing them every step lets a tumbled pose flip a sign and the
     // blade point teleports, which explodes the force calculation
@@ -121,7 +113,7 @@ export class Flight {
     const prev = [null, null]; let L = 0; const dt = 1 / (WING_CYCLE.length * FLIGHT.wingHz);
     for (let k = 0; k <= WING_CYCLE.length; k++) {
       const kk = k % WING_CYCLE.length;
-      for (let s = 0; s < 2; s++) for (let a = 0; a < 3; a++) d.qpos[this.wing[s][a][0]] = WING_CYCLE[kk][a];
+      for (let s = 0; s < 2; s++) for (let a = 0; a < 3; a++) d.qpos[this.wing[s][a]] = WING_CYCLE[kk][a];
       mj.mj_kinematics(M, d);
       for (let s = 0; s < 2; s++) {
         const { bp } = this.bladePoint(s);
@@ -237,11 +229,11 @@ export class Flight {
     this.wingPhase = (this.wingPhase + F.wingHz * dtMs / 1000) % 1;
     const ph = this.wingPhase * WING_CYCLE.length, i0 = Math.floor(ph) % WING_CYCLE.length, i1 = (i0 + 1) % WING_CYCLE.length, u = ph - Math.floor(ph);
     const q = [0, 1, 2].map(a => WING_CYCLE[i0][a] + (WING_CYCLE[i1][a] - WING_CYCLE[i0][a]) * u);
-    const saved = [0, 1].map(s => [0, 1, 2].map(a => d.qpos[this.wing[s][a][0]]));
+    const saved = [0, 1].map(s => [0, 1, 2].map(a => d.qpos[this.wing[s][a]]));
     for (let s = 0; s < 2; s++) for (let a = 0; a < 3; a++) {
       const qq = a === 2 ? q[a] : WING_MEAN[a] + this.ampS[s] * (q[a] - WING_MEAN[a]);
       const [lo, hi] = WING_RANGE[a];
-      d.qpos[this.wing[s][a][0]] = Math.max(lo, Math.min(hi, qq));
+      d.qpos[this.wing[s][a]] = Math.max(lo, Math.min(hi, qq));
     }
     mj.mj_kinematics(M, d);
     // clamp the free body before every step: the leg launch and floor-contact kicks can push qvel to
@@ -265,7 +257,7 @@ export class Flight {
       x[o] += Fw[0]; x[o + 1] += Fw[1]; x[o + 2] += Fw[2];
       x[o + 3] += r[1] * Fw[2] - r[2] * Fw[1]; x[o + 4] += r[2] * Fw[0] - r[0] * Fw[2]; x[o + 5] += r[0] * Fw[1] - r[1] * Fw[0];
     }
-    for (let s = 0; s < 2; s++) for (let a = 0; a < 3; a++) d.qpos[this.wing[s][a][0]] = saved[s][a];   // restore parked wings
+    for (let s = 0; s < 2; s++) for (let a = 0; a < 3; a++) d.qpos[this.wing[s][a]] = saved[s][a];   // restore parked wings
   }
   /** wing poses relative to the thorax at n phases of the stroke cycle, for drawing the beating wings:
    *  { left: [[px, py, pz, qw, qx, qy, qz], ...], right: [...] } */
@@ -274,7 +266,7 @@ export class Flight {
     const wb = ['left', 'right'].map(sd => M.body(`wing_${sd}`).id);
     for (let k = 0; k < n; k++) {
       const q = WING_CYCLE[Math.floor(k * WING_CYCLE.length / n)];
-      for (let s = 0; s < 2; s++) for (let a = 0; a < 3; a++) d.qpos[this.wing[s][a][0]] = q[a];
+      for (let s = 0; s < 2; s++) for (let a = 0; a < 3; a++) d.qpos[this.wing[s][a]] = q[a];
       mj.mj_kinematics(M, d);
       const R = d.xmat.slice(th * 9, th * 9 + 9), pt = [d.xpos[th * 3], d.xpos[th * 3 + 1], d.xpos[th * 3 + 2]], qt = d.xquat.slice(th * 4, th * 4 + 4);
       wb.forEach((b, s) => {

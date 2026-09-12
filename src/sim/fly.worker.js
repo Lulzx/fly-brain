@@ -4,7 +4,7 @@ import { FlyAgent } from './fly.js';
 import { attachBrain, attachEyes } from '../brainsetup.js';
 import { buildGroups, GroupMeter } from './groups.js';
 
-let fly = null, meter = null, running = false, speed = 1, others = [], env = null, lastReal = 0, simAhead = 0;
+let fly = null, meter = null, running = false, speed = 1, others = [], env = null, lastReal = 0, simAhead = 0, timer = null;
 const POSE_EVERY = 16; // ms of sim between pose messages (renderer interpolates)
 
 onmessage = async (e) => {
@@ -22,8 +22,8 @@ onmessage = async (e) => {
     postMessage({ type: 'ready', id: m.id, nbody: fly.model.nbody, bodyNames: [...Array(fly.model.nbody).keys()].map(i => fly.model.body(i).name), wingPoses: fly.flight.wingPoses(mj) });
     postPose();
     if (running) { lastReal = performance.now(); loop(); }
-  } else if (m.type === 'run') { if (running) return; running = true; lastReal = performance.now(); if (fly) loop(); }   // before init: loop starts once ready
-  else if (m.type === 'pause') running = false;
+  } else if (m.type === 'run') { if (running) return; running = true; lastReal = performance.now(); clearTimeout(timer); if (fly) loop(); }   // before init: loop starts once ready; clearTimeout kills a pending reschedule from a paused loop
+  else if (m.type === 'pause') { running = false; clearTimeout(timer); }
   else if (m.type === 'speed') speed = m.speed;
   else if (m.type === 'env') { Object.assign(env, m.env); fly.env = env; if (fly.foodEaten.length !== env.food.length) fly.foodEaten = env.food.map(() => 0); }
   else if (m.type === 'others') { others = m.others; fly.others = others; setProxies(); }
@@ -52,9 +52,9 @@ async function loop() {
   const now = performance.now(); simAhead += Math.min(100, now - lastReal) * speed; lastReal = now;
   const t0 = performance.now(); let sinceP = 0;
   // yielding every 8 steps lets the WebGPU brain's readback promises resolve during long bursts
-  while (simAhead >= 1 && performance.now() - t0 < 40) { fly.step(); simAhead -= 1; if (++sinceP % 8 === 0) await new Promise(r => setTimeout(r, 0)); if (sinceP >= POSE_EVERY) { postPose(); sinceP = 0; } }
+  while (running && simAhead >= 1 && performance.now() - t0 < 40) { fly.step(); simAhead -= 1; if (++sinceP % 8 === 0) await new Promise(r => setTimeout(r, 0)); if (sinceP >= POSE_EVERY) { postPose(); sinceP = 0; } }
   fly.brain.flush?.();
   if (simAhead > 50) simAhead = 50;   // can't keep up: run as fast as possible
   if (sinceP) postPose();
-  setTimeout(loop, 0);
+  timer = setTimeout(loop, 0);
 }

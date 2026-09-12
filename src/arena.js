@@ -185,7 +185,7 @@ function onWorker(f, m) {
 let foodDirty = false, lastEnvSync = 0, lastOthers = 0;
 function broadcastOthers() {
   const now = performance.now(); if (now - lastOthers < 20) return; lastOthers = now;
-  for (const f of flies) { if (!f.ready) continue; f.worker.postMessage({ type: 'others', others: flies.filter(o => o !== f && o.last && o.last.alive !== false).map(o => ({ x: o.last.pos[0], y: o.last.pos[1], z: o.last.pos[2], yaw: o.last.yaw })) }); }
+  for (const f of flies) { if (!f.ready) continue; f.worker.postMessage({ type: 'others', others: flies.filter(o => o !== f && o.last && o.last.alive !== false).map(o => ({ x: o.last.pos[0], y: o.last.pos[1], z: o.last.pos[2], yaw: o.last.yaw, sex: o.sex })) }); }
 }
 function syncEnv() { for (const f of flies) if (f.ready) f.worker.postMessage({ type: 'env', env }); }
 

@@ -10,7 +10,7 @@ async function loop() {
   let budget = Math.min(50, now - lastReal) * speed; lastReal = now;
   const t0 = performance.now();
   let k = 0;
-  while (budget > 0 && performance.now() - t0 < 30) { spikesWindow += net.step().length; budget -= net.p.dt; windowMs += net.p.dt; if (nm && (half += net.p.dt) >= 1) { half -= 1; nm.update(1, 0.85); } if (++k % 32 === 0) await new Promise(r => setTimeout(r, 0)); }
+  while (running && budget > 0 && performance.now() - t0 < 30) { spikesWindow += net.step().length; budget -= net.p.dt; windowMs += net.p.dt; if (nm && (half += net.p.dt) >= 1) { half -= 1; nm.update(1, 0.85); } if (++k % 32 === 0) await new Promise(r => setTimeout(r, 0)); }
   net.flush?.();
   postMessage({ type: 'frame', t: net.t, trace: net.trace.slice(0), spikesWindow, windowMs, spikes: net.spikeCount.slice(0) });
   spikesWindow = 0; windowMs = 0;
@@ -24,9 +24,11 @@ onmessage = async (e) => {
       const mem = allocBrainMemory(data, m.size, m.sign, m.params, 1);
       net = await attachBrain(m.wasm, mem, 0, data, 1);
       if (m.params.neuromod && m.neuromod) nm = new Neuromod(data, net, { calib: m.neuromod, minSyn: m.params.minSyn ?? 5 });
-      postMessage({ type: 'ready' }); break; }
+      postMessage({ type: 'ready' });
+      if (running) { lastReal = performance.now(); loop(); }   // run may have arrived while init was in flight
+      break; }
     case 'params': if (m.params.speed !== undefined) speed = m.params.speed; if (m.params.bgRate !== undefined) net.setBackground(m.params.bgRate, m.params.bgAmp ?? 1); break;
-    case 'run': running = true; lastReal = performance.now(); loop(); break;
+    case 'run': if (running) break; running = true; lastReal = performance.now(); clearTimeout(timer); if (net) loop(); break;   // clearTimeout kills a pending reschedule left over from a paused loop
     case 'pause': running = false; clearTimeout(timer); break;
     case 'reset': net.reset(); nm?.reset(); break;
     case 'drive': net.setDrive(m.indices, m.rate); break;

@@ -121,6 +121,7 @@ export class FlyAgent {
     if (this.sex !== 'f' && st.otherFlies.length) {
       const fx = Rt9(d.xmat, this.bid.thorax), yaw = Math.atan2(fx[1], fx[0]);
       for (const o of st.otherFlies) {
+        if (o.sex !== 'f') continue;   // a male courts only a female target
         const dd = Math.hypot(o.x - st.pos[0], o.y - st.pos[1]);
         if (!court || dd < court.dist) { const a = Math.atan2(o.y - st.pos[1], o.x - st.pos[0]) - yaw; court = { dist: dd, bearing: Math.atan2(Math.sin(a), Math.cos(a)) }; }
       }
