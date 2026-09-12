@@ -12,3 +12,5 @@ export function loadAll() {
   const byType = (t, s = 0) => { const o = []; for (let i = 0; i < N; i++) if (meta.types[i] === t && (!s || side[i] === s)) o.push(i); return o; };
   return { meta, N, E, bodyIds, soma, indeg, outdeg, cls, nt, sc, side, indptr, indices, weights, bodymap, byType };
 }
+/** calibration of the neuromodulation module (src/sim/neuromod.js), for FlyAgent's `neuromod` option */
+export const loadNeuromod = () => fs.existsSync('public/data/neuromod.json') ? { calib: JSON.parse(fs.readFileSync('public/data/neuromod.json')) } : null;

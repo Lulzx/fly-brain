@@ -3,7 +3,7 @@
 An embodied simulation of the male *Drosophila* central nervous system connectome, running in the browser.
 Each fly is a 165,122-neuron spiking brain inside a physics-simulated body, seeing through a trained
 compound-eye model. The brain turns what the fly senses into what it does. An endogenous-activity module
-supplies the spontaneous drive the model lacks.
+supplies the spontaneous drive the model lacks, and hunger reaches the brain as hormones and octopamine.
 
 ## Index
 
@@ -46,6 +46,7 @@ supplies the spontaneous drive the model lacks.
 ### Behaviour
 23. [Endogenous behaviour](23-behaviour.md): bouts, saccades, obstacle and heat avoidance, feeding, search
 24. [Flight](24-flight.md): takeoff, quasi-steady flight, collision avoidance, landing
+25. [Neuromodulation](25-neuromodulation.md): hunger through AKH, insulin and octopamine
 
 ## Repository layout
 
@@ -53,7 +54,7 @@ supplies the spontaneous drive the model lacks.
 |---|---|
 | `index.html`, `src/main.js` | Connectome viewer |
 | `arena.html`, `src/arena.js` | Embodied arena |
-| `src/sim/` | Fly agent, world, senses, vision, motor, endogenous behaviour, flight, worker |
+| `src/sim/` | Fly agent, world, senses, vision, motor, endogenous behaviour, neuromodulation, flight, worker |
 | `src/lif.js`, `src/lifwasm.js`, `src/wasm/lif.c` | Brain model in JS and WebAssembly |
 | `src/brainmodel.js`, `src/brainsetup.js` | Calibrated brain construction, shared memory |
 | `src/flyvis.js` | flyvis optic-lobe runtime |

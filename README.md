@@ -37,6 +37,9 @@ versions of the connectome, skeletons and neuron table (27 MB in total, see [doc
 4. **Physics** (`src/sim/world.js`): flybody fly with exact inertias, adhesive claws, 0.2 ms MuJoCo steps.
 5. **Endogenous behaviour** (`src/sim/intrinsic.js`): walk, pause and grooming bouts, saccades, turning away
    from obstacles and heat, feeding stops, local search, voluntary takeoff. All delivered as DN synaptic input.
+   **Neuromodulation** (`src/sim/neuromod.js`): hunger sets AKH and insulin, which drive octopaminergic
+   neurons; their release lowers their targets' thresholds and sets the arousal the bout rules use
+   ([docs/25-neuromodulation.md](docs/25-neuromodulation.md)).
 6. **Flight** (`src/sim/flight.js`): takeoff after the jump, quasi-steady flight steered by the brain's
    steering DNs, collision-avoidance saccades, and landing ([docs/24-flight.md](docs/24-flight.md)).
 
@@ -51,6 +54,7 @@ node --max-old-space-size=16000 scripts/prep_skel_tree.mjs   # skeletons.flys   
 .venv/bin/python scripts/prep_flyvis_map.py     # flyvis node <-> male-CNS neuron map (retinotopy via connectome)
 node scripts/pack_data.mjs                      # graph.flyg, neurons.flyn                 (packed for the browser)
 node scripts/calib_search.mjs '{"coba":true}'   # fit brain parameters to behavioural benchmarks
+node scripts/neuromod_calib.mjs 60              # neuromod.json: octopamine and insulin cell thresholds (fed fly)
 .venv/bin/python scripts/gait_opt2.py 60        # stepping pattern generator (multi-condition CMA-ES)
 ```
 

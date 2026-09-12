@@ -14,7 +14,7 @@ const presetKey = new URLSearchParams(location.search).get('env') || 'foraging';
 const PRESET = PRESETS[presetKey] || PRESETS.foraging;
 const env = PRESET.env();
 const flies = [];          // {id, worker, group, bodies[], last, color, ready}
-let flyvisMap, shared, meta, bodymap, flyXML, gait, visual, running = false, selected = 0, tool = 'none', speed = 2, brainMem, wasmModule, brainParams;
+let flyvisMap, shared, meta, bodymap, flyXML, gait, visual, running = false, selected = 0, tool = 'none', speed = 2, brainMem, wasmModule, brainParams, neuromodCalib;
 
 function toShared(ta) { const sab = new SharedArrayBuffer(ta.byteLength); const out = new ta.constructor(sab); out.set(ta); return out; }
 
@@ -23,17 +23,18 @@ async function main() {
   const data = await loadConnectome(status);
   meta = data.meta;
   status('loading body model');
-  const [bm, xml, g, vj, vb, sz, sg, bp, wasmBytes, fvb, fvj, fvi, fvm] = await Promise.all([
+  const [bm, xml, g, vj, vb, sz, sg, bp, wasmBytes, fvb, fvj, fvi, fvm, nmc] = await Promise.all([
     fetch(`${BASE}data/bodymap.json`).then(r => r.json()), fetch(`${BASE}body/fly_physics.xml`).then(r => r.text()), fetch(`${BASE}body/gait.json`).then(r => r.json()),
     fetch(`${BASE}body/fly_visual.json`).then(r => r.json()), fetch(`${BASE}body/fly_visual.bin`).then(r => r.arrayBuffer()),
     fetch(`${BASE}data/neuron_size.bin`).then(r => r.arrayBuffer()), fetch(`${BASE}data/ntsign.bin`).then(r => r.arrayBuffer()),
     fetch(`${BASE}data/brain_params.json`).then(r => r.ok ? r.json() : {}).catch(() => ({})), fetch(`${BASE}lif.wasm`).then(r => r.arrayBuffer()),
-    fetch(`${BASE}vision/flyvis.bin`).then(r => r.arrayBuffer()), fetch(`${BASE}vision/flyvis.json`).then(r => r.json()), fetch(`${BASE}vision/flyvis_inputs.json`).then(r => r.json()), fetch(`${BASE}vision/flyvis_map.json`).then(r => r.json())]);
+    fetch(`${BASE}vision/flyvis.bin`).then(r => r.arrayBuffer()), fetch(`${BASE}vision/flyvis.json`).then(r => r.json()), fetch(`${BASE}vision/flyvis_inputs.json`).then(r => r.json()), fetch(`${BASE}vision/flyvis_map.json`).then(r => r.json()),
+    fetch(`${BASE}data/neuromod.json`).then(r => r.ok ? r.json() : null).catch(() => null)]);
   const vision = { model: parseFlyVis(fvb, fvj, fvi), map: fvm };
   bodymap = bm; flyXML = xml; gait = g; visual = { json: vj, bin: vb };
   shared = { N: data.N, E: data.E, indptr: toShared(data.indptr), indices: toShared(data.indices), weights: toShared(data.weights), nt: toShared(data.nt),
     side: toShared(data.side), superclass: toShared(data.superclass), cls: toShared(data.cls), size: toShared(new Float32Array(sz)), sign: toShared(new Float32Array(sg)) };
-  brainParams = bp; wasmModule = await WebAssembly.compile(wasmBytes);
+  brainParams = { ...bp, neuromod: !!(bp.neuromod && nmc) }; neuromodCalib = nmc; wasmModule = await WebAssembly.compile(wasmBytes);
   status('writing connectome into shared memory');
   status('writing connectome and optic-lobe model into shared memory');
   brainMem = allocBrainMemory({ ...data, superclass: data.superclass }, shared.size, shared.sign, brainParams, MAX_FLIES, vision);
@@ -163,7 +164,7 @@ async function addFly(pos, yaw) {
   scene.add(f.group); flies.push(f);
   worker.onmessage = e => onWorker(f, e.data);
   if (id >= MAX_FLIES) { alert(`At most ${MAX_FLIES} flies`); return; }
-  worker.postMessage({ type: 'init', id, graph: shared, meta, bodymap, flyXML, gait, env, pos, yaw, nProxies: 7, mode: $('#mode').value, brainOpts: brainParams, vision: true,
+  worker.postMessage({ type: 'init', id, graph: shared, meta, bodymap, flyXML, gait, env, pos, yaw, nProxies: 7, mode: $('#mode').value, brainOpts: brainParams, neuromod: neuromodCalib, vision: true,
     brainMem: { memory: brainMem.memory, graph: brainMem.graph, bases: brainMem.bases, opts: brainMem.opts, fv: brainMem.fv }, wasmModule, slot: id, flyvisMap });
   await new Promise(res => { f.onReady = res; });
   if (running) worker.postMessage({ type: 'run' });
@@ -226,7 +227,7 @@ function renderFlyList() {
   const f = flies.find(x => x.id === selected); $('#selsec').hidden = !f;
   if (f?.last) { const s = f.last, c = s.cmd || {};
     $('#sel').innerHTML = `<div class="kv"><span>behaviour</span><span style="color:var(--acc)">${s.behavior || ''}</span><span>energy</span><span>${(s.energy * 100).toFixed(0)}%</span><span>health</span><span>${(s.health * 100).toFixed(0)}%</span>
-      <span>food eaten</span><span>${(s.eaten * 1000).toFixed(1)} mg·eq</span><span>distance travelled</span><span>${(s.dist || 0).toFixed(1)} cm</span><span>takeoffs / flights</span><span>${s.jumps || 0} / ${s.flights || 0}</span><span>endogenous state</span><span>${s.drive || '–'}</span><span>walk drive (BDN2/oDN1/P9)</span><span>${(c.drive || 0).toFixed(0)} Hz</span>
+      <span>food eaten</span><span>${(s.eaten * 1000).toFixed(1)} mg·eq</span><span>distance travelled</span><span>${(s.dist || 0).toFixed(1)} cm</span><span>takeoffs / flights</span><span>${s.jumps || 0} / ${s.flights || 0}</span><span>endogenous state</span><span>${s.drive || '–'}</span>${s.nm ? `<span>AKH / insulin</span><span>${s.nm.akh.toFixed(2)} / ${s.nm.dilp.toFixed(2)}</span><span>octopamine (AKHR neurons)</span><span>${s.nm.oa.toFixed(1)} Hz, arousal ${(s.nm.arousal * 100).toFixed(0)}%</span>` : ''}<span>walk drive (BDN2/oDN1/P9)</span><span>${(c.drive || 0).toFixed(0)} Hz</span>
       <span>backward (MDN)</span><span>${(c.back || 0).toFixed(0)} Hz</span><span>steering (DNa01/02)</span><span>${(c.turn || 0).toFixed(2)}</span>
       <span>giant fibre</span><span>${(c.escape || 0).toFixed(0)} Hz</span><span>MN9 (proboscis)</span><span>${(s.mn9 || 0).toFixed(0)} Hz</span>
       <span>pharyngeal pump</span><span>${((s.feeding || 0) * 100).toFixed(0)}%</span><span>sensory neurons driven</span><span>${s.nSensory}</span></div>`; }

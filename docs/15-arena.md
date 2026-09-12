@@ -19,7 +19,8 @@ The right-hand panel follows the selected fly. Every 120 ms the page asks that f
   azimuth and elevation with the front of each eye towards the middle.
 - **Named neuron groups:** firing rate per side in Hz of simulated time, smoothed over about 150 ms,
   for smell, taste, photoreceptors, looming detectors (LC4, LPLC2), the giant fibre, forward and backward
-  walking DNs, steering DNs, grooming DNs and feeding motor neurons. Each row keeps about 18 s of
+  walking DNs, steering DNs, grooming DNs, the hunger-driven octopamine neurons (one pooled trace) and
+  feeding motor neurons. Each row keeps about 18 s of
   history. The "?" opens a short explanation. Hovering a row fades the brain inset and marks that
   group's somas.
 
@@ -49,4 +50,5 @@ DNp02 and DNp04.
 Run and pause, speed, add fly, motor mode, follow camera, placement tools, looming threat, takeoff DN
 activation, wind, light.
 The panel shows each fly's behaviour label, energy, health, food eaten, distance, takeoffs and flights,
-its endogenous state (walk, stop, groom, feed, search, avoiding, fly), and live descending-neuron commands.
+its endogenous state (walk, stop, groom, feed, search, avoiding, fly), AKH and insulin levels, octopamine
+tone and arousal ([Neuromodulation](25-neuromodulation.md)), and live descending-neuron commands.

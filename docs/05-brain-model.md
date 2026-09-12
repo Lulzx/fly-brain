@@ -20,6 +20,7 @@ rest −52 mV, threshold −45 mV, membrane time constant 20 ms, synaptic time c
 | Lamina resting bias | L1 to L5 are graded neurons with a depolarised rest, so histaminergic photoreceptor input can modulate them. |
 | Giant fibre to TTMn electrical synapse | Absent from the chemical connectome; added explicitly. |
 | Background synaptic events | Optional random excitatory kicks standing in for spontaneous release. |
+| Octopamine as a slow modulator | Octopaminergic neurons have no fast synapses; their release lowers their targets' thresholds over seconds. They and the insulin cells get a slow afterhyperpolarisation and calibrated thresholds. See [Neuromodulation](25-neuromodulation.md). |
 
 ## What was tried and dropped
 - **Firing-rate model of the whole CNS** after Pugliese et al.: ignited to about 25,000 active neurons.

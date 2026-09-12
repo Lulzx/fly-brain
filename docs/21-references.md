@@ -33,5 +33,12 @@
 - Tammero and Dickinson 2002, collision-avoidance saccades in free flight, J Exp Biol.
 - Dickinson 1999, haltere-mediated equilibrium reflexes, Phil Trans R Soc B.
 
+## Neuromodulation
+- Yu et al. 2016, insulin and AKH signalling in octopaminergic neurons regulate starvation-induced
+  hyperactivity, eLife 5:e15693.
+- Lee and Park 2004, AKH and starvation-induced hyperactivity, Genetics 167:311.
+- Suver et al. 2012, octopamine neurons mediate flight-induced modulation of visual processing, Neuron.
+- Marella et al. 2012, dopaminergic modulation of sucrose acceptance, Neuron.
+
 ## Precedent
 - Eon Systems, embodied brain emulation: https://eon.systems/updates/embodied-brain-emulation

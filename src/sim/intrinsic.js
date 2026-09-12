@@ -43,7 +43,9 @@ export class Intrinsic {
   lognormal([median, sd]) { return 1000 * median * Math.exp(sd * this.gauss()); }
   /** one ms. ctx: { energy 0..1, touch/heat: {left, right} per antenna, rearing: body pitched up against something } */
   update(dtMs, brain, ctx) {
-    const P = INTRINSIC, hunger = Math.max(0, Math.min(1, (0.7 - ctx.energy) / 0.6));   // starved flies walk more (Yang et al. 2015)
+    // hunger gates feeding. Starved flies also walk more (Yang et al. 2015): with neuromodulation that comes from
+    // the octopamine level of the AKH-sensitive OA neurons (ctx.arousal, see neuromod.js), otherwise from energy
+    const P = INTRINSIC, hunger = Math.max(0, Math.min(1, (0.7 - ctx.energy) / 0.6)), arousal = ctx.arousal ?? hunger;
     // obstacle at the front. Head-on (both antennae within 150 ms, or the body rearing up against it): stop,
     // back off, pivot away, walk on. One antenna grazing: turn away while walking, which is how flies come to
     // follow walls.
@@ -61,12 +63,14 @@ export class Intrinsic {
       const dir = ctx.touch.left ? -1 : 1;   // +1 = turn left
       this.sacc = { t: 0, dur: P.grazeTurnMs[0] + (P.grazeTurnMs[1] - P.grazeTurnMs[0]) * this.rand(), dir }; this.lastDir = dir; this.sinceSacc = 0; this.lastGraze = t;
     }
-    // noxious heat at the aristae: turn away from the warmer side and run (flies turn back at a hot edge)
+    // noxious heat at the aristae: turn away from the warmer side and run (flies turn back at a hot edge). Deep
+    // inside a hot patch (after landing on it) both sides read the same saturated heat, so turning has no
+    // direction to go: run straight out instead of turning on the spot
     const hot = Math.max(ctx.heat.left, ctx.heat.right); this.hot = hot;
     if (hot > 0.08 && !this.avoid && t - this.lastHeat > P.heatRefractory) {
-      const dir = Math.abs(ctx.heat.left - ctx.heat.right) < 0.02 ? this.lastDir : ctx.heat.left > ctx.heat.right ? -1 : 1;
-      this.sacc = { t: 0, dur: 300 + 300 * this.rand(), dir }; this.lastDir = dir; this.sinceSacc = 0; this.lastHeat = t;
-      this.state = 'walk'; this.left = Math.max(this.left, 1500);
+      const even = Math.abs(ctx.heat.left - ctx.heat.right) < 0.02, dir = even ? this.lastDir : ctx.heat.left > ctx.heat.right ? -1 : 1;
+      if (!(even && hot > 0.9)) { this.sacc = { t: 0, dur: 300 + 300 * this.rand(), dir }; this.lastDir = dir; this.sinceSacc = 0; }
+      this.lastHeat = t; this.state = 'walk'; this.left = Math.max(this.left, 1500);
     }
     // food: a hungry fly that tastes sugar with its legs or labellum stops there to feed; once it leaves (sated,
     // or the bout ends), it searches locally with frequent turns, looping back to the spot (Dethier 1957,
@@ -87,10 +91,10 @@ export class Intrinsic {
       this.left -= dtMs;
       if (this.left <= 0) {   // action selection at the end of a bout
         if (this.approach && this.state !== 'feed') { this.state = 'walk'; this.left = 600; } else
-        if (this.state !== 'feed' && this.state !== 'groom' && this.rand() < P.pTakeoff * (1 + 2 * hunger)) this.takeoffUntil = t + 80;   // leave by air
+        if (this.state !== 'feed' && this.state !== 'groom' && this.rand() < P.pTakeoff * (1 + 2 * arousal)) this.takeoffUntil = t + 80;   // leave by air
         if (this.state === 'feed') { this.state = 'walk'; this.left = this.lognormal(P.walkBout); }
-        else if (this.state === 'walk') { this.state = this.rand() < P.pGroom * (1 - hunger) ? 'groom' : 'stop'; this.left = this.lognormal(this.state === 'groom' ? P.groomBout : P.stopBout) * (1 - 0.6 * hunger); }
-        else { this.state = 'walk'; this.left = this.lognormal(P.walkBout) * (1 + 1.5 * hunger); }
+        else if (this.state === 'walk') { this.state = this.rand() < P.pGroom * (1 - arousal) ? 'groom' : 'stop'; this.left = this.lognormal(this.state === 'groom' ? P.groomBout : P.stopBout) * (1 - 0.6 * arousal); }
+        else { this.state = 'walk'; this.left = this.lognormal(P.walkBout) * (1 + 1.5 * arousal); }
       }
       // spontaneous saccades; alternate direction more often than not (flies avoid circling)
       this.sinceSacc += dtMs;
@@ -104,7 +108,7 @@ export class Intrinsic {
     this.fwdNoise += dtMs / P.fwdTau * (-this.fwdNoise) + Math.sqrt(2 * dtMs / P.fwdTau) * this.gauss();
     const walking = this.state === 'walk' && !this.avoid;
     const B = this.bias;
-    B.fwd = walking ? P.fwdDrive * (this.approach ? 0.7 : Math.max(0.3, 1 + P.fwdJitter * this.fwdNoise + 0.25 * hunger + 0.6 * this.hot)) : 0;
+    B.fwd = walking ? P.fwdDrive * (this.approach ? 0.7 : Math.max(0.3, 1 + P.fwdJitter * this.fwdNoise + 0.25 * arousal + 0.6 * this.hot)) : 0;
     B.back = this.avoid && this.avoid.t < P.avoidMs ? P.backDrive : 0;
     B.groom = this.state === 'groom' && !this.avoid ? P.groomDrive : 0;
     B.turnL = this.sacc && this.sacc.dir > 0 ? P.turnDrive : 0; B.turnR = this.sacc && this.sacc.dir < 0 ? P.turnDrive : 0;

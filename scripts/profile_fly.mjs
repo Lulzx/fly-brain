@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import loadMujoco from '@mujoco/mujoco';
-import { loadAll } from './lib_node.mjs';
+import { loadAll, loadNeuromod } from './lib_node.mjs';
 import { FlyAgent } from '../src/sim/fly.js';
 import { DEFAULT_ENV } from '../src/sim/world.js';
 const D = loadAll(); const data = { ...D, superclass: D.sc };
@@ -9,7 +9,7 @@ const sign = new Float32Array(fs.readFileSync('public/data/ntsign.bin').buffer.s
 const gait = JSON.parse(fs.readFileSync('public/body/gait.json')); const flyXML = fs.readFileSync('public/body/fly_physics.xml', 'utf8');
 const mj = await loadMujoco(); const env = structuredClone(DEFAULT_ENV);
 const cfg = JSON.parse(process.argv[2] || '{"wSyn":0.4}');
-const fly = new FlyAgent({ mj, flyXML, env, data, size, sign, bodymap: D.bodymap, gait, mode: 'descending', brainOpts: cfg, vision: true });
+const fly = new FlyAgent({ mj, flyXML, env, data, size, sign, bodymap: D.bodymap, gait, neuromod: loadNeuromod(), mode: 'descending', brainOpts: cfg, vision: true });
 let AW = 0, SP = 0, ED = 0; const T = { state: 0, senses: 0, eye: 0, brain: 0, motor: 0, physics: 0 }; const now = () => performance.now();
 for (let s = 0; s < 400; s++) {   // instrumented copy of FlyAgent.step
   let t = now(); const st = fly.state(); T.state += now() - t;

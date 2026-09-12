@@ -1,10 +1,11 @@
 // Worker process: evaluates a parameter set on the benchmark suite; used by calib_search.mjs
 import fs from 'node:fs';
 import { loadAll } from './lib_node.mjs';
-import { createBrain, brainScales, applyClassPhysiology, BRAIN_DEFAULTS } from '../src/brainmodel.js';
+import { createBrain, brainScales, applyClassPhysiology, BRAIN_DEFAULTS, modulatorySign } from '../src/brainmodel.js';
 import { graphBytes, brainBytes, writeGraph, LIFWasm } from '../src/lifwasm.js';
 import { DEFAULTS as LIF_DEFAULTS } from '../src/lif.js';
 import { FlyVis, parseFlyVis, flyvisBytes } from '../src/flyvis.js';
+import { Neuromod } from '../src/sim/neuromod.js';
 const D = loadAll(); const SIZE = new Float32Array(fs.readFileSync('public/data/neuron_size.bin').buffer.slice(0));
 const SIGN = new Float32Array(fs.readFileSync('public/data/ntsign.bin').buffer.slice(0));
 const T = (...ts) => ts.flatMap(t => D.byType(t));
@@ -18,10 +19,12 @@ const INST = (await WebAssembly.instantiate(WASM, { env: { memory: MEM } })).ins
 let graphKey = null, GRAPH = null, BRAIN_END = 0;
 function makeBrain(cfg) {
   const o = { ...BRAIN_DEFAULTS, ...cfg }; const key = JSON.stringify(o);
-  if (key !== graphKey) { const { inScale, sensoryMask } = brainScales(DATA, SIZE, o); for (const sd of ['L', 'R']) for (const [i] of FVMAP.eyes[sd].pairs) sensoryMask[i] = 1; GRAPH = writeGraph(MEM, 1024, DATA, { ...LIF_DEFAULTS, ...o }, inScale, sensoryMask, SIGN); graphKey = key; }
+  if (key !== graphKey) { const { inScale, sensoryMask } = brainScales(DATA, SIZE, o); for (const sd of ['L', 'R']) for (const [i] of FVMAP.eyes[sd].pairs) sensoryMask[i] = 1; GRAPH = writeGraph(MEM, 1024, DATA, { ...LIF_DEFAULTS, ...o }, inScale, sensoryMask, modulatorySign(DATA, SIGN, o)); graphKey = key; }
   const b = new LIFWasm({ instance: INST, memory: MEM, graph: GRAPH, base: (GRAPH.end + 4095) & ~4095, N: D.N, params: o, seed: (Math.random() * 1e9) | 0 });
   BRAIN_END = b.end;
-  return applyClassPhysiology(b, DATA, o);
+  applyClassPhysiology(b, DATA, o);
+  if (o.neuromod) new Neuromod(DATA, b, { minSyn: o.minSyn }).modulate();   // fed octopamine tone on OA targets (its fast synapses are off)
+  return b;
 }
 const S = D.bodymap.sensors, SN = Object.fromEntries(S.map(s => [s.name, s.idx]));
 const RELAY = T('GNG232'), RELAY2 = T('DNge080');

@@ -1,7 +1,7 @@
 // Runs survival scenarios with the full embodied fly and reports what the brain made it do.
 import fs from 'node:fs';
 import loadMujoco from '@mujoco/mujoco';
-import { loadAll } from './lib_node.mjs';
+import { loadAll, loadNeuromod } from './lib_node.mjs';
 import { FlyAgent } from '../src/sim/fly.js';
 import { DEFAULT_ENV } from '../src/sim/world.js';
 import { allocBrainMemory, attachBrain, attachEyes } from '../src/brainsetup.js';
@@ -14,7 +14,7 @@ const fb = fs.readFileSync('public/vision/flyvis.bin'); const vision = { model: 
 const mj = await loadMujoco(); const wasm = fs.readFileSync('public/lif.wasm');
 const mem = allocBrainMemory(data, size, sign, params, 1, vision);
 async function makeFly(env, pos, yaw) { const brain = await attachBrain(wasm, mem, 0, data, (Math.random() * 1e6) | 0); brain.reset();
-  return new FlyAgent({ mj, flyXML, env, data, size, sign, bodymap: D.bodymap, gait, brain, brainOpts: params, pos, yaw, vision: true, flyvis: { eyes: attachEyes(brain.instance, mem, 0), map: vision.map, gain: +(process.env.FVGAIN || 150) } }); }
+  return new FlyAgent({ mj, flyXML, env, data, size, sign, bodymap: D.bodymap, gait, brain, brainOpts: params, neuromod: loadNeuromod(), pos, yaw, vision: true, flyvis: { eyes: attachEyes(brain.instance, mem, 0), map: vision.map, gain: +(process.env.FVGAIN || 150) } }); }
 const only = process.argv[2];
 const scenarios = {
   forage: { secs: 12, setup: env => [[-0.2, 0.6], 0], note: 'food + vinegar 1.2 cm ahead' },

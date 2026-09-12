@@ -2,7 +2,7 @@
 // Usage: node scripts/diag_walk.mjs <secs> <scenario> <out.jsonl> ['{"vision":false,"seed":7}']
 import fs from 'node:fs';
 import loadMujoco from '@mujoco/mujoco';
-import { loadAll } from './lib_node.mjs';
+import { loadAll, loadNeuromod } from './lib_node.mjs';
 import { FlyAgent } from '../src/sim/fly.js';
 import { DEFAULT_ENV } from '../src/sim/world.js';
 import { allocBrainMemory, attachBrain, attachEyes } from '../src/brainsetup.js';
@@ -21,7 +21,7 @@ const brain = await attachBrain(wasm, mem, 0, data, X.seed ?? 7); brain.reset();
 const env = structuredClone(DEFAULT_ENV); if (X.env) Object.assign(env, X.env);
 const SC = { open: [[0, 0], 0], wall: [[1.9, -0.9], -0.4], cube: [[-0.4, 0.55], Math.PI / 2], corner: [[-0.4, 0.8], Math.PI / 2 + 0.5] };
 const [pos, yaw] = X.pos ? [X.pos, X.yaw ?? 0] : SC[scenario];
-const fly = new FlyAgent({ mj, flyXML, env, data, size, sign, bodymap: D.bodymap, gait, brain, brainOpts: params, pos, yaw, intrinsic: X.intrinsic ?? true, seed: X.seed ?? 0, vision: useFV, flyvis: useFV ? { eyes: attachEyes(brain.instance, mem, 0), map: vision.map, gain: X.fvGain ?? 150 } : null });
+const fly = new FlyAgent({ mj, flyXML, env, data, size, sign, bodymap: D.bodymap, gait, brain, brainOpts: params, neuromod: loadNeuromod(), pos, yaw, intrinsic: X.intrinsic ?? true, seed: X.seed ?? 0, vision: useFV, flyvis: useFV ? { eyes: attachEyes(brain.instance, mem, 0), map: vision.map, gain: X.fvGain ?? 150 } : null });
 if (X.mask) { const re = new RegExp(X.mask); const drop = new Set(D.bodymap.sensors.filter(s => re.test(s.name)).flatMap(s => s.idx)); console.log('masking', drop.size, 'sensory neurons');
   const up0 = fly.senses.update.bind(fly.senses); fly.senses.update = (...a) => { const r = up0(...a); for (const i of drop) r.delete(i); return r; }; }
 if (X.P) Object.assign((await import('../src/sim/intrinsic.js')).INTRINSIC, X.P);

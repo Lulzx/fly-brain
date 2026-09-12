@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import loadMujoco from '@mujoco/mujoco';
-import { loadAll } from './lib_node.mjs';
+import { loadAll, loadNeuromod } from './lib_node.mjs';
 import { FlyAgent } from '../src/sim/fly.js';
 import { DEFAULT_ENV } from '../src/sim/world.js';
 import { allocBrainMemory, attachBrain } from '../src/brainsetup.js';
@@ -11,7 +11,7 @@ const gait = JSON.parse(fs.readFileSync('public/body/gait.json')); const flyXML 
 const mj = await loadMujoco(); const env = structuredClone(DEFAULT_ENV);
 const mem = allocBrainMemory(data, size, sign, params, 1); const brain = await attachBrain(fs.readFileSync('public/lif.wasm'), mem, 0, data, 7);
 const vision = process.argv[2] !== 'novision';
-const fly = new FlyAgent({ mj, flyXML, env, data, size, sign, bodymap: D.bodymap, gait, brain, brainOpts: params, pos: [0.95, 0.6], vision });
+const fly = new FlyAgent({ mj, flyXML, env, data, size, sign, bodymap: D.bodymap, gait, neuromod: loadNeuromod(), brain, brainOpts: params, pos: [0.95, 0.6], vision });
 const legSugar = new Set(Object.values(fly.senses.taste.legs).flatMap(x => x.sugar));
 for (let t = 0; t < 400; t++) {
   fly.step();

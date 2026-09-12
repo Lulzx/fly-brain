@@ -1,7 +1,7 @@
 // Tethered fly: the body is held (no physics steps); its compound eye watches moving proxy objects.
 import fs from 'node:fs';
 import loadMujoco from '@mujoco/mujoco';
-import { loadAll } from './lib_node.mjs';
+import { loadAll, loadNeuromod } from './lib_node.mjs';
 import { FlyAgent } from '../src/sim/fly.js';
 import { DEFAULT_ENV } from '../src/sim/world.js';
 import { allocBrainMemory, attachBrain, attachEyes } from '../src/brainsetup.js';
@@ -13,7 +13,7 @@ const gait = JSON.parse(fs.readFileSync('public/body/gait.json')); const flyXML 
 const mj = await loadMujoco(); const env = structuredClone(DEFAULT_ENV); env.odors = []; env.food = []; env.bitterPatches = []; env.hazards = []; env.obstacles = [];
 const fb = fs.readFileSync('public/vision/flyvis.bin'); const vision = { model: parseFlyVis(fb.buffer.slice(fb.byteOffset, fb.byteOffset + fb.byteLength), JSON.parse(fs.readFileSync('public/vision/flyvis.json')), JSON.parse(fs.readFileSync('public/vision/flyvis_inputs.json'))), map: JSON.parse(fs.readFileSync('public/vision/flyvis_map.json')) };
 const mem = allocBrainMemory(data, size, sign, params, 1, vision); const brain = await attachBrain(fs.readFileSync('public/lif.wasm'), mem, 0, data, 9);
-const fly = new FlyAgent({ mj, flyXML, env, data, size, sign, bodymap: D.bodymap, gait, brain, brainOpts: params, nProxies: 1, vision: true, flyvis: { eyes: attachEyes(brain.instance, mem, 0), map: vision.map, gain: +(process.env.FVGAIN || 60) } });
+const fly = new FlyAgent({ mj, flyXML, env, data, size, sign, bodymap: D.bodymap, gait, neuromod: loadNeuromod(), brain, brainOpts: params, nProxies: 1, vision: true, flyvis: { eyes: attachEyes(brain.instance, mem, 0), map: vision.map, gain: +(process.env.FVGAIN || 60) } });
 const T = (t, s) => D.byType(t).filter(i => !s || D.side[i] === s);
 const G = { MN9: T('MN9'), MN11D: T('MN11D'), DNp02: T('DNp02'), DNp04: T('DNp04'), DNp06: T('DNp06'), DNp11: T('DNp11'), T4L: T('T4a', 1).concat(T('T4b', 1), T('T4c', 1), T('T4d', 1)), T5L: T('T5a', 1).concat(T('T5b', 1), T('T5c', 1), T('T5d', 1)), LPLC2L: T('LPLC2', 1), LC4L: T('LC4', 1), LPLC2R: T('LPLC2', 2), fwd: [...T('DNg100'), ...T('DNg97'), ...T('DNp09')], P9L: T('DNp09', 1), P9R: T('DNp09', 2), DNaL: [...T('DNa02', 1), ...T('DNa01', 1)], DNaR: [...T('DNa02', 2), ...T('DNa01', 2)], GF: T('DNp01'), MDN: T('MDN') };
 const vpn = []; for (let i = 0; i < D.N; i++) if (D.meta.superclasses[D.sc[i]] === 'visual_projection') vpn.push(i);

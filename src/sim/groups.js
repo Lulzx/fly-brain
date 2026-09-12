@@ -22,6 +22,8 @@ const GROUPS = [
     info: 'Steering descending neurons (DNa01, DNa02, DNp09). The fly turns towards the side firing more, so watch the left and right traces separate during a turn.' },
   { key: 'groom', label: 'Grooming', color: '#f472b6', types: Object.keys(DN_ROLES.groom),
     info: 'Descending neurons that trigger head grooming with the front legs.' },
+  { key: 'octopamine', label: 'Octopamine (hunger)', color: '#e0a3ff', types: ['OA-VUMa1', 'OA-VUMa2', 'OA-VUMa3', 'OA-VUMa4', 'OA-VUMa5', 'OA-VUMa6', 'OA-VUMa8', 'OA-VPM3', 'OA-VPM4'], pooled: true,
+    info: 'Octopaminergic neurons of the subesophageal zone (OA-VUMa, OA-VPM). The hunger hormone AKH excites them and insulin inhibits them, so they fire faster as the fly starves; their octopamine makes it more active. Watch them rise as energy falls. Most are unpaired midline cells, so both sides share one trace.' },
   { key: 'feed', label: 'Feeding motor', color: '#facc15', types: ['MN9'], feeding: true,
     info: 'Proboscis extension motor neurons (MN9) and the pharyngeal pump motor neurons that swallow. Active when a hungry fly tastes sugar.' },
 ];
@@ -33,7 +35,7 @@ export function buildGroups(bodymap, types, side) {
     let L = [], R = [];
     if (g.sensors) for (const s of bodymap.sensors) if (g.sensors(s)) (/right/.test(s.name) ? R : L).push(...s.idx);
     if (g.eyes) for (const e of bodymap.eyes) (e.side === 'right' ? R : L).push(...e.idx);
-    if (g.types) { const [a, b] = byTypes(g.types); L.push(...a); R.push(...b); }
+    if (g.types) { const [a, b] = byTypes(g.types); if (g.pooled) L.push(...a, ...b); else { L.push(...a); R.push(...b); } }
     if (g.feeding) for (const i of bodymap.feeding) (side[i] === 2 ? R : L).push(i);
     return { key: g.key, label: g.label, color: g.color, info: g.info, L: Int32Array.from(new Set(L)), R: Int32Array.from(new Set(R)) };
   });

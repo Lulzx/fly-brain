@@ -14,6 +14,8 @@
 | `node scripts/check_arena.mjs` | Headless browser test of the arena |
 | `node scripts/diag_walk.mjs <s> <scenario> <out.jsonl> [json]` | 20 ms behaviour trace: position, DN rates, endogenous state, flight. Scenarios open, wall, cube, corner; options vision, seed, pos, yaw, mask (sensor regex), freeze, threatAt, takeoffAt, probe |
 | `node scripts/flight_test.mjs [turn] [ms]` | Brainless flight-controller test |
+| `node scripts/neuromod_calib.mjs [s]` | Calibrates octopamine and insulin cell thresholds for a fed fly; writes `public/data/neuromod.json` |
+| `node scripts/starvation.mjs [s] [seeds]` | Starvation-induced hyperactivity, fed vs starved, in five genotypes ([Neuromodulation](25-neuromodulation.md)) |
 
 ## Diagnostic tools
 `al_trace`, `ignition`, `paths`, `chain`, `inputs`, `dn_inputs`, `sign_diff`, `sense_ablate`, `kc_test`,

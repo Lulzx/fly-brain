@@ -7,8 +7,12 @@
   GABA_B presynaptic inhibition, the main gain control, is not modelled.
 - **Proboscis.** MN9 is partly driven by olfactory channels, so flies often walk with the proboscis out.
 - **Tarsal reflex** is weak: 15 Hz, partial extension.
-- **No intrinsic drives** such as circadian state or hunger peptides. The endogenous-activity module stands
-  in for them with rules ([Endogenous behaviour](23-behaviour.md)), not with modelled neuromodulators.
+- **Few intrinsic drives.** Hunger reaches the octopamine neurons through AKH and insulin
+  ([Neuromodulation](25-neuromodulation.md)), but the bouts it lengthens are still rules
+  ([Endogenous behaviour](23-behaviour.md)): octopamine's action on the connectome alone does not make starved
+  flies walk more. No circadian state; dopamine and serotonin are still fast excitatory transmitters.
+- With octopamine's fast synapses removed, the tethered looming benchmark lost its giant-fibre response.
+  Brain parameters have not been refitted.
 - Left/right imbalances: the right DNa02 and P9 get more tonic excitation than the left, so the steering
   readout adapts slowly to cancel standing asymmetry.
 

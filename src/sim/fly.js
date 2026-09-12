@@ -5,6 +5,7 @@
 import { buildWorldXML } from './world.js';
 import { Senses, CompoundEye, clearance, heatAt } from './senses.js';
 import { Intrinsic } from './intrinsic.js';
+import { Neuromod } from './neuromod.js';
 import { Flight } from './flight.js';
 import { FlyVisionFV } from './vision.js';
 import { Motor } from './motor.js';
@@ -13,7 +14,7 @@ import { createBrain } from '../brainmodel.js';
 const Rt9 = (xm, b) => [xm[b * 9], xm[b * 9 + 3], xm[b * 9 + 6]];   // body x axis (heading) in world frame
 
 export class FlyAgent {
-  constructor({ mj, flyXML, env, data, size, sign, bodymap, gait, id = 0, pos = [0, 0], yaw = 0, nProxies = 0, mode = 'descending', brainOpts = {}, vision = true, brain = null, flyvis = null, intrinsic = true, seed = 0 }) {
+  constructor({ mj, flyXML, env, data, size, sign, bodymap, gait, id = 0, pos = [0, 0], yaw = 0, nProxies = 0, mode = 'descending', brainOpts = {}, vision = true, brain = null, flyvis = null, intrinsic = true, seed = 0, neuromod = null }) {
     this.id = id; this.mj = mj; this.env = env; this.data = data; this.vision = vision;
     this.model = mj.MjModel.from_xml_string(buildWorldXML(flyXML, env, { flyPos: [pos[0], pos[1], 0.132], flyYaw: yaw, nProxies }));
     this.mjd = new mj.MjData(this.model);
@@ -30,6 +31,9 @@ export class FlyAgent {
     this.threatMocap = M.body_mocapid[M.body('threat').id];
     // brain
     this.brain = brain || createBrain(data, size, brainOpts, sign);   // wasm brain can be injected (shared connectome memory)
+    // hunger as hormones and octopamine (neuromod: { calib: neuromod.json, block }); needs brainOpts.neuromod, which
+    // also removes the OA neurons' fast synapses from the graph
+    this.neuromod = brainOpts.neuromod ? new Neuromod(data, this.brain, { calib: neuromod?.calib, block: neuromod?.block, params: neuromod?.params, minSyn: brainOpts.minSyn ?? 5 }) : null;
     const typeOf = data.meta.types, sideOf = data.side;
     this.senses = new Senses(bodymap, mj, M); this.senses.bindTypes(typeOf, sideOf);
     // vision: flyvis optic-lobe model driving the male-CNS optic lobe (if provided), else the simple photoreceptor eye
@@ -105,7 +109,8 @@ export class FlyAgent {
     if (this._eyeRates) for (const [i, hz] of this._eyeRates) rates.set(i, hz);
     // apply sensory drive (clear neurons no longer driven)
     const B = this.brain; for (const i of this.driven) B.drive[i] = 0;
-    if (this.intrinsic) this.intrinsic.update(1, B, { energy: this.energy, touch: st.antTouch, rearing: st.pitchUp > 0.45 && this.motor.jumpT < 0 && !this.motor.righting,
+    if (this.neuromod) this.neuromod.update(1, this.energy);
+    if (this.intrinsic) this.intrinsic.update(1, B, { energy: this.energy, arousal: this.neuromod?.arousal, touch: st.antTouch, rearing: st.pitchUp > 0.45 && this.motor.jumpT < 0 && !this.motor.righting,
       heat: { left: heatAt(st.antenna.left, this.env), right: heatAt(st.antenna.right, this.env) }, sugar: this._sugar || 0, flying: this.flight.active, ahead: st.ahead,
       mouthOnFood: this.env.food.some(f => f.amount > 0 && Math.hypot(st.labellum[0] - f.x, st.labellum[1] - f.y) < f.r - 0.02) });
     const nd = new Int32Array(rates.size); let k = 0; for (const [i, hz] of rates) { B.setDriveOne(i, hz); nd[k++] = i; } this.driven = nd;

@@ -1,8 +1,9 @@
 // Calibrated whole-CNS spiking model (see PLAN.md "Brain model calibration").
 // LIF (Shiu et al. 2024) + per-neuron PSP scaling by (volume / regional median volume)^-0.5,
 // connections >= 5 synapses (Pugliese et al. 2025), sensory neurons driven only by their receptors.
-import { LIFNetwork } from './lif.js';
+import { LIFNetwork, EXC_SIGN } from './lif.js';
 import { regionSizeRef } from './ratenet.js';
+import { isOctopaminergic } from './sim/neuromod.js';
 export const BRAIN_DEFAULTS = { laminaBias: 9, kcThreshold: 0, wSyn: 0.3, sizeAlpha: 0.5, minSyn: 5, adaptInc: 0, depU: 0, maxSizeScale: 20, boostCap: 1 };
 export function brainScales(data, size, opts = {}) {
   const o = { ...BRAIN_DEFAULTS, ...opts };
@@ -27,11 +28,19 @@ export function applyClassPhysiology(net, data, o) {
   net.setBias(lam, o.laminaBias);
   return net;
 }
+// With neuromodulation on, octopaminergic neurons act only through slow release (src/sim/neuromod.js), so their
+// fast synapses leave the graph. Returns a copy of the per-neuron sign array (or of the transmitter table's signs).
+export function modulatorySign(data, preSign, o) {
+  if (!o.neuromod) return preSign;
+  const types = data.meta.types, s = preSign ? Float32Array.from(preSign) : Float32Array.from(data.nt, n => EXC_SIGN[n]);
+  for (let i = 0; i < data.N; i++) if (isOctopaminergic(types[i])) s[i] = 0;
+  return s;
+}
 export function createBrain(data, size, opts = {}, preSign = null) {
-  const o = { ...BRAIN_DEFAULTS, ...opts };
+  const o = { ...BRAIN_DEFAULTS, ...opts }; preSign = modulatorySign(data, o.gradedSign === false ? null : preSign, o);
   const { inScale, sensoryMask } = brainScales(data, size, o);
   return applyClassPhysiology(createLIF(data, o, inScale, sensoryMask, preSign), data, o);
 }
 function createLIF(data, o, inScale, sensoryMask, preSign) {
-  return new LIFNetwork(data.N, data.indptr, data.indices, data.weights, data.nt, { ...o, inScale, sensoryMask, preSign: o.gradedSign === false ? null : preSign });
+  return new LIFNetwork(data.N, data.indptr, data.indices, data.weights, data.nt, { ...o, inScale, sensoryMask, preSign });
 }

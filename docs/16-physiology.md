@@ -14,6 +14,10 @@ A hungry fly with sugar under its mouthparts stops and extends its proboscis. Hu
 real flies, and the model's own tarsal-sugar pathway reaches MN9 only weakly
 ([Endogenous behaviour](23-behaviour.md)).
 
+## Hunger as hormones
+Energy stands for haemolymph sugar. It sets AKH secretion and drives the insulin-producing cells, and both act
+on octopaminergic neurons whose release sets the fly's arousal ([Neuromodulation](25-neuromodulation.md)).
+
 ## Hunger modulates taste
 Sugar receptor gain rises and bitter gain falls as energy drops, following Inagaki 2012 and LeDue 2016.
 This is receptor physiology, not a behavioural rule.

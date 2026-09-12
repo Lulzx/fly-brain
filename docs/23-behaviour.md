@@ -58,7 +58,7 @@ the right, and P9 also steers, so driving it made the fly circle.
 | After leaving food | 12 s local search: three times the saccades, same direction 75% of the time, so the path loops back | Dethier 1957; Kim & Dickinson 2017 |
 | Voluntary takeoff | 10% of bout ends, more when hungry | |
 | In flight | Saccades 1 per second, and collision-avoidance saccades toward open space | Tammero & Dickinson 2002 |
-| Hunger | Longer walk bouts and shorter pauses; faster walking | Yang et al. 2015 |
+| Hunger | Longer walk bouts and shorter pauses, less grooming, more takeoffs, faster walking. Scaled by octopamine arousal from [Neuromodulation](25-neuromodulation.md) when it is on, otherwise by energy | Yang et al. 2015 |
 
 ## Senses added for it
 See [Senses](10-senses.md): antennal and front-leg obstacle touch, heat per arista, and suppression of
@@ -67,5 +67,6 @@ footfall touch while stepping (reafference).
 ## What is still the brain's
 Sensory steering, such as odour, optomotor and object responses, the sugar stop, bitter aversion, looming
 escape and grooming triggered by touch, all come from the connectome. The module supplies timing and
-intent. Where a pathway is missing from the model, such as turning away from a touched obstacle or from
+intent. With [neuromodulation](25-neuromodulation.md) on, its hunger input for locomotion is the octopamine
+level of identified neurons rather than the energy variable; feeding still reads energy. Where a pathway is missing from the model, such as turning away from a touched obstacle or from
 heat, the module supplies it and this page lists it.

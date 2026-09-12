@@ -1,7 +1,7 @@
 // Headless closed-loop run of one embodied fly. Usage: node scripts/run_fly.mjs [seconds] [scenario] [mode]
 import fs from 'node:fs';
 import loadMujoco from '@mujoco/mujoco';
-import { loadAll } from './lib_node.mjs';
+import { loadAll, loadNeuromod } from './lib_node.mjs';
 import { FlyAgent } from '../src/sim/fly.js';
 import { DEFAULT_ENV } from '../src/sim/world.js';
 import { allocBrainMemory, attachBrain, attachEyes } from '../src/brainsetup.js';
@@ -25,7 +25,7 @@ if (useFV) { const fb = fs.readFileSync('public/vision/flyvis.bin'); vision = { 
 const mem = allocBrainMemory(data, size, sign, brainOpts, 1, vision);
 const brain = await attachBrain(fs.readFileSync('public/lif.wasm'), mem, 0, data, 7);
 const flyvis = useFV ? { eyes: attachEyes(brain.instance, mem, 0), map: vision.map, gain: X.fvGain ?? 150 } : null;
-const fly = new FlyAgent({ mj, flyXML, env, data, size, sign, bodymap: D.bodymap, gait, pos, yaw, mode, brainOpts, vision: X.vision ?? true, brain, flyvis });
+const fly = new FlyAgent({ mj, flyXML, env, data, size, sign, bodymap: D.bodymap, gait, pos, yaw, mode, brainOpts, neuromod: loadNeuromod(), vision: X.vision ?? true, brain, flyvis });
 const t0 = Date.now(); const steps = secs * 1000; const prev = new Uint32Array(D.N);
 console.log(`scenario ${scenario}, mode ${mode}, start pos ${pos}, ${extra}`);
 for (let s = 1; s <= steps; s++) {

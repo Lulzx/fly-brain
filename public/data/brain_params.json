@@ -1,5 +1,6 @@
 {
  "coba": true,
+ "neuromod": true,
  "wSyn": 0.6,
  "sizeAlpha": 0.66,
  "kcThreshold": 10.744,

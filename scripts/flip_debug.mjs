@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import loadMujoco from '@mujoco/mujoco';
-import { loadAll } from './lib_node.mjs';
+import { loadAll, loadNeuromod } from './lib_node.mjs';
 import { FlyAgent } from '../src/sim/fly.js';
 import { DEFAULT_ENV } from '../src/sim/world.js';
 import { allocBrainMemory, attachBrain, attachEyes } from '../src/brainsetup.js';
@@ -12,7 +12,7 @@ const fb = fs.readFileSync('public/vision/flyvis.bin'); const vision = { model: 
 const mj = await loadMujoco(); const mem = allocBrainMemory(data, size, sign, params, 1, vision);
 const brain = await attachBrain(fs.readFileSync('public/lif.wasm'), mem, 0, data, +(process.argv[2] || 3));
 const env = structuredClone(DEFAULT_ENV);
-const fly = new FlyAgent({ mj, flyXML, env, data, size, sign, bodymap: D.bodymap, gait, brain, brainOpts: params, pos: [0.95, 0.6], yaw: 0, vision: true, flyvis: { eyes: attachEyes(brain.instance, mem, 0), map: vision.map, gain: 250 } });
+const fly = new FlyAgent({ mj, flyXML, env, data, size, sign, bodymap: D.bodymap, gait, neuromod: loadNeuromod(), brain, brainOpts: params, pos: [0.95, 0.6], yaw: 0, vision: true, flyvis: { eyes: attachEyes(brain.instance, mem, 0), map: vision.map, gain: 250 } });
 const hist = [];
 for (let t = 0; t < 5000; t++) {
   fly.step(); const up = fly.mjd.xmat[fly.bid.thorax * 9 + 8]; const c = fly.cmd, m = fly.motor, st = fly.state();

@@ -11,8 +11,9 @@ In recommended order.
    with the wing stroke driven by wing power
    and steering motor neurons.
 4. **Wall climbing.** Train or fit a vertical-surface gait so legs can grip walls.
-5. **Neuromodulation and state.** Replace the endogenous-activity rules with hunger and arousal acting as
-   slow modulators of identified neurons (octopaminergic, peptidergic).
+5. **Neuromodulation and state.** Started: hunger acts through AKH, insulin and octopamine
+   ([Neuromodulation](25-neuromodulation.md)). Next: refit the brain with it on, octopamine's optic-lobe gain,
+   dopamine gating of feeding, and bout structure from the circuits rather than rules.
 6. **Speed.** Multi-threaded brain and physics, then WebGPU.
 7. **Social behaviour.** Courtship song and male-specific fruitless and doublesex circuits, which this male
    dataset annotates.

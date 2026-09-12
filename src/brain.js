@@ -15,10 +15,11 @@ export class FlyBrain {
     };
     // Share graph arrays via structured clone (copy). For many flies, move to SharedArrayBuffer.
     Promise.all([fetch(`${BASE}data/neuron_size.bin`).then(r => r.arrayBuffer()), fetch(`${BASE}data/ntsign.bin`).then(r => r.arrayBuffer()),
-      fetch(`${BASE}data/brain_params.json`).then(r => r.json()), fetch(`${BASE}lif.wasm`).then(r => r.arrayBuffer()).then(b => WebAssembly.compile(b))]).then(([sz, sg, params, wasm]) => {
+      fetch(`${BASE}data/brain_params.json`).then(r => r.json()), fetch(`${BASE}lif.wasm`).then(r => r.arrayBuffer()).then(b => WebAssembly.compile(b)),
+      fetch(`${BASE}data/neuromod.json`).then(r => r.ok ? r.json() : null).catch(() => null)]).then(([sz, sg, params, wasm, neuromod]) => {
       this.params = params;
       this.worker.postMessage({ type: 'init', N: data.N, E: data.E, meta: data.meta, indptr: data.indptr, indices: data.indices, weights: data.weights, nt: data.nt,
-        superclass: data.superclass, cls: data.cls, side: data.side, size: new Float32Array(sz), sign: new Float32Array(sg), params, wasm });
+        superclass: data.superclass, cls: data.cls, side: data.side, size: new Float32Array(sz), sign: new Float32Array(sg), params: { ...params, neuromod: !!(params.neuromod && neuromod) }, neuromod, wasm });
     });
   }
   onFrame(fn) { this.listeners.add(fn); return () => this.listeners.delete(fn); }
