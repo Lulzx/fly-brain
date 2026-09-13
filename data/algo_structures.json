@@ -1,0 +1,4380 @@
+{
+ "flow": {
+  "iterations": 304,
+  "forward_weight_frac": 0.375,
+  "feedback_weight_frac": 0.124,
+  "lateral_frac": 0.501,
+  "median_depth_by_superclass": {
+   "ascending_neuron": [
+    0.425,
+    1846
+   ],
+   "cb_endocrine": [
+    1.0,
+    72
+   ],
+   "cb_intrinsic": [
+    0.333,
+    32160
+   ],
+   "cb_motor": [
+    1.0,
+    107
+   ],
+   "cb_sensory": [
+    0.0,
+    4868
+   ],
+   "descending_neuron": [
+    0.491,
+    1314
+   ],
+   "ol_intrinsic": [
+    0.32,
+    89390
+   ],
+   "ol_sensory": [
+    0.0,
+    4114
+   ],
+   "sensory_ascending": [
+    0.0,
+    537
+   ],
+   "unknown": [
+    0.5,
+    516
+   ],
+   "visual_centrifugal": [
+    0.359,
+    563
+   ],
+   "visual_projection": [
+    0.339,
+    9201
+   ],
+   "vnc_efferent": [
+    1.0,
+    94
+   ],
+   "vnc_intrinsic": [
+    0.524,
+    13151
+   ],
+   "vnc_motor": [
+    1.0,
+    708
+   ],
+   "vnc_sensory": [
+    0.0,
+    6365
+   ]
+  },
+  "median_depth_by_class": {
+   "ALIN": 0.163,
+   "ALLN": 0.094,
+   "ALON": 0.223,
+   "ALPN": 0.149,
+   "CX": 0.352,
+   "DAN": 0.238,
+   "Kenyon_Cell": 0.193,
+   "MBON": 0.263,
+   "SEZPN": 0.263,
+   "chemosensory": 0.0,
+   "gustatory": 0.0,
+   "hygrosensory": 0.0,
+   "mechanosensory": 0.0,
+   "mechanosensory_proprioceptive": 0.0,
+   "mechanosensory_tactile": 0.0,
+   "mechanosensory_tbc": 0.0,
+   "ol_bilateral": 0.332,
+   "olfactory": 0.0,
+   "thermosensory": 0.0,
+   "unknown_sensory": 0.0,
+   "visual": 0.0
+  },
+  "hops_from_sensory": {
+   "-1": 857,
+   "0": 15912,
+   "1": 27495,
+   "2": 84711,
+   "3": 35214,
+   "4": 902,
+   "5": 25,
+   "6": 6
+  },
+  "dn_hops_from_sensory": {
+   "1": 625,
+   "2": 684,
+   "3": 5
+  },
+  "motor_hops_from_sensory": {
+   "-1": 7,
+   "1": 465,
+   "2": 226,
+   "3": 10
+  }
+ },
+ "recurrence": {
+  "n_scc": 4599,
+  "giant_scc_size": 160514,
+  "giant_scc_frac": 0.972,
+  "giant_scc_frac_by_superclass": {
+   "ascending_neuron": 1.0,
+   "cb_endocrine": 0.431,
+   "cb_intrinsic": 1.0,
+   "cb_motor": 0.85,
+   "cb_sensory": 0.893,
+   "descending_neuron": 1.0,
+   "ol_intrinsic": 0.979,
+   "ol_sensory": 0.872,
+   "sensory_ascending": 0.993,
+   "unknown": 0.103,
+   "visual_centrifugal": 0.95,
+   "visual_projection": 1.0,
+   "vnc_efferent": 0.394,
+   "vnc_intrinsic": 0.996,
+   "vnc_motor": 0.353,
+   "vnc_sensory": 0.928
+  },
+  "reciprocal_edge_frac": 0.1915,
+  "reciprocal_weight_frac": 0.2657,
+  "two_cycles_by_sign": {
+   "E<->E": 263808,
+   "E<->I": 616156,
+   "I<->I": 126371
+  },
+  "scc_size_hist": {
+   "1": 4589,
+   "3": 1,
+   "2": 8,
+   "10": 1
+  }
+ },
+ "sign": {
+  "exc_weight_frac": 0.612,
+  "inh_weight_frac": 0.382,
+  "weight_by_nt": {
+   "unknown": 0.0147,
+   "acetylcholine": 0.5977,
+   "gaba": 0.2108,
+   "glutamate": 0.1646,
+   "dopamine": 0.0033,
+   "serotonin": 0.0009,
+   "octopamine": 0.0032,
+   "histamine": 0.0049
+  },
+  "inh_input_frac_by_superclass": {
+   "ascending_neuron": 0.389,
+   "cb_endocrine": 0.373,
+   "cb_intrinsic": 0.343,
+   "cb_motor": 0.417,
+   "cb_sensory": 0.445,
+   "descending_neuron": 0.391,
+   "ol_intrinsic": 0.4,
+   "ol_sensory": 0.958,
+   "sensory_ascending": 0.69,
+   "unknown": 0.369,
+   "visual_centrifugal": 0.321,
+   "visual_projection": 0.369,
+   "vnc_efferent": 0.389,
+   "vnc_intrinsic": 0.423,
+   "vnc_motor": 0.411,
+   "vnc_sensory": 0.576
+  },
+  "inh_input_frac_by_class": {
+   "ALIN": 0.336,
+   "ALLN": 0.097,
+   "ALON": 0.267,
+   "ALPN": 0.214,
+   "CX": 0.535,
+   "DAN": 0.192,
+   "Kenyon_Cell": 0.183,
+   "MBON": 0.144,
+   "SEZPN": 0.229,
+   "chemosensory": 0.659,
+   "gustatory": 0.409,
+   "hygrosensory": 0.276,
+   "mechanosensory": 0.745,
+   "mechanosensory_proprioceptive": 0.871,
+   "mechanosensory_tactile": 0.578,
+   "mechanosensory_tbc": 0.635,
+   "ol_bilateral": 0.339,
+   "olfactory": 0.339,
+   "thermosensory": 0.241,
+   "unknown_sensory": 0.564,
+   "visual": 0.958
+  },
+  "inh_input_frac_neuron_p10_50_90": [
+   0.237,
+   0.442,
+   0.685
+  ],
+  "modulatory": {
+   "dopamine": {
+    "n": 392,
+    "median_out_synapses": 263.5,
+    "median_target_types": 8.0,
+    "max_target_types": 700
+   },
+   "octopamine": {
+    "n": 101,
+    "median_out_synapses": 835.0,
+    "median_target_types": 27.0,
+    "max_target_types": 1462
+   },
+   "serotonin": {
+    "n": 48,
+    "median_out_synapses": 825.5,
+    "median_target_types": 50.0,
+    "max_target_types": 733
+   }
+  }
+ },
+ "bilateral": {
+  "crossing_weight_frac": 0.218,
+  "crossing_frac_by_superclass": {
+   "ascending_neuron": 0.623,
+   "cb_endocrine": 0.64,
+   "cb_intrinsic": 0.269,
+   "cb_motor": 0.461,
+   "cb_sensory": 0.0,
+   "descending_neuron": 0.473,
+   "ol_intrinsic": 0.033,
+   "ol_sensory": 0.001,
+   "sensory_ascending": 0.0,
+   "unknown": 0.027,
+   "visual_centrifugal": 0.406,
+   "visual_projection": 0.076,
+   "vnc_efferent": 0.665,
+   "vnc_intrinsic": 0.436,
+   "vnc_motor": 0.356,
+   "vnc_sensory": 0.124
+  },
+  "inh_frac_of_crossing": 0.442,
+  "inh_frac_of_ipsilateral": 0.379,
+  "mutual_inhibition_LR_homologues": [
+   {
+    "type": "ER4d",
+    "L_to_R": 10156,
+    "R_to_L": 10083,
+    "nL": 13,
+    "nR": 13
+   },
+   {
+    "type": "Delta7",
+    "L_to_R": 7157,
+    "R_to_L": 7325,
+    "nL": 21,
+    "nR": 21
+   },
+   {
+    "type": "ER2_c",
+    "L_to_R": 4251,
+    "R_to_L": 4094,
+    "nL": 10,
+    "nR": 10
+   },
+   {
+    "type": "ER5",
+    "L_to_R": 4070,
+    "R_to_L": 3885,
+    "nL": 11,
+    "nR": 10
+   },
+   {
+    "type": "ER4m",
+    "L_to_R": 3865,
+    "R_to_L": 3668,
+    "nL": 5,
+    "nR": 6
+   },
+   {
+    "type": "ER3d_b",
+    "L_to_R": 3592,
+    "R_to_L": 3571,
+    "nL": 10,
+    "nR": 10
+   },
+   {
+    "type": "ER3m",
+    "L_to_R": 2864,
+    "R_to_L": 2963,
+    "nL": 9,
+    "nR": 9
+   },
+   {
+    "type": "ER3w_b",
+    "L_to_R": 2709,
+    "R_to_L": 2692,
+    "nL": 10,
+    "nR": 8
+   },
+   {
+    "type": "ER3p_a",
+    "L_to_R": 2059,
+    "R_to_L": 1958,
+    "nL": 7,
+    "nR": 7
+   },
+   {
+    "type": "ER3d_d",
+    "L_to_R": 1390,
+    "R_to_L": 1346,
+    "nL": 5,
+    "nR": 6
+   },
+   {
+    "type": "ER3a_a",
+    "L_to_R": 1292,
+    "R_to_L": 1489,
+    "nL": 8,
+    "nR": 7
+   },
+   {
+    "type": "FB2I_a",
+    "L_to_R": 1269,
+    "R_to_L": 1248,
+    "nL": 5,
+    "nR": 5
+   },
+   {
+    "type": "ER2_a",
+    "L_to_R": 1059,
+    "R_to_L": 1106,
+    "nL": 7,
+    "nR": 5
+   },
+   {
+    "type": "ER3d_c",
+    "L_to_R": 785,
+    "R_to_L": 875,
+    "nL": 5,
+    "nR": 4
+   },
+   {
+    "type": "ER3d_e",
+    "L_to_R": 760,
+    "R_to_L": 734,
+    "nL": 3,
+    "nR": 4
+   },
+   {
+    "type": "ER3d_a",
+    "L_to_R": 556,
+    "R_to_L": 586,
+    "nL": 3,
+    "nR": 4
+   },
+   {
+    "type": "ExR4",
+    "L_to_R": 555,
+    "R_to_L": 600,
+    "nL": 1,
+    "nR": 1
+   },
+   {
+    "type": "PS353",
+    "L_to_R": 407,
+    "R_to_L": 466,
+    "nL": 5,
+    "nR": 5
+   },
+   {
+    "type": "ER3p_b",
+    "L_to_R": 420,
+    "R_to_L": 375,
+    "nL": 2,
+    "nR": 2
+   },
+   {
+    "type": "ER3w_a",
+    "L_to_R": 373,
+    "R_to_L": 428,
+    "nL": 2,
+    "nR": 5
+   },
+   {
+    "type": "ER3w_c",
+    "L_to_R": 363,
+    "R_to_L": 330,
+    "nL": 3,
+    "nR": 3
+   },
+   {
+    "type": "ER3a_b",
+    "L_to_R": 319,
+    "R_to_L": 330,
+    "nL": 3,
+    "nR": 3
+   },
+   {
+    "type": "ANXXX007",
+    "L_to_R": 328,
+    "R_to_L": 293,
+    "nL": 4,
+    "nR": 3
+   },
+   {
+    "type": "AN12B004",
+    "L_to_R": 277,
+    "R_to_L": 292,
+    "nL": 3,
+    "nR": 3
+   },
+   {
+    "type": "FB4O",
+    "L_to_R": 226,
+    "R_to_L": 236,
+    "nL": 2,
+    "nR": 4
+   }
+  ]
+ },
+ "motifs": {
+  "strong_type_edges": 473523,
+  "fan_by_superclass": {
+   "cb_motor": {
+    "types": 43,
+    "median_in_types": 54.0,
+    "median_out_types": 0.0
+   },
+   "ascending_neuron": {
+    "types": 545,
+    "median_in_types": 33.0,
+    "median_out_types": 55.0
+   },
+   "vnc_motor": {
+    "types": 139,
+    "median_in_types": 73.0,
+    "median_out_types": 0.0
+   },
+   "sensory_ascending": {
+    "types": 28,
+    "median_in_types": 5.0,
+    "median_out_types": 54.5
+   },
+   "ol_intrinsic": {
+    "types": 263,
+    "median_in_types": 19.0,
+    "median_out_types": 29.0
+   },
+   "visual_projection": {
+    "types": 338,
+    "median_in_types": 25.0,
+    "median_out_types": 41.0
+   },
+   "descending_neuron": {
+    "types": 473,
+    "median_in_types": 55.0,
+    "median_out_types": 60.0
+   },
+   "ol_sensory": {
+    "types": 11,
+    "median_in_types": 2.0,
+    "median_out_types": 11.0
+   },
+   "vnc_efferent": {
+    "types": 17,
+    "median_in_types": 31.0,
+    "median_out_types": 0.0
+   },
+   "cb_endocrine": {
+    "types": 10,
+    "median_in_types": 12.5,
+    "median_out_types": 0.0
+   },
+   "cb_sensory": {
+    "types": 155,
+    "median_in_types": 6.0,
+    "median_out_types": 30.0
+   },
+   "vnc_sensory": {
+    "types": 161,
+    "median_in_types": 5.0,
+    "median_out_types": 49.0
+   },
+   "cb_intrinsic": {
+    "types": 6456,
+    "median_in_types": 31.0,
+    "median_out_types": 31.0
+   },
+   "vnc_intrinsic": {
+    "types": 2676,
+    "median_in_types": 29.0,
+    "median_out_types": 27.0
+   },
+   "visual_centrifugal": {
+    "types": 105,
+    "median_in_types": 41.0,
+    "median_out_types": 23.0
+   }
+  },
+  "top_convergent_types": [
+   [
+    "AVLP001",
+    537,
+    "cb_intrinsic"
+   ],
+   [
+    "AVLP076",
+    497,
+    "cb_intrinsic"
+   ],
+   [
+    "AVLP016",
+    475,
+    "cb_intrinsic"
+   ],
+   [
+    "AVLP080",
+    419,
+    "cb_intrinsic"
+   ],
+   [
+    "AVLP079",
+    411,
+    "cb_intrinsic"
+   ],
+   [
+    "IN19A008",
+    393,
+    "vnc_intrinsic"
+   ],
+   [
+    "DNp103",
+    388,
+    "descending_neuron"
+   ],
+   [
+    "Sternotrochanter MN",
+    382,
+    "vnc_motor"
+   ],
+   [
+    "IN19A002",
+    366,
+    "vnc_intrinsic"
+   ],
+   [
+    "oviIN",
+    364,
+    "cb_intrinsic"
+   ],
+   [
+    "MBON35",
+    348,
+    "cb_intrinsic"
+   ],
+   [
+    "Sternal anterior rotator MN",
+    344,
+    "vnc_motor"
+   ],
+   [
+    "IN20A.22A001",
+    339,
+    "vnc_intrinsic"
+   ],
+   [
+    "AVLP532",
+    337,
+    "cb_intrinsic"
+   ],
+   [
+    "IN19A003",
+    332,
+    "vnc_intrinsic"
+   ]
+  ],
+  "top_divergent_types": [
+   [
+    "IN12B002",
+    558,
+    "vnc_intrinsic"
+   ],
+   [
+    "SNppxx",
+    518,
+    "vnc_sensory"
+   ],
+   [
+    "AN19B001",
+    498,
+    "ascending_neuron"
+   ],
+   [
+    "AN02A002",
+    462,
+    "ascending_neuron"
+   ],
+   [
+    "ANXXX027",
+    458,
+    "ascending_neuron"
+   ],
+   [
+    "oviIN",
+    450,
+    "cb_intrinsic"
+   ],
+   [
+    "AVLP001",
+    424,
+    "cb_intrinsic"
+   ],
+   [
+    "AVLP079",
+    406,
+    "cb_intrinsic"
+   ],
+   [
+    "IN09A001",
+    399,
+    "vnc_intrinsic"
+   ],
+   [
+    "OA-VUMa1",
+    389,
+    "cb_intrinsic"
+   ],
+   [
+    "AVLP076",
+    387,
+    "cb_intrinsic"
+   ],
+   [
+    "AN06B009",
+    384,
+    "ascending_neuron"
+   ],
+   [
+    "AstA1",
+    380,
+    "cb_intrinsic"
+   ],
+   [
+    "AN02A001",
+    364,
+    "ascending_neuron"
+   ],
+   [
+    "AVLP080",
+    356,
+    "cb_intrinsic"
+   ]
+  ],
+  "reciprocal_type_pairs_by_sign": {
+   "I<->I": 6375,
+   "E<->I": 20816,
+   "mixed": 786,
+   "E<->E": 8272
+  },
+  "recurrent_excitation_top": [
+   [
+    "L2",
+    "L4",
+    22107,
+    18929
+   ],
+   [
+    "T3",
+    "Tm3",
+    17135,
+    35306
+   ],
+   [
+    "DPM",
+    "KCg-m",
+    12727,
+    34993
+   ],
+   [
+    "Mi1",
+    "T2",
+    28953,
+    12350
+   ],
+   [
+    "L2",
+    "L5",
+    86280,
+    11678
+   ],
+   [
+    "KCg-m",
+    "PPL103",
+    9251,
+    10514
+   ],
+   [
+    "L5",
+    "Mi1",
+    71814,
+    8996
+   ],
+   [
+    "Mi1",
+    "T2a",
+    93168,
+    8978
+   ],
+   [
+    "MeLo2",
+    "Tm4",
+    6879,
+    9881
+   ],
+   [
+    "Mi1",
+    "Tm3",
+    122257,
+    6731
+   ],
+   [
+    "KCa'b'-ap2",
+    "KCa'b'-m",
+    6645,
+    6659
+   ],
+   [
+    "KCa'b'-ap1",
+    "PAM05",
+    7355,
+    6637
+   ]
+  ],
+  "mutual_inhibition_top": [
+   [
+    "C2",
+    "L1",
+    46184,
+    52440
+   ],
+   [
+    "Mi4",
+    "Mi9",
+    82136,
+    34156
+   ],
+   [
+    "Pm3",
+    "Pm4",
+    26011,
+    17359
+   ],
+   [
+    "Dm9",
+    "R8y",
+    24567,
+    16636
+   ],
+   [
+    "MeLo9",
+    "Mi2",
+    15031,
+    17300
+   ],
+   [
+    "MeLo9",
+    "Pm2a",
+    62310,
+    14515
+   ],
+   [
+    "Dm9",
+    "R8_unclear",
+    20324,
+    13415
+   ],
+   [
+    "Dm6",
+    "Mi4",
+    20151,
+    13287
+   ],
+   [
+    "Dm9",
+    "R8p",
+    18099,
+    12231
+   ],
+   [
+    "Cm5",
+    "Cm9",
+    10622,
+    7696
+   ],
+   [
+    "Pm3",
+    "Pm7",
+    7475,
+    7768
+   ],
+   [
+    "Li32",
+    "TmY5a",
+    6703,
+    9766
+   ]
+  ],
+  "feedback_inhibition_top": [
+   [
+    "APL",
+    "KCg-m",
+    79151,
+    79270
+   ],
+   [
+    "Dm12",
+    "L3",
+    106686,
+    73099
+   ],
+   [
+    "Pm2b",
+    "Tm1",
+    64592,
+    164914
+   ],
+   [
+    "Mi1",
+    "Pm2b",
+    229812,
+    63307
+   ],
+   [
+    "Pm2a",
+    "Tm1",
+    54577,
+    255210
+   ],
+   [
+    "L1",
+    "L5",
+    135598,
+    54570
+   ],
+   [
+    "Dm13",
+    "Tm2",
+    42972,
+    47011
+   ],
+   [
+    "Dm6",
+    "L2",
+    38097,
+    135821
+   ],
+   [
+    "Cm3",
+    "Dm2",
+    36394,
+    45125
+   ],
+   [
+    "C2",
+    "L5",
+    37183,
+    34741
+   ],
+   [
+    "Dm15",
+    "L2",
+    34323,
+    59021
+   ],
+   [
+    "L1",
+    "Mi1",
+    141963,
+    32982
+   ]
+  ],
+  "recurrent_excitation_central": [
+   [
+    "DPM",
+    "KCg-m",
+    12727,
+    34993
+   ],
+   [
+    "KCg-m",
+    "PPL103",
+    9251,
+    10514
+   ],
+   [
+    "KCa'b'-ap2",
+    "KCa'b'-m",
+    6645,
+    6659
+   ],
+   [
+    "KCa'b'-ap1",
+    "PAM05",
+    7355,
+    6637
+   ],
+   [
+    "lLN1_bc",
+    "lLN2X12",
+    6450,
+    9200
+   ],
+   [
+    "EPG",
+    "PEN_b(PEN2)",
+    6187,
+    9628
+   ],
+   [
+    "EPG",
+    "PEN_a(PEN1)",
+    6028,
+    14332
+   ],
+   [
+    "KCg-m",
+    "PAM08",
+    8073,
+    5838
+   ],
+   [
+    "KCab-c",
+    "KCab-m",
+    5842,
+    5559
+   ],
+   [
+    "KCg-m",
+    "PPL101",
+    13099,
+    5507
+   ],
+   [
+    "DPM",
+    "KCab-s",
+    4703,
+    14111
+   ],
+   [
+    "KCg-d",
+    "KCg-m",
+    4789,
+    4614
+   ]
+  ],
+  "mutual_inhibition_central": [
+   [
+    "ER2_a",
+    "ER2_c",
+    5845,
+    6099
+   ],
+   [
+    "lLN2F_b",
+    "lLN2P_c",
+    5006,
+    5621
+   ],
+   [
+    "ER3a_a",
+    "ER3m",
+    5183,
+    3088
+   ],
+   [
+    "ER3d_b",
+    "ER3d_d",
+    2975,
+    2241
+   ],
+   [
+    "ER3w_b",
+    "ER3w_c",
+    2186,
+    3156
+   ],
+   [
+    "ER3d_a",
+    "ER3d_c",
+    2012,
+    2360
+   ],
+   [
+    "ER3d_a",
+    "ER3d_e",
+    1947,
+    1997
+   ],
+   [
+    "ER3d_c",
+    "ER3d_d",
+    1731,
+    2421
+   ],
+   [
+    "LNO1",
+    "LNO2",
+    1750,
+    1564
+   ],
+   [
+    "ER3a_a",
+    "ER3a_d",
+    1520,
+    1944
+   ],
+   [
+    "ER2_c",
+    "ER4d",
+    2389,
+    1347
+   ],
+   [
+    "ER2_a",
+    "ER2_d",
+    1534,
+    1328
+   ]
+  ],
+  "feedback_inhibition_central": [
+   [
+    "APL",
+    "KCg-m",
+    79151,
+    79270
+   ],
+   [
+    "APL",
+    "KCab-s",
+    24854,
+    25082
+   ],
+   [
+    "APL",
+    "KCab-m",
+    17038,
+    23418
+   ],
+   [
+    "APL",
+    "KCa'b'-ap2",
+    19298,
+    16014
+   ],
+   [
+    "APL",
+    "KCab-c",
+    12814,
+    22579
+   ],
+   [
+    "APL",
+    "KCa'b'-ap1",
+    12040,
+    13312
+   ],
+   [
+    "APL",
+    "KCa'b'-m",
+    13143,
+    11754
+   ],
+   [
+    "APL",
+    "KCg-d",
+    10652,
+    10108
+   ],
+   [
+    "IN05B002",
+    "LgLG1a",
+    6922,
+    9385
+   ],
+   [
+    "IN05B002",
+    "WG4",
+    6535,
+    7164
+   ],
+   [
+    "EPG",
+    "ExR6",
+    10169,
+    6236
+   ],
+   [
+    "AN05B004",
+    "SNch01",
+    6421,
+    6053
+   ]
+  ],
+  "feedforward_inhibition": {
+   "E_type_edges": 277512,
+   "with_parallel_inhibitory_path": 221798,
+   "frac": 0.799,
+   "top": [
+    {
+     "A": "Mi1",
+     "I": "MeLo9",
+     "B": "Pm2a",
+     "A_B": 260372,
+     "A_I": 55674,
+     "I_B": 62310
+    },
+    {
+     "A": "L5",
+     "I": "L1",
+     "B": "Tm3",
+     "A_B": 97520,
+     "A_I": 54570,
+     "I_B": 147429
+    },
+    {
+     "A": "L5",
+     "I": "L1",
+     "B": "Mi1",
+     "A_B": 71814,
+     "A_I": 54570,
+     "I_B": 141963
+    },
+    {
+     "A": "L5",
+     "I": "Mi4",
+     "B": "TmY3",
+     "A_B": 45574,
+     "A_I": 68120,
+     "I_B": 59558
+    },
+    {
+     "A": "Tm1",
+     "I": "Pm4",
+     "B": "Y3",
+     "A_B": 98129,
+     "A_I": 98593,
+     "I_B": 43192
+    },
+    {
+     "A": "Mi1",
+     "I": "Pm4",
+     "B": "Y3",
+     "A_B": 113405,
+     "A_I": 134872,
+     "I_B": 43192
+    },
+    {
+     "A": "Tm9",
+     "I": "CT1",
+     "B": "T5b",
+     "A_B": 57372,
+     "A_I": 52113,
+     "I_B": 40664
+    },
+    {
+     "A": "Tm9",
+     "I": "CT1",
+     "B": "T5a",
+     "A_B": 48489,
+     "A_I": 52113,
+     "I_B": 39413
+    },
+    {
+     "A": "Mi1",
+     "I": "MeLo9",
+     "B": "Pm2b",
+     "A_B": 229812,
+     "A_I": 55674,
+     "I_B": 39181
+    },
+    {
+     "A": "Tm1",
+     "I": "Pm4",
+     "B": "Tm6",
+     "A_B": 90539,
+     "A_I": 98593,
+     "I_B": 36852
+    },
+    {
+     "A": "Tm1",
+     "I": "MeLo9",
+     "B": "Pm2b",
+     "A_B": 164914,
+     "A_I": 35813,
+     "I_B": 39181
+    },
+    {
+     "A": "Tm1",
+     "I": "MeLo9",
+     "B": "Pm2a",
+     "A_B": 255210,
+     "A_I": 35813,
+     "I_B": 62310
+    },
+    {
+     "A": "Tm4",
+     "I": "Pm4",
+     "B": "TmY14",
+     "A_B": 81475,
+     "A_I": 56268,
+     "I_B": 35015
+    },
+    {
+     "A": "Tm3",
+     "I": "Pm4",
+     "B": "TmY14",
+     "A_B": 66585,
+     "A_I": 54985,
+     "I_B": 35015
+    },
+    {
+     "A": "L5",
+     "I": "L1",
+     "B": "C2",
+     "A_B": 34741,
+     "A_I": 54570,
+     "I_B": 52440
+    }
+   ],
+   "top_central": [
+    {
+     "A": "EPG",
+     "I": "Delta7",
+     "B": "Delta7",
+     "A_B": 19446,
+     "A_I": 19446,
+     "I_B": 26515
+    },
+    {
+     "A": "KCa'b'-m",
+     "I": "APL",
+     "B": "KCa'b'-ap2",
+     "A_B": 6659,
+     "A_I": 11754,
+     "I_B": 19298
+    },
+    {
+     "A": "KCa'b'-ap2",
+     "I": "APL",
+     "B": "KCa'b'-m",
+     "A_B": 6645,
+     "A_I": 16014,
+     "I_B": 13143
+    },
+    {
+     "A": "EPG",
+     "I": "Delta7",
+     "B": "PEN_b(PEN2)",
+     "A_B": 6187,
+     "A_I": 19446,
+     "I_B": 6003
+    },
+    {
+     "A": "KCab-c",
+     "I": "APL",
+     "B": "KCab-m",
+     "A_B": 5842,
+     "A_I": 22579,
+     "I_B": 17038
+    },
+    {
+     "A": "ExR1",
+     "I": "ER5",
+     "B": "ER5",
+     "A_B": 5624,
+     "A_I": 5624,
+     "I_B": 15478
+    },
+    {
+     "A": "KCab-m",
+     "I": "APL",
+     "B": "KCab-c",
+     "A_B": 5559,
+     "A_I": 23418,
+     "I_B": 12814
+    },
+    {
+     "A": "EPG",
+     "I": "ExR6",
+     "B": "PEN_a(PEN1)",
+     "A_B": 6028,
+     "A_I": 10169,
+     "I_B": 5089
+    },
+    {
+     "A": "KCg-d",
+     "I": "APL",
+     "B": "KCg-m",
+     "A_B": 4789,
+     "A_I": 10108,
+     "I_B": 79151
+    },
+    {
+     "A": "ExR1",
+     "I": "ER5",
+     "B": "EL",
+     "A_B": 4754,
+     "A_I": 5624,
+     "I_B": 10073
+    },
+    {
+     "A": "KCg-m",
+     "I": "APL",
+     "B": "KCg-d",
+     "A_B": 4614,
+     "A_I": 79270,
+     "I_B": 10652
+    },
+    {
+     "A": "EPG",
+     "I": "ER4m",
+     "B": "ER4m",
+     "A_B": 4457,
+     "A_I": 4457,
+     "I_B": 14580
+    },
+    {
+     "A": "KCab-m",
+     "I": "APL",
+     "B": "KCab-s",
+     "A_B": 4237,
+     "A_I": 23418,
+     "I_B": 24854
+    },
+    {
+     "A": "ORN_DA1",
+     "I": "lLN2F_b",
+     "B": "lLN2T_b",
+     "A_B": 6109,
+     "A_I": 6879,
+     "I_B": 4164
+    },
+    {
+     "A": "EL",
+     "I": "ER4d",
+     "B": "ER4d",
+     "A_B": 4120,
+     "A_I": 4120,
+     "I_B": 39443
+    }
+   ]
+  },
+  "disinhibition": {
+   "I_to_I_type_edges": 78796,
+   "top": [
+    {
+     "I1": "L1",
+     "I2": "C3",
+     "target": "L2",
+     "I1_I2": 94233,
+     "I2_target": 122099
+    },
+    {
+     "I1": "Mi4",
+     "I2": "Mi9",
+     "target": "TmY13",
+     "I1_I2": 82136,
+     "I2_target": 58655
+    },
+    {
+     "I1": "MeLo9",
+     "I2": "Pm2a",
+     "target": "Tm1",
+     "I1_I2": 62310,
+     "I2_target": 54577
+    },
+    {
+     "I1": "R1-R6",
+     "I2": "L1",
+     "target": "Tm3",
+     "I1_I2": 51795,
+     "I2_target": 147429
+    },
+    {
+     "I1": "C2",
+     "I2": "L1",
+     "target": "Tm3",
+     "I1_I2": 46184,
+     "I2_target": 147429
+    },
+    {
+     "I1": "Dm4",
+     "I2": "Mi4",
+     "target": "TmY3",
+     "I1_I2": 39491,
+     "I2_target": 59558
+    },
+    {
+     "I1": "MeLo9",
+     "I2": "Pm2b",
+     "target": "Tm1",
+     "I1_I2": 39181,
+     "I2_target": 64592
+    },
+    {
+     "I1": "TmY16",
+     "I2": "Mi4",
+     "target": "TmY3",
+     "I1_I2": 38193,
+     "I2_target": 59558
+    },
+    {
+     "I1": "L1",
+     "I2": "C2",
+     "target": "L5",
+     "I1_I2": 52440,
+     "I2_target": 37183
+    },
+    {
+     "I1": "Mi9",
+     "I2": "Mi4",
+     "target": "TmY3",
+     "I1_I2": 34156,
+     "I2_target": 59558
+    },
+    {
+     "I1": "Mi18",
+     "I2": "Dm12",
+     "target": "L3",
+     "I1_I2": 29551,
+     "I2_target": 106686
+    },
+    {
+     "I1": "Pm3",
+     "I2": "Pm4",
+     "target": "Y3",
+     "I1_I2": 26011,
+     "I2_target": 43192
+    },
+    {
+     "I1": "Dm12",
+     "I2": "Mi9",
+     "target": "TmY13",
+     "I1_I2": 24623,
+     "I2_target": 58655
+    },
+    {
+     "I1": "TmY5a",
+     "I2": "MeLo10",
+     "target": "T2a",
+     "I1_I2": 24373,
+     "I2_target": 24854
+    },
+    {
+     "I1": "C3",
+     "I2": "Dm1",
+     "target": "L2",
+     "I1_I2": 24198,
+     "I2_target": 33647
+    }
+   ],
+   "top_central": [
+    {
+     "I1": "ER2_c",
+     "I2": "ER2_a",
+     "target": "EPG",
+     "I1_I2": 6099,
+     "I2_target": 8225
+    },
+    {
+     "I1": "ER2_a",
+     "I2": "ER2_c",
+     "target": "EPG",
+     "I1_I2": 5845,
+     "I2_target": 14590
+    },
+    {
+     "I1": "lLN2P_c",
+     "I2": "lLN2F_b",
+     "target": "lLN2T_c",
+     "I1_I2": 5621,
+     "I2_target": 6862
+    },
+    {
+     "I1": "ER3a_a",
+     "I2": "ER3m",
+     "target": "EPG",
+     "I1_I2": 5183,
+     "I2_target": 3821
+    },
+    {
+     "I1": "IN08A002",
+     "I2": "IN19A002",
+     "target": "IN19B003",
+     "I1_I2": 3645,
+     "I2_target": 4682
+    },
+    {
+     "I1": "lLN2P_c",
+     "I2": "lLN2P_a",
+     "target": "lLN1_bc",
+     "I1_I2": 5563,
+     "I2_target": 2296
+    },
+    {
+     "I1": "lLN2P_a",
+     "I2": "M_vPNml50",
+     "target": "LHPV10d1",
+     "I1_I2": 6640,
+     "I2_target": 1114
+    },
+    {
+     "I1": "lLN2P_b",
+     "I2": "M_vPNml50",
+     "target": "LHPV10d1",
+     "I1_I2": 3700,
+     "I2_target": 1114
+    },
+    {
+     "I1": "lLN2F_b",
+     "I2": "lLN2P_c",
+     "target": "DA1_lPN",
+     "I1_I2": 5006,
+     "I2_target": 876
+    },
+    {
+     "I1": "IN19A002",
+     "I2": "IN19A016",
+     "target": "IN21A012",
+     "I1_I2": 3690,
+     "I2_target": 369
+    },
+    {
+     "I1": "IN19A016",
+     "I2": "Sternal posterior rotator MN",
+     "target": "IN21A010",
+     "I1_I2": 5649,
+     "I2_target": 69
+    },
+    {
+     "I1": "IN19A003",
+     "I2": "Sternal posterior rotator MN",
+     "target": "IN21A010",
+     "I1_I2": 5305,
+     "I2_target": 69
+    },
+    {
+     "I1": "IN08A026",
+     "I2": "Sternal posterior rotator MN",
+     "target": "IN21A010",
+     "I1_I2": 4562,
+     "I2_target": 69
+    },
+    {
+     "I1": "IN19A022",
+     "I2": "Sternal posterior rotator MN",
+     "target": "IN21A010",
+     "I1_I2": 3857,
+     "I2_target": 69
+    }
+   ]
+  },
+  "normalisation_candidates": [
+   {
+    "type": "APL",
+    "population": "Kenyon_Cell",
+    "in_frac": 0.9,
+    "out_frac": 0.94,
+    "in_syn": 232712,
+    "n": 2
+   },
+   {
+    "type": "lLN2F_b",
+    "population": "olfactory",
+    "in_frac": 0.56,
+    "out_frac": 0.49,
+    "in_syn": 145668,
+    "n": 4
+   },
+   {
+    "type": "lLN2P_a",
+    "population": "ALLN",
+    "in_frac": 0.32,
+    "out_frac": 0.33,
+    "in_syn": 80195,
+    "n": 7
+   },
+   {
+    "type": "lLN2P_a",
+    "population": "ALPN",
+    "in_frac": 0.33,
+    "out_frac": 0.58,
+    "in_syn": 80195,
+    "n": 7
+   },
+   {
+    "type": "lLN2P_b",
+    "population": "ALPN",
+    "in_frac": 0.36,
+    "out_frac": 0.41,
+    "in_syn": 79420,
+    "n": 12
+   },
+   {
+    "type": "lLN2P_b",
+    "population": "olfactory",
+    "in_frac": 0.33,
+    "out_frac": 0.33,
+    "in_syn": 79420,
+    "n": 12
+   },
+   {
+    "type": "lLN2P_c",
+    "population": "ALPN",
+    "in_frac": 0.4,
+    "out_frac": 0.55,
+    "in_syn": 69806,
+    "n": 9
+   },
+   {
+    "type": "lLN2P_c",
+    "population": "ALLN",
+    "in_frac": 0.41,
+    "out_frac": 0.4,
+    "in_syn": 69806,
+    "n": 9
+   },
+   {
+    "type": "ER4d",
+    "population": "CX",
+    "in_frac": 0.97,
+    "out_frac": 1.0,
+    "in_syn": 52250,
+    "n": 26
+   },
+   {
+    "type": "Delta7",
+    "population": "CX",
+    "in_frac": 0.99,
+    "out_frac": 1.0,
+    "in_syn": 48190,
+    "n": 42
+   },
+   {
+    "type": "IN01B001",
+    "population": "mechanosensory_tactile",
+    "in_frac": 0.68,
+    "out_frac": 0.82,
+    "in_syn": 33827,
+    "n": 2
+   },
+   {
+    "type": "ER2_c",
+    "population": "CX",
+    "in_frac": 0.95,
+    "out_frac": 1.0,
+    "in_syn": 33813,
+    "n": 20
+   },
+   {
+    "type": "IN05B011a",
+    "population": "gustatory",
+    "in_frac": 0.9,
+    "out_frac": 0.39,
+    "in_syn": 31331,
+    "n": 2
+   },
+   {
+    "type": "IN05B002",
+    "population": "gustatory",
+    "in_frac": 0.71,
+    "out_frac": 0.72,
+    "in_syn": 27549,
+    "n": 2
+   },
+   {
+    "type": "AN05B004",
+    "population": "unknown_sensory",
+    "in_frac": 0.5,
+    "out_frac": 0.47,
+    "in_syn": 26980,
+    "n": 2
+   },
+   {
+    "type": "ER4m",
+    "population": "CX",
+    "in_frac": 0.94,
+    "out_frac": 1.0,
+    "in_syn": 26565,
+    "n": 11
+   },
+   {
+    "type": "IN01B002",
+    "population": "mechanosensory_tactile",
+    "in_frac": 0.48,
+    "out_frac": 0.75,
+    "in_syn": 25095,
+    "n": 6
+   },
+   {
+    "type": "ER5",
+    "population": "CX",
+    "in_frac": 0.93,
+    "out_frac": 1.0,
+    "in_syn": 23662,
+    "n": 21
+   },
+   {
+    "type": "DNge122",
+    "population": "mechanosensory_tactile",
+    "in_frac": 0.38,
+    "out_frac": 0.59,
+    "in_syn": 23624,
+    "n": 2
+   },
+   {
+    "type": "ER3d_b",
+    "population": "CX",
+    "in_frac": 0.96,
+    "out_frac": 1.0,
+    "in_syn": 23306,
+    "n": 20
+   },
+   {
+    "type": "FB5A",
+    "population": "CX",
+    "in_frac": 0.69,
+    "out_frac": 0.99,
+    "in_syn": 21584,
+    "n": 4
+   },
+   {
+    "type": "ER3m",
+    "population": "CX",
+    "in_frac": 0.95,
+    "out_frac": 1.0,
+    "in_syn": 21027,
+    "n": 18
+   },
+   {
+    "type": "ExR4",
+    "population": "CX",
+    "in_frac": 0.82,
+    "out_frac": 0.99,
+    "in_syn": 19631,
+    "n": 2
+   },
+   {
+    "type": "ExR6",
+    "population": "CX",
+    "in_frac": 0.72,
+    "out_frac": 0.97,
+    "in_syn": 19470,
+    "n": 2
+   },
+   {
+    "type": "DNge104",
+    "population": "mechanosensory_tactile",
+    "in_frac": 0.39,
+    "out_frac": 0.54,
+    "in_syn": 19018,
+    "n": 2
+   },
+   {
+    "type": "LNO2",
+    "population": "CX",
+    "in_frac": 0.33,
+    "out_frac": 1.0,
+    "in_syn": 18365,
+    "n": 2
+   },
+   {
+    "type": "ER3w_b",
+    "population": "CX",
+    "in_frac": 0.94,
+    "out_frac": 1.0,
+    "in_syn": 18362,
+    "n": 18
+   },
+   {
+    "type": "ER2_a",
+    "population": "CX",
+    "in_frac": 0.95,
+    "out_frac": 1.0,
+    "in_syn": 18342,
+    "n": 12
+   },
+   {
+    "type": "lLN2R_a",
+    "population": "ALLN",
+    "in_frac": 0.41,
+    "out_frac": 0.53,
+    "in_syn": 18028,
+    "n": 6
+   },
+   {
+    "type": "LCNOpm",
+    "population": "CX",
+    "in_frac": 0.33,
+    "out_frac": 1.0,
+    "in_syn": 16800,
+    "n": 2
+   }
+  ]
+ },
+ "antennal_lobe": {
+  "glomeruli": 50,
+  "n_orn": 2562,
+  "n_pn": 267,
+  "n_ln": 420,
+  "orn_to_pn_same_glomerulus_frac": 0.966,
+  "orn_per_glomerulus_median": 35.0,
+  "pn_per_glomerulus_median": 4.0,
+  "convergence_ratio_median": 9.6,
+  "orn_per_pn_median": 38.0,
+  "pn_per_orn_median": 4.0,
+  "ln_transmitters": {
+   "unknown": 67,
+   "gaba": 115,
+   "acetylcholine": 137,
+   "glutamate": 99,
+   "octopamine": 2
+  },
+  "ln_input_glomeruli_p10_50_90": [
+   2,
+   8,
+   42
+  ],
+  "ln_output_glomeruli_p10_50_90": [
+   1,
+   15,
+   48
+  ],
+  "synapse_flows": {
+   "ORN->PN": 413839,
+   "ORN->LN": 537431,
+   "LN->PN": 282995,
+   "LN->ORN (presynaptic)": 168731,
+   "LN->LN": 625544,
+   "PN->LN": 303632,
+   "PN->PN": 16305,
+   "ORN->ORN": 117399,
+   "LN(inh)->PN": 90652,
+   "LN(exc)->PN": 148633
+  },
+  "ln_to_orn_over_orn_to_pn": 0.408
+ },
+ "mushroom_body": {
+  "n_kc": 4064,
+  "kc_subtypes": {
+   "KCab-s": 657,
+   "KCab-c": 488,
+   "KCg-m": 1342,
+   "KCa'b'-ap2": 291,
+   "KCg-s1": 2,
+   "KCg-d": 206,
+   "KCg-s2": 2,
+   "KCab-m": 536,
+   "KCa'b'-ap1": 199,
+   "KCab-p": 129,
+   "KCa'b'-m": 205,
+   "KCg": 1,
+   "KCg-s3": 2,
+   "KCg-s4": 2,
+   "KC": 2
+  },
+  "n_pn": 686,
+  "expansion_ratio": 5.9,
+  "claws_per_kc_p10_50_90": [
+   3,
+   5,
+   8
+  ],
+  "kc_without_pn_input": 283,
+  "kc_per_pn_median": 56.0,
+  "pn_reaching_kc": 282,
+  "pn_type_pair_corr_observed": 0.0234,
+  "pn_type_pair_corr_shuffled": 0.0125,
+  "apl_covers_kc_frac": 1.0,
+  "kc_drive_apl_frac": 1.0,
+  "n_mbon": 97,
+  "kc_per_mbon_median": 313.0,
+  "kc_per_mbon_max": 1680,
+  "mbon_per_kc_median": 11.0,
+  "n_dan": 340,
+  "dan_mbon_same_compartment_frac": 0.699,
+  "synapse_flows": {
+   "PN->KC": 388674,
+   "KC->KC": 491490,
+   "KC->APL": 209730,
+   "APL->KC": 195629,
+   "KC->MBON": 439429,
+   "KC->DAN": 133612,
+   "DAN->KC": 89036,
+   "DAN->MBON": 37972,
+   "MBON->DAN": 9340,
+   "MBON->MBON": 25379,
+   "MBON->KC": 4139,
+   "PN->APL": 5344,
+   "APL->PN": 4535
+  }
+ },
+ "central_complex": {
+  "n": {
+   "EPG": 46,
+   "PEN1": 20,
+   "PEN2": 22,
+   "Delta7": 42,
+   "PEG": 18
+  },
+  "side_resolved_profiles": {
+   "PEN1_to_EPG": {
+    "L->L +0": 13.5,
+    "L->L +5": 2.1,
+    "L->L +6": 42.5,
+    "L->L -1": 68.6,
+    "L->L -2": 42.3,
+    "L->L -3": 2.4,
+    "L->L -7": 1.0,
+    "L->L -8": 23.5,
+    "L->R sum10": 41.0,
+    "L->R sum11": 68.6,
+    "L->R sum12": 12.3,
+    "L->R sum17": 3.2,
+    "L->R sum3": 83.0,
+    "L->R sum4": 13.5,
+    "L->R sum9": 2.6,
+    "R->L sum10": 39.0,
+    "R->L sum11": 67.4,
+    "R->L sum12": 10.6,
+    "R->L sum17": 2.0,
+    "R->L sum3": 75.5,
+    "R->L sum4": 11.0,
+    "R->R +0": 11.7,
+    "R->R +5": 2.6,
+    "R->R +6": 28.8,
+    "R->R -1": 70.6,
+    "R->R -2": 41.1,
+    "R->R -3": 1.6,
+    "R->R -8": 16.0
+   },
+   "PEN2_to_EPG": {
+    "L->L +0": 2.0,
+    "L->L +6": 18.2,
+    "L->L -1": 55.2,
+    "L->L -2": 19.9,
+    "L->R sum10": 20.2,
+    "L->R sum11": 51.9,
+    "L->R sum3": 75.0,
+    "L->R sum4": 1.5,
+    "R->L sum10": 20.4,
+    "R->L sum11": 52.0,
+    "R->L sum3": 64.0,
+    "R->L sum4": 1.5,
+    "R->R +0": 1.7,
+    "R->R +6": 13.8,
+    "R->R -1": 60.2,
+    "R->R -2": 15.8,
+    "R->R -8": 1.5
+   },
+   "EPG_to_PEN1": {
+    "L->L +0": 15.8,
+    "L->L +1": 29.7,
+    "L->L +2": 14.9,
+    "L->L +8": 11.0,
+    "L->L -6": 13.8,
+    "L->R sum10": 12.7,
+    "L->R sum11": 27.4,
+    "L->R sum12": 1.4,
+    "L->R sum3": 33.0,
+    "L->R sum4": 3.0,
+    "R->L sum10": 13.9,
+    "R->L sum11": 28.3,
+    "R->L sum12": 2.7,
+    "R->L sum17": 1.0,
+    "R->L sum3": 38.5,
+    "R->L sum4": 5.0,
+    "R->R +0": 15.3,
+    "R->R +1": 30.6,
+    "R->R +2": 15.3,
+    "R->R +8": 4.0,
+    "R->R -6": 13.0
+   },
+   "EPG_to_D7_to_EPG": {
+    "L->L +0": 92.2,
+    "L->L +1": 146.0,
+    "L->L +2": 903.3,
+    "L->L +3": 1833.4,
+    "L->L +4": 1931.2,
+    "L->L +5": 1375.7,
+    "L->L +6": 411.5,
+    "L->L +7": 4.5,
+    "L->L -1": 128.3,
+    "L->L -2": 656.5,
+    "L->L -3": 1531.3,
+    "L->L -4": 1773.7,
+    "L->L -5": 1514.1,
+    "L->L -6": 1052.8,
+    "L->L -7": 241.9,
+    "L->R sum10": 101.0,
+    "L->R sum11": 425.5,
+    "L->R sum12": 1220.7,
+    "L->R sum13": 1526.7,
+    "L->R sum14": 1462.8,
+    "L->R sum15": 951.8,
+    "L->R sum16": 221.4,
+    "L->R sum2": 23.2,
+    "L->R sum3": 345.5,
+    "L->R sum4": 1645.6,
+    "L->R sum5": 2461.0,
+    "L->R sum6": 2331.6,
+    "L->R sum7": 1471.0,
+    "L->R sum8": 393.2,
+    "L->R sum9": 114.9,
+    "R->L sum10": 66.1,
+    "R->L sum11": 399.5,
+    "R->L sum12": 1181.1,
+    "R->L sum13": 1457.7,
+    "R->L sum14": 1314.1,
+    "R->L sum15": 869.2,
+    "R->L sum16": 151.7,
+    "R->L sum2": 50.0,
+    "R->L sum3": 350.8,
+    "R->L sum4": 1668.1,
+    "R->L sum5": 2549.2,
+    "R->L sum6": 2310.0,
+    "R->L sum7": 1553.9,
+    "R->L sum8": 401.4,
+    "R->L sum9": 111.8,
+    "R->R +0": 147.2,
+    "R->R +1": 178.8,
+    "R->R +2": 1015.1,
+    "R->R +3": 1882.9,
+    "R->R +4": 2077.9,
+    "R->R +5": 1594.9,
+    "R->R +6": 438.0,
+    "R->R +7": 51.9,
+    "R->R -1": 132.9,
+    "R->R -2": 726.0,
+    "R->R -3": 1591.0,
+    "R->R -4": 1755.4,
+    "R->R -5": 1553.7,
+    "R->R -6": 1049.6,
+    "R->R -7": 242.5
+   },
+   "EPG_to_PEN1L_to_EPG": {
+    "L->L +0": 3752.8,
+    "L->L +1": 1943.9,
+    "L->L +2": 349.6,
+    "L->L +3": 17.2,
+    "L->L +5": 34.1,
+    "L->L +6": 858.8,
+    "L->L +7": 2806.8,
+    "L->L -1": 3129.8,
+    "L->L -2": 1006.7,
+    "L->L -3": 58.5,
+    "L->L -5": 7.7,
+    "L->L -6": 325.6,
+    "L->L -7": 1621.6,
+    "L->R sum10": 3812.6,
+    "L->R sum11": 2100.2,
+    "L->R sum12": 306.6,
+    "L->R sum13": 3.8,
+    "L->R sum15": 52.4,
+    "L->R sum16": 696.4,
+    "L->R sum2": 4838.5,
+    "L->R sum3": 1876.0,
+    "L->R sum4": 246.1,
+    "L->R sum5": 4.6,
+    "L->R sum6": 1.1,
+    "L->R sum7": 67.3,
+    "L->R sum8": 962.7,
+    "L->R sum9": 3170.9,
+    "R->L sum10": 3093.8,
+    "R->L sum11": 847.2,
+    "R->L sum12": 83.3,
+    "R->L sum13": 1.1,
+    "R->L sum15": 59.7,
+    "R->L sum16": 876.0,
+    "R->L sum2": 3585.0,
+    "R->L sum3": 1085.5,
+    "R->L sum4": 111.7,
+    "R->L sum5": 2.3,
+    "R->L sum7": 63.8,
+    "R->L sum8": 866.6,
+    "R->L sum9": 2936.9,
+    "R->R +0": 3603.7,
+    "R->R +1": 1722.7,
+    "R->R +2": 282.6,
+    "R->R +3": 11.7,
+    "R->R +5": 13.2,
+    "R->R +6": 327.7,
+    "R->R +7": 2186.1,
+    "R->R -1": 1898.8,
+    "R->R -2": 271.2,
+    "R->R -3": 6.4,
+    "R->R -5": 6.3,
+    "R->R -6": 248.7,
+    "R->R -7": 1992.8
+   },
+   "EPG_to_PEN1R_to_EPG": {
+    "L->L +0": 3221.2,
+    "L->L +1": 1662.8,
+    "L->L +2": 189.1,
+    "L->L +5": 3.3,
+    "L->L +6": 181.4,
+    "L->L +7": 1654.1,
+    "L->L -1": 1584.1,
+    "L->L -2": 108.4,
+    "L->L -3": 1.9,
+    "L->L -6": 161.9,
+    "L->L -7": 1260.0,
+    "L->R sum10": 2806.2,
+    "L->R sum11": 578.5,
+    "L->R sum12": 21.7,
+    "L->R sum15": 38.5,
+    "L->R sum16": 416.9,
+    "L->R sum2": 3606.8,
+    "L->R sum3": 742.0,
+    "L->R sum4": 48.7,
+    "L->R sum7": 28.6,
+    "L->R sum8": 820.0,
+    "L->R sum9": 2669.9,
+    "R->L sum10": 3599.6,
+    "R->L sum11": 1755.2,
+    "R->L sum12": 217.7,
+    "R->L sum15": 36.0,
+    "R->L sum16": 571.5,
+    "R->L sum2": 3892.0,
+    "R->L sum3": 1526.0,
+    "R->L sum4": 140.1,
+    "R->L sum7": 15.8,
+    "R->L sum8": 862.4,
+    "R->L sum9": 2921.8,
+    "R->R +0": 3677.4,
+    "R->R +1": 1810.3,
+    "R->R +2": 227.7,
+    "R->R +5": 36.5,
+    "R->R +6": 594.1,
+    "R->R +7": 1639.5,
+    "R->R -1": 3009.5,
+    "R->R -2": 875.8,
+    "R->R -3": 30.8,
+    "R->R -6": 224.6,
+    "R->R -7": 1777.0
+   },
+   "EPG_to_PEN2L_to_EPG": {
+    "L->L +0": 3312.4,
+    "L->L +1": 546.3,
+    "L->L +2": 14.5,
+    "L->L +5": 12.2,
+    "L->L +6": 239.9,
+    "L->L +7": 1177.1,
+    "L->L -1": 2263.2,
+    "L->L -2": 383.9,
+    "L->L -6": 7.1,
+    "L->L -7": 242.0,
+    "L->R sum10": 3221.6,
+    "L->R sum11": 1150.0,
+    "L->R sum12": 27.8,
+    "L->R sum15": 1.4,
+    "L->R sum16": 54.3,
+    "L->R sum2": 4837.5,
+    "L->R sum3": 959.2,
+    "L->R sum4": 54.8,
+    "L->R sum5": 1.0,
+    "L->R sum8": 182.1,
+    "L->R sum9": 1534.8,
+    "R->L sum10": 2702.9,
+    "R->L sum11": 88.4,
+    "R->L sum16": 177.9,
+    "R->L sum2": 5676.0,
+    "R->L sum3": 145.1,
+    "R->L sum8": 197.5,
+    "R->L sum9": 1572.8,
+    "R->R +0": 2947.4,
+    "R->R +1": 603.9,
+    "R->R +2": 9.0,
+    "R->R +6": 27.6,
+    "R->R +7": 1273.9,
+    "R->R -1": 969.2,
+    "R->R -2": 3.8,
+    "R->R -6": 16.7,
+    "R->R -7": 731.2
+   },
+   "EPG_to_PEN2R_to_EPG": {
+    "L->L +0": 2869.6,
+    "L->L +1": 569.9,
+    "L->L +2": 6.3,
+    "L->L +7": 756.5,
+    "L->L -1": 1102.8,
+    "L->L -6": 9.0,
+    "L->L -7": 336.0,
+    "L->R sum10": 3073.3,
+    "L->R sum11": 63.8,
+    "L->R sum15": 2.6,
+    "L->R sum16": 72.2,
+    "L->R sum2": 3692.2,
+    "L->R sum3": 108.8,
+    "L->R sum8": 155.7,
+    "L->R sum9": 1382.0,
+    "R->L sum10": 3175.8,
+    "R->L sum11": 1094.5,
+    "R->L sum12": 24.1,
+    "R->L sum16": 68.0,
+    "R->L sum2": 5024.0,
+    "R->L sum3": 437.8,
+    "R->L sum4": 39.5,
+    "R->L sum5": 1.0,
+    "R->L sum8": 135.7,
+    "R->L sum9": 1471.6,
+    "R->R +0": 3645.6,
+    "R->R +1": 473.2,
+    "R->R +2": 9.6,
+    "R->R +5": 11.7,
+    "R->R +6": 112.2,
+    "R->R +7": 1079.4,
+    "R->R -1": 1983.4,
+    "R->R -2": 361.0,
+    "R->R -3": 1.5,
+    "R->R -6": 10.7,
+    "R->R -7": 440.2
+   },
+   "EPG_to_EPG": {
+    "L->L +0": 32.9,
+    "L->L +1": 2.9,
+    "L->L +7": 1.2,
+    "L->L -1": 3.2,
+    "L->L -7": 1.8,
+    "L->R sum10": 20.9,
+    "L->R sum2": 35.0,
+    "L->R sum9": 21.6,
+    "R->L sum10": 20.9,
+    "R->L sum2": 32.8,
+    "R->L sum9": 23.0,
+    "R->R +0": 32.8,
+    "R->R +1": 2.2,
+    "R->R +7": 3.2,
+    "R->R -1": 2.2,
+    "R->R -7": 3.6
+   }
+  },
+  "fb_in_out_column_shift": {
+   "PFNv": {
+    "n": 20,
+    "median_shift": 0.54,
+    "abs_shift_p50": 1.28
+   },
+   "hDelta": {
+    "n": 188,
+    "median_shift": -0.12,
+    "abs_shift_p50": 1.9
+   },
+   "PFR": {
+    "n": 44,
+    "median_shift": -0.11,
+    "abs_shift_p50": 1.19
+   },
+   "PFNa": {
+    "n": 56,
+    "median_shift": 0.15,
+    "abs_shift_p50": 1.02
+   },
+   "PFGs": {
+    "n": 18,
+    "median_shift": 0.98,
+    "abs_shift_p50": 1.64
+   },
+   "vDelta": {
+    "n": 336,
+    "median_shift": 0.12,
+    "abs_shift_p50": 0.87
+   },
+   "FR1": {
+    "n": 18,
+    "median_shift": -0.3,
+    "abs_shift_p50": 0.49
+   },
+   "PFNm": {
+    "n": 47,
+    "median_shift": -0.33,
+    "abs_shift_p50": 0.68
+   },
+   "PFNd": {
+    "n": 40,
+    "median_shift": 1.25,
+    "abs_shift_p50": 1.25
+   },
+   "FC3": {
+    "n": 49,
+    "median_shift": 0.03,
+    "abs_shift_p50": 0.28
+   },
+   "FC1E": {
+    "n": 22,
+    "median_shift": -0.05,
+    "abs_shift_p50": 0.14
+   },
+   "FC2A": {
+    "n": 18,
+    "median_shift": -0.62,
+    "abs_shift_p50": 2.38
+   },
+   "FC2B": {
+    "n": 27,
+    "median_shift": -3.1,
+    "abs_shift_p50": 3.33
+   },
+   "FC1D": {
+    "n": 25,
+    "median_shift": 0.02,
+    "abs_shift_p50": 0.09
+   },
+   "FC1B": {
+    "n": 22,
+    "median_shift": 0.19,
+    "abs_shift_p50": 0.19
+   },
+   "FC1A": {
+    "n": 17,
+    "median_shift": 0.0,
+    "abs_shift_p50": 0.14
+   },
+   "FC1C": {
+    "n": 22,
+    "median_shift": -0.0,
+    "abs_shift_p50": 0.15
+   },
+   "FC2C": {
+    "n": 47,
+    "median_shift": 0.48,
+    "abs_shift_p50": 3.52
+   },
+   "FC1F": {
+    "n": 15,
+    "median_shift": 0.27,
+    "abs_shift_p50": 0.27
+   }
+  },
+  "offset_profiles_pb_line": {
+   "EPG_to_PEN1": {
+    "-16": 1.0,
+    "-15": 0.0,
+    "-14": 0.0,
+    "-13": 0.0,
+    "-12": 0.0,
+    "-11": 2.73,
+    "-10": 28.33,
+    "-9": 13.86,
+    "-8": 1.04,
+    "-7": 0.0,
+    "-6": 1.79,
+    "-5": 0.0,
+    "-4": 0.0,
+    "-3": 0.63,
+    "-2": 8.86,
+    "-1": 15.94,
+    "0": 15.52,
+    "1": 16.52,
+    "2": 8.84,
+    "3": 0.29,
+    "4": 0.0,
+    "5": 0.0,
+    "6": 1.9,
+    "7": 0.0,
+    "8": 0.3,
+    "9": 12.72,
+    "10": 27.44,
+    "11": 1.42,
+    "12": 0.0,
+    "13": 0.0,
+    "14": 0.0,
+    "15": 0.0,
+    "16": 0.0
+   },
+   "PEN1_to_EPG": {
+    "-16": 2.0,
+    "-15": 0.0,
+    "-14": 0.0,
+    "-13": 0.0,
+    "-12": 0.0,
+    "-11": 10.58,
+    "-10": 67.37,
+    "-9": 39.0,
+    "-8": 2.04,
+    "-7": 0.0,
+    "-6": 5.86,
+    "-5": 0.48,
+    "-4": 0.0,
+    "-3": 1.9,
+    "-2": 23.2,
+    "-1": 38.22,
+    "0": 12.59,
+    "1": 36.81,
+    "2": 24.1,
+    "3": 2.54,
+    "4": 0.0,
+    "5": 0.58,
+    "6": 3.97,
+    "7": 0.16,
+    "8": 4.15,
+    "9": 41.03,
+    "10": 68.56,
+    "11": 12.27,
+    "12": 0.26,
+    "13": 0.0,
+    "14": 0.0,
+    "15": 0.0,
+    "16": 3.25
+   },
+   "EPG_to_PEN2": {
+    "-16": 0.0,
+    "-15": 0.0,
+    "-14": 0.0,
+    "-13": 0.0,
+    "-12": 0.0,
+    "-11": 0.0,
+    "-10": 32.69,
+    "-9": 7.1,
+    "-8": 0.0,
+    "-7": 0.0,
+    "-6": 0.5,
+    "-5": 0.0,
+    "-4": 0.0,
+    "-3": 0.0,
+    "-2": 5.23,
+    "-1": 21.47,
+    "0": 13.41,
+    "1": 22.52,
+    "2": 4.02,
+    "3": 0.0,
+    "4": 0.0,
+    "5": 0.0,
+    "6": 0.34,
+    "7": 0.0,
+    "8": 0.0,
+    "9": 6.55,
+    "10": 35.62,
+    "11": 0.0,
+    "12": 0.0,
+    "13": 0.0,
+    "14": 0.0,
+    "15": 0.0,
+    "16": 0.0
+   },
+   "PEN2_to_EPG": {
+    "-16": 0.0,
+    "-15": 0.0,
+    "-14": 0.0,
+    "-13": 0.0,
+    "-12": 0.0,
+    "-11": 0.93,
+    "-10": 52.0,
+    "-9": 20.39,
+    "-8": 0.21,
+    "-7": 0.0,
+    "-6": 2.28,
+    "-5": 0.0,
+    "-4": 0.0,
+    "-3": 0.14,
+    "-2": 10.65,
+    "-1": 34.22,
+    "0": 1.83,
+    "1": 31.4,
+    "2": 13.19,
+    "3": 0.14,
+    "4": 0.0,
+    "5": 0.09,
+    "6": 1.72,
+    "7": 0.0,
+    "8": 0.21,
+    "9": 20.23,
+    "10": 51.93,
+    "11": 0.97,
+    "12": 0.0,
+    "13": 0.0,
+    "14": 0.0,
+    "15": 0.0,
+    "16": 0.0
+   },
+   "EPG_to_D7_to_EPG": {
+    "-15": 151.69,
+    "-14": 869.21,
+    "-13": 1314.06,
+    "-12": 1457.67,
+    "-11": 1181.06,
+    "-10": 399.52,
+    "-9": 66.11,
+    "-8": 111.77,
+    "-7": 335.04,
+    "-6": 1224.53,
+    "-5": 1809.06,
+    "-4": 2031.58,
+    "-3": 1705.14,
+    "-2": 780.92,
+    "-1": 136.43,
+    "0": 119.71,
+    "1": 149.17,
+    "2": 800.17,
+    "3": 1697.26,
+    "4": 2068.53,
+    "5": 1871.1,
+    "6": 1180.74,
+    "7": 334.37,
+    "8": 114.94,
+    "9": 100.97,
+    "10": 425.47,
+    "11": 1220.71,
+    "12": 1526.74,
+    "13": 1462.79,
+    "14": 951.83,
+    "15": 221.44
+   },
+   "EPG_to_PEG": {
+    "-16": 0.0,
+    "-15": 0.0,
+    "-14": 0.0,
+    "-13": 0.0,
+    "-12": 0.0,
+    "-11": 0.0,
+    "-10": 0.0,
+    "-9": 10.83,
+    "-8": 2.8,
+    "-7": 0.0,
+    "-6": 2.37,
+    "-5": 0.0,
+    "-4": 3.36,
+    "-3": 0.38,
+    "-2": 3.71,
+    "-1": 4.04,
+    "0": 93.02,
+    "1": 3.76,
+    "2": 4.38,
+    "3": 0.38,
+    "4": 3.22,
+    "5": 0.09,
+    "6": 2.43,
+    "7": 0.0,
+    "8": 3.96,
+    "9": 7.43,
+    "10": 0.0,
+    "11": 0.0,
+    "12": 0.0,
+    "13": 0.0,
+    "14": 0.0,
+    "15": 0.0,
+    "16": 0.0
+   },
+   "PEG_to_EPG": {
+    "-16": 0.0,
+    "-15": 0.0,
+    "-14": 0.0,
+    "-13": 0.0,
+    "-12": 0.0,
+    "-11": 0.0,
+    "-10": 0.0,
+    "-9": 2.78,
+    "-8": 1.52,
+    "-7": 0.0,
+    "-6": 0.3,
+    "-5": 0.0,
+    "-4": 1.19,
+    "-3": 0.08,
+    "-2": 0.86,
+    "-1": 0.24,
+    "0": 8.54,
+    "1": 0.2,
+    "2": 1.31,
+    "3": 0.0,
+    "4": 0.47,
+    "5": 0.0,
+    "6": 0.4,
+    "7": 0.0,
+    "8": 1.12,
+    "9": 3.13,
+    "10": 0.0,
+    "11": 0.0,
+    "12": 0.0,
+    "13": 0.0,
+    "14": 0.0,
+    "15": 0.0,
+    "16": 0.0
+   },
+   "EPG_to_EPG": {
+    "-15": 0.0,
+    "-14": 0.0,
+    "-13": 0.0,
+    "-12": 0.0,
+    "-11": 0.0,
+    "-10": 0.12,
+    "-9": 20.9,
+    "-8": 22.95,
+    "-7": 0.63,
+    "-6": 0.1,
+    "-5": 0.0,
+    "-4": 0.14,
+    "-3": 0.03,
+    "-2": 0.33,
+    "-1": 3.52,
+    "0": 32.83,
+    "1": 3.74,
+    "2": 0.22,
+    "3": 0.03,
+    "4": 0.23,
+    "5": 0.04,
+    "6": 0.09,
+    "7": 0.64,
+    "8": 21.58,
+    "9": 20.89,
+    "10": 0.05,
+    "11": 0.0,
+    "12": 0.0,
+    "13": 0.0,
+    "14": 0.0,
+    "15": 0.19
+   }
+  },
+  "offset_profiles_mod8": {
+   "EPG_to_PEN1": {
+    "0": 3.57,
+    "1": 7.31,
+    "2": 9.52,
+    "3": 0.43,
+    "4": 0.0,
+    "5": 0.84,
+    "6": 9.77,
+    "7": 7.45
+   },
+   "PEN1_to_EPG": {
+    "0": 4.81,
+    "1": 19.46,
+    "2": 24.63,
+    "3": 3.82,
+    "4": 0.07,
+    "5": 3.27,
+    "6": 23.64,
+    "7": 19.34
+   },
+   "EPG_to_PEN2": {
+    "0": 2.68,
+    "1": 7.27,
+    "2": 10.04,
+    "3": 0.0,
+    "4": 0.0,
+    "5": 0.0,
+    "6": 9.57,
+    "7": 7.14
+   },
+   "PEN2_to_EPG": {
+    "0": 0.45,
+    "1": 12.91,
+    "2": 16.85,
+    "3": 0.28,
+    "4": 0.0,
+    "5": 0.29,
+    "6": 16.09,
+    "7": 13.65
+   },
+   "EPG_to_D7_to_EPG": {
+    "0": 115.47,
+    "1": 184.22,
+    "2": 829.85,
+    "3": 1510.27,
+    "4": 1771.13,
+    "5": 1555.02,
+    "6": 828.25,
+    "7": 189.59
+   },
+   "EPG_to_PEG": {
+    "0": 19.96,
+    "1": 2.8,
+    "2": 1.69,
+    "3": 0.1,
+    "4": 1.65,
+    "5": 0.12,
+    "6": 1.54,
+    "7": 3.72
+   },
+   "PEG_to_EPG": {
+    "0": 2.24,
+    "1": 0.83,
+    "2": 0.4,
+    "3": 0.0,
+    "4": 0.41,
+    "5": 0.02,
+    "6": 0.32,
+    "7": 0.75
+   },
+   "EPG_to_EPG": {
+    "0": 25.79,
+    "1": 6.32,
+    "2": 0.09,
+    "3": 0.01,
+    "4": 0.09,
+    "5": 0.02,
+    "6": 0.14,
+    "7": 6.31
+   }
+  },
+  "delta7_inhibition_min_offset": 0,
+  "delta7_inhibition_min_over_mean": 0.132,
+  "pen1_peak_offset": 2,
+  "pen2_peak_offset": 2,
+  "delta7_inputs_per_cell_median": 32.0,
+  "delta7_epg_targets_per_cell_median": 8.0,
+  "fb_columnar_offsets": [
+   {
+    "pre": "vDelta",
+    "post": "hDelta",
+    "synapses": 37891,
+    "peak_offset": 0,
+    "peak_frac": 0.16,
+    "abs_offset_mean": 2.79
+   },
+   {
+    "pre": "hDelta",
+    "post": "hDelta",
+    "synapses": 31419,
+    "peak_offset": 0,
+    "peak_frac": 0.21,
+    "abs_offset_mean": 3.65
+   },
+   {
+    "pre": "PFNd",
+    "post": "hDelta",
+    "synapses": 22720,
+    "peak_offset": -3,
+    "peak_frac": 0.18,
+    "abs_offset_mean": 3.78
+   },
+   {
+    "pre": "hDelta",
+    "post": "vDelta",
+    "synapses": 21203,
+    "peak_offset": 4,
+    "peak_frac": 0.2,
+    "abs_offset_mean": 4.67
+   },
+   {
+    "pre": "hDelta",
+    "post": "PFR",
+    "synapses": 18364,
+    "peak_offset": 4,
+    "peak_frac": 0.23,
+    "abs_offset_mean": 4.85
+   },
+   {
+    "pre": "PFNa",
+    "post": "PFNa",
+    "synapses": 13749,
+    "peak_offset": 0,
+    "peak_frac": 0.11,
+    "abs_offset_mean": 2.83
+   },
+   {
+    "pre": "vDelta",
+    "post": "vDelta",
+    "synapses": 13386,
+    "peak_offset": 0,
+    "peak_frac": 0.53,
+    "abs_offset_mean": 1.12
+   },
+   {
+    "pre": "hDelta",
+    "post": "PFL3",
+    "synapses": 11807,
+    "peak_offset": 4,
+    "peak_frac": 0.24,
+    "abs_offset_mean": 4.63
+   },
+   {
+    "pre": "hDelta",
+    "post": "FC2C",
+    "synapses": 11363,
+    "peak_offset": 5,
+    "peak_frac": 0.23,
+    "abs_offset_mean": 4.41
+   },
+   {
+    "pre": "hDelta",
+    "post": "FC2B",
+    "synapses": 10784,
+    "peak_offset": 5,
+    "peak_frac": 0.18,
+    "abs_offset_mean": 4.74
+   },
+   {
+    "pre": "PFNv",
+    "post": "PFNv",
+    "synapses": 9022,
+    "peak_offset": 2,
+    "peak_frac": 0.13,
+    "abs_offset_mean": 3.25
+   },
+   {
+    "pre": "FR1",
+    "post": "FR1",
+    "synapses": 8694,
+    "peak_offset": -1,
+    "peak_frac": 0.11,
+    "abs_offset_mean": 3.35
+   },
+   {
+    "pre": "hDelta",
+    "post": "PFGs",
+    "synapses": 8198,
+    "peak_offset": 4,
+    "peak_frac": 0.23,
+    "abs_offset_mean": 4.78
+   },
+   {
+    "pre": "PFNd",
+    "post": "PFNd",
+    "synapses": 7970,
+    "peak_offset": -1,
+    "peak_frac": 0.14,
+    "abs_offset_mean": 2.56
+   },
+   {
+    "pre": "PFR",
+    "post": "hDelta",
+    "synapses": 7535,
+    "peak_offset": 0,
+    "peak_frac": 0.17,
+    "abs_offset_mean": 2.94
+   },
+   {
+    "pre": "FC3",
+    "post": "vDelta",
+    "synapses": 6540,
+    "peak_offset": 0,
+    "peak_frac": 0.47,
+    "abs_offset_mean": 1.03
+   },
+   {
+    "pre": "PFNm",
+    "post": "PFNm",
+    "synapses": 6157,
+    "peak_offset": 0,
+    "peak_frac": 0.2,
+    "abs_offset_mean": 2.57
+   },
+   {
+    "pre": "hDelta",
+    "post": "FS2",
+    "synapses": 6102,
+    "peak_offset": 4,
+    "peak_frac": 0.2,
+    "abs_offset_mean": 4.68
+   },
+   {
+    "pre": "hDelta",
+    "post": "FS3",
+    "synapses": 5700,
+    "peak_offset": 4,
+    "peak_frac": 0.2,
+    "abs_offset_mean": 4.31
+   },
+   {
+    "pre": "hDelta",
+    "post": "PFL2",
+    "synapses": 5542,
+    "peak_offset": 4,
+    "peak_frac": 0.23,
+    "abs_offset_mean": 4.59
+   },
+   {
+    "pre": "PFNv",
+    "post": "hDelta",
+    "synapses": 5495,
+    "peak_offset": 2,
+    "peak_frac": 0.28,
+    "abs_offset_mean": 1.48
+   },
+   {
+    "pre": "PFGs",
+    "post": "hDelta",
+    "synapses": 4915,
+    "peak_offset": 6,
+    "peak_frac": 0.23,
+    "abs_offset_mean": 5.21
+   },
+   {
+    "pre": "FC3",
+    "post": "hDelta",
+    "synapses": 4761,
+    "peak_offset": 0,
+    "peak_frac": 0.16,
+    "abs_offset_mean": 2.31
+   },
+   {
+    "pre": "hDelta",
+    "post": "FR1",
+    "synapses": 4523,
+    "peak_offset": 4,
+    "peak_frac": 0.23,
+    "abs_offset_mean": 4.75
+   },
+   {
+    "pre": "PFR",
+    "post": "PFR",
+    "synapses": 4364,
+    "peak_offset": 0,
+    "peak_frac": 0.28,
+    "abs_offset_mean": 1.99
+   },
+   {
+    "pre": "FC3",
+    "post": "PFR",
+    "synapses": 4234,
+    "peak_offset": 0,
+    "peak_frac": 0.73,
+    "abs_offset_mean": 0.27
+   },
+   {
+    "pre": "hDelta",
+    "post": "FS1A",
+    "synapses": 4012,
+    "peak_offset": 5,
+    "peak_frac": 0.22,
+    "abs_offset_mean": 4.58
+   },
+   {
+    "pre": "PFNa",
+    "post": "FC1B",
+    "synapses": 4005,
+    "peak_offset": 0,
+    "peak_frac": 0.55,
+    "abs_offset_mean": 0.47
+   },
+   {
+    "pre": "hDelta",
+    "post": "FC2A",
+    "synapses": 3786,
+    "peak_offset": 4,
+    "peak_frac": 0.2,
+    "abs_offset_mean": 4.99
+   },
+   {
+    "pre": "PFNm",
+    "post": "vDelta",
+    "synapses": 3778,
+    "peak_offset": 0,
+    "peak_frac": 0.59,
+    "abs_offset_mean": 1.18
+   },
+   {
+    "pre": "PFNd",
+    "post": "PFR",
+    "synapses": 3392,
+    "peak_offset": 0,
+    "peak_frac": 0.53,
+    "abs_offset_mean": 0.47
+   },
+   {
+    "pre": "PFNa",
+    "post": "FC1A",
+    "synapses": 2766,
+    "peak_offset": 0,
+    "peak_frac": 0.58,
+    "abs_offset_mean": 0.43
+   },
+   {
+    "pre": "FC2C",
+    "post": "PFL3",
+    "synapses": 2623,
+    "peak_offset": 0,
+    "peak_frac": 0.68,
+    "abs_offset_mean": 0.33
+   },
+   {
+    "pre": "FC2A",
+    "post": "PFL3",
+    "synapses": 2487,
+    "peak_offset": 0,
+    "peak_frac": 0.64,
+    "abs_offset_mean": 0.36
+   },
+   {
+    "pre": "PFNa",
+    "post": "FC1F",
+    "synapses": 2471,
+    "peak_offset": 0,
+    "peak_frac": 0.52,
+    "abs_offset_mean": 0.5
+   },
+   {
+    "pre": "vDelta",
+    "post": "FC2A",
+    "synapses": 2436,
+    "peak_offset": 0,
+    "peak_frac": 0.43,
+    "abs_offset_mean": 1.05
+   },
+   {
+    "pre": "FC2B",
+    "post": "PFL3",
+    "synapses": 2427,
+    "peak_offset": 0,
+    "peak_frac": 0.63,
+    "abs_offset_mean": 0.38
+   },
+   {
+    "pre": "hDelta",
+    "post": "FS4A",
+    "synapses": 2386,
+    "peak_offset": 4,
+    "peak_frac": 0.21,
+    "abs_offset_mean": 4.31
+   },
+   {
+    "pre": "PFNa",
+    "post": "hDelta",
+    "synapses": 2373,
+    "peak_offset": 2,
+    "peak_frac": 0.26,
+    "abs_offset_mean": 1.6
+   },
+   {
+    "pre": "PFNa",
+    "post": "FC3",
+    "synapses": 2267,
+    "peak_offset": 0,
+    "peak_frac": 0.58,
+    "abs_offset_mean": 0.43
+   }
+  ],
+  "fb_offset_weight": {
+   "peak_same_column": 200956,
+   "peak_shift_ge3": 145788,
+   "peak_shift_1_2": 38485
+  },
+  "pfl_to_dn": {
+   "DNa03": 2039.0,
+   "DNb01": 753.0,
+   "DNa02": 736.0,
+   "DNpe016": 457.0,
+   "DNae002": 313.0,
+   "DNg97": 299.0,
+   "DNb09": 258.0,
+   "DNbe006": 216.0
+  }
+ },
+ "optic_lobe": {
+  "columnar_types": 47,
+  "weight_sharing": [
+   {
+    "pre": "L2",
+    "post": "Tm2",
+    "synapses": 220167,
+    "src_frac_connected": 1.0,
+    "partners_per_src": 1.0,
+    "weight_cv": 0.25
+   },
+   {
+    "pre": "L2",
+    "post": "Tm1",
+    "synapses": 205148,
+    "src_frac_connected": 1.0,
+    "partners_per_src": 1.0,
+    "weight_cv": 0.26
+   },
+   {
+    "pre": "L2",
+    "post": "Tm4",
+    "synapses": 160489,
+    "src_frac_connected": 1.0,
+    "partners_per_src": 5.0,
+    "weight_cv": 0.36
+   },
+   {
+    "pre": "L2",
+    "post": "T1",
+    "synapses": 157590,
+    "src_frac_connected": 1.0,
+    "partners_per_src": 1.0,
+    "weight_cv": 0.28
+   },
+   {
+    "pre": "L1",
+    "post": "Tm3",
+    "synapses": 147429,
+    "src_frac_connected": 1.0,
+    "partners_per_src": 6.0,
+    "weight_cv": 0.34
+   },
+   {
+    "pre": "L1",
+    "post": "Mi1",
+    "synapses": 141963,
+    "src_frac_connected": 1.0,
+    "partners_per_src": 1.0,
+    "weight_cv": 0.2
+   },
+   {
+    "pre": "L1",
+    "post": "L5",
+    "synapses": 135598,
+    "src_frac_connected": 1.0,
+    "partners_per_src": 1.0,
+    "weight_cv": 0.19
+   },
+   {
+    "pre": "Mi1",
+    "post": "Tm3",
+    "synapses": 122257,
+    "src_frac_connected": 1.0,
+    "partners_per_src": 6.0,
+    "weight_cv": 0.3
+   },
+   {
+    "pre": "C3",
+    "post": "L2",
+    "synapses": 122099,
+    "src_frac_connected": 1.0,
+    "partners_per_src": 1.0,
+    "weight_cv": 0.2
+   },
+   {
+    "pre": "Mi1",
+    "post": "Y3",
+    "synapses": 113405,
+    "src_frac_connected": 1.0,
+    "partners_per_src": 4.0,
+    "weight_cv": 0.33
+   },
+   {
+    "pre": "Mi1",
+    "post": "T4a",
+    "synapses": 110378,
+    "src_frac_connected": 1.0,
+    "partners_per_src": 5.0,
+    "weight_cv": 0.29
+   },
+   {
+    "pre": "Mi1",
+    "post": "T4c",
+    "synapses": 105441,
+    "src_frac_connected": 1.0,
+    "partners_per_src": 5.0,
+    "weight_cv": 0.3
+   },
+   {
+    "pre": "C3",
+    "post": "T1",
+    "synapses": 104436,
+    "src_frac_connected": 1.0,
+    "partners_per_src": 1.0,
+    "weight_cv": 0.25
+   },
+   {
+    "pre": "Mi1",
+    "post": "T3",
+    "synapses": 102594,
+    "src_frac_connected": 1.0,
+    "partners_per_src": 3.0,
+    "weight_cv": 0.33
+   },
+   {
+    "pre": "Tm2",
+    "post": "T2",
+    "synapses": 101562,
+    "src_frac_connected": 1.0,
+    "partners_per_src": 4.0,
+    "weight_cv": 0.34
+   },
+   {
+    "pre": "Tm4",
+    "post": "TmY5a",
+    "synapses": 100031,
+    "src_frac_connected": 1.0,
+    "partners_per_src": 4.0,
+    "weight_cv": 0.3
+   },
+   {
+    "pre": "Tm1",
+    "post": "Y3",
+    "synapses": 98129,
+    "src_frac_connected": 1.0,
+    "partners_per_src": 4.0,
+    "weight_cv": 0.35
+   },
+   {
+    "pre": "L5",
+    "post": "Tm3",
+    "synapses": 97520,
+    "src_frac_connected": 1.0,
+    "partners_per_src": 6.0,
+    "weight_cv": 0.33
+   },
+   {
+    "pre": "Mi1",
+    "post": "T4b",
+    "synapses": 96913,
+    "src_frac_connected": 0.99,
+    "partners_per_src": 5.0,
+    "weight_cv": 0.3
+   },
+   {
+    "pre": "Mi1",
+    "post": "T4d",
+    "synapses": 94955,
+    "src_frac_connected": 0.99,
+    "partners_per_src": 5.0,
+    "weight_cv": 0.31
+   },
+   {
+    "pre": "L1",
+    "post": "C3",
+    "synapses": 94233,
+    "src_frac_connected": 1.0,
+    "partners_per_src": 1.0,
+    "weight_cv": 0.23
+   },
+   {
+    "pre": "Mi1",
+    "post": "T2a",
+    "synapses": 93168,
+    "src_frac_connected": 1.0,
+    "partners_per_src": 5.0,
+    "weight_cv": 0.4
+   },
+   {
+    "pre": "L3",
+    "post": "Mi9",
+    "synapses": 92179,
+    "src_frac_connected": 1.0,
+    "partners_per_src": 1.0,
+    "weight_cv": 0.25
+   },
+   {
+    "pre": "Tm3",
+    "post": "TmY5a",
+    "synapses": 91859,
+    "src_frac_connected": 1.0,
+    "partners_per_src": 3.0,
+    "weight_cv": 0.31
+   },
+   {
+    "pre": "Mi1",
+    "post": "TmY18",
+    "synapses": 91635,
+    "src_frac_connected": 0.99,
+    "partners_per_src": 3.0,
+    "weight_cv": 0.47
+   },
+   {
+    "pre": "Tm1",
+    "post": "Tm6",
+    "synapses": 90539,
+    "src_frac_connected": 1.0,
+    "partners_per_src": 4.0,
+    "weight_cv": 0.4
+   },
+   {
+    "pre": "L2",
+    "post": "L5",
+    "synapses": 86280,
+    "src_frac_connected": 0.99,
+    "partners_per_src": 1.0,
+    "weight_cv": 0.32
+   },
+   {
+    "pre": "Mi4",
+    "post": "Mi9",
+    "synapses": 82136,
+    "src_frac_connected": 1.0,
+    "partners_per_src": 1.0,
+    "weight_cv": 0.23
+   },
+   {
+    "pre": "L5",
+    "post": "T2",
+    "synapses": 74708,
+    "src_frac_connected": 1.0,
+    "partners_per_src": 3.0,
+    "weight_cv": 0.37
+   },
+   {
+    "pre": "Tm1",
+    "post": "T2a",
+    "synapses": 73971,
+    "src_frac_connected": 1.0,
+    "partners_per_src": 4.0,
+    "weight_cv": 0.46
+   },
+   {
+    "pre": "Tm1",
+    "post": "T3",
+    "synapses": 72643,
+    "src_frac_connected": 1.0,
+    "partners_per_src": 3.0,
+    "weight_cv": 0.39
+   },
+   {
+    "pre": "L5",
+    "post": "Mi1",
+    "synapses": 71814,
+    "src_frac_connected": 1.0,
+    "partners_per_src": 2.0,
+    "weight_cv": 0.27
+   },
+   {
+    "pre": "L5",
+    "post": "Mi4",
+    "synapses": 68120,
+    "src_frac_connected": 1.0,
+    "partners_per_src": 4.0,
+    "weight_cv": 0.38
+   },
+   {
+    "pre": "Tm9",
+    "post": "T5c",
+    "synapses": 67570,
+    "src_frac_connected": 0.97,
+    "partners_per_src": 5.0,
+    "weight_cv": 0.46
+   },
+   {
+    "pre": "TmY5a",
+    "post": "Y3",
+    "synapses": 66900,
+    "src_frac_connected": 1.0,
+    "partners_per_src": 4.0,
+    "weight_cv": 0.28
+   },
+   {
+    "pre": "Tm3",
+    "post": "T2",
+    "synapses": 60659,
+    "src_frac_connected": 1.0,
+    "partners_per_src": 3.0,
+    "weight_cv": 0.33
+   },
+   {
+    "pre": "C3",
+    "post": "Tm4",
+    "synapses": 59559,
+    "src_frac_connected": 1.0,
+    "partners_per_src": 5.0,
+    "weight_cv": 0.37
+   },
+   {
+    "pre": "Mi4",
+    "post": "TmY3",
+    "synapses": 59558,
+    "src_frac_connected": 1.0,
+    "partners_per_src": 4.0,
+    "weight_cv": 0.36
+   },
+   {
+    "pre": "L5",
+    "post": "Tm6",
+    "synapses": 57558,
+    "src_frac_connected": 0.98,
+    "partners_per_src": 4.0,
+    "weight_cv": 0.46
+   },
+   {
+    "pre": "Tm9",
+    "post": "T5b",
+    "synapses": 57372,
+    "src_frac_connected": 0.96,
+    "partners_per_src": 4.0,
+    "weight_cv": 0.47
+   }
+  ],
+  "lamina_to_medulla": {
+   "L1": {
+    "Mi1": 141963,
+    "Tm3": 147429,
+    "Mi4": 223,
+    "Mi9": 27,
+    "Tm1": 65,
+    "Tm2": 64,
+    "Tm4": 41,
+    "Tm9": 9,
+    "C2": 52440,
+    "C3": 94233,
+    "T1": 728
+   },
+   "L2": {
+    "Mi1": 978,
+    "Tm3": 380,
+    "Mi4": 2719,
+    "Mi9": 449,
+    "Tm1": 205148,
+    "Tm2": 220167,
+    "Tm4": 160489,
+    "Tm9": 52,
+    "C2": 62,
+    "C3": 6469,
+    "T1": 157590
+   },
+   "L3": {
+    "Mi1": 34987,
+    "Tm3": 72,
+    "Mi4": 779,
+    "Mi9": 92179,
+    "Tm1": 123,
+    "Tm2": 405,
+    "Tm4": 142,
+    "Tm9": 47548,
+    "C2": 61,
+    "C3": 13410,
+    "T1": 532
+   },
+   "L4": {
+    "Mi1": 70,
+    "Tm3": 40,
+    "Mi4": 22,
+    "Mi9": 2968,
+    "Tm1": 120,
+    "Tm2": 41898,
+    "Tm4": 28883,
+    "Tm9": 3526,
+    "C2": 11,
+    "C3": 651,
+    "T1": 120
+   },
+   "L5": {
+    "Mi1": 71814,
+    "Tm3": 97520,
+    "Mi4": 68120,
+    "Mi9": 140,
+    "Tm1": 83,
+    "Tm2": 233,
+    "Tm4": 281,
+    "Tm9": 36,
+    "C2": 34741,
+    "C3": 23563,
+    "T1": 537
+   }
+  },
+  "t4_input_composition": {
+   "a": {
+    "Mi1": 0.326,
+    "Tm3": 0.134,
+    "Mi9": 0.098,
+    "CT1": 0.068,
+    "T4a": 0.062,
+    "Y13": 0.056,
+    "Mi4": 0.055,
+    "TmY15": 0.052
+   },
+   "b": {
+    "Mi1": 0.285,
+    "Tm3": 0.14,
+    "Mi9": 0.115,
+    "T4b": 0.083,
+    "CT1": 0.063,
+    "Mi4": 0.063,
+    "LPi2b": 0.058,
+    "TmY15": 0.057
+   },
+   "c": {
+    "Mi1": 0.327,
+    "Tm3": 0.133,
+    "Mi9": 0.122,
+    "CT1": 0.063,
+    "TmY15": 0.057,
+    "Mi4": 0.056,
+    "T4c": 0.054,
+    "Y11": 0.046
+   },
+   "d": {
+    "Mi1": 0.319,
+    "Tm3": 0.132,
+    "Mi9": 0.119,
+    "CT1": 0.069,
+    "T4d": 0.058,
+    "Y12": 0.057,
+    "TmY15": 0.051,
+    "Mi4": 0.049
+   }
+  },
+  "t5_input_composition": {
+   "a": {
+    "Tm2": 0.181,
+    "Tm9": 0.162,
+    "CT1": 0.132,
+    "Tm1": 0.124,
+    "Tm4": 0.096,
+    "Y13": 0.063,
+    "T5a": 0.058,
+    "TmY15": 0.031
+   },
+   "b": {
+    "Tm9": 0.184,
+    "Tm2": 0.182,
+    "CT1": 0.131,
+    "Tm1": 0.109,
+    "Tm4": 0.086,
+    "T5b": 0.072,
+    "LPi2b": 0.052,
+    "TmY15": 0.032
+   },
+   "c": {
+    "Tm9": 0.214,
+    "Tm2": 0.181,
+    "Tm1": 0.125,
+    "CT1": 0.107,
+    "Tm4": 0.104,
+    "T5c": 0.047,
+    "Y11": 0.041,
+    "LT33": 0.029
+   },
+   "d": {
+    "Tm9": 0.207,
+    "Tm2": 0.174,
+    "Tm1": 0.133,
+    "CT1": 0.114,
+    "Tm4": 0.1,
+    "T5d": 0.055,
+    "Y12": 0.044,
+    "TmY15": 0.033
+   }
+  },
+  "t4_subtype_input_cosine": [
+   [
+    1.0,
+    0.928,
+    0.954,
+    0.947
+   ],
+   [
+    0.928,
+    1.0,
+    0.937,
+    0.927
+   ],
+   [
+    0.954,
+    0.937,
+    1.0,
+    0.947
+   ],
+   [
+    0.947,
+    0.927,
+    0.947,
+    1.0
+   ]
+  ],
+  "lptc_pooling": {
+   "H2": {
+    "n": 2,
+    "inputs": {
+     "T4a": [
+      0,
+      0.0
+     ],
+     "T5a": [
+      0,
+      0.0
+     ],
+     "T4b": [
+      23871,
+      758.5
+     ],
+     "T5b": [
+      28299,
+      773.5
+     ],
+     "T4c": [
+      3,
+      0.5
+     ],
+     "T5c": [
+      0,
+      0.0
+     ],
+     "T4d": [
+      0,
+      0.0
+     ],
+     "T5d": [
+      0,
+      0.0
+     ]
+    }
+   },
+   "HSE": {
+    "n": 2,
+    "inputs": {
+     "T4a": [
+      14390,
+      537.5
+     ],
+     "T5a": [
+      16500,
+      529.5
+     ],
+     "T4b": [
+      0,
+      0.0
+     ],
+     "T5b": [
+      0,
+      0.0
+     ],
+     "T4c": [
+      0,
+      0.0
+     ],
+     "T5c": [
+      6,
+      0.5
+     ],
+     "T4d": [
+      0,
+      0.0
+     ],
+     "T5d": [
+      0,
+      0.0
+     ]
+    }
+   },
+   "HSN": {
+    "n": 2,
+    "inputs": {
+     "T4a": [
+      12717,
+      389.0
+     ],
+     "T5a": [
+      16455,
+      407.0
+     ],
+     "T4b": [
+      0,
+      0.0
+     ],
+     "T5b": [
+      0,
+      0.0
+     ],
+     "T4c": [
+      0,
+      0.0
+     ],
+     "T5c": [
+      0,
+      0.0
+     ],
+     "T4d": [
+      4,
+      0.5
+     ],
+     "T5d": [
+      0,
+      0.0
+     ]
+    }
+   },
+   "HSS": {
+    "n": 2,
+    "inputs": {
+     "T4a": [
+      13392,
+      463.0
+     ],
+     "T5a": [
+      13904,
+      454.5
+     ],
+     "T4b": [
+      0,
+      0.0
+     ],
+     "T5b": [
+      0,
+      0.0
+     ],
+     "T4c": [
+      0,
+      0.0
+     ],
+     "T5c": [
+      0,
+      0.0
+     ],
+     "T4d": [
+      5,
+      0.5
+     ],
+     "T5d": [
+      0,
+      0.0
+     ]
+    }
+   },
+   "HST": {
+    "n": 2,
+    "inputs": {
+     "T4a": [
+      1515,
+      180.5
+     ],
+     "T5a": [
+      2054,
+      226.5
+     ],
+     "T4b": [
+      0,
+      0.0
+     ],
+     "T5b": [
+      0,
+      0.0
+     ],
+     "T4c": [
+      0,
+      0.0
+     ],
+     "T5c": [
+      0,
+      0.0
+     ],
+     "T4d": [
+      3,
+      0.5
+     ],
+     "T5d": [
+      0,
+      0.0
+     ]
+    }
+   },
+   "VS": {
+    "n": 18,
+    "inputs": {
+     "T4a": [
+      14028,
+      94.8
+     ],
+     "T5a": [
+      16303,
+      100.6
+     ],
+     "T4b": [
+      11123,
+      50.6
+     ],
+     "T5b": [
+      11707,
+      51.9
+     ],
+     "T4c": [
+      48,
+      0.6
+     ],
+     "T5c": [
+      46,
+      0.5
+     ],
+     "T4d": [
+      50208,
+      225.2
+     ],
+     "T5d": [
+      50819,
+      232.4
+     ]
+    }
+   },
+   "VST1": {
+    "n": 5,
+    "inputs": {
+     "T4a": [
+      0,
+      0.0
+     ],
+     "T5a": [
+      0,
+      0.0
+     ],
+     "T4b": [
+      0,
+      0.0
+     ],
+     "T5b": [
+      0,
+      0.0
+     ],
+     "T4c": [
+      0,
+      0.0
+     ],
+     "T5c": [
+      0,
+      0.0
+     ],
+     "T4d": [
+      2279,
+      105.0
+     ],
+     "T5d": [
+      2619,
+      121.2
+     ]
+    }
+   },
+   "VST2": {
+    "n": 7,
+    "inputs": {
+     "T4a": [
+      780,
+      27.7
+     ],
+     "T5a": [
+      1478,
+      50.1
+     ],
+     "T4b": [
+      0,
+      0.0
+     ],
+     "T5b": [
+      0,
+      0.0
+     ],
+     "T4c": [
+      0,
+      0.0
+     ],
+     "T5c": [
+      0,
+      0.0
+     ],
+     "T4d": [
+      3849,
+      120.3
+     ],
+     "T5d": [
+      4384,
+      138.1
+     ]
+    }
+   },
+   "VSm": {
+    "n": 4,
+    "inputs": {
+     "T4a": [
+      3,
+      0.2
+     ],
+     "T5a": [
+      10,
+      0.8
+     ],
+     "T4b": [
+      2101,
+      105.8
+     ],
+     "T5b": [
+      1789,
+      94.5
+     ],
+     "T4c": [
+      0,
+      0.0
+     ],
+     "T5c": [
+      3,
+      0.2
+     ],
+     "T4d": [
+      7482,
+      335.8
+     ],
+     "T5d": [
+      9686,
+      372.0
+     ]
+    }
+   }
+  }
+ },
+ "escape": {
+  "gf_inputs_top": [
+   [
+    "LC4",
+    6362,
+    0.176,
+    126
+   ],
+   [
+    "LPLC2",
+    4858,
+    0.134,
+    182
+   ],
+   [
+    "DNp70",
+    1416,
+    0.039,
+    4
+   ],
+   [
+    "SAD064",
+    1215,
+    0.034,
+    6
+   ],
+   [
+    "PVLP122",
+    1214,
+    0.034,
+    10
+   ],
+   [
+    "SAD073",
+    1177,
+    0.033,
+    8
+   ],
+   [
+    "PVLP010",
+    711,
+    0.02,
+    2
+   ],
+   [
+    "PVLP123",
+    618,
+    0.017,
+    15
+   ],
+   [
+    "PVLP151",
+    603,
+    0.017,
+    8
+   ],
+   [
+    "CL038",
+    549,
+    0.015,
+    4
+   ],
+   [
+    "JO-B1_a",
+    545,
+    0.015,
+    14
+   ],
+   [
+    "CL367",
+    537,
+    0.015,
+    4
+   ]
+  ],
+  "gf_total_input": 36193,
+  "gf_outputs_top": [
+   [
+    "GFC2",
+    140.0
+   ],
+   [
+    "GFC4",
+    110.0
+   ],
+   [
+    "DNp11",
+    107.0
+   ],
+   [
+    "IN06B008",
+    97.0
+   ],
+   [
+    "TTMn",
+    90.0
+   ],
+   [
+    "GFC3",
+    88.0
+   ],
+   [
+    "IN18B034",
+    75.0
+   ],
+   [
+    "AN18B053",
+    66.0
+   ],
+   [
+    "IN11A001",
+    65.0
+   ],
+   [
+    "AN19A018",
+    57.0
+   ]
+  ],
+  "photoreceptor_to_gf_hops": 3,
+  "n_lc4": 126,
+  "n_lplc2": 185,
+  "lc4_per_gf": [
+   55,
+   71
+  ],
+  "lplc2_per_gf": [
+   89,
+   93
+  ]
+ },
+ "descending": {
+  "n_dn": 1314,
+  "n_an": 1846,
+  "brain_output_to_dn_frac": 0.0374,
+  "dn_in_synapses_p10_50_90": [
+   335,
+   1722,
+   7883
+  ],
+  "dn_input_types_p10_50_90": [
+   26,
+   87,
+   253
+  ],
+  "dn_dn_reciprocal_connections": 6801,
+  "dn_dn_connections": 31993,
+  "dn_output_to_mn_frac": 0.061,
+  "dn_output_to_vnc_frac": 0.504,
+  "an_to_dn_synapses": 526879,
+  "dn_to_an_synapses": 381003,
+  "top_dn_by_input": [
+   [
+    "DNp103",
+    27101
+   ],
+   [
+    "DNp103",
+    25032
+   ],
+   [
+    "DNa02",
+    23542
+   ],
+   [
+    "DNa02",
+    23381
+   ],
+   [
+    "DNp06",
+    21752
+   ],
+   [
+    "DNg16",
+    20607
+   ],
+   [
+    "DNp01",
+    20423
+   ],
+   [
+    "pIP1",
+    20138
+   ],
+   [
+    "DNg16",
+    19914
+   ],
+   [
+    "DNg100",
+    19768
+   ],
+   [
+    "DNge037",
+    19548
+   ],
+   [
+    "DNg100",
+    19415
+   ]
+  ],
+  "dn_median_depth": 0.491
+ },
+ "vnc": {
+  "n_mn": 708,
+  "mn_input_synapses_p10_50_90": [
+   128,
+   2464,
+   9072
+  ],
+  "premotor_neurons_per_mn_p10_50_90": [
+   20,
+   143,
+   344
+  ],
+  "mn_inhibitory_input_frac_median": 0.439,
+  "mn_input_sources": {
+   "DN": 0.092,
+   "VNC intrinsic": 0.884,
+   "VNC sensory": 0.022,
+   "MN": 0.002
+  },
+  "pool_premotor_jaccard_median": 0.03,
+  "random_mn_pair_jaccard_median": 0.002,
+  "vnc_crossing_weight_frac": 0.428,
+  "vnc_crossing_inh_frac": 0.531,
+  "mutual_inhibition_vnc_top": [
+   {
+    "a": "IN16B049",
+    "b": "INXXX217",
+    "a_b": 2450,
+    "b_a": 1180
+   },
+   {
+    "a": "IN13A001",
+    "b": "IN19A001",
+    "a_b": 2294,
+    "b_a": 1130
+   },
+   {
+    "a": "IN08A002",
+    "b": "IN19A011",
+    "a_b": 1326,
+    "b_a": 1102
+   },
+   {
+    "a": "IN01B003",
+    "b": "IN13B021",
+    "a_b": 1059,
+    "b_a": 1163
+   },
+   {
+    "a": "IN11A001",
+    "b": "vMS11",
+    "a_b": 1112,
+    "b_a": 848
+   },
+   {
+    "a": "INXXX230",
+    "b": "INXXX396",
+    "a_b": 757,
+    "b_a": 1461
+   },
+   {
+    "a": "IN13B001",
+    "b": "IN21A009",
+    "a_b": 725,
+    "b_a": 851
+   },
+   {
+    "a": "INXXX258",
+    "b": "INXXX369",
+    "a_b": 701,
+    "b_a": 788
+   },
+   {
+    "a": "IN09A016",
+    "b": "IN09A039",
+    "a_b": 1048,
+    "b_a": 675
+   },
+   {
+    "a": "IN01B008",
+    "b": "IN09B022",
+    "a_b": 761,
+    "b_a": 641
+   },
+   {
+    "a": "IN08A006",
+    "b": "IN08A019",
+    "a_b": 608,
+    "b_a": 1029
+   },
+   {
+    "a": "IN08A007",
+    "b": "IN19A001",
+    "a_b": 605,
+    "b_a": 937
+   },
+   {
+    "a": "IN07B007",
+    "b": "IN12B030",
+    "a_b": 604,
+    "b_a": 752
+   },
+   {
+    "a": "IN09A010",
+    "b": "IN16B045",
+    "a_b": 597,
+    "b_a": 977
+   },
+   {
+    "a": "IN19A011",
+    "b": "IN21A008",
+    "a_b": 1752,
+    "b_a": 587
+   }
+  ]
+ },
+ "hubs": {
+  "top_in": [
+   [
+    "APL",
+    "cb_intrinsic",
+    119325
+   ],
+   [
+    "APL",
+    "cb_intrinsic",
+    113387
+   ],
+   [
+    "CT1",
+    "ol_intrinsic",
+    78011
+   ],
+   [
+    "LPi21",
+    "ol_intrinsic",
+    73943
+   ],
+   [
+    "CT1",
+    "ol_intrinsic",
+    69338
+   ],
+   [
+    "LPi21",
+    "ol_intrinsic",
+    66147
+   ],
+   [
+    "Am1",
+    "ol_intrinsic",
+    62751
+   ],
+   [
+    "Am1",
+    "ol_intrinsic",
+    56813
+   ],
+   [
+    "DPM",
+    "cb_intrinsic",
+    54529
+   ],
+   [
+    "Li39",
+    "ol_intrinsic",
+    53286
+   ],
+   [
+    "il3LN6",
+    "cb_intrinsic",
+    50259
+   ],
+   [
+    "Li39",
+    "ol_intrinsic",
+    49693
+   ],
+   [
+    "DPM",
+    "cb_intrinsic",
+    46600
+   ],
+   [
+    "il3LN6",
+    "cb_intrinsic",
+    46536
+   ],
+   [
+    "AVLP001",
+    "cb_intrinsic",
+    46312
+   ]
+  ],
+  "top_out": [
+   [
+    "CT1",
+    "ol_intrinsic",
+    138620
+   ],
+   [
+    "CT1",
+    "ol_intrinsic",
+    110558
+   ],
+   [
+    "APL",
+    "cb_intrinsic",
+    106932
+   ],
+   [
+    "APL",
+    "cb_intrinsic",
+    101573
+   ],
+   [
+    "Li39",
+    "ol_intrinsic",
+    48455
+   ],
+   [
+    "LPi21",
+    "ol_intrinsic",
+    48265
+   ],
+   [
+    "Li39",
+    "ol_intrinsic",
+    45003
+   ],
+   [
+    "LPi4b",
+    "ol_intrinsic",
+    44605
+   ],
+   [
+    "Am1",
+    "ol_intrinsic",
+    41232
+   ],
+   [
+    "MeVC11",
+    "visual_centrifugal",
+    38416
+   ],
+   [
+    "Li32",
+    "ol_intrinsic",
+    38318
+   ],
+   [
+    "Li32",
+    "ol_intrinsic",
+    37790
+   ],
+   [
+    "LPi21",
+    "ol_intrinsic",
+    37367
+   ],
+   [
+    "LPi4b",
+    "ol_intrinsic",
+    34739
+   ],
+   [
+    "Am1",
+    "ol_intrinsic",
+    33930
+   ]
+  ],
+  "in_degree_tail_exponent": 1.02,
+  "out_degree_tail_exponent": 1.15,
+  "synapses_in_p50_90_99": [
+   260,
+   1367,
+   6301
+  ],
+  "synapses_out_p50_90_99": [
+   341,
+   1282,
+   5018
+  ]
+ }
+}

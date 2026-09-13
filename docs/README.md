@@ -50,6 +50,9 @@ supplies the spontaneous drive the model lacks, and hunger reaches the brain as 
 26. [Courtship](26-courtship.md): LC10 detection, cVA pheromone, pIP10/DNp13 pursuit, wing display
 27. [WebGPU](27-webgpu.md): GPU LIF kernel with WASM fallback
 
+### Analysis
+28. [Algorithmic structures](28-algorithmic-structures.md): what the wiring computes — hierarchy, recurrence, motifs, ring attractor, expansion coding, convolution kernels
+
 ## Repository layout
 
 | Path | Contents |
