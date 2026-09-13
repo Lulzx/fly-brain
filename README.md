@@ -12,9 +12,9 @@ supplies the spontaneous drive the connectome model lacks: when to walk, pause, 
 It acts only as synaptic input to identified descending neurons ([docs/23-behaviour.md](docs/23-behaviour.md)).
 
 - `index.html` – the connectome viewer: 3D skeletons of all neurons, stimulate any cell type, watch activity.
-- `arena.html` – the embodied arena: add flies, place sugar, odour, bitter patches, heat, blocks; launch a
-  looming threat or activate a fly's takeoff neurons; change wind and light; follow a fly and watch its brain
-  in the inset. `[` and `]` fold the side panels.
+- `arena.html` – the embodied arena: add flies (male or female), place sugar, odour, bitter patches, heat,
+  blocks; launch a looming threat or activate a fly's takeoff neurons; change wind and light; follow a fly
+  and watch its brain in the inset. `[` and `]` fold the side panels.
 
 ## Run
 ```sh
@@ -26,11 +26,13 @@ versions of the connectome, skeletons and neuron table (27 MB in total, see [doc
 
 ## What happens every simulated millisecond (per fly, in its own Web Worker)
 1. **Senses** (`src/sim/senses.js`, `src/sim/vision.js`): taste (labellum, taste pegs, each leg), odour plumes
-   per antenna (glomerulus-specific ORNs), phasic tarsal touch, leg proprioceptors, body bristles, halteres,
+   per antenna (glomerulus-specific ORNs with GABA_B-like gain control; each other fly carries a short-range
+   cVA-like pheromone plume), phasic tarsal touch, leg proprioceptors, body bristles, halteres,
    antennal wind, heat. Vision: 2 × 721 rays → flyvis optic-lobe model (50 Hz) → drives the matching
    ~62,000 male-CNS optic-lobe neurons (same cell type, same retinotopic column).
-2. **Brain** (`src/wasm/lif.c`, WebAssembly): conductance-based LIF over 10.5 M connections, parameters fitted
-   to published behaviours (see PLAN.md).
+2. **Brain** (`src/wasm/lif.c`, WebAssembly; or a WebGPU kernel, `src/lifgpu.js`, when the browser has
+   WebGPU — `?gpu=0` on the arena forces WASM): conductance-based LIF over 10.5 M connections, parameters
+   fitted to published behaviours (see PLAN.md).
 3. **Motor** (`src/sim/motor.js`): descending-neuron populations → walking/turning/backing (stepping pattern
    generator), head grooming, escape jump (giant fibre / looming takeoff DNs); proboscis and antennae driven
    by their own motor neurons. Optional "full connectome VNC" mode drives every leg muscle from its MNs.
@@ -38,10 +40,15 @@ versions of the connectome, skeletons and neuron table (27 MB in total, see [doc
 5. **Endogenous behaviour** (`src/sim/intrinsic.js`): walk, pause and grooming bouts, saccades, turning away
    from obstacles and heat, feeding stops, local search, voluntary takeoff. All delivered as DN synaptic input.
    **Neuromodulation** (`src/sim/neuromod.js`): hunger sets AKH and insulin, which drive octopaminergic
-   neurons; their release lowers their targets' thresholds and sets the arousal the bout rules use
-   ([docs/25-neuromodulation.md](docs/25-neuromodulation.md)).
-6. **Flight** (`src/sim/flight.js`): takeoff after the jump, quasi-steady flight steered by the brain's
-   steering DNs, collision-avoidance saccades, and landing ([docs/24-flight.md](docs/24-flight.md)).
+   neurons; their release lowers their targets' thresholds and sets the arousal the bout rules use.
+   Locomotion drives the optic-lobe octopamine cells, raising visual gain while walking or flying
+   (Suver et al. 2012) ([docs/25-neuromodulation.md](docs/25-neuromodulation.md)).
+   **Courtship** ([docs/26-courtship.md](docs/26-courtship.md)): a male detects a nearby fly through LC10
+   small-object neurons and her cVA-like plume; the connectome's fru/dsx circuit readout (pIP10, DNp13)
+   gates a court state — chase on her bearing, sing with the wing facing her.
+6. **Flight** (`src/sim/flight.js`): takeoff after the jump, then blade-element aerodynamic forces computed
+   every physics substep on the real 218 Hz wing stroke — lift and thrust are emergent — with brain
+   steering, collision-avoidance saccades, and landing ([docs/24-flight.md](docs/24-flight.md)).
 
 ## Data / model pipeline
 ```sh

@@ -33,3 +33,9 @@ at |r| up to 0.87. About 410 of 721 model columns are used, because the real eye
 
 ## Gain
 Gain 150 is the default. At 250 looming escape became reliable but walking produced frequent false escapes.
+
+## What flyvis does not cover
+The front end ends before the visual projection neuron layer. LC10a/d — the small-object channel a male
+uses to notice another fly — are driven geometrically instead (angular size and bearing in the frontal
+field); see [Courtship](26-courtship.md). Locomotion also raises optic-lobe gain through octopamine
+([Neuromodulation](25-neuromodulation.md)).

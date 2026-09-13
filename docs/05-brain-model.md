@@ -1,6 +1,10 @@
 # 5. Brain model
 
-Files: `src/lif.js`, `src/brainmodel.js`, `src/wasm/lif.c`.
+Files: `src/lif.js`, `src/brainmodel.js`, `src/wasm/lif.c`, `src/lifgpu.js`.
+
+The same model runs on three interchangeable kernels — JavaScript (`src/lif.js`), WebAssembly
+(`src/lifwasm.js` + `src/wasm/lif.c`, [doc 6](06-wasm-kernel.md)) and WebGPU (`src/lifgpu.js`,
+[doc 27](27-webgpu.md)) — selected by `attachBrain` in `src/brainsetup.js`.
 
 ## Base model
 Leaky integrate-and-fire neurons after Shiu et al. 2024:

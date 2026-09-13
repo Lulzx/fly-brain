@@ -14,8 +14,9 @@ About 0.2 times real time in the browser, with vision. Five flies ran together o
 | Vision | 4,107 photoreceptor rays to 2 × 721 flyvis columns | Fewer rays; flyvis adds about 53 ms per simulated second |
 | Contacts | Read every 10 ms and freed explicitly | Avoids leaks and overhead |
 | Memory | Shared connectome | About 86 MB once instead of per fly |
+| Brain | WebGPU kernel ([doc 27](27-webgpu.md)) | Matches WASM within RNG; throughput depends on the adapter — one GPU device per fly for now |
 
 ## Remaining options
+- Share one GPU device across flies, and move flyvis up to WebGPU too.
 - Split one brain across threads with SharedArrayBuffer barriers.
 - Move physics to the multi-threaded MuJoCo build.
-- WebGPU for the brain.

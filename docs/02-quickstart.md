@@ -26,8 +26,12 @@ the [data pipeline](03-data-pipeline.md).
 2. Pick a **world** preset to reload with a different environment.
 3. Use **Place** tools, then click the floor to add sugar, vinegar, CO₂, bitter, heat, or blocks.
 4. Press **Looming threat** to send a dark object at the selected fly.
-5. Adjust **wind** and **light**.
+5. Adjust **wind** and **light**. **+ ♀** adds a female; males detect and court her (the Courtship preset
+   starts a pair).
 6. Click a fly to select it. Its brain activity appears in the inset, and its vital signs in the panel.
+
+The brain uses a WebGPU kernel when the browser provides WebGPU; append `?gpu=0` to the arena URL to force
+the WebAssembly kernel.
 
 ## Headless runs
 ```sh

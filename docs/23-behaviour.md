@@ -56,6 +56,7 @@ the right, and P9 also steers, so driving it made the fly circle.
 | Sugar under the mouthparts, hungry | Stop and feed until sated or off the food | |
 | Sugar underfoot only | Walk on slowly onto the food | |
 | After leaving food | 12 s local search: three times the saccades, same direction 75% of the time, so the path loops back | Dethier 1957; Kim & Dickinson 2017 |
+| Courtship (males) | When the connectome's own courtship readout (pIP10, DNp13 rates) is high and a female is within range: chase on her bearing, and sing with the wing facing her when close | Ewing & Bennet-Clark 1968; see [Courtship](26-courtship.md) |
 | Voluntary takeoff | 10% of bout ends, more when hungry | |
 | In flight | Saccades 1 per second, and collision-avoidance saccades toward open space | Tammero & Dickinson 2002 |
 | Hunger | Longer walk bouts and shorter pauses, less grooming, more takeoffs, faster walking. Scaled by octopamine arousal from [Neuromodulation](25-neuromodulation.md) when it is on, otherwise by energy | Yang et al. 2015 |

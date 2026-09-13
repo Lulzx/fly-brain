@@ -13,6 +13,7 @@ Firing rates are low-pass filtered with a 40 ms time constant.
 | Head grooming | DNg07, DNg08, DNg12 | Cande 2018 |
 | Escape | DNp01 giant fibre | von Reyn 2014 |
 | Takeoff | DNp02, DNp04 | Namiki 2018 |
+| Courtship circuit | pIP10, DNp13 | Deutsch et al. 2020 |
 
 ## Readout constants
 
@@ -29,6 +30,7 @@ Firing rates are low-pass filtered with a 40 ms time constant.
 | gfSpikes, gfWindow | 4 spikes in 50 ms | Giant-fibre escape criterion |
 | takeoffThreshold, takeoffRatio | 70 Hz and 3 × baseline | Takeoff escape criterion |
 | startupMs | 1500 ms | No escapes while vision settles |
+| courtPBase/Scale, courtDNBase/Scale | 5/4 Hz and 12/8 Hz | Courtship level: baseline-subtracted pIP10 and DNp13 rates, normalised |
 
 ## Why these values
 - DNa05, DNp26 and DNa07 fire at 15 to 55 Hz from vision alone. At weight 0.7 they kept the fly walking
@@ -44,6 +46,11 @@ the inner legs step backwards.
 ## Muscles
 Activation = 1 − exp(−rate × ln 2 ÷ 17 Hz). Insect force-frequency curves saturate at low rates.
 Antagonist groups move each position-servo target within its range.
+
+## Courtship song
+While a male courts close up, the wing on the side facing the target extends and flutters — a visible
+display standing in for the sine/pulse song; the wing muscle MNs that would produce a real song are not
+annotated in this dataset. See [Courtship](26-courtship.md).
 
 ## Interlocks
 - An inverted fly cannot jump, nor can a flying one.

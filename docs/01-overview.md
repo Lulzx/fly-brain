@@ -13,9 +13,11 @@ Every simulated millisecond, for each fly:
 2. Senses convert that state into firing rates of identified sensory neurons.
 3. The eyes cast rays, run the flyvis optic-lobe model, and drive matching optic-lobe neurons.
 4. The endogenous-activity module adds its synaptic input to descending neurons, then the brain advances
-   two 0.5 ms spiking steps over 10.5 million connections.
+   two 0.5 ms spiking steps over 10.5 million connections — on a WebGPU kernel when available, else
+   WebAssembly ([WebGPU](27-webgpu.md)).
 5. The motor layer reads descending and motor neurons and sets actuator targets.
-6. In flight, the flight model sets the aerodynamic force and torque and the leg posture.
+6. In flight, blade-element aerodynamic forces from the real 218 Hz wing stroke act on the body, and the
+   legs take their flight posture ([Flight](24-flight.md)).
 7. MuJoCo advances the body five 0.2 ms physics steps.
 
 ## Components

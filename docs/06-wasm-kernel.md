@@ -32,4 +32,9 @@ Up to 12 flies are reserved.
 
 ## JavaScript wrapper
 `src/lifwasm.js` exposes the same API as the JS model: `step`, `setDrive`, `setDriveOne`, `setBias`,
-`pulse`, `reset`, `setBackground`, and typed-array views of state.
+`setThr`, `addG`, `pulse`, `reset`, `setBackground`, and typed-array views of state.
+
+## Sibling kernel
+`src/lifgpu.js` runs the same model on WebGPU ([doc 27](27-webgpu.md)). `attachBrain` picks it when
+`navigator.gpu` exists; this wasm module is still instantiated either way, because the flyvis eyes run on
+`fv_step`.

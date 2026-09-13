@@ -32,6 +32,11 @@
 - Kim et al. 2015, efference copy in Drosophila visuomotor processing, Nat Neurosci.
 - Tammero and Dickinson 2002, collision-avoidance saccades in free flight, J Exp Biol.
 - Dickinson 1999, haltere-mediated equilibrium reflexes, Phil Trans R Soc B.
+- Dickinson et al. 1999, the quasi-steady aerodynamic force model the wing blade elements use,
+  Science 284:1954.
+- Ewing and Bennet-Clark 1968, the courtship song of Drosophila, Behaviour 31:288.
+- Ribeiro et al. 2018, LC10 visual projection neurons in courtship, Neuron.
+- Deutsch et al. 2020, pIP10 interneurons driving courtship pursuit, Curr Biol.
 
 ## Neuromodulation
 - Yu et al. 2016, insulin and AKH signalling in octopaminergic neurons regulate starvation-induced

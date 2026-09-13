@@ -5,8 +5,11 @@ Files: `arena.html`, `src/arena.js`, `src/sim/fly.worker.js`, `src/sim/fly.js`.
 ## Architecture
 - The main thread loads data, writes the connectome and flyvis model into shared memory, and renders.
 - Each fly runs in its own Web Worker with its own MuJoCo world and brain slot.
-- Workers post poses every 16 ms of simulated time. The main thread shares other flies' positions so each
-  world moves its proxies, which collide, are seen, and carry pheromone.
+- Workers post poses every 16 ms of simulated time. The main thread shares other flies' positions and sexes
+  so each world moves its proxies, which collide, are seen, and carry pheromone.
+- The brain runs on a WebGPU kernel when `navigator.gpu` is available (see [WebGPU](27-webgpu.md));
+  `?gpu=0` on the arena URL forces the WebAssembly kernel. Either way the wasm module is also instantiated,
+  because the flyvis eyes run on it.
 - Food consumption is summed across workers and broadcast back.
 
 ## Rendering
@@ -19,7 +22,8 @@ The right-hand panel follows the selected fly. Every 120 ms the page asks that f
   azimuth and elevation with the front of each eye towards the middle.
 - **Named neuron groups:** firing rate per side in Hz of simulated time, smoothed over about 150 ms,
   for smell, taste, photoreceptors, looming detectors (LC4, LPLC2), the giant fibre, forward and backward
-  walking DNs, steering DNs, grooming DNs, the hunger-driven octopamine neurons (one pooled trace) and
+  walking DNs, steering DNs, grooming DNs, the courtship circuit (pIP10, DNp13), the hunger-driven
+  octopamine neurons (one pooled trace) and
   feeding motor neurons. Each row keeps about 18 s of
   history. The "?" opens a short explanation. Hovering a row fades the brain inset and marks that
   group's somas.
@@ -45,10 +49,11 @@ DNp02 and DNp04.
 | Predator zone | Two flies, a looming threat every 6 s |
 | Maze | Three walls, food at the far end |
 | Social | Five flies, one food patch |
+| Courtship | A male and a female |
 
 ## Controls
-Run and pause, speed, add fly, motor mode, follow camera, placement tools, looming threat, takeoff DN
-activation, wind, light.
+Run and pause, speed, add fly, add female, motor mode, follow camera, placement tools, looming threat,
+takeoff DN activation, wind, light.
 The panel shows each fly's behaviour label, energy, health, food eaten, distance, takeoffs and flights,
-its endogenous state (walk, stop, groom, feed, search, avoiding, fly), AKH and insulin levels, octopamine
+its endogenous state (walk, stop, groom, feed, search, avoiding, court, fly), AKH and insulin levels, octopamine
 tone and arousal ([Neuromodulation](25-neuromodulation.md)), and live descending-neuron commands.
