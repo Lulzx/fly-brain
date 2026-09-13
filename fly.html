@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Drosophila melanogaster — body</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="/src/fly.css" />
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="loading"><div class="title">Drosophila melanogaster</div><div id="status">loading body…</div></div>
+<header id="hud">
+  <h1><i>Drosophila melanogaster</i></h1>
+  <div class="sub">Adult <span id="sexLabel">male</span>, ≈2.5 mm. Cuticle, bristles and eye from the flybody scan; setae, microtrichia and the sex comb added from the anatomical literature. <a href="./">brain viewer</a> · <a href="./arena.html">arena</a></div>
+</header>
+<aside id="controls">
+  <div class="seg" role="group" aria-label="Sex"><button data-sex="m" class="on">♂ male</button><button data-sex="f">♀ female</button></div>
+  <div class="seg" role="group" aria-label="Wings"><button data-wings="rest" class="on">wings folded</button><button data-wings="spread">spread</button><button data-wings="flight">flying</button></div>
+  <div class="seg" role="group" aria-label="Backdrop"><button data-bg="light" class="on">studio</button><button data-bg="dark">dark field</button></div>
+  <label><input type="checkbox" id="hairs" checked> setae</label>
+  <label><input type="checkbox" id="dof" checked> macro depth of field</label>
+  <label><input type="checkbox" id="labels"> anatomy on hover</label>
+</aside>
+<div id="tip" hidden><b></b><span></span></div>
+<div id="hint">drag to orbit · scroll to zoom · right-drag to pan · double-click to focus</div>
+<script type="module" src="/src/fly.js"></script>
+</body>
+</html>

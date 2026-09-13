@@ -20,5 +20,5 @@ export default defineConfig({
   preview: { headers: isolation },
   optimizeDeps: { exclude: ['@mujoco/mujoco'] },
   worker: { format: 'es' },
-  build: { target: 'esnext', rollupOptions: { input: { main: 'index.html', arena: 'arena.html' } } },
+  build: { target: 'esnext', rollupOptions: { input: { main: 'index.html', arena: 'arena.html', fly: 'fly.html' } } },
 });

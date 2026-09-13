@@ -13,6 +13,7 @@ npm run dev
 Then open:
 - `http://localhost:5173/` for the connectome viewer
 - `http://localhost:5173/arena.html` for the embodied arena
+- `http://localhost:5173/fly.html` for the anatomy viewer: the flybody body at full scan resolution with setae, wing interference colours and the compound eye's pseudopupil (mesh from `scripts/prep_fly_hd.py`)
 
 The dev server sends the `Cross-Origin-Opener-Policy` and `Cross-Origin-Embedder-Policy` headers set in
 `vite.config.js`. Without them the arena cannot share memory between fly workers.

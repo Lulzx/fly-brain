@@ -15,6 +15,8 @@ It acts only as synaptic input to identified descending neurons ([docs/23-behavi
 - `arena.html` – the embodied arena: add flies (male or female), place sugar, odour, bitter patches, heat,
   blocks; launch a looming threat or activate a fly's takeoff neurons; change wind and light; follow a fly
   and watch its brain in the inset. `[` and `]` fold the side panels.
+- `fly.html` – the anatomy viewer: the flybody scan at full resolution with added setae, sex comb, tergite
+  pigmentation, wing thin-film colours and the eye's pseudopupil; male or female, wings folded, spread or flying.
 
 ## Run
 ```sh
