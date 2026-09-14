@@ -20,6 +20,15 @@ const status = s => { $('#status').textContent = s; };
 const FLY_COLORS = ['#ffb347', '#5ac8fa', '#a3e635', '#f472b6', '#c084fc', '#facc15', '#fb7185', '#2dd4bf'];
 const presetKey = new URLSearchParams(location.search).get('env') || 'foraging';
 const PRESET = PRESETS[presetKey] || PRESETS.foraging;
+// Worker-pool cap. Each fly is one worker running its own brain + MuJoCo world, so the
+// practical ceiling is CPU-bound and machine-dependent: on a 16-core laptop aggregate
+// throughput stops improving past ~6 flies. ?flies=N caps the pool so a slower machine can
+// stay interactive. Defaults to MAX_FLIES, i.e. unchanged behaviour unless asked for.
+// Clamped to MAX_FLIES because the shared brain memory is sized for MAX_FLIES slots at load
+// time (see allocBrainMemory) and cannot grow afterwards. Note that slots are never
+// reclaimed (nothing calls worker.terminate), so this is a lifetime budget rather than a
+// concurrency limit -- lowering it needs a page reload.
+const FLY_CAP = Math.min(MAX_FLIES, Math.max(1, Number(new URLSearchParams(location.search).get('flies')) || MAX_FLIES));
 const env = PRESET.env();
 const flies = [];          // {id, worker, group, bodies[], last, color, ready}
 let flyvisMap, shared, meta, bodymap, flyXML, gait, visual, batches, outputPass, running = false, selected = 0, tool = 'none', speed = 2, brainMem, wasmModule, brainParams, neuromodCalib;
@@ -55,11 +64,11 @@ async function main() {
   buildUI();
   $('#loading').remove();
   const st0 = PRESET.start || [0, 0, 0];
-  if (PRESET.flySpots) for (const s of PRESET.flySpots) await addFly(s.pos, s.yaw, s.sex);
+  if (PRESET.flySpots) for (const s of PRESET.flySpots.slice(0, FLY_CAP)) await addFly(s.pos, s.yaw, s.sex);
   else { await addFly([st0[0], st0[1]], st0[2]);
-    for (let k = 1; k < (PRESET.flies || 1); k++) { const ang = k * 2.4; await addFly([1.2 * Math.cos(ang), 1.2 * Math.sin(ang)], ang + Math.PI); } }
+    for (let k = 1; k < Math.min(PRESET.flies || 1, FLY_CAP); k++) { const ang = k * 2.4; await addFly([1.2 * Math.cos(ang), 1.2 * Math.sin(ang)], ang + Math.PI); } }
   if (PRESET.autoThreat) setInterval(() => { if (!running || !flies.length) return; const live = flies.filter(f => f.last?.alive !== false); if (!live.length) return; selected = live[Math.floor(Math.random() * live.length)].id; launchThreat(); }, PRESET.autoThreat * 1000);
-  window.__arena = { camera, controls, flies, env, THREE, renderer, scene, gtao, composer, metrics, resolution, batches, visual, addFly, rebuildEnv };
+  window.__arena = { camera, controls, flies, env, THREE, renderer, scene, gtao, composer, metrics, resolution, batches, visual, addFly, rebuildEnv, FLY_CAP, MAX_FLIES };
   animate();
 }
 
@@ -193,7 +202,7 @@ function updateWingBlur(f, s) {
 // ---------------- flies ----------------
 let nextId = 0;
 async function addFly(pos, yaw, sex = 'm') {
-  if (nextId >= MAX_FLIES) { alert(`At most ${MAX_FLIES} flies`); return; }
+  if (nextId >= FLY_CAP) { alert(`Worker-pool cap reached: ${FLY_CAP} flies (?flies=N to raise, max ${MAX_FLIES})`); return; }
   const id = nextId++; const color = FLY_COLORS[id % FLY_COLORS.length];
   const worker = new Worker(new URL('./sim/fly.worker.js', import.meta.url), { type: 'module' });
   const f = { id, worker, color, sex, ready: false, last: null, prev: null, stats: {}, ...buildFlyMesh(color, sex) };
