@@ -29,6 +29,11 @@ const PRESET = PRESETS[presetKey] || PRESETS.foraging;
 // reclaimed (nothing calls worker.terminate), so this is a lifetime budget rather than a
 // concurrency limit -- lowering it needs a page reload.
 const FLY_CAP = Math.min(MAX_FLIES, Math.max(1, Number(new URLSearchParams(location.search).get('flies')) || MAX_FLIES));
+// ?vision=0 runs the flies blind: no eye raycasting (2 x 721 rays per fly per 20 ms) and no
+// flyvis optic-lobe model. The ~62k optic-lobe neurons stay in the connectome and keep their
+// chemical synapses -- they are simply never driven by light, so the fly navigates by smell,
+// taste and touch alone. This is a behavioural change, not just an optimisation.
+const NO_VISION = new URLSearchParams(location.search).get('vision') === '0';
 const env = PRESET.env();
 const flies = [];          // {id, worker, group, bodies[], last, color, ready}
 let flyvisMap, shared, meta, bodymap, flyXML, gait, visual, batches, outputPass, running = false, selected = 0, tool = 'none', speed = 2, brainMem, wasmModule, brainParams, neuromodCalib;
@@ -47,7 +52,10 @@ async function main() {
     fetch(`${BASE}data/brain_params.json`).then(r => r.ok ? r.json() : {}).catch(() => ({})), fetch(`${BASE}lif.wasm`).then(r => r.arrayBuffer()),
     fetch(`${BASE}vision/flyvis.bin`).then(r => r.arrayBuffer()), fetch(`${BASE}vision/flyvis.json`).then(r => r.json()), fetch(`${BASE}vision/flyvis_inputs.json`).then(r => r.json()), fetch(`${BASE}vision/flyvis_map.json`).then(r => r.json()),
     fetch(`${BASE}data/neuromod.json`).then(r => r.ok ? r.json() : null).catch(() => null), loadCuticleDetail(`${BASE}body/cuticle_detail.png`)]);
-  const vision = { model: parseFlyVis(fvb, fvj, fvi), map: fvm };
+  // Passing null here also skips the sensoryMask that would otherwise zero these neurons'
+  // incoming synapses (allocBrainMemory marks flyvis-driven neurons sensory because flyvis
+  // normally replaces their input). Blind flies therefore keep an intact, wired optic lobe.
+  const vision = NO_VISION ? null : { model: parseFlyVis(fvb, fvj, fvi), map: fvm };
   bodymap = bm; flyXML = xml; gait = g; visual = createBlenderFly(blender, detail, levels); outputPass = output;
   shared = { N: data.N, E: data.E, indptr: toShared(data.indptr), indices: toShared(data.indices), weights: toShared(data.weights), nt: toShared(data.nt),
     side: toShared(data.side), superclass: toShared(data.superclass), cls: toShared(data.cls), size: toShared(new Float32Array(sz)), sign: toShared(new Float32Array(sg)) };
@@ -208,7 +216,7 @@ async function addFly(pos, yaw, sex = 'm') {
   const f = { id, worker, color, sex, ready: false, last: null, prev: null, stats: {}, ...buildFlyMesh(color, sex) };
   scene.add(f.group); flies.push(f); batches.add(f);
   worker.onmessage = e => onWorker(f, e.data);
-  worker.postMessage({ type: 'init', id, graph: shared, meta, bodymap, flyXML, gait, env, pos, yaw, nProxies: MAX_FLIES - 1, mode: $('#mode').value, brainOpts: brainParams, neuromod: neuromodCalib, vision: true, sex,
+  worker.postMessage({ type: 'init', id, graph: shared, meta, bodymap, flyXML, gait, env, pos, yaw, nProxies: MAX_FLIES - 1, mode: $('#mode').value, brainOpts: brainParams, neuromod: neuromodCalib, vision: !NO_VISION, sex,
     brainMem: { memory: brainMem.memory, graph: brainMem.graph, bases: brainMem.bases, opts: brainMem.opts, fv: brainMem.fv }, wasmModule, slot: id, flyvisMap });
   await new Promise(res => { f.onReady = res; });
   if (running) worker.postMessage({ type: 'run' });
@@ -333,6 +341,12 @@ function onActivity(f, m) {
     const cx = $(id).getContext('2d'), lum = m.eyes[s], dots = eyeDots[s];
     cx.fillStyle = '#05070c'; cx.fillRect(0, 0, 168, 116);
     for (let c = 0; c < dots.length; c++) { const v = Math.round(255 * Math.min(1, lum[c])); cx.fillStyle = `rgb(${v},${v},${v})`; cx.beginPath(); cx.arc(dots[c][0], dots[c][1], 3, 0, 6.2832); cx.fill(); }
+  });
+  else ['#eyeL', '#eyeR'].forEach(id => {   // ?vision=0: no eyes sampled, say so rather than leave a stale frame
+    const cx = $(id).getContext('2d');
+    cx.fillStyle = '#05070c'; cx.fillRect(0, 0, 168, 116);
+    cx.fillStyle = '#5b6472'; cx.font = '11px system-ui, sans-serif'; cx.textAlign = 'center';
+    cx.fillText('vision off', 84, 62);
   });
 }
 
