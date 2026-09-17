@@ -23,17 +23,19 @@ const PRESET = PRESETS[presetKey] || PRESETS.foraging;
 // Worker-pool cap. Each fly is one worker running its own brain + MuJoCo world, so the
 // practical ceiling is CPU-bound and machine-dependent: on a 16-core laptop aggregate
 // throughput stops improving past ~6 flies. ?flies=N caps the pool so a slower machine can
-// stay interactive. Defaults to MAX_FLIES, i.e. unchanged behaviour unless asked for.
-// Clamped to MAX_FLIES because the shared brain memory is sized for MAX_FLIES slots at load
-// time (see allocBrainMemory) and cannot grow afterwards. Note that slots are never
-// reclaimed (nothing calls worker.terminate), so this is a lifetime budget rather than a
-// concurrency limit -- lowering it needs a page reload.
-const FLY_CAP = Math.min(MAX_FLIES, Math.max(1, Number(new URLSearchParams(location.search).get('flies')) || MAX_FLIES));
+// stay interactive. Defaults to MAX_FLIES, i.e. unchanged behaviour unless asked for, and is
+// clamped there because MAX_FLIES is the designed ceiling (proxy bodies, colour cycle).
+// The shared brain memory and each world's proxy bodies are both sized from FLY_CAP, so a
+// lower cap also costs less memory and less per-step proxy work -- but it is fixed at load
+// time and slots are never reclaimed (nothing calls worker.terminate), so this is a lifetime
+// budget rather than a concurrency limit: changing it needs a page reload.
+const FLY_CAP = Math.min(MAX_FLIES, Math.max(1, Math.floor(Number(new URLSearchParams(location.search).get('flies'))) || MAX_FLIES));
 // ?vision=0 runs the flies blind: no eye raycasting (2 x 721 rays per fly per 20 ms) and no
 // flyvis optic-lobe model. The ~62k optic-lobe neurons stay in the connectome and keep their
 // chemical synapses -- they are simply never driven by light, so the fly navigates by smell,
 // taste and touch alone. This is a behavioural change, not just an optimisation.
-const NO_VISION = new URLSearchParams(location.search).get('vision') === '0';
+// Accepts the usual spellings of "off" so ?vision=false doesn't silently leave vision on.
+const NO_VISION = ['0', 'false', 'off', 'no'].includes((new URLSearchParams(location.search).get('vision') || '').toLowerCase());
 const env = PRESET.env();
 const flies = [];          // {id, worker, group, bodies[], last, color, ready}
 let flyvisMap, shared, meta, bodymap, flyXML, gait, visual, batches, outputPass, running = false, selected = 0, tool = 'none', speed = 2, brainMem, wasmModule, brainParams, neuromodCalib;
@@ -64,7 +66,7 @@ async function main() {
   neuromodCalib = nmc; wasmModule = await WebAssembly.compile(wasmBytes);
   status('writing connectome into shared memory');
   status('writing connectome and optic-lobe model into shared memory');
-  brainMem = allocBrainMemory({ ...data, superclass: data.superclass }, shared.size, shared.sign, brainParams, MAX_FLIES, vision);
+  brainMem = allocBrainMemory({ ...data, superclass: data.superclass }, shared.size, shared.sign, brainParams, FLY_CAP, vision);
   flyvisMap = fvm;
   window.__data = data;
   buildBrainPanel(data);
@@ -130,7 +132,7 @@ function buildScene(data) {
   }
   addEventListener('resize', () => { resolution.reset(); resize(); }); resize();
   envGroup = new THREE.Group(); scene.add(envGroup); rebuildEnv();
-  batches = new ArenaBatches(scene, visual, MAX_FLIES);
+  batches = new ArenaBatches(scene, visual, FLY_CAP);
   raycaster = new THREE.Raycaster();
   renderer.domElement.addEventListener('pointerdown', e => { pd = [e.clientX, e.clientY]; });
   renderer.domElement.addEventListener('pointerup', e => { if (pd && Math.hypot(e.clientX - pd[0], e.clientY - pd[1]) < 4) onClick(e); });
@@ -216,7 +218,7 @@ async function addFly(pos, yaw, sex = 'm') {
   const f = { id, worker, color, sex, ready: false, last: null, prev: null, stats: {}, ...buildFlyMesh(color, sex) };
   scene.add(f.group); flies.push(f); batches.add(f);
   worker.onmessage = e => onWorker(f, e.data);
-  worker.postMessage({ type: 'init', id, graph: shared, meta, bodymap, flyXML, gait, env, pos, yaw, nProxies: MAX_FLIES - 1, mode: $('#mode').value, brainOpts: brainParams, neuromod: neuromodCalib, vision: !NO_VISION, sex,
+  worker.postMessage({ type: 'init', id, graph: shared, meta, bodymap, flyXML, gait, env, pos, yaw, nProxies: FLY_CAP - 1, mode: $('#mode').value, brainOpts: brainParams, neuromod: neuromodCalib, vision: !NO_VISION, sex,
     brainMem: { memory: brainMem.memory, graph: brainMem.graph, bases: brainMem.bases, opts: brainMem.opts, fv: brainMem.fv }, wasmModule, slot: id, flyvisMap });
   await new Promise(res => { f.onReady = res; });
   if (running) worker.postMessage({ type: 'run' });
