@@ -11,6 +11,7 @@ const PARTS = [
   { name: 'The Method', slugs: ['05-operators', '06-ensemble-method'] },
   { name: 'Three Circuits', slugs: ['07-heading-lab', '08-field-model', '09-cross-validation', '10-phasor-circuit', '11-mushroom-body'] },
   { name: 'Assessment', slugs: ['12-benchmark', '13-compiler', '14-embodied', '15-synthesis'] },
+  { name: 'Beyond the Fly', slugs: ['16-upload'] },
   { name: 'Appendices', slugs: ['A-reproduction', 'B-references'] },
 ];
 

@@ -19,3 +19,11 @@ In recommended order.
 7. ~~Social behaviour~~ — done: LC10 visual detection + cVA pheromone → pIP10/DNp13 pursuit and wing
    display through the male fru/dsx circuitry ([Courtship](26-courtship.md)). Next: a female that flees or
    rejects, and real song pulses.
+8. **Substitution ladder.** Make the abstraction-level question a recorded table instead of scattered
+   findings: drop size scaling, adaptation, short-term depression and axonal delay one at a time from
+   [`brainmodel.js`](05-brain-model.md) and log which behavioural assays break
+   ([Limitations](19-limitations.md) for the ones already known to).
+9. **Individual identifiability.** Fit the same connectome separately against two recorded individuals and
+   test whether a held-out assay separates the two models in the direction that matches the two animals.
+   A negative result would be the more informative one — see the textbook chapter *What Emulating an
+   Individual Would Require* (`docs/textbook/16-upload.md`).
