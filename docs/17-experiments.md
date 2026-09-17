@@ -16,6 +16,11 @@
 | `node scripts/flight_test.mjs [turn] [ms]` | Brainless flight-controller test |
 | `node scripts/neuromod_calib.mjs [s]` | Calibrates octopamine and insulin cell thresholds for a fed fly; writes `public/data/neuromod.json` |
 | `node scripts/starvation.mjs [s] [seeds]` | Starvation-induced hyperactivity, fed vs starved, in five genotypes ([Neuromodulation](25-neuromodulation.md)) |
+| `node scripts/ablation_ladder.mjs [seeds]` | Substitution ladder: drop one level of description at a time and re-score the benchmark ([Ablation ladder](31-ablation-ladder.md)) |
+| `node scripts/ablation_refit.mjs [gens] [pop]` | The same ablations, each refitted, to separate sensitivity from necessity |
+| `python3 scripts/synapse_confidence.py` | Per-connection measurement uncertainty from bilateral replicates ([Uncertainty](32-synapse-uncertainty.md)) |
+| `node scripts/grad_check.mjs [n] [steps]` | Verifies the adjoint in `src/lifdiff.js` against finite differences ([Differentiable brain](33-differentiable-brain.md)) |
+| `node --max-old-space-size=14000 scripts/grad_fit.mjs [steps] [iters] [mode]` | Gradient descent on the whole CNS, globals and/or 165,122 per-neuron gains |
 
 ## Diagnostic tools
 `al_trace`, `ignition`, `paths`, `chain`, `inputs`, `dn_inputs`, `sign_diff`, `sense_ablate`, `kc_test`,

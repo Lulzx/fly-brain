@@ -1,0 +1,265 @@
+{
+ "_source": "scripts/synapse_confidence.py",
+ "method": "bilateral test-retest: existence against a configuration-model null, weight as a reliability coefficient on log(1+count), with empirical-Bayes shrinkage",
+ "floor": 3,
+ "edges": 10511038,
+ "format": {
+  "reliability": "uint8 per edge, lambda = byte / 255, graph_w3.bin CSR order",
+  "shrunkWeight": "uint16 per edge, empirical-Bayes weight, same order"
+ },
+ "calibration": {
+  "typesWithOneCellPerSide": 5247,
+  "cellsWithMirror": 10494,
+  "edgesWithMirrorDefined": 657126,
+  "edgesWithMirrorPresent": 434896,
+  "distinctPairs": 357984,
+  "pairsBothObserved": 171158,
+  "fractionOfGraphCalibrated": 0.0625
+ },
+ "latentModel": {
+  "mu": -0.55123,
+  "tau": 1.88615,
+  "logSigmaIntercept": -0.11952,
+  "logSigmaSlope": -0.24056,
+  "censorAtLogCount": 1.25276,
+  "pairsFitted": 120000,
+  "negLogLik": 251791.9,
+  "converged": true,
+  "sdAtCount3": 0.6357,
+  "sdAtCount30": 0.3884
+ },
+ "reliabilityByCount": {
+  "3": 0.8698,
+  "4": 0.8819,
+  "5": 0.8916,
+  "6": 0.8992,
+  "8": 0.9098,
+  "10": 0.9173,
+  "15": 0.9326,
+  "20": 0.9424,
+  "30": 0.9507,
+  "50": 0.9645,
+  "100": 0.9723
+ },
+ "shrunkWeightByCount": {
+  "3": 1.25,
+  "4": 1.84,
+  "5": 2.47,
+  "6": 3.11,
+  "8": 4.3,
+  "10": 5.47,
+  "15": 9.25,
+  "20": 13.5,
+  "30": 19.38,
+  "50": 40.5,
+  "100": 69.9
+ },
+ "curve": [
+  {
+   "lo": 3,
+   "hi": 4,
+   "n": 128450,
+   "reproduced": 0.3204,
+   "chance": 0.00711,
+   "enrichment": 45.1,
+   "medianMirror": 0.0,
+   "medianCount": 3,
+   "reliability": 0.8698,
+   "shrunkWeight": 1.25
+  },
+  {
+   "lo": 4,
+   "hi": 5,
+   "n": 81681,
+   "reproduced": 0.4285,
+   "chance": 0.00737,
+   "enrichment": 58.2,
+   "medianMirror": 0.0,
+   "medianCount": 4,
+   "reliability": 0.8819,
+   "shrunkWeight": 1.84
+  },
+  {
+   "lo": 5,
+   "hi": 6,
+   "n": 57448,
+   "reproduced": 0.5212,
+   "chance": 0.00762,
+   "enrichment": 68.4,
+   "medianMirror": 3.0,
+   "medianCount": 5,
+   "reliability": 0.8916,
+   "shrunkWeight": 2.47
+  },
+  {
+   "lo": 6,
+   "hi": 8,
+   "n": 77193,
+   "reproduced": 0.628,
+   "chance": 0.0078,
+   "enrichment": 80.5,
+   "medianMirror": 4.0,
+   "medianCount": 6,
+   "reliability": 0.8992,
+   "shrunkWeight": 3.11
+  },
+  {
+   "lo": 8,
+   "hi": 10,
+   "n": 50706,
+   "reproduced": 0.7338,
+   "chance": 0.00798,
+   "enrichment": 91.9,
+   "medianMirror": 6.0,
+   "medianCount": 8,
+   "reliability": 0.9098,
+   "shrunkWeight": 4.3
+  },
+  {
+   "lo": 10,
+   "hi": 13,
+   "n": 50686,
+   "reproduced": 0.8226,
+   "chance": 0.00799,
+   "enrichment": 102.9,
+   "medianMirror": 8.0,
+   "medianCount": 11,
+   "reliability": 0.9207,
+   "shrunkWeight": 6.11
+  },
+  {
+   "lo": 13,
+   "hi": 17,
+   "n": 43734,
+   "reproduced": 0.892,
+   "chance": 0.0083,
+   "enrichment": 107.5,
+   "medianMirror": 11.0,
+   "medianCount": 14,
+   "reliability": 0.9299,
+   "shrunkWeight": 8.38
+  },
+  {
+   "lo": 17,
+   "hi": 22,
+   "n": 36013,
+   "reproduced": 0.9349,
+   "chance": 0.00826,
+   "enrichment": 113.1,
+   "medianMirror": 15.0,
+   "medianCount": 19,
+   "reliability": 0.9409,
+   "shrunkWeight": 12.72
+  },
+  {
+   "lo": 22,
+   "hi": 30,
+   "n": 35933,
+   "reproduced": 0.9635,
+   "chance": 0.00856,
+   "enrichment": 112.5,
+   "medianMirror": 21.0,
+   "medianCount": 25,
+   "reliability": 0.9474,
+   "shrunkWeight": 16.68
+  },
+  {
+   "lo": 30,
+   "hi": 40,
+   "n": 26674,
+   "reproduced": 0.9791,
+   "chance": 0.00919,
+   "enrichment": 106.5,
+   "medianMirror": 29.5,
+   "medianCount": 34,
+   "reliability": 0.9534,
+   "shrunkWeight": 22.13
+  },
+  {
+   "lo": 40,
+   "hi": 60,
+   "n": 27998,
+   "reproduced": 0.9874,
+   "chance": 0.00942,
+   "enrichment": 104.8,
+   "medianMirror": 42.0,
+   "medianCount": 48,
+   "reliability": 0.9635,
+   "shrunkWeight": 38.25
+  },
+  {
+   "lo": 60,
+   "hi": 100,
+   "n": 22524,
+   "reproduced": 0.9928,
+   "chance": 0.0099,
+   "enrichment": 100.3,
+   "medianMirror": 69.0,
+   "medianCount": 74,
+   "reliability": 0.9686,
+   "shrunkWeight": 53.23
+  },
+  {
+   "lo": 100,
+   "hi": null,
+   "n": 18086,
+   "reproduced": 0.9955,
+   "chance": 0.01338,
+   "enrichment": 74.4,
+   "medianMirror": 139.0,
+   "medianCount": 143,
+   "reliability": 0.9794,
+   "shrunkWeight": 132.62
+  }
+ ],
+ "thresholds": {
+  "1": {
+   "edges": 10511038,
+   "fracEdges": 1.0,
+   "meanReliability": 0.9015,
+   "synapseMassKept": 1.0
+  },
+  "3": {
+   "edges": 10511038,
+   "fracEdges": 1.0,
+   "meanReliability": 0.9015,
+   "synapseMassKept": 1.0
+  },
+  "5": {
+   "edges": 6235682,
+   "fracEdges": 0.5933,
+   "meanReliability": 0.9192,
+   "synapseMassKept": 0.861
+  },
+  "6": {
+   "edges": 5092668,
+   "fracEdges": 0.4845,
+   "meanReliability": 0.925,
+   "synapseMassKept": 0.8062
+  },
+  "8": {
+   "edges": 3630343,
+   "fracEdges": 0.3454,
+   "meanReliability": 0.9337,
+   "synapseMassKept": 0.716
+  },
+  "10": {
+   "edges": 2749407,
+   "fracEdges": 0.2616,
+   "meanReliability": 0.9401,
+   "synapseMassKept": 0.6446
+  },
+  "12": {
+   "edges": 2168143,
+   "fracEdges": 0.2063,
+   "meanReliability": 0.9452,
+   "synapseMassKept": 0.5863
+  }
+ },
+ "summary": {
+  "meanReliability": 0.9015,
+  "synapsesRaw": 104213652,
+  "synapsesShrunk": 65558202,
+  "weightsChanged": 10451491
+ }
+}
