@@ -41,14 +41,16 @@ Baseline 0.722 ± 0.003 (n = 12).
 | rung | level | score | change | assays that break |
 |---|---|---|---|---|
 | `w_binary` | efficacy | 0.259 | −0.463 ± 0.003 | sugar, mix, kcSparse, legs, rhythm, tarsalPER, sugarStop, loom, noFalseAlarm |
-| `w_shuffle` | control | 0.301 | −0.421 ± 0.012 | sugar, mix, kcSparse, baseline, legs, tarsalPER, sugarStop, loom, noFalseAlarm |
+| `w_shuffle` | efficacy | 0.301 | −0.421 ± 0.012 | sugar, mix, kcSparse, baseline, legs, tarsalPER, sugarStop, loom, noFalseAlarm |
 | `add_depression` | cellular | 0.306 | −0.416 ± 0.004 | sugar, mix, kcSparse, legs, rhythm, tarsalPER, sugarStop, loom, noFalseAlarm |
 | `add_adaptation` | cellular | 0.429 | −0.293 ± 0.004 | sugar, mix, kcSparse, tarsalPER, sugarStop, loom, noFalseAlarm |
+| `w_eb_gated` | efficacy | 0.454 | −0.268 ± 0.003 | sugar, mix, kcSparse, tarsalPER, sugarStop, loom |
+| `w_eb` | efficacy | 0.458 | −0.264 ± 0.003 | sugar, mix, kcSparse, tarsalPER, sugarStop, loom |
 | `no_inh_gain` | cellular | 0.466 | −0.256 ± 0.005 | sugar, mix, kcSparse, tarsalPER, noMDN, loom |
 | `no_size_scaling` | cellular | 0.482 | −0.240 ± 0.007 | bitter, mix, kcSparse, baseline, tarsalPER, sugarStop, noMDN, loom |
 | `no_refractory` | cellular | 0.484 | −0.238 ± 0.014 | bitter, mix, kcSparse, baseline, sugarStop, loom |
 | `cuba` | cellular | 0.509 | −0.213 ± 0.005 | bitter, mix, kcSparse, baseline, sugarStop, loom |
-| `sign_free` | control | 0.521 | −0.201 ± 0.003 | bitter, mix, kcSparse, baseline, sugarStop, noMDN, noFalseAlarm |
+| `sign_free` | control (floor) | 0.521 | −0.201 ± 0.003 | bitter, mix, kcSparse, baseline, sugarStop, noMDN, noFalseAlarm |
 | `no_delay` | cellular | 0.606 | −0.116 ± 0.006 | tarsalPER, sugarStop, loom, noFalseAlarm |
 | `minsyn_12` | efficacy | 0.651 | −0.071 ± 0.004 | bitter, kcSparse, sugarStop, noMDN, loom |
 | `no_kc_threshold` | cellular | 0.660 | −0.063 ± 0.004 | kcSparse, baseline |
@@ -58,10 +60,20 @@ Baseline 0.722 ± 0.003 (n = 12).
 | `nominal_einh` | cellular | 0.698 | −0.025 ± 0.007 | kcSparse, noMDN |
 | `no_lamina_bias` | cellular | 0.722 | +0.000 ± 0.000 | (none) |
 
-`sign_free` — every neuron made excitatory — is the floor: a manipulation that destroys the
-inhibitory half of the wiring and must break the benchmark if the benchmark detects anything. It costs
-0.201. **Four rungs cost more than the floor.** Replacing graded synapse counts with their mean costs
-more than twice it.
+`sign_free` — every neuron made excitatory — is the control: a manipulation that destroys the
+inhibitory half of the wiring, and one the benchmark must be able to detect if it detects anything. It
+costs 0.201, and **ten of the nineteen ablations cost more than it does.** Replacing graded synapse
+counts with their mean costs more than twice as much.
+
+That is worth pausing on, because it was meant to be a floor and is not one. Deleting every inhibitory
+sign in a 165,122-neuron nervous system is a more violent manipulation than anything else in the table,
+and the benchmark ranks it eleventh. The composite is built from firing rates, sparseness fractions and
+rhythm indices, and those are dominated by how much drive reaches each population — so a manipulation
+that changes gain scores worse than one that changes the computation. This is a property of the
+objective, not of the model, and it is the same property that makes `w_shuffle` recoverable to 41%
+below. A benchmark assembled from literature summary statistics measures what those statistics measure.
+Fixing it means scoring against recorded activity rather than summaries, which is item B1 on the
+[roadmap](20-roadmap.md).
 
 Three results are worth separating from the rest.
 
@@ -98,21 +110,22 @@ was a coordinate, not a requirement; 0% means the loss survives everything the o
 
 | rung | no refit | refitted | recovered |
 |---|---|---|---|
-| `no_size_scaling` | 0.482 | 0.690 | **90%** |
-| `no_neuromod` | 0.689 | 0.705 | 76% |
+| `no_size_scaling` | 0.482 | 0.690 | **91%** |
+| `no_neuromod` | 0.689 | 0.705 | 77% |
 | `cuba` | 0.509 | 0.659 | 75% |
 | `w_binary` | 0.259 | 0.586 | 73% |
 | `add_depression` | 0.306 | 0.539 | 58% |
 | `no_refractory` | 0.484 | 0.587 | 47% |
-| `add_adaptation` | 0.429 | 0.556 | 46% |
+| `add_adaptation` | 0.429 | 0.556 | 47% |
 | `w_shuffle` | 0.301 | 0.465 | 41% |
 | `no_inh_gain` | 0.466 | 0.551 | 37% |
 | `no_delay` | 0.606 | 0.630 | **28%** |
+| `sign_free` | 0.521 | 0.513 | **1%** |
 
 The ordering changes almost completely, and the changes are the point.
 
 **Per-neuron size scaling was not load-bearing.** It looked like the third most costly ablation in arm
-one at −0.240. Ninety per cent of that comes back once the remaining eight parameters are refitted. The
+one at −0.240. Ninety-one per cent of that comes back once the remaining eight parameters are refitted. The
 postsynaptic volume scaling is a coordinate the search was using to set an overall gain, and a different
 combination of `wSyn`, `inhGain` and the rest reaches almost the same place without it. This directly
 weakens a claim made in [Chapter 16](textbook/16-upload.md), which cites size scaling as evidence
@@ -124,6 +137,11 @@ potentials or thresholds reconstitutes what a 1.8 ms conduction delay does, and 
 why: looming escape and its false-alarm control, which depend on relative timing along the LC4/LPLC2 →
 giant-fibre chain rather than on the gain anywhere in it. A mechanism can be modest in sensitivity and
 irreplaceable in kind.
+
+**The floor is a real floor.** `sign_free` recovers 1% — refitted, it scores 0.513 against 0.521
+un-refitted, very slightly *worse*. Twelve generations of search over every remaining parameter
+cannot rebuild a model whose inhibition has been deleted, which is the behaviour a control of this
+kind has to show for the recovery column to mean anything.
 
 **Graded weight remains load-bearing, but less than arm one suggested.** `w_binary` recovers 73%: most
 of what binarisation destroys is a gain the global parameters can restore. The residual 27% — a gap of
@@ -139,6 +157,20 @@ to 0.465 when re-scored across seeds, since each seed draws a different permutat
 one of them. The benchmark discriminates real wiring from permuted wiring, but by a smaller margin than
 the raw scores suggest, and any single fit to a single graph carries a substantial component of
 "the search found a way."
+
+### The empirical-Bayes weights are not yet interpretable
+
+`w_eb` and `w_eb_gated` substitute the weights from [doc 32](32-synapse-uncertainty.md) for the raw
+synapse counts, and cost 0.264 and 0.268 at the fitted operating point. That number should not be read
+as evidence against them. The empirical-Bayes weights shrink the graph from 104.2 M synapses to
+65.6 M, a 37% change in overall synaptic scale, and `wSyn` was fitted against the raw counts — so most
+of what the rung measures is a gain mismatch that the model has a parameter for.
+
+Arm one cannot answer this. The comparison that can is the refit, and it is the obvious next thing to
+run: `scripts/ablation_refit.mjs 12 20 'w_eb'` puts both rungs through the same search as everything
+else. If the refitted empirical-Bayes model matches the refitted baseline, the six-synapse threshold
+can be replaced by a per-connection uncertainty estimate at no cost, and nothing is discarded. That is
+the result worth having, and it is not in this table.
 
 ## What this says about the abstraction question
 
