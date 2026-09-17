@@ -17,10 +17,28 @@ const MEMB = graphBytes(D.N, D.E) + brainBytes(D.N, 20) + flyvisBytes(FVM.N, FVM
 const MEM = new WebAssembly.Memory({ initial: Math.ceil(MEMB / 65536), maximum: Math.ceil(MEMB / 65536), shared: true });
 const INST = (await WebAssembly.instantiate(WASM, { env: { memory: MEM } })).instance;
 let graphKey = null, GRAPH = null, BRAIN_END = 0;
+const ALL_EXC = new Float32Array(D.N).fill(1);   // sign-free control: every neuron excitatory
+// Weight ablations for the substitution ladder (scripts/ablation_ladder.mjs): graded synapse counts
+// replaced by their mean (topology only) or permuted among the retained edges (a matched control).
+const mulberry32 = a => () => { a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+let EBW = null;   // empirical-Bayes connection weights from scripts/synapse_confidence.py
+function weightsFor(o) {
+  if (o.wEB) { if (!EBW) { const b = fs.readFileSync('public/data/edge_w_shrunk.u16'); EBW = new Uint16Array(b.buffer.slice(b.byteOffset, b.byteOffset + b.byteLength)); }
+    if (EBW.length !== DATA.weights.length) throw new Error('edge_w_shrunk.u16 does not match the graph'); return EBW; }
+  if (!o.wBinary && !o.wShuffle) return DATA.weights;
+  const min = o.minSyn ?? 1, src = DATA.weights, kept = [];
+  for (let k = 0; k < src.length; k++) if (src[k] >= min) kept.push(k);
+  const w = Float32Array.from(src);
+  if (o.wBinary) { let m = 0; for (const k of kept) m += src[k]; m /= Math.max(1, kept.length); for (const k of kept) w[k] = m; }
+  else { const vals = kept.map(k => src[k]), rnd = mulberry32((o.seed ?? 1) >>> 0);
+    for (let i = vals.length - 1; i > 0; i--) { const j = (rnd() * (i + 1)) | 0; [vals[i], vals[j]] = [vals[j], vals[i]]; }
+    kept.forEach((k, i) => { w[k] = vals[i]; }); }
+  return w;
+}
 function makeBrain(cfg) {
-  const o = { ...BRAIN_DEFAULTS, ...cfg }; const key = JSON.stringify(o);
-  if (key !== graphKey) { const { inScale, sensoryMask } = brainScales(DATA, SIZE, o); for (const sd of ['L', 'R']) for (const [i] of FVMAP.eyes[sd].pairs) sensoryMask[i] = 1; GRAPH = writeGraph(MEM, 1024, DATA, { ...LIF_DEFAULTS, ...o }, inScale, sensoryMask, modulatorySign(DATA, SIGN, o)); graphKey = key; }
-  const b = new LIFWasm({ instance: INST, memory: MEM, graph: GRAPH, base: (GRAPH.end + 4095) & ~4095, N: D.N, params: o, seed: (Math.random() * 1e9) | 0 });
+  const o = { ...BRAIN_DEFAULTS, ...cfg }; const { seed: cfgSeed, ...gcfg } = o; const key = JSON.stringify(gcfg) + (o.wShuffle ? '|' + cfgSeed : '');
+  if (key !== graphKey) { const { inScale, sensoryMask } = brainScales(DATA, SIZE, o); for (const sd of ['L', 'R']) for (const [i] of FVMAP.eyes[sd].pairs) sensoryMask[i] = 1; GRAPH = writeGraph(MEM, 1024, { ...DATA, weights: weightsFor(o) }, { ...LIF_DEFAULTS, ...o }, inScale, sensoryMask, modulatorySign(DATA, o.signFree ? ALL_EXC : SIGN, o)); graphKey = key; }
+  const b = new LIFWasm({ instance: INST, memory: MEM, graph: GRAPH, base: (GRAPH.end + 4095) & ~4095, N: D.N, params: o, seed: cfgSeed ?? ((Math.random() * 1e9) | 0) });
   BRAIN_END = b.end;
   applyClassPhysiology(b, DATA, o);
   if (o.neuromod) new Neuromod(DATA, b, { minSyn: o.minSyn }).modulate();   // fed octopamine tone on OA targets (its fast synapses are off)

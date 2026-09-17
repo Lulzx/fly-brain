@@ -10,3 +10,8 @@ data/calib_log.jsonl
 scripts/_tmp
 data/ir
 __pycache__
+
+# Regenerated in ~30 s by scripts/synapse_confidence.py (31 MB of derived arrays;
+# the results themselves are in the tracked public/data/edge_uncertainty.json)
+public/data/edge_reliability.u8
+public/data/edge_w_shrunk.u16
