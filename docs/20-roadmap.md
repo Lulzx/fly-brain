@@ -280,6 +280,45 @@ replace. The finding to carry forward is that each repair made the terms movable
 something was fitted against them, a further loosened joint appeared — first aliasing, then a
 threshold, then sparseness-by-excitability — which is the argument for B1 in miniature.
 
+### A8. Make the engram expressible, then ask in simulation whether it is recoverable
+Nothing in the model changes with experience, and the shape of that gap is more specific than "learning
+is missing". `public/data/sparse_associative_memory_lab.json` describes the 44,000 Kenyon-cell-to-output
+connections as *plastic in vivo* and then hands the ensemble a single scalar, `kc2mb`, swept over
+{0.5, 1, 2}. An individual's entire olfactory engram is currently one global gain. [Textbook chapter
+11](textbook/11-mushroom-body.md) reaches the same place from the other side: the probe tests
+fixed-pattern readout, there is no teaching rule, and recall is never tested.
+
+The engineering half is small and self-contained:
+
+- **A plastic scalar per KC→MBON connection**, initialised at the empirical-Bayes weight from
+  [doc 32](32-synapse-uncertainty.md), sign-restricted and bounded. 44k floats against the model's
+  10.5 M connections.
+- **A compartment map**, so dopaminergic gating is local rather than global. The graph already carries
+  the argument for putting the gate at the presynaptic terminal: DAN→KC contacts outnumber DAN→MBON
+  89,036 to 37,972.
+- **A teaching rule with a stated time window, and a recall protocol that is not the training
+  protocol.** Scored baseline-subtracted, per [A7](20-roadmap.md) — a mushroom-body assay in this
+  repository that counts raw threshold crossings has already been wrong twice.
+
+The experiment that follows needs no new data at all. Install a known weight vector, discard it,
+generate synthetic recordings and behaviour from the model that holds it, and try to recover it with
+the adjoint from [doc 33](33-differentiable-brain.md) holding the graph and the nine globals fixed.
+Ground truth is known exactly, and fit error is zero by construction, so what is being measured is
+identifiability alone.
+
+**Success:** the installed vector is recovered above chance, *and* the recovered model expresses the
+trained preference on a recall protocol it was not fitted against.
+**The interesting negative:** if a 44k-dimensional engram cannot be recovered even from data the same
+model generated, no quantity of real recording will do it either. That is [doc
+34](34-individual-validation.md)'s κ measured for memory specifically, in simulation, before an animal
+is on a rig — and κ is the axis that otherwise fails silently.
+
+**The trap to design against.** 44,000 free parameters is exactly how doc 34's β blows up, and β = 1
+caps power at 0.70 against even an excellent observable. Constrain the plastic subspace to what the
+biology permits — depression-only within the taught compartment, sparse, bounded — so that the
+regulariser and the biological claim are the same object. A free 44k-parameter fit that reproduces the
+behaviour has established that 44k parameters can reproduce behaviour.
+
 ---
 
 ## B. Needs data that exists
@@ -339,6 +378,37 @@ requires either a different measurement or a level of description the current re
 express. That is a real answer to a question the upload literature generally assumes away, and it is
 reachable at fly scale for a small fraction of what the same question costs at any larger one.
 
+### C1b. The installed-memory experiment, pre-registered separately
+[Doc 34](34-individual-validation.md) freezes six observables, and this item does **not** amend it. A
+seventh observable added to a frozen design is the failure the document exists to prevent, so the
+memory assay is a second pre-registration with its own outcome table, run alongside C1 rather than
+inside it, and doc 34's result stands or falls on its own six either way.
+
+It is worth running because it removes the one assumption C1 cannot control. C1 has to *hope* that
+ρ ≥ 0.4 — that the animals happen to differ enough in behaviours that arose on their own. A memory can
+be installed: assign each of the twelve animals a different randomly chosen training odour, and
+between-animal variance becomes a design variable. It is also the only observable in either design
+whose correct answer is known in advance, so a failure is attributable rather than merely negative.
+
+The statistic is `scripts/identify_test.mjs` unchanged, over a preference vector across the odour
+panel. Doc 34's three controls carry over, and the design needs three more, all of which test the same
+worry from different sides:
+
+- **Freeze the plastic weights and remove DAN drive at test.** A model that re-learns during the assay
+  has preserved nothing.
+- **The naive competitor.** An untrained but otherwise identical model, entered alongside doc 34's
+  species-typical thirteenth candidate. It separates *this model holds a memory* from *this model holds
+  this animal's memory*.
+- **The swap.** Exchange the fitted plastic vectors between two animals' models. Identification must
+  follow the weights, not the fly.
+
+**Dependencies, and the one that is worse here than anywhere else.** A8 for the representation, B1 for
+the objective, and B2 for registration — but B2 at Kenyon-cell resolution rather than cell-type
+resolution, which is the hard version of an already hard item. A memory is defined over the identity of
+individual Kenyon cells, they are not individually named cell types, and doc 32's bilateral-replicate
+trick excludes them by construction. There is no version of this experiment that a cell-type
+registration can reach.
+
 ### ~~C2. Design the validation before there is anything to validate~~
 Committed: [doc 34](34-individual-validation.md) fixes the assay, the six observables, the number of
 animals, the split, the statistic, the threshold, the controls and the outcome table, and
@@ -366,6 +436,34 @@ rather than the imaging.
 lower bound derived from bilateral symmetry, and it exists only because the pipeline discarded its own
 confidence upstream. A pipeline that kept it would make that entire document unnecessary. That is an
 argument for building the pipeline, not for improving the workaround.
+
+### C4. Does the scan carry the engram?
+[Doc 32](32-synapse-uncertainty.md) already treats a contact count as a noisy measurement of an
+efficacy rather than as a fact. If associative learning moves contact number or active-zone size at the
+taught compartment's KC→MBON connections, then part of an individual's memory is in the micrographs,
+and it is preservable by scanning in the same sense that wiring is. If it does not, the engram is
+reachable only by fitting against function — and only for associations the animal expressed while the
+recording was running ([Chapter 16](textbook/16-upload.md)).
+
+Nothing decides this by argument, and it is a fly-scale experiment: train animals on one odour, scan
+them alongside naive controls, and compare the taught compartment's weights against the *untaught*
+compartments of the same animal. The within-animal contrast is the one to score, because doc 32 shows
+between-animal weight disagreement to be large at low counts and inseparable from reconstruction error.
+
+**The measurement problem has to be stated with the design, not after it.** At the floor the
+reconstruction's standard deviation is 0.64 log units — a connection reported at three synapses is
+uncertain by about a factor of two — and Kenyon cells have no one-cell-per-side replicate, so doc 32's
+noise model is *inherited* for exactly the connections that hold the memory rather than fitted on them.
+A per-connection test is therefore hopeless and the compartment-wide aggregate is not, since the
+prediction is compartment-wide to begin with. Powering it means estimating the detectable effect size
+from the fitted σ(θ) before any tissue is cut.
+
+**Success:** a compartment-specific weight shift in trained animals, absent in their own untaught
+compartments and in naive controls.
+**Why the negative is worth the cost:** it would establish that electron microscopy is blind to
+acquired state, which converts "preserve a memory" from a scan problem into a recording problem with a
+known information bound — and that bound then propagates into every upload roadmap that assumes a
+sufficiently good scan is sufficient.
 
 ---
 
@@ -395,8 +493,8 @@ argument for building the pipeline, not for improving the workaround.
 - **Wall climbing.** Train or fit a vertical-surface gait so the legs can grip walls.
 - **A female fly.** The male CNS connectome is the only whole-CNS release, so courtship currently plays
   against a target that cannot respond.
-- **Learning.** Nothing in the model changes with experience. The mushroom body is wired for it
-  ([textbook chapter 11](textbook/11-mushroom-body.md)), and the dopaminergic compartments that would
-  gate plasticity are in the graph but static. This is the largest single capability the model lacks,
-  and it is also the one that would most complicate every fitting procedure above, since a plastic
-  model's parameters are no longer constants to be fitted.
+- ~~**Learning.**~~ Scheduled as [A8](20-roadmap.md), which states the build and the simulation
+  experiment that follows it. The observation that promoted it: a plastic model's parameters are no
+  longer constants to be fitted, so every fitting procedure above inherits the complication — which is
+  the argument for measuring the identifiability of an engram in simulation, where it is free, before
+  any of them depends on the answer.
