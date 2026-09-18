@@ -41,7 +41,7 @@ which covers the structural analysis and the model ensembles.
 17. [Experiments and scripts](17-experiments.md): headless tools and the behaviour report
 18. [Performance](18-performance.md): where time goes and what was optimised
 19. [Limitations](19-limitations.md): what does not work yet, and why
-20. [Roadmap](20-roadmap.md): recommended next steps
+20. [Roadmap](20-roadmap.md): the motor programme first, then what is reachable now, what needs data that exists, and what needs data nobody has
 21. [References](21-references.md): datasets, models, and papers used
 
 ### Delivery
