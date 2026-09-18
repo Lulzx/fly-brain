@@ -5,9 +5,134 @@ than an engineering task, it also says what a negative result would mean — an 
 failure mode is engineering, and an item with one is science, where the negative result is often the
 more valuable outcome.
 
-The ordering inside each part is by dependency, not by ambition. Part A is reachable from what is
-already in the repository. Part B needs data this project does not have but that exists. Part C needs
-data nobody has yet, and is stated precisely so that the cost of getting it is visible.
+The ordering inside each part is by dependency, not by ambition. Part M is the current priority and
+is reachable now. Part A is the rest of what is reachable from what is already in the repository.
+Part B needs data this project does not have but that exists. Part C needs data nobody has yet, and
+is stated precisely so that the cost of getting it is visible.
+
+---
+
+## M. The motor programme — the current priority
+
+**Why the motor side goes first.** Every other benchmark in this repository is a number someone
+chose. The physiological objective scores firing rates against published summaries; the behavioural
+one scores against targets this project set ([doc 35](35-behaviour-ladder.md)); both can be gamed,
+and [A7](20-roadmap.md) documents three separate occasions on which they were. Motor output is the
+exception. A fly either holds its posture or falls over, and no weighting of terms changes that. The
+motor neurons are the last stage the connectome owns before the body takes over, so they are the one
+place where "does the wiring produce the behaviour" has an answer that is not a matter of scoring.
+
+The motor side is also where this model's honest failures are concentrated, and they are already
+measured rather than suspected:
+
+| what | measured | where |
+|---|---|---|
+| leg motor neurons mapped to muscles | 439 cells, 170 muscle groups | [doc 9](09-bodymap.md) |
+| motor neurons with no annotated muscle | **422 cells across 285 types** (abdominal, neck, haltere) | [doc 9](09-bodymap.md) |
+| full-connectome motor mode | **cannot hold posture** | [Limitations](19-limitations.md) |
+| wing motor pools, ground vs flight | 33–109 Hz either way; power pool changes **7%** at takeoff | [Flight](24-flight.md) |
+| wing steering asymmetry vs commanded turn | **\|r\| ≤ 0.08** in all six pools (64 cells) | `scripts/wing_mn.mjs` |
+| proboscis MN9 with no tastant | **26.6 Hz** against a 10 Hz target — the one benchmark term stuck at zero | [A7](20-roadmap.md) |
+| motor-neuron rate to muscle force | half-maximal at 17 Hz, saturating | [Motor](12-motor.md) |
+
+Read together these say something specific: the motor neurons are wired and active, and nothing that
+reaches them carries the behaviour. That is a *locatable* gap rather than a general shortfall, which
+is what makes it the right thing to work on next.
+
+### M1. A descending command the wing system can follow
+`scripts/wing_mn.mjs` measured the wing pools through a flight and found no flight-versus-ground
+contrast and no steering asymmetry ([doc 24](24-flight.md)). The cause is upstream: flight is started
+and maintained by the endogenous module, so no descending signal ever tells the wing motor neurons
+that the animal is airborne. Find the descending population that should carry it — the candidates are
+in the graph and unscored — and drive flight initiation and maintenance from it rather than from the
+rule.
+
+**Success:** the power pool separates flight from walking by more than the 7% it manages now, and at
+least one steering pool's left–right asymmetry correlates with the commanded turn at |r| ≥ 0.5. Both
+numbers come out of `wing_mn.mjs` as it stands, so the criterion is already implemented.
+**The interesting negative:** if no descending population in the graph separates flight from walking,
+then either the release's descending annotation is insufficient for flight or the model's excitability
+is wrong in a way that erases a real signal — and the two are distinguishable, because the first
+predicts that the *recorded* DN populations (B1) do separate them while the model's do not.
+
+### M2. Stepping from the nerve cord
+Moved here from [A2](20-roadmap.md), because it is the same problem as M1 one body-part over. The
+full-connectome motor mode does not hold posture ([Gait](13-gait.md)), so walking is executed by a
+CMA-ES-optimised tripod generator and the connectome supplies only the decision to walk. Fit the leg
+premotor circuits against the FlySuite walking data using the adjoint from
+[doc 33](33-differentiable-brain.md), rather than fitting a generator to trajectories.
+
+**Success:** posture held in `'connectome'` mode for a full 20 s foraging scenario, and a stepping
+rhythm that is measured rather than imposed — the FlySuite comparison in [doc 13](13-gait.md) is the
+scoring function.
+**The interesting negative:** if a fitted VNC still cannot hold posture, the missing quantity is not
+in the graph. The candidates are proprioceptive feedback delay, the muscle force–frequency model
+(M4), and the absence of the leg's own reflex loops at the timescale they operate on — and a failure
+here would be the strongest evidence this project can produce that a connectome plus a fitted gain
+per neuron is not sufficient for motor control, which is a claim about the abstraction level rather
+than about the fly.
+
+### M3. The proboscis motor neuron that cannot be quieted
+`quietMN9` is the only scored term that sits at exactly zero in every seed and every rung of the
+ladder: MN9 idles at 26.6 Hz with no tastant against a target of 10. [A7](20-roadmap.md) notes that
+it is also the one term in the objective that punishes a busy baseline, and that the two facts are
+probably the same fact. [Limitations](19-limitations.md) names the mechanism — MN9 is partly driven
+by olfactory channels downstream of the antennal-lobe spread, so a fly in odour extends its
+proboscis while walking.
+
+**Success:** MN9 below 15 Hz with no tastant, *without* losing the sugar-evoked extension (the
+`sugar` and `tarsalPER` terms hold).
+**The interesting negative:** if no parameter set does both, the olfactory bleed into MN9 is
+structural, and fixing it means the antennal-lobe lateral inhibition that
+[Limitations](19-limitations.md) records as unmodelled — which makes this item a test of the AL gap
+rather than of the feeding circuit, and locates a whole-brain error at one measurable motor neuron.
+
+### M4. The force–frequency model between motor neuron and muscle
+Muscle activation is `1 − exp(−rate · ln 2 / 17 Hz)` for every muscle in the animal
+([Motor](12-motor.md)). One saturation constant stands in for the whole neuromuscular junction: no
+per-muscle force–frequency curve, no fibre-type difference between the fast tergotrochanteral muscle
+and a slow postural one, no calcium dynamics, and no history dependence. It is the smallest piece of
+supplied machinery on the motor side and the one that M1 and M2 will both run into.
+
+**Success:** per-class force–frequency curves from the insect muscle literature, with the ladder
+re-run to say what the single constant was costing.
+**The interesting negative:** if the behavioural ladder cannot tell a per-class muscle model from the
+single constant, then motor-neuron *rate* is not the quantity the body reads at this level of
+description, and the modelling effort belongs upstream — which would be a useful thing to know before
+anyone fits 165,122 gains against motor output.
+
+### M5. The 422 motor neurons with nowhere to go
+285 motor-neuron types — 422 cells — carry no muscle assignment in v1.0: abdominal (115 types), neck
+(42), haltere and some wing. They are simulated, they spike, and nothing they do can reach the body.
+The neck motor neurons matter most, because head stabilisation is a visual-feedback loop that the
+model currently cannot close at all.
+
+**Success:** an assignment for the neck and haltere pools from the morphology and nerve, with the
+rest stated as a bound: what fraction of motor output this model structurally cannot express.
+**The interesting negative:** if the unmapped pools turn out to carry substantial descending drive,
+then every behavioural score in this repository is being produced by a motor system missing a known
+fraction of its output, and that fraction belongs in [Limitations](19-limitations.md) as a number.
+
+### M6. Motor output as the identifiability observable
+[Doc 34](34-individual-validation.md) freezes six observables for the individual-identifiability
+experiment, and [C1](20-roadmap.md) is the experiment the rest of this roadmap exists to make
+possible. The observables are behavioural because behaviour is what a body makes measurable — and the
+motor neurons are where the model's behaviour is generated, which makes them the natural place to
+read an individual difference out.
+
+The question this item asks is narrow and answerable in simulation now: **does motor-neuron activity
+carry more individuating information than the behaviour it produces?** The body is a low-pass filter
+with 17 Hz saturation, six legs and a stepping generator in between; if two models differ at their
+motor neurons but not in what the fly does, the observable to record in C1 is the motor neurons, not
+the trajectory.
+
+**Success:** run `scripts/identify_test.mjs`'s statistic on simulated pairs, scoring once on motor
+pool rates and once on doc 34's behavioural observables, and report which separates the models at a
+smaller fit error.
+**The interesting negative:** if the behaviour separates individuals and the motor rates do not, the
+low-pass story is backwards and the body is *adding* individuating structure rather than removing it
+— which would matter to anyone proposing to validate an upload against recorded neural activity
+rather than against what the animal does.
 
 ---
 
@@ -33,11 +158,10 @@ nervous system.
 
 ### A2. Close the supplied-machinery gaps, one at a time
 Four behaviours are produced by code rather than read out of the graph. Each is separable work with
-the same test: does the behaviour survive when its rule is deleted?
+the same test: does the behaviour survive when its rule is deleted? Two of the four are motor and
+have moved into Part M — stepping is [M2](20-roadmap.md) and the flight command is
+[M1](20-roadmap.md). What is left here:
 
-- **Stepping from the nerve cord.** The full-connectome motor mode does not hold posture
-  ([Gait](13-gait.md)). Fit the leg premotor circuits against the FlySuite walking data using the
-  adjoint from [doc 33](33-differentiable-brain.md), rather than fitting a generator to trajectories.
 - **Bout structure from the circuits.** Walk, pause and saccade timing comes from a scheduler whose
   statistics are taken from Maye et al. 2007 and Geurten et al. 2014 ([Behaviour](23-behaviour.md)).
   The candidate substrate is the descending network of Braun et al. 2024.
@@ -216,7 +340,10 @@ same construction would otherwise be inherited by the per-neuron activity object
 **The second open question is unchanged.** `quietMN9` — the proboscis motor neuron runs at 26.6 Hz with
 no tastant, against a target of 10 — is still the only term at exactly zero in every seed. Note that it
 is also the one term in the objective that punishes a busy baseline, and it is the one the fit cannot
-satisfy; the two facts are probably related, and separating them is the same piece of work.
+satisfy; the two facts are probably related, and separating them is the same piece of work. That
+separation is now [M3](20-roadmap.md), because the term is pinned at a motor neuron and the mechanism
+that pins it is an antennal-lobe one — which makes it the cheapest available test of a whole-brain
+error, read out at a single cell.
 
 **Why it was worth doing before B1:** the objective is the thing every fit in this repository is
 measured against. Nothing downstream of it means what it says until the terms in it can move.
@@ -475,12 +602,12 @@ sufficiently good scan is sufficient.
   ([Senses](10-senses.md)).
 - ~~**Aerodynamic flight**~~ — blade-element forces on the real 218 Hz stroke ([Flight](24-flight.md)).
   The next level was to drive the stroke from the wing power and steering motor neurons; those motor
-  neurons turn out to be annotated (54 cells over six pools), and `scripts/wing_mn.mjs` measures them
+  neurons turn out to be annotated (64 cells over six pools), and `scripts/wing_mn.mjs` measures them
   through a flight. They cannot drive anything yet: every pool fires at 33–109 Hz on the ground and in
   the air alike, and no pool's left-right asymmetry tracks the commanded turn (|r| ≤ 0.08). The item is
   therefore **not** "wire the motor neurons up" but "put a descending flight command in the graph for
-  them to follow", with those two measurements as its success criterion — which makes it the flight
-  half of [A2](20-roadmap.md)'s supplied-machinery list rather than a separate piece of work.
+  them to follow", with those two measurements as its success criterion. It is now
+  [M1](20-roadmap.md).
 - ~~**Social behaviour**~~ — LC10 visual detection and cVA pheromone driving pIP10/DNp13 pursuit and
   wing display through the male *fru*/*dsx* circuitry, with a song that has the real pulse/sine
   structure (35 ms IPI) and a female who decamps and kicks ([Courtship](26-courtship.md)). Both new
@@ -502,9 +629,14 @@ sufficiently good scan is sufficient.
 
 ## Open, not yet scheduled
 
-- **Wall climbing.** Train or fit a vertical-surface gait so the legs can grip walls.
+- **Wall climbing.** Train or fit a vertical-surface gait so the legs can grip walls. Deliberately
+  left here rather than promoted into Part M: it is another supplied gait, and fitting a second
+  generator would add a behaviour while moving the motor question backwards. It becomes worth doing
+  once [M2](20-roadmap.md) says whether a fitted nerve cord can hold posture at all.
 - **A female fly.** The male CNS connectome is the only whole-CNS release, so courtship currently plays
-  against a target that cannot respond.
+  against a target that cannot respond. She now decamps and kicks by rule
+  ([Courtship](26-courtship.md)), which is enough for the male's behaviour to be measurable and is not
+  evidence about anything female.
 - ~~**Learning.**~~ Scheduled as [A8](20-roadmap.md), which states the build and the simulation
   experiment that follows it. The observation that promoted it: a plastic model's parameters are no
   longer constants to be fitted, so every fitting procedure above inherits the complication — which is
