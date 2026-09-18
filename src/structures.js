@@ -8,29 +8,49 @@ const C = { exc: '#38bdf8', inh: '#f43f5e', mod: '#a855f7', acc: '#ffb347', ok: 
 const svgEl = (w, h) => { const s = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); s.setAttribute('viewBox', `0 0 ${w} ${h}`); s.setAttribute('width', w); return s; };
 const el = (tag, attrs = {}, text) => { const e = document.createElementNS('http://www.w3.org/2000/svg', tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (text != null) e.textContent = text; return e; };
 const h = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
+// text metrics for the SVG label font, so figures size to their own labels instead of a guessed column
+const _mctx = document.createElement('canvas').getContext('2d');
+const FONT = '11px ui-sans-serif, system-ui, sans-serif';
+const textW = (t) => { _mctx.font = FONT; return _mctx.measureText(String(t)).width; };
+/** shorten a label to fit maxW, keeping the full string as a tooltip */
+const clip = (t, maxW) => { let s = String(t); if (textW(s) <= maxW) return s; while (s.length > 1 && textW(s + '\u2026') > maxW) s = s.slice(0, -1); return s + '\u2026'; };
 
 // ---------- figure primitives ----------
 /** horizontal bars: rows = [{label, value, color?, note?}] */
-function bars(rows, { width = 420, max, unit = '', barH = 14, labelW = 130, format = fmt } = {}) {
-  max = max ?? Math.max(...rows.map(r => r.value)); const H = rows.length * (barH + 4) + 4, s = svgEl(width, H);
+function bars(rows, { width = 420, max, unit = '', barH = 14, labelW = 130, maxLabelW = 180, format = fmt } = {}) {
+  max = max ?? Math.max(...rows.map(r => r.value));
+  // the bar track keeps its nominal width; the label and value gutters are measured so nothing spills out of the viewBox
+  const notes = rows.map(r => (r.note ?? format(r.value)) + unit);
+  const bw = Math.max(60, width - labelW - 70);
+  const lw = Math.min(maxLabelW, Math.max(...rows.map(r => textW(r.label)))) + 8;
+  const nw = Math.max(0, ...notes.map(textW)) + 10;
+  const H = rows.length * (barH + 4) + 4, s = svgEl(Math.ceil(lw + bw + nw), H);
   rows.forEach((r, i) => {
-    const y = i * (barH + 4) + 2, w = Math.max(0, (width - labelW - 70) * r.value / max);
-    s.append(el('text', { x: labelW - 6, y: y + barH - 3, 'text-anchor': 'end' }, r.label));
-    s.append(el('rect', { x: labelW, y, width: w, height: barH, rx: 3, fill: r.color || C.acc, opacity: .9 }));
-    s.append(el('text', { x: labelW + w + 5, y: y + barH - 3, class: 'dim' }, (r.note ?? format(r.value)) + unit));
+    const y = i * (barH + 4) + 2, w = Math.max(0, bw * r.value / max);
+    const label = clip(r.label, lw - 8), t = el('text', { x: lw - 6, y: y + barH - 3, 'text-anchor': 'end' }, label);
+    if (label !== String(r.label)) t.append(el('title', {}, String(r.label)));
+    s.append(t);
+    s.append(el('rect', { x: lw, y, width: w, height: barH, rx: 3, fill: r.color || C.acc, opacity: .9 }));
+    s.append(el('text', { x: lw + w + 5, y: y + barH - 3, class: 'dim' }, notes[i]));
   });
   return s;
 }
 /** heatmap: rows × cols with values, colour by value/max */
 function heat(rowLabels, colLabels, M, { cell = 30, labelW = 60, top = 46, color = C.exc, format = (v) => v >= 1000 ? `${Math.round(v / 1000)}k` : v ? String(Math.round(v)) : '' } = {}) {
-  const max = Math.max(...M.flat()), s = svgEl(labelW + colLabels.length * cell + 6, top + rowLabels.length * cell + 4);
-  colLabels.forEach((c, j) => s.append(el('text', { x: labelW + j * cell + cell / 2, y: top - 6, 'text-anchor': 'end', transform: `rotate(-45 ${labelW + j * cell + cell / 2} ${top - 6})` }, c)));
+  const max = Math.max(...M.flat());
+  // row labels sit left of the grid and column labels lean out of its top-left corner; both gutters are measured
+  const lw = Math.max(labelW, Math.max(...rowLabels.map(textW)) + 8);
+  const diag = Math.max(...colLabels.map(textW)) / Math.SQRT2;
+  const t0 = Math.max(top, diag + 12), padL = Math.max(0, diag - lw - cell / 2);
+  const W = padL + lw + colLabels.length * cell + 6, s = svgEl(Math.ceil(W), Math.ceil(t0 + rowLabels.length * cell + 4));
+  const g = el('g', { transform: `translate(${padL.toFixed(1)} 0)` }); s.append(g);
+  colLabels.forEach((c, j) => g.append(el('text', { x: lw + j * cell + cell / 2, y: t0 - 6, 'text-anchor': 'end', transform: `rotate(-45 ${lw + j * cell + cell / 2} ${t0 - 6})` }, c)));
   rowLabels.forEach((r, i) => {
-    s.append(el('text', { x: labelW - 6, y: top + i * cell + cell / 2 + 4, 'text-anchor': 'end' }, r));
+    g.append(el('text', { x: lw - 6, y: t0 + i * cell + cell / 2 + 4, 'text-anchor': 'end' }, r));
     colLabels.forEach((c, j) => {
       const v = M[i][j], a = max ? Math.pow(v / max, .5) : 0;
-      s.append(el('rect', { x: labelW + j * cell, y: top + i * cell, width: cell - 1, height: cell - 1, rx: 2, fill: color, opacity: .08 + .92 * a }));
-      if (v / max > .03) s.append(el('text', { x: labelW + j * cell + cell / 2 - .5, y: top + i * cell + cell / 2 + 4, 'text-anchor': 'middle', 'font-size': 9, fill: a > .5 ? '#06121a' : '#d7dbe6' }, format(v)));
+      g.append(el('rect', { x: lw + j * cell, y: t0 + i * cell, width: cell - 1, height: cell - 1, rx: 2, fill: color, opacity: .08 + .92 * a }));
+      if (v / max > .03) g.append(el('text', { x: lw + j * cell + cell / 2 - .5, y: t0 + i * cell + cell / 2 + 4, 'text-anchor': 'middle', 'font-size': 9, fill: a > .5 ? '#06121a' : '#d7dbe6' }, format(v)));
     });
   });
   return s;
@@ -72,10 +92,12 @@ function glyph(nodes, edges) {
 }
 function table(cols, rows) {
   const t = h('table'); t.append(h('thead', '', `<tr>${cols.map(c => `<th>${c}</th>`).join('')}</tr>`));
-  const b = h('tbody'); rows.forEach(r => b.append(h('tr', '', r.map(v => `<td class="${typeof v === 'number' ? 'n' : ''}">${fmt(v)}</td>`).join('')))); t.append(b); return t;
+  const b = h('tbody'); rows.forEach(r => b.append(h('tr', '', r.map(v => `<td class="${typeof v === 'number' ? 'n' : ''}">${fmt(v)}</td>`).join('')))); t.append(b);
+  // wide tables get two grid tracks and, failing that, scroll inside the card rather than spilling over its edge
+  const wrap = h('div', cols.length >= 4 ? 'tbl wide' : 'tbl'); wrap.append(t); return wrap;
 }
 const stats = (items) => { const d = h('div', 'stats'); items.forEach(([v, l]) => d.append(h('div', '', `<b>${fmt(v)}</b><span>${l}</span>`))); return d; };
-const fig = (node, cap) => { const f = h('figure'); f.append(node); if (cap) f.append(h('figcaption', '', cap)); return f; };
+const fig = (node, cap) => { const f = h('figure'); if (node.classList?.contains('wide')) f.classList.add('wide'); f.append(node); if (cap) f.append(h('figcaption', '', cap)); return f; };
 const legend = (items) => h('div', 'legend', items.map(([c, l]) => `<span><i style="background:${c}"></i>${l}</span>`).join(''));
 const ent = (o) => Object.entries(o);
 /** deep links to the live brain viewer / arena; ?type selects, ?drive stimulates, ?run starts */
