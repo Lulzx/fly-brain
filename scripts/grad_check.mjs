@@ -12,11 +12,15 @@
 // exercised is the one the whole-brain fit uses: the same CSR traversal, the same delay ring, the
 // same size-scaling and inhibitory-gain machinery.
 //
-//   node scripts/grad_check.mjs [neurons] [steps]
+//   node scripts/grad_check.mjs [neurons] [steps] [truncate]
+//
+// The third argument is the truncation window: 0 disables truncation, which is the setting that must
+// pass, because with it the adjoint differentiates the whole trajectory. A shorter window is a
+// deliberate bias (see scripts/adjoint_window.mjs) and will not match finite differences.
 import { loadAll } from './lib_node.mjs';
 import { LIFDiff, DIFF_PARAMS } from '../src/lifdiff.js';
 
-const K = +(process.argv[2] || 600), STEPS = +(process.argv[3] || 60);
+const K = +(process.argv[2] || 600), STEPS = +(process.argv[3] || 60), TRUNC = +(process.argv[4] ?? 0);
 const D = loadAll();
 
 // ---- induced subgraph: breadth-first from a well-connected neuron -------------------------------
@@ -40,7 +44,8 @@ for (let a = 0; a < n; a++) {
 }
 const sub = { N: n, indptr: ip, indices: Uint32Array.from(ix), weights: Uint16Array.from(wt),
   nt: Uint8Array.from(pick, i => D.nt[i]) };
-console.log(`subgraph: ${n} neurons, ${ix.length} connections, ${STEPS} steps, soft spikes`);
+console.log(`subgraph: ${n} neurons, ${ix.length} connections, ${STEPS} steps, soft spikes,`
+  + ' with a type gain and a threshold offset on every neuron');
 
 // ---- a deterministic, smooth test problem -------------------------------------------------------
 let rs = 12345; const rnd = () => { rs = (rs * 1103515245 + 12345) & 0x7fffffff; return rs / 0x7fffffff; };
@@ -48,6 +53,13 @@ const sizeLog = Float32Array.from({ length: n }, () => rnd() * 2 - 1);
 const thrMask = Uint8Array.from({ length: n }, () => (rnd() < 0.2 ? 1 : 0));
 const biasMask = Uint8Array.from({ length: n }, (_, i) => (i < n / 4 ? 1 : 0));   // the input
 const logGain = Float32Array.from({ length: n }, () => (rnd() - 0.5) * 0.2);
+// The fixed per-neuron structure src/diffsetup.js supplies: a type gain on outgoing synapses and a
+// threshold offset in mV. Neither is differentiated, but both sit inside the expressions the nine
+// gradients below are taken of -- outScale multiplies everything wSyn and logGain and depU act on, and
+// thrOffset shifts the point the surrogate is evaluated at -- so every row here is also a check that
+// they were threaded through the adjoint and not just the forward pass.
+const outScale = Float32Array.from({ length: n }, () => 0.5 + rnd());
+const thrOffset = Float32Array.from({ length: n }, () => (rnd() - 0.5) * 4);
 const target = []; for (let i = 0; i < n; i++) if (rnd() < 0.3) target.push(i);
 
 const P0 = { soft: true, tRef: 0, minSyn: 3, coba: true, wSyn: 0.5, sizeAlpha: 0.6, inhGain: 0.8,
@@ -55,18 +67,18 @@ const P0 = { soft: true, tRef: 0, minSyn: 3, coba: true, wSyn: 0.5, sizeAlpha: 0
   surrogateBeta: 1.5 };
 
 function loss(over) {
-  const net = new LIFDiff(sub, { ...P0, ...over, sizeLog, thrMask, biasMask,
+  const net = new LIFDiff(sub, { ...P0, ...over, sizeLog, thrMask, biasMask, outScale, thrOffset,
     logGain: over?.logGain || logGain });
   net.forward(STEPS, { record: false });
   let L = 0; for (const i of target) L += net.spikeCount[i];
   return L;
 }
 function gradient() {
-  const net = new LIFDiff(sub, { ...P0, sizeLog, thrMask, biasMask, logGain });
+  const net = new LIFDiff(sub, { ...P0, sizeLog, thrMask, biasMask, outScale, thrOffset, logGain });
   const tape = net.forward(STEPS);
   let L = 0; for (const i of target) L += net.spikeCount[i];
   const dL = new Float32Array(n); for (const i of target) dL[i] = 1;
-  return { L, ...net.backward(tape, dL) };
+  return { L, ...net.backward(tape, dL, { truncate: TRUNC }) };
 }
 
 const t0 = Date.now();

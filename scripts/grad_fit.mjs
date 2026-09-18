@@ -17,11 +17,12 @@
 import fs from 'node:fs';
 import { loadAll } from './lib_node.mjs';
 import { LIFDiff, DIFF_PARAMS } from '../src/lifdiff.js';
-import { regionSizeRef } from '../src/ratenet.js';
+import { diffOptions, diffSummary } from '../src/diffsetup.js';
 import { BRAIN_DEFAULTS } from '../src/brainmodel.js';
 
 const STEPS = +(process.argv[2] || 600), ITERS = +(process.argv[3] || 20), MODE = process.argv[4] || 'both';
-const TRUNC = +(process.env.TRUNC || 25), CLIP = +(process.env.CLIP || 10);
+// Truncation off by default: it was biasing every gradient and buying nothing (scripts/adjoint_window.mjs).
+const TRUNC = +(process.env.TRUNC || 0), CLIP = +(process.env.CLIP || 10);
 const LR_W = +(process.env.LR_W || 0.01), LR_G = +(process.env.LR_G || 0.01), W_BASE = +(process.env.W_BASE || 2);
 const D = loadAll();
 const SIZE = new Float32Array(fs.readFileSync('public/data/neuron_size.bin').buffer.slice(0));
@@ -31,18 +32,13 @@ const BASE = (() => { const o = JSON.parse(fs.readFileSync('public/data/brain_pa
 const P = { ...BRAIN_DEFAULTS, ...BASE };
 
 // ---- the per-neuron quantities the model parameters act on --------------------------------------
-const { ref } = regionSizeRef(D.meta.superclasses, D.sc, SIZE);
-const sizeLog = new Float32Array(D.N);
-for (let i = 0; i < D.N; i++) {
-  const s = SIZE[i] > 0 ? Math.min(P.maxSizeScale, Math.max(1 / P.maxSizeScale, SIZE[i] / ref[i])) : 1;
-  sizeLog[i] = Math.log(s);
-}
-const thrMask = new Uint8Array(D.N), biasMask = new Uint8Array(D.N), sensoryMask = new Uint8Array(D.N);
-for (let i = 0; i < D.N; i++) {
-  if (D.meta.classes[D.cls[i]] === 'Kenyon_Cell') thrMask[i] = 1;
-  if (/^L[1-5]$/.test(D.meta.types[i])) biasMask[i] = 1;
-  if (/sensory/.test(D.meta.superclasses[D.sc[i]])) sensoryMask[i] = 1;
-}
+// This used to be built inline here, and it was missing four of the things makeBrain applies -- the
+// octopamine tone above all -- which left the fitted model at 64% of the shipped model's MN9 rate
+// (scripts/lifdiff_equiv.mjs). src/diffsetup.js calls the shipped functions instead.
+const SETUP = diffOptions(D, SIZE, P, SIGN);
+{ const sm = diffSummary(SETUP);
+  console.log(`setup: ${sm.thrShifted} threshold offsets, ${sm.signZeroed} neurons with their fast`
+    + ` synapses removed, ${sm.typeGained} type gains, ${sm.sensory} sensory`); }
 
 const T = (...ts) => ts.flatMap(t => D.byType(t));
 const S = D.bodymap.sensors;
@@ -64,8 +60,8 @@ for (const k of DIFF_PARAMS) if (!Number.isFinite(globals[k])) throw new Error(`
 console.log('start:', DIFF_PARAMS.map(k => `${k}=${(+globals[k]).toFixed(3)}`).join(' '));
 
 function build(over = {}) {
-  const net = new LIFDiff(D, { ...P, ...globals, ...over, preSign: SIGN, sizeLog, thrMask, biasMask,
-    sensoryMask, logGain: over.logGain || logGain, soft: false });
+  const net = new LIFDiff(D, { ...P, ...globals, ...over, ...SETUP,
+    logGain: over.logGain || logGain, soft: false });
   net.setDrive(ORN_ALL, 6); net.setDrive(SUGAR, 100);
   return net;
 }

@@ -8,8 +8,10 @@ const align = n => (n + 63) & ~63;
 export function graphBytes(N, E) { return align((N + 1) * 4) + align(E * 4) * 2 + align(N * 4) + 256; }
 export function brainBytes(N, nslots = 5) { return HDR + 64 + align(N * 4) * 13 + align(nslots * N * 4) + align(nslots * 4) + 64 * 16; }
 
-/** Build the effective weight/sign arrays (depend on model params) and place them in memory. */
-export function writeGraph(memory, base, { N, E, indptr, indices, weights, nt }, p, inScale, sensoryMask, preSign) {
+/** Build the effective weight/sign arrays (depend on model params) and place them in memory.
+ *  outScale, when given, is a per-presynaptic-neuron gain on every outgoing synapse: the pathway
+ *  scale factors fitted in scripts/pathway_fit.mjs (doc 07). */
+export function writeGraph(memory, base, { N, E, indptr, indices, weights, nt }, p, inScale, sensoryMask, preSign, outScale) {
   const buf = memory.buffer; let o = base;
   const ip = new Uint32Array(buf, o, N + 1); ip.set(indptr); o += align((N + 1) * 4);
   const ix = new Uint32Array(buf, o, E); ix.set(indices); o += align(E * 4);
@@ -18,11 +20,11 @@ export function writeGraph(memory, base, { N, E, indptr, indices, weights, nt },
   const SIGN = p.ntSign || EXC_SIGN;
   for (let j = 0; j < N; j++) {
     const s = preSign ? preSign[j] : SIGN[nt[j]]; sg[j] = s * p.wSyn;
-    const ig = s < 0 ? p.inhGain : 1;
+    const og = outScale ? outScale[j] : 1, ig = (s < 0 ? p.inhGain : 1) * og;
     for (let k = indptr[j]; k < indptr[j + 1]; k++) { const q = indices[k], c = weights[k];
       w[k] = (c >= p.minSyn && !(sensoryMask && sensoryMask[q])) ? c * (inScale ? inScale[q] : 1) * ig : 0; }
   }
-  return { indptr: ip.byteOffset, indices: ix.byteOffset, weights: w.byteOffset, sign: sg.byteOffset, end: o };
+  return { indptr: ip.byteOffset, indices: ix.byteOffset, weights: w.byteOffset, sign: sg.byteOffset, end: o, outScale };
 }
 
 export class LIFWasm {
@@ -84,7 +86,7 @@ export async function createWasmBrain(wasmBytes, data, p, inScale, sensoryMask, 
   const pages = Math.ceil((gb + bb * nBrains + (1 << 20)) / 65536);
   const memory = new WebAssembly.Memory({ initial: pages, maximum: pages, shared: true });
   const { instance } = await WebAssembly.instantiate(wasmBytes, { env: { memory } });
-  const graph = writeGraph(memory, 1024, data, { ...DEFAULTS, ...p }, inScale, sensoryMask, preSign);
+  const graph = writeGraph(memory, 1024, data, { ...DEFAULTS, ...p }, inScale, sensoryMask, preSign, p.outScale);
   const brains = []; let base = align(graph.end);
   for (let k = 0; k < nBrains; k++) { const b = new LIFWasm({ instance, memory, graph, base, N: data.N, params: p, seed: k + 1 }); brains.push(b); base = align(b.end); }
   return { memory, instance, graph, brains };

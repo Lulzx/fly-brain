@@ -1,0 +1,105 @@
+{
+ "_": "End-to-end visual fit through the joined optic lobe and CNS. See docs/33-differentiable-brain.md.",
+ "steps": 1200,
+ "pre": 400,
+ "mode": "both",
+ "beta": 5,
+ "clip": 10,
+ "targetGF": 2,
+ "coupledNeurons": 62157,
+ "iterations": 4,
+ "history": [
+  {
+   "it": 1,
+   "L": 4,
+   "loomGF": 0,
+   "flowGF": 0,
+   "gradNorm": 0,
+   "clampedGains": 10862,
+   "clampedGlobals": 9,
+   "couplingGain": 250,
+   "live": 0.025455969024674077,
+   "globals": {
+    "wSyn": 0.562,
+    "sizeAlpha": 0.572,
+    "inhGain": 0.577,
+    "eInh": -69.079,
+    "vThresh": null,
+    "kcThreshold": 7.319,
+    "laminaBias": 2.86,
+    "adaptInc": 0.072,
+    "depU": 0
+   },
+   "ms": 69795
+  },
+  {
+   "it": 2,
+   "L": 4,
+   "loomGF": 0,
+   "flowGF": 0,
+   "gradNorm": 0,
+   "clampedGains": 10862,
+   "clampedGlobals": 9,
+   "couplingGain": 250,
+   "live": 0.025455969024674077,
+   "globals": {
+    "wSyn": 0.562,
+    "sizeAlpha": 0.572,
+    "inhGain": 0.577,
+    "eInh": -69.079,
+    "vThresh": null,
+    "kcThreshold": 7.319,
+    "laminaBias": 2.86,
+    "adaptInc": 0.072,
+    "depU": 0
+   },
+   "ms": 53363
+  },
+  {
+   "it": 3,
+   "L": 4,
+   "loomGF": 0,
+   "flowGF": 0,
+   "gradNorm": 0,
+   "clampedGains": 10862,
+   "clampedGlobals": 9,
+   "couplingGain": 250,
+   "live": 0.025455969024674077,
+   "globals": {
+    "wSyn": 0.562,
+    "sizeAlpha": 0.572,
+    "inhGain": 0.577,
+    "eInh": -69.079,
+    "vThresh": null,
+    "kcThreshold": 7.319,
+    "laminaBias": 2.86,
+    "adaptInc": 0.072,
+    "depU": 0
+   },
+   "ms": 43327
+  },
+  {
+   "it": 4,
+   "L": 4,
+   "loomGF": 0,
+   "flowGF": 0,
+   "gradNorm": 0,
+   "clampedGains": 10862,
+   "clampedGlobals": 9,
+   "couplingGain": 250,
+   "live": 0.025455969024674077,
+   "globals": {
+    "wSyn": 0.562,
+    "sizeAlpha": 0.572,
+    "inhGain": 0.577,
+    "eInh": -69.079,
+    "vThresh": null,
+    "kcThreshold": 7.319,
+    "laminaBias": 2.86,
+    "adaptInc": 0.072,
+    "depU": 0
+   },
+   "ms": 66074
+  }
+ ]
+}
