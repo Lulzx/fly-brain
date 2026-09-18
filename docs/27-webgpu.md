@@ -43,6 +43,48 @@ guarantees ordering and memory visibility between dispatches in a pass.
   readout EMA is 40 ms, so this is invisible), and the GF→TTMn electrical-synapse shortcut gains ~1–4 ms
   of extra delay.
 
+## One device, one connectome, however many flies
+
+A `GPUDevice` cannot be moved between workers, so "share the device across flies" means share it among
+the flies hosted in the same context. `gpuDevice()` hands out one device per context and the graph pack
+is cached on it by `(N, E)`: the first brain uploads the 84 MB connectome, every later brain on that
+device binds the same buffer, and the pack is freed when the last one is destroyed. Per-fly state — the
+header, the f32 state pack, the atomics and the delta list — stays private, which is what makes the
+sharing safe: the graph is read-only and identical for every fly.
+
+With one fly per worker, as the arena runs today, nothing changes. What the cache buys is that hosting
+K flies in one worker costs one graph pack instead of K, which is the difference between 84 MB and
+1 GB at the arena's twelve-fly limit — the memory wall that made co-hosting pointless before.
+
+## flyvis on the GPU
+
+`src/flyvisgpu.js` runs the optic lobe on the same device. The model is small and regular — 45,669
+nodes, 1.5 M synapses, one rectified scatter and one node update per 20 ms step — so it is three
+dispatches (`clear`, `scatter`, `integrate`) against the brain kernel's seven, with the same
+fixed-point-atomics trick because WGSL still has no f32 atomics. The scale is 65,536 rather than the
+brain's 1,024, and the accumulate rounds rather than truncates: at 1/4096 with truncation, ~33 incoming
+edges per node and 25 steps of integration accumulated a 0.027 disagreement with the reference, which is
+the kind of error that looks like a modelling difference and is not.
+
+Both eyes of a fly, and every fly in the worker, share one parameter pack (12.7 MB: edges, weights, bias
+and dt/tau). Only `v` and the input vector are per-eye. Reading back follows the brain kernel's pattern —
+each submit copies `v` into a rotating staging buffer and `mapAsync` refreshes the CPU shadow — so
+`vision.js` keeps reading `eyes[s].v` synchronously and sees a value that lags by about one 20 ms step.
+
+`scripts/check_flyvisgpu.mjs` runs it against a transcription of `fv_step` on the shipped export, through
+a real adapter in headless Chrome:
+
+| check | result |
+|---|---|
+| max \|GPU − reference\| over 45,669 nodes, 25 steps | **0.00032** |
+| mean \|difference\| | 0.000025 |
+| parameter packs on the device for two eyes | **1** (12.7 MB) |
+| second eye's state after the first eye runs | unchanged from rest |
+
+Since the WASM kernel matches the trained PyTorch model to 2e-6 ([Vision](11-vision.md)), agreeing with
+its transcription to 3e-4 closes the chain to the published model, with the residual explained by the
+fixed-point step.
+
 ## Verified
 
 On the full connectome, 1000 steps driven identically produce within-RNG-equal activity: WASM 10,298 vs

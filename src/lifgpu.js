@@ -151,32 +151,67 @@ const align = n => (n + 15) & ~15;
 const xs32 = x => { x ^= x << 13; x ^= x >>> 17; x ^= x << 5; return x >>> 0; };   // same stream as the WGSL xs()
 const BATCH_STEPS = 8, BATCH_MS = 2;
 
-export class LIFGpu {
-  /** graph: { indptr, indices, weights, sign } as typed arrays (views into shared wasm memory are fine) */
-  static async create({ N, E, graph, params = {}, seed = 1, device = null }) {
-    if (!device) {
+// One device and one connectome per context, however many brains are attached to it. A GPUDevice cannot
+// be moved between workers, so "shared across flies" means shared among the flies hosted together: with
+// one fly per worker nothing changes, and with K flies in a worker the 84 MB graph pack is uploaded once
+// instead of K times. The graph is read-only and identical for every fly, which is what makes this safe;
+// per-fly state (st, at, hdr, deltas) stays private.
+let _devicePromise = null;
+const _graphCache = new Map();          // key -> { buffer, words, refs }
+
+export async function gpuDevice() {
+  if (!_devicePromise) {
+    _devicePromise = (async () => {
       const adapter = await navigator.gpu.requestAdapter();
       if (!adapter) throw new Error('no WebGPU adapter');
-      device = await adapter.requestDevice();
-    }
+      const dev = await adapter.requestDevice();
+      dev.lost?.then(() => { _devicePromise = null; _graphCache.clear(); });
+      return dev;
+    })();
+    _devicePromise.catch(() => { _devicePromise = null; });
+  }
+  return _devicePromise;
+}
+
+/** bytes currently held by shared graph packs, and how many brains reference them */
+export function gpuSharedGraphStats() {
+  let bytes = 0, refs = 0;
+  for (const g of _graphCache.values()) { bytes += g.words * 4; refs += g.refs; }
+  return { packs: _graphCache.size, bytes, refs };
+}
+
+export class LIFGpu {
+  /** graph: { indptr, indices, weights, sign } as typed arrays (views into shared wasm memory are fine) */
+  static async create({ N, E, graph, params = {}, seed = 1, device = null, graphKey = null }) {
+    if (!device) device = await gpuDevice();
     const b = new LIFGpu();
     b.device = device; b.N = N; b.E = E; b.p = { ...DEFAULTS, ...params };
     const p = b.p; b.nslots = Math.max(1, Math.round(p.delay / p.dt)) + 1;
     const S = GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC;
     // graph pack: indptr | indices | weights | sign as u32 words
     const ipOff = 0, ixOff = align(N + 1), wOff = ixOff + align(E), sOff = wOff + align(E), gWords = sOff + align(N);
-    const gArr = new Uint32Array(gWords);
-    gArr.set(graph.indptr, ipOff); gArr.set(graph.indices, ixOff);
-    gArr.set(new Uint32Array(graph.weights.buffer, graph.weights.byteOffset, E), wOff);
-    gArr.set(new Uint32Array(graph.sign.buffer, graph.sign.byteOffset, N), sOff);
+    // the graph pack is shared per device: build and upload it once per (N, E) on this device
+    const gkey = `${graphKey || `${N}:${E}`}`;
+    let cached = _graphCache.get(gkey);
+    if (cached && cached.device !== device) cached = undefined;      // a new device needs its own copy
     // f32 state pack: v | refr | trace | adapt | res | bias | thr | drive
     const st = new Float32Array(8 * N); st.fill(p.vRest, 0, N); st.fill(1, 4 * N, 5 * N);   // v=vRest, res=1
     // atomics pack: gE | gI | spikeC | ring | ringCount | driven
     const ringOff = 3 * N, rcOff = ringOff + b.nslots * N, drvOff = rcOff + b.nslots, atWords = drvOff + N;
     const mk = (arr, usage = S) => { const g = device.createBuffer({ size: Math.max(16, arr.byteLength), usage }); device.queue.writeBuffer(g, 0, arr.buffer, arr.byteOffset, arr.byteLength); return g; };
+    if (!cached) {
+      const gArr = new Uint32Array(gWords);
+      gArr.set(graph.indptr, ipOff); gArr.set(graph.indices, ixOff);
+      gArr.set(new Uint32Array(graph.weights.buffer, graph.weights.byteOffset, E), wOff);
+      gArr.set(new Uint32Array(graph.sign.buffer, graph.sign.byteOffset, N), sOff);
+      cached = { device, words: gWords, refs: 0,
+                 buffer: mk(gArr, GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST) };
+      _graphCache.set(gkey, cached);
+    }
+    cached.refs++; b._graphKey = gkey;
     b.buf = {
       hdr: device.createBuffer({ size: 144, usage: S }),
-      graph: mk(gArr, GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST),
+      graph: cached.buffer,
       st: mk(st), at: mk(new Int32Array(atWords)), deltas: device.createBuffer({ size: 16 + 16 * DELTA_CAP, usage: S }),
     };
     b._offs = { ipOff, ixOff, wOff, sOff, ringOff, rcOff, drvOff };
@@ -324,5 +359,12 @@ export class LIFGpu {
     q.writeBuffer(this.buf.at, 0, new Int32Array(3 * N + this.nslots * N + this.nslots));   // gE, gI, spikeC, ring, ringCount
     this.spikeCount.fill(0); this.trace.fill(0); this.t = 0; this.head = 0; this._writeParams();
   }
-  destroy() { for (const k in this.buf) this.buf[k].destroy(); for (const s of this._staging) s.destroy(); }
+  destroy() {
+    // the graph pack belongs to the cache, not to this brain: drop a reference and free it only when the
+    // last brain on this device is gone, or the next fly to start would read a destroyed buffer
+    const g = _graphCache.get(this._graphKey);
+    if (g && --g.refs <= 0) { g.buffer.destroy(); _graphCache.delete(this._graphKey); }
+    for (const k in this.buf) if (k !== 'graph') this.buf[k].destroy();
+    for (const s of this._staging) s.destroy();
+  }
 }

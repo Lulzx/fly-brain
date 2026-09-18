@@ -262,15 +262,18 @@
    "dan": [
     "PPL*",
     "PAM*"
-   ]
+   ],
+   "pn": "pool:kc"
   },
   "roles": {
    "input": "kc",
    "output": "mbon",
-   "control": "apl"
+   "control": "apl",
+   "drive": "pn"
   },
-  "odor_size": 200,
+  "odor_size": 80,
   "odor_overlap": 0.5,
+  "drive_rate": 150,
   "edge_params": [
    {
     "pre": "KC*",

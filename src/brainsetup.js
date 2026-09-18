@@ -2,7 +2,8 @@
 import { BRAIN_DEFAULTS, brainScales, applyClassPhysiology, modulatorySign, typeGains } from './brainmodel.js';
 import { DEFAULTS as LIF_DEFAULTS } from './lif.js';
 import { graphBytes, brainBytes, writeGraph, LIFWasm } from './lifwasm.js';
-import { LIFGpu } from './lifgpu.js';
+import { LIFGpu, gpuDevice } from './lifgpu.js';
+import { FlyVisGpu } from './flyvisgpu.js';
 import { FlyVis, flyvisBytes } from './flyvis.js';
 export const MAX_FLIES = 12;
 /** main thread: allocate memory for the connectome + MAX_FLIES brains and write the graph once */
@@ -24,6 +25,31 @@ export function allocBrainMemory(data, size, sign, opts = {}, maxFlies = MAX_FLI
       eyeBases, N: vision.model.N, E: vision.model.E, inputIdx: vision.model.inputIdx };
   }
   return { memory, graph, bases, opts: o, fv };
+}
+/** worker: attach the two flyvis eyes of a fly slot on the GPU, sharing the brain's device and one
+ * parameter pack. Falls back to the WASM eyes on any failure, exactly as the brain kernel does. */
+export async function attachEyesGpu(mem) {
+  if (!mem.fv || mem.opts.gpu === false || typeof navigator === 'undefined' || !navigator.gpu) return null;
+  try {
+    const buf = mem.memory.buffer, F = mem.fv, N = F.N, E = F.E, sp = F.sharedParts;
+    // the shared block holds dt/tau rather than tau; FlyVisGpu takes either
+    const model = { N, E, dt: 0.02, inputIdx: F.inputIdx,
+      bias: new Float32Array(buf, sp.bias, N), kdt: new Float32Array(buf, sp.kdt, N),
+      indptr: new Int32Array(buf, sp.indptr, N + 1), target: new Int32Array(buf, sp.target, E),
+      weight: new Float32Array(buf, sp.weight, E) };
+    const device = await gpuDevice();
+    const eyes = [];
+    for (let e = 0; e < 2; e++) eyes.push(await FlyVisGpu.create({ model, device }));
+    // Resting activity under a uniform grey field, measured here because it is the one quantity the
+    // vision layer needs synchronously and the GPU shadow is asynchronous. It is a property of the
+    // model, so measuring it once per worker on one eye is exact rather than an approximation.
+    const grey = new Float32Array(F.inputIdx.R1.length).fill(0.5);
+    eyes[0].reset(); eyes[0].setInput(grey); eyes[0].step(150);
+    const vRest = (await eyes[0].sync()).slice(0);
+    for (const e of eyes) e.reset();
+    console.info('flyvis backend: WebGPU');
+    return { eyes, vRest };
+  } catch (e) { console.warn('WebGPU flyvis unavailable, falling back to WASM:', e); return null; }
 }
 /** worker: attach the two flyvis eyes of a fly slot (shared weights, private state) */
 export function attachEyes(instance, mem, slot) {

@@ -82,7 +82,9 @@ uncertainty it just measured. Two steps:
 - Weight each connection's contribution to the loss by its precision, so a fit is free to move a
   3-synapse connection and constrained on a 100-synapse one. This matters because doc 31 finds graded
   weight to be the most load-bearing quantity in the model, and doc 32 finds it to be the one the
-  reconstruction measures worst.
+  reconstruction measures worst. [Doc 35](35-behaviour-ladder.md) complicates the first half — the same
+  weights are free in the arena — so the item's justification is now the *threshold*, which both ladders
+  agree is expensive and neither can refit away, rather than the weight values.
 - Extend the calibration set to the optic lobe. The one-cell-per-side trick covers 6.4% of the CNS and
   excludes every columnar type by construction, so the optic lobe currently inherits a noise model
   fitted elsewhere. Columnar types have a different replicate available: the columns themselves, which
@@ -472,15 +474,25 @@ sufficiently good scan is sufficient.
 - ~~**Antennal lobe gain control**~~ — divisive ORN normalisation for GABA_B presynaptic inhibition
   ([Senses](10-senses.md)).
 - ~~**Aerodynamic flight**~~ — blade-element forces on the real 218 Hz stroke ([Flight](24-flight.md)).
-  Next level: wing power and steering motor neurons driving the stroke, or a trained stabiliser.
+  The next level was to drive the stroke from the wing power and steering motor neurons; those motor
+  neurons turn out to be annotated (54 cells over six pools), and `scripts/wing_mn.mjs` measures them
+  through a flight. They cannot drive anything yet: every pool fires at 33–109 Hz on the ground and in
+  the air alike, and no pool's left-right asymmetry tracks the commanded turn (|r| ≤ 0.08). The item is
+  therefore **not** "wire the motor neurons up" but "put a descending flight command in the graph for
+  them to follow", with those two measurements as its success criterion — which makes it the flight
+  half of [A2](20-roadmap.md)'s supplied-machinery list rather than a separate piece of work.
 - ~~**Social behaviour**~~ — LC10 visual detection and cVA pheromone driving pIP10/DNp13 pursuit and
-  wing display through the male *fru*/*dsx* circuitry ([Courtship](26-courtship.md)). Next: a female
-  that flees or rejects, and real song pulses.
+  wing display through the male *fru*/*dsx* circuitry, with a song that has the real pulse/sine
+  structure (35 ms IPI) and a female who decamps and kicks ([Courtship](26-courtship.md)). Both new
+  pieces are supplied machinery, and the female's is unavoidably so: a female nervous system is not in
+  a male connectome. That makes her one more entry on [A2](20-roadmap.md)'s list rather than a
+  circuit result.
 - ~~**Neuromodulation**~~ — AKH, insulin and octopamine are in, the brain is refitted with them on, and
   locomotion drives optic-lobe octopamine release ([Neuromodulation](25-neuromodulation.md)). Dopamine
   gating of feeding remains, as A2.
-- ~~**Speed**~~ — WebGPU brain kernel with a WASM fallback ([WebGPU](27-webgpu.md)). Next: sharing the
-  device across flies, and moving flyvis onto it too.
+- ~~**Speed**~~ — WebGPU brain kernel with a WASM fallback, one device and one cached connectome per
+  context, and flyvis on the same device (three dispatches, verified to 3e-4 against the reference
+  model) ([WebGPU](27-webgpu.md)). What is left is the adjoint, which is [A5](20-roadmap.md).
 - ~~**Substitution ladder**~~ — both arms, sensitivity and refit
   ([Ablation ladder](31-ablation-ladder.md)). The embodied version is A1.
 - ~~**Per-connection uncertainty**~~ — estimated from bilateral replicates

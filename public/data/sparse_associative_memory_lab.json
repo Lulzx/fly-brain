@@ -1,15 +1,20 @@
 {
- "seed": 42,
+ "seed": 20260704,
  "spec": "sparse_associative_memory",
  "summary": {
   "ensemble_size": 18,
   "hypotheses": {
-   "silent": 9,
-   "collapsed": 9
+   "silent": 3,
+   "linear_passthrough": 2,
+   "gain_controlled": 9,
+   "collapsed": 4
   },
-  "mechanisms": {},
+  "mechanisms": {
+   "robust": 7,
+   "needs_apl_silence": 2
+  },
   "best_experiment": "baseline_gain_control",
-  "best_experiment_separation": 0.529
+  "best_experiment_separation": 0.647
  },
  "spec_def": {
   "geometry": "memory",
@@ -21,15 +26,18 @@
    "dan": [
     "PPL*",
     "PAM*"
-   ]
+   ],
+   "pn": "pool:kc"
   },
   "roles": {
    "input": "kc",
    "output": "mbon",
-   "control": "apl"
+   "control": "apl",
+   "drive": "pn"
   },
-  "odor_size": 200,
+  "odor_size": 80,
   "odor_overlap": 0.5,
+  "drive_rate": 150,
   "edge_params": [
    {
     "pre": "KC*",
@@ -136,24 +144,28 @@
    "hypothesis": "silent",
    "baseline": {
     "expansion": 2,
-    "compression": 1.772,
+    "compression": 1.818,
     "in_sim": 0.5,
     "out_sim": 0,
-    "kc_active": 0.049,
-    "rate": 0
+    "kc_active": 0.123,
+    "rate": 6
+   },
+   "baseline_repeat": {
+    "kc_active": 0.122,
+    "expansion": 2
    },
    "perturbations": {
     "apl_silence": {
-     "expansion": 2,
-     "compression": 1.747,
-     "kc_active": 0.049,
-     "rate": 0
+     "expansion": 0.199,
+     "compression": 2.515,
+     "kc_active": 0.509,
+     "rate": 293
     },
     "mb_recur_off": {
-     "expansion": 2,
-     "compression": 1.753,
-     "kc_active": 0.049,
-     "rate": 0
+     "expansion": 1.423,
+     "compression": 1.62,
+     "kc_active": 0.13,
+     "rate": 11
     }
    },
    "mechanism": null
@@ -165,27 +177,31 @@
     "mbonTonic": 4,
     "mbRecur": 1
    },
-   "hypothesis": "silent",
+   "hypothesis": "linear_passthrough",
    "baseline": {
-    "expansion": 0.367,
-    "compression": 1.739,
+    "expansion": 0.719,
+    "compression": 1.622,
     "in_sim": 0.5,
-    "out_sim": 0.816,
-    "kc_active": 0.049,
-    "rate": 5
+    "out_sim": 0.641,
+    "kc_active": 0.136,
+    "rate": 40
+   },
+   "baseline_repeat": {
+    "kc_active": 0.15,
+    "expansion": 1.23
    },
    "perturbations": {
     "apl_silence": {
-     "expansion": 0,
-     "compression": 1.799,
-     "kc_active": 0.049,
-     "rate": 4
+     "expansion": 0.172,
+     "compression": 1.105,
+     "kc_active": 0.94,
+     "rate": 577
     },
     "mb_recur_off": {
-     "expansion": 0.586,
-     "compression": 1.778,
-     "kc_active": 0.049,
-     "rate": 6
+     "expansion": 0.53,
+     "compression": 1.595,
+     "kc_active": 0.128,
+     "rate": 37
     }
    },
    "mechanism": null
@@ -200,23 +216,27 @@
    "hypothesis": "silent",
    "baseline": {
     "expansion": 2,
-    "compression": 1.755,
+    "compression": 1.24,
     "in_sim": 0.5,
     "out_sim": 0,
-    "kc_active": 0.049,
-    "rate": 0
+    "kc_active": 0.086,
+    "rate": 1
+   },
+   "baseline_repeat": {
+    "kc_active": 0.085,
+    "expansion": 2
    },
    "perturbations": {
     "apl_silence": {
-     "expansion": 2,
-     "compression": 1.763,
-     "kc_active": 0.049,
-     "rate": 0
+     "expansion": 0.152,
+     "compression": 1.123,
+     "kc_active": 0.943,
+     "rate": 444
     },
     "mb_recur_off": {
      "expansion": 2,
-     "compression": 1.741,
-     "kc_active": 0.049,
+     "compression": 1.468,
+     "kc_active": 0.074,
      "rate": 0
     }
    },
@@ -229,30 +249,34 @@
     "mbonTonic": 4,
     "mbRecur": 1
    },
-   "hypothesis": "silent",
+   "hypothesis": "gain_controlled",
    "baseline": {
-    "expansion": 0.586,
-    "compression": 1.774,
+    "expansion": 1.26,
+    "compression": 1.148,
     "in_sim": 0.5,
-    "out_sim": 0.707,
-    "kc_active": 0.049,
-    "rate": 6
+    "out_sim": 0.37,
+    "kc_active": 0.094,
+    "rate": 20
+   },
+   "baseline_repeat": {
+    "kc_active": 0.064,
+    "expansion": 2
    },
    "perturbations": {
     "apl_silence": {
-     "expansion": 0.268,
-     "compression": 1.769,
-     "kc_active": 0.049,
-     "rate": 6
+     "expansion": 0.142,
+     "compression": 1.13,
+     "kc_active": 0.937,
+     "rate": 567
     },
     "mb_recur_off": {
-     "expansion": 0.586,
-     "compression": 1.726,
-     "kc_active": 0.049,
-     "rate": 6
+     "expansion": 0.9,
+     "compression": 1.158,
+     "kc_active": 0.093,
+     "rate": 25
     }
    },
-   "mechanism": null
+   "mechanism": "robust"
   },
   {
    "params": {
@@ -264,24 +288,28 @@
    "hypothesis": "silent",
    "baseline": {
     "expansion": 2,
-    "compression": 1.814,
+    "compression": 1.305,
     "in_sim": 0.5,
     "out_sim": 0,
-    "kc_active": 0.049,
+    "kc_active": 0.059,
     "rate": 0
+   },
+   "baseline_repeat": {
+    "kc_active": 0.056,
+    "expansion": 2
    },
    "perturbations": {
     "apl_silence": {
-     "expansion": 2,
-     "compression": 1.811,
-     "kc_active": 0.049,
-     "rate": 0
+     "expansion": 0.206,
+     "compression": 1.157,
+     "kc_active": 0.938,
+     "rate": 427
     },
     "mb_recur_off": {
      "expansion": 2,
-     "compression": 1.686,
-     "kc_active": 0.049,
-     "rate": 0
+     "compression": 1.126,
+     "kc_active": 0.069,
+     "rate": 1
     }
    },
    "mechanism": null
@@ -293,30 +321,34 @@
     "mbonTonic": 4,
     "mbRecur": 1
    },
-   "hypothesis": "silent",
+   "hypothesis": "gain_controlled",
    "baseline": {
-    "expansion": 0.148,
-    "compression": 1.75,
+    "expansion": 1.684,
+    "compression": 1.058,
     "in_sim": 0.5,
-    "out_sim": 0.926,
-    "kc_active": 0.049,
-    "rate": 9
+    "out_sim": 0.158,
+    "kc_active": 0.063,
+    "rate": 13
+   },
+   "baseline_repeat": {
+    "kc_active": 0.059,
+    "expansion": 2
    },
    "perturbations": {
     "apl_silence": {
-     "expansion": 0,
-     "compression": 1.731,
-     "kc_active": 0.049,
-     "rate": 4
+     "expansion": 0.501,
+     "compression": 1.101,
+     "kc_active": 0.941,
+     "rate": 457
     },
     "mb_recur_off": {
-     "expansion": 0.367,
-     "compression": 1.808,
-     "kc_active": 0.049,
-     "rate": 5
+     "expansion": 2,
+     "compression": 1.44,
+     "kc_active": 0.063,
+     "rate": 14
     }
    },
-   "mechanism": null
+   "mechanism": "robust"
   },
   {
    "params": {
@@ -325,27 +357,31 @@
     "mbonTonic": 0,
     "mbRecur": 1
    },
-   "hypothesis": "silent",
+   "hypothesis": "linear_passthrough",
    "baseline": {
-    "expansion": 0.211,
-    "compression": 1.751,
+    "expansion": 0.784,
+    "compression": 1.54,
     "in_sim": 0.5,
-    "out_sim": 0.894,
-    "kc_active": 0.049,
-    "rate": 8
+    "out_sim": 0.608,
+    "kc_active": 0.144,
+    "rate": 36
+   },
+   "baseline_repeat": {
+    "kc_active": 0.139,
+    "expansion": 0.607
    },
    "perturbations": {
     "apl_silence": {
-     "expansion": 0.268,
-     "compression": 1.786,
-     "kc_active": 0.049,
-     "rate": 6
+     "expansion": 0.681,
+     "compression": 1.268,
+     "kc_active": 0.892,
+     "rate": 428
     },
     "mb_recur_off": {
-     "expansion": 0.103,
-     "compression": 1.752,
-     "kc_active": 0.049,
-     "rate": 7
+     "expansion": 0.238,
+     "compression": 1.336,
+     "kc_active": 0.146,
+     "rate": 50
     }
    },
    "mechanism": null
@@ -359,25 +395,29 @@
    },
    "hypothesis": "collapsed",
    "baseline": {
-    "expansion": 0.105,
-    "compression": 1.791,
+    "expansion": 0.34,
+    "compression": 1.667,
     "in_sim": 0.5,
-    "out_sim": 0.947,
-    "kc_active": 0.049,
-    "rate": 59
+    "out_sim": 0.83,
+    "kc_active": 0.135,
+    "rate": 79
+   },
+   "baseline_repeat": {
+    "kc_active": 0.135,
+    "expansion": 0.515
    },
    "perturbations": {
     "apl_silence": {
-     "expansion": 0.081,
-     "compression": 1.793,
-     "kc_active": 0.049,
-     "rate": 58
+     "expansion": 0.126,
+     "compression": 1.108,
+     "kc_active": 0.936,
+     "rate": 837
     },
     "mb_recur_off": {
-     "expansion": 0.093,
-     "compression": 1.737,
-     "kc_active": 0.049,
-     "rate": 65
+     "expansion": 0.365,
+     "compression": 1.648,
+     "kc_active": 0.133,
+     "rate": 100
     }
    },
    "mechanism": null
@@ -389,30 +429,34 @@
     "mbonTonic": 0,
     "mbRecur": 1
    },
-   "hypothesis": "silent",
+   "hypothesis": "gain_controlled",
    "baseline": {
-    "expansion": 0,
-    "compression": 1.808,
+    "expansion": 0.384,
+    "compression": 1.328,
     "in_sim": 0.5,
-    "out_sim": 1,
-    "kc_active": 0.049,
-    "rate": 6
+    "out_sim": 0.808,
+    "kc_active": 0.087,
+    "rate": 17
+   },
+   "baseline_repeat": {
+    "kc_active": 0.087,
+    "expansion": 0.509
    },
    "perturbations": {
     "apl_silence": {
-     "expansion": 0.174,
-     "compression": 1.773,
-     "kc_active": 0.049,
-     "rate": 7
+     "expansion": 0.223,
+     "compression": 1.399,
+     "kc_active": 0.853,
+     "rate": 621
     },
     "mb_recur_off": {
-     "expansion": 0.174,
-     "compression": 1.805,
-     "kc_active": 0.049,
-     "rate": 7
+     "expansion": 0.6,
+     "compression": 1.235,
+     "kc_active": 0.088,
+     "rate": 28
     }
    },
-   "mechanism": null
+   "mechanism": "robust"
   },
   {
    "params": {
@@ -421,30 +465,34 @@
     "mbonTonic": 4,
     "mbRecur": 1
    },
-   "hypothesis": "collapsed",
+   "hypothesis": "gain_controlled",
    "baseline": {
-    "expansion": 0.156,
-    "compression": 1.784,
+    "expansion": 0.744,
+    "compression": 1.371,
     "in_sim": 0.5,
-    "out_sim": 0.922,
-    "kc_active": 0.049,
-    "rate": 58
+    "out_sim": 0.628,
+    "kc_active": 0.084,
+    "rate": 49
+   },
+   "baseline_repeat": {
+    "kc_active": 0.085,
+    "expansion": 1.198
    },
    "perturbations": {
     "apl_silence": {
-     "expansion": 0.147,
-     "compression": 1.7,
-     "kc_active": 0.049,
-     "rate": 58
+     "expansion": 0.344,
+     "compression": 1.818,
+     "kc_active": 0.74,
+     "rate": 627
     },
     "mb_recur_off": {
-     "expansion": 0.147,
-     "compression": 1.731,
-     "kc_active": 0.049,
-     "rate": 67
+     "expansion": 0.307,
+     "compression": 1.354,
+     "kc_active": 0.078,
+     "rate": 66
     }
    },
-   "mechanism": null
+   "mechanism": "needs_apl_silence"
   },
   {
    "params": {
@@ -453,30 +501,34 @@
     "mbonTonic": 0,
     "mbRecur": 1
    },
-   "hypothesis": "silent",
+   "hypothesis": "gain_controlled",
    "baseline": {
-    "expansion": 0.174,
-    "compression": 1.765,
+    "expansion": 1.383,
+    "compression": 1.097,
     "in_sim": 0.5,
-    "out_sim": 0.913,
-    "kc_active": 0.049,
-    "rate": 7
+    "out_sim": 0.309,
+    "kc_active": 0.061,
+    "rate": 17
+   },
+   "baseline_repeat": {
+    "kc_active": 0.068,
+    "expansion": 2
    },
    "perturbations": {
     "apl_silence": {
-     "expansion": 0,
-     "compression": 1.802,
-     "kc_active": 0.049,
-     "rate": 6
+     "expansion": 0.163,
+     "compression": 2.712,
+     "kc_active": 0.575,
+     "rate": 453
     },
     "mb_recur_off": {
-     "expansion": 0.103,
-     "compression": 1.796,
-     "kc_active": 0.049,
-     "rate": 7
+     "expansion": 2,
+     "compression": 1.118,
+     "kc_active": 0.06,
+     "rate": 10
     }
    },
-   "mechanism": null
+   "mechanism": "needs_apl_silence"
   },
   {
    "params": {
@@ -485,30 +537,34 @@
     "mbonTonic": 4,
     "mbRecur": 1
    },
-   "hypothesis": "collapsed",
+   "hypothesis": "gain_controlled",
    "baseline": {
-    "expansion": 0.127,
-    "compression": 1.757,
+    "expansion": 0.556,
+    "compression": 1.399,
     "in_sim": 0.5,
-    "out_sim": 0.936,
-    "kc_active": 0.049,
-    "rate": 59
+    "out_sim": 0.722,
+    "kc_active": 0.061,
+    "rate": 36
+   },
+   "baseline_repeat": {
+    "kc_active": 0.063,
+    "expansion": 0.709
    },
    "perturbations": {
     "apl_silence": {
-     "expansion": 0.116,
-     "compression": 1.815,
-     "kc_active": 0.049,
-     "rate": 56
+     "expansion": 0.039,
+     "compression": 1.171,
+     "kc_active": 0.933,
+     "rate": 966
     },
     "mb_recur_off": {
-     "expansion": 0.119,
-     "compression": 1.787,
-     "kc_active": 0.049,
-     "rate": 65
+     "expansion": 0.575,
+     "compression": 1.435,
+     "kc_active": 0.055,
+     "rate": 38
     }
    },
-   "mechanism": null
+   "mechanism": "robust"
   },
   {
    "params": {
@@ -519,25 +575,29 @@
    },
    "hypothesis": "collapsed",
    "baseline": {
-    "expansion": 0.069,
-    "compression": 1.742,
+    "expansion": 0.17,
+    "compression": 1.548,
     "in_sim": 0.5,
-    "out_sim": 0.966,
-    "kc_active": 0.049,
-    "rate": 70
+    "out_sim": 0.915,
+    "kc_active": 0.136,
+    "rate": 120
+   },
+   "baseline_repeat": {
+    "kc_active": 0.155,
+    "expansion": 0.371
    },
    "perturbations": {
     "apl_silence": {
-     "expansion": 0.062,
-     "compression": 1.747,
-     "kc_active": 0.049,
-     "rate": 72
+     "expansion": 0.048,
+     "compression": 1.184,
+     "kc_active": 0.932,
+     "rate": 1262
     },
     "mb_recur_off": {
-     "expansion": 0.067,
-     "compression": 1.79,
-     "kc_active": 0.049,
-     "rate": 76
+     "expansion": 0.129,
+     "compression": 1.63,
+     "kc_active": 0.133,
+     "rate": 103
     }
    },
    "mechanism": null
@@ -551,25 +611,29 @@
    },
    "hypothesis": "collapsed",
    "baseline": {
-    "expansion": 0.068,
-    "compression": 1.829,
+    "expansion": 0.114,
+    "compression": 1.685,
     "in_sim": 0.5,
-    "out_sim": 0.966,
-    "kc_active": 0.049,
-    "rate": 245
+    "out_sim": 0.943,
+    "kc_active": 0.122,
+    "rate": 170
+   },
+   "baseline_repeat": {
+    "kc_active": 0.138,
+    "expansion": 0.123
    },
    "perturbations": {
     "apl_silence": {
-     "expansion": 0.079,
-     "compression": 1.758,
-     "kc_active": 0.049,
-     "rate": 251
+     "expansion": 0.344,
+     "compression": 1.168,
+     "kc_active": 0.926,
+     "rate": 911
     },
     "mb_recur_off": {
-     "expansion": 0.043,
-     "compression": 1.808,
-     "kc_active": 0.049,
-     "rate": 283
+     "expansion": 0.117,
+     "compression": 1.878,
+     "kc_active": 0.112,
+     "rate": 187
     }
    },
    "mechanism": null
@@ -583,25 +647,29 @@
    },
    "hypothesis": "collapsed",
    "baseline": {
-    "expansion": 0.065,
-    "compression": 1.822,
+    "expansion": 0.315,
+    "compression": 1.786,
     "in_sim": 0.5,
-    "out_sim": 0.967,
-    "kc_active": 0.049,
-    "rate": 63
+    "out_sim": 0.843,
+    "kc_active": 0.065,
+    "rate": 52
+   },
+   "baseline_repeat": {
+    "kc_active": 0.09,
+    "expansion": 0.131
    },
    "perturbations": {
     "apl_silence": {
-     "expansion": 0.086,
-     "compression": 1.737,
-     "kc_active": 0.049,
-     "rate": 75
+     "expansion": 0.187,
+     "compression": 2.212,
+     "kc_active": 0.686,
+     "rate": 1051
     },
     "mb_recur_off": {
-     "expansion": 0.05,
-     "compression": 1.815,
-     "kc_active": 0.049,
-     "rate": 79
+     "expansion": 0.33,
+     "compression": 1.264,
+     "kc_active": 0.092,
+     "rate": 80
     }
    },
    "mechanism": null
@@ -613,30 +681,34 @@
     "mbonTonic": 4,
     "mbRecur": 1
    },
-   "hypothesis": "collapsed",
+   "hypothesis": "gain_controlled",
    "baseline": {
-    "expansion": 0.06,
-    "compression": 1.781,
+    "expansion": 0.125,
+    "compression": 1.324,
     "in_sim": 0.5,
-    "out_sim": 0.97,
-    "kc_active": 0.049,
-    "rate": 255
+    "out_sim": 0.937,
+    "kc_active": 0.083,
+    "rate": 104
+   },
+   "baseline_repeat": {
+    "kc_active": 0.091,
+    "expansion": 0.624
    },
    "perturbations": {
     "apl_silence": {
-     "expansion": 0.066,
-     "compression": 1.79,
-     "kc_active": 0.049,
-     "rate": 249
+     "expansion": 0.261,
+     "compression": 1.102,
+     "kc_active": 0.942,
+     "rate": 1094
     },
     "mb_recur_off": {
-     "expansion": 0.068,
-     "compression": 1.781,
-     "kc_active": 0.049,
-     "rate": 283
+     "expansion": 0.3,
+     "compression": 1.485,
+     "kc_active": 0.075,
+     "rate": 100
     }
    },
-   "mechanism": null
+   "mechanism": "robust"
   },
   {
    "params": {
@@ -645,30 +717,34 @@
     "mbonTonic": 0,
     "mbRecur": 1
    },
-   "hypothesis": "collapsed",
+   "hypothesis": "gain_controlled",
    "baseline": {
-    "expansion": 0.077,
-    "compression": 1.762,
+    "expansion": 0.468,
+    "compression": 1.285,
     "in_sim": 0.5,
-    "out_sim": 0.961,
-    "kc_active": 0.049,
-    "rate": 71
+    "out_sim": 0.766,
+    "kc_active": 0.057,
+    "rate": 45
+   },
+   "baseline_repeat": {
+    "kc_active": 0.066,
+    "expansion": 0.355
    },
    "perturbations": {
     "apl_silence": {
-     "expansion": 0.085,
-     "compression": 1.801,
-     "kc_active": 0.049,
-     "rate": 73
+     "expansion": 0.752,
+     "compression": 1.301,
+     "kc_active": 0.89,
+     "rate": 615
     },
     "mb_recur_off": {
-     "expansion": 0.094,
-     "compression": 1.767,
-     "kc_active": 0.049,
-     "rate": 81
+     "expansion": 1.225,
+     "compression": 1.436,
+     "kc_active": 0.056,
+     "rate": 26
     }
    },
-   "mechanism": null
+   "mechanism": "robust"
   },
   {
    "params": {
@@ -677,103 +753,107 @@
     "mbonTonic": 4,
     "mbRecur": 1
    },
-   "hypothesis": "collapsed",
+   "hypothesis": "gain_controlled",
    "baseline": {
-    "expansion": 0.067,
-    "compression": 1.777,
+    "expansion": 0.198,
+    "compression": 1.237,
     "in_sim": 0.5,
-    "out_sim": 0.967,
-    "kc_active": 0.049,
-    "rate": 250
+    "out_sim": 0.901,
+    "kc_active": 0.069,
+    "rate": 77
+   },
+   "baseline_repeat": {
+    "kc_active": 0.068,
+    "expansion": 0.302
    },
    "perturbations": {
     "apl_silence": {
-     "expansion": 0.064,
-     "compression": 1.747,
-     "kc_active": 0.049,
-     "rate": 251
+     "expansion": 0.11,
+     "compression": 1.156,
+     "kc_active": 0.932,
+     "rate": 1253
     },
     "mb_recur_off": {
-     "expansion": 0.059,
-     "compression": 1.754,
-     "kc_active": 0.049,
-     "rate": 285
+     "expansion": 0.132,
+     "compression": 1.135,
+     "kc_active": 0.078,
+     "rate": 111
     }
    },
-   "mechanism": null
+   "mechanism": "robust"
   }
  ],
  "ranked_experiments": [
   {
    "experiment": "baseline_gain_control",
-   "separation": 0.529,
+   "separation": 0.647,
    "outcomes": [
     "silent",
-    "silent",
-    "silent",
-    "silent",
-    "silent",
-    "silent",
-    "silent",
     "uncontrolled",
     "silent",
-    "uncontrolled",
+    "controlled",
     "silent",
+    "controlled",
     "uncontrolled",
     "uncontrolled",
-    "uncontrolled",
+    "controlled",
+    "controlled",
+    "controlled",
+    "controlled",
     "uncontrolled",
     "uncontrolled",
     "uncontrolled",
-    "uncontrolled"
-   ]
-  },
-  {
-   "experiment": "apl_silence",
-   "separation": 0.529,
-   "outcomes": [
-    "silent",
-    "silent",
-    "silent",
-    "silent",
-    "silent",
-    "silent",
-    "silent",
-    "uncontrolled",
-    "silent",
-    "uncontrolled",
-    "silent",
-    "uncontrolled",
-    "uncontrolled",
-    "uncontrolled",
-    "uncontrolled",
-    "uncontrolled",
-    "uncontrolled",
-    "uncontrolled"
+    "controlled",
+    "controlled",
+    "controlled"
    ]
   },
   {
    "experiment": "mb_recur_off",
-   "separation": 0.529,
+   "separation": 0.569,
    "outcomes": [
-    "silent",
-    "silent",
-    "silent",
-    "silent",
-    "silent",
-    "silent",
-    "silent",
-    "uncontrolled",
-    "silent",
-    "uncontrolled",
-    "silent",
     "uncontrolled",
     "uncontrolled",
+    "silent",
+    "controlled",
+    "silent",
+    "controlled",
+    "controlled",
+    "uncontrolled",
+    "controlled",
+    "controlled",
+    "controlled",
+    "controlled",
     "uncontrolled",
     "uncontrolled",
+    "controlled",
+    "controlled",
+    "controlled",
+    "controlled"
+   ]
+  },
+  {
+   "experiment": "apl_silence",
+   "separation": 0.366,
+   "outcomes": [
+    "uncontrolled",
+    "controlled",
+    "controlled",
+    "controlled",
+    "controlled",
+    "controlled",
+    "controlled",
+    "controlled",
+    "controlled",
     "uncontrolled",
     "uncontrolled",
-    "uncontrolled"
+    "controlled",
+    "controlled",
+    "controlled",
+    "uncontrolled",
+    "controlled",
+    "controlled",
+    "controlled"
    ]
   }
  ]

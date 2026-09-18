@@ -3232,6 +3232,96 @@
     "n_nulls": 6
    }
   },
+  "electrical": {
+   "cell_pairs": 1383,
+   "gap_junctions": 11529,
+   "cell_pairs_neuron_neuron": 1109,
+   "cell_pairs_neuron_neuron_electrical_only": 528,
+   "cell_pairs_also_chemical": 632,
+   "cell_pairs_electrical_only": 751,
+   "cell_pairs_by_sign": {
+    "E-I": 123,
+    "E-E": 114,
+    "unsigned": 1038,
+    "I-I": 108
+   },
+   "type_pairs": 54,
+   "type_pairs_electrical_only": 47,
+   "type_pairs_by_sign": {
+    "mixed": 42,
+    "I<->I": 4,
+    "E<->I": 5,
+    "E<->E": 3
+   },
+   "type_pairs_top": [
+    [
+     "ALA",
+     "CAN",
+     802
+    ],
+    [
+     "PVD",
+     "hmc",
+     800
+    ],
+    [
+     "PVD",
+     "hyp",
+     800
+    ],
+    [
+     "ALA",
+     "PVD",
+     500
+    ],
+    [
+     "dBWML",
+     "hmc",
+     401
+    ],
+    [
+     "CAN",
+     "exc_cell",
+     400
+    ],
+    [
+     "dBWMR",
+     "hmc",
+     297
+    ],
+    [
+     "CAN",
+     "hyp",
+     280
+    ],
+    [
+     "hmc",
+     "vBWMR",
+     250
+    ],
+    [
+     "CAN",
+     "PVD",
+     200
+    ],
+    [
+     "hmc",
+     "vBWML",
+     185
+    ],
+    [
+     "exc_gl",
+     "hmc",
+     118
+    ]
+   ],
+   "reciprocal_type_pairs_chemical": 15,
+   "reciprocal_type_pairs_added": 53,
+   "reciprocal_type_pairs_combined": 68,
+   "threshold": "same as the chemical census: >=3 gap junctions per target cell and >=20 in total",
+   "mutual_inhibition_added": 4,
+   "recurrent_excitation_added": 3
+  },
   "spectral": {
    "spectral_radius_power_iter": 136.3,
    "dominant_eigvec_participation": 10.8,

@@ -68,6 +68,14 @@ measures the model's sensitivity to exactly these two things and finds the grade
 load-bearing quantity in the whole model, worth more than any item of cellular biophysics. The quantity
 the model depends on most is the quantity the reconstruction measures least well at low counts.
 
+That is a statement about the physiological benchmark, and the embodied one disagrees with it:
+[doc 35](35-behaviour-ladder.md) finds binarising the weights and permuting them both free in the arena
+(+0.019 ± 0.036 and +0.030 ± 0.040). So the case for measuring weight uncertainty carefully rests on
+the benchmark rather than on the animal's outcomes, and the strongest behavioural argument for this
+document is a different one: removing the contact threshold altogether, which costs 0.037 on the
+benchmark, kills four flies in twelve in the arena. What the counts are worth is unsettled; how far
+they can be trusted is what is measured below either way.
+
 ## Reliability, and why the obvious estimator is wrong
 
 The natural way to quantify weight error is to bin mirror pairs by synapse count and take the
@@ -143,7 +151,11 @@ The calibrated cut at six contacts is not arbitrary, and it is not free either:
 
 The fitted threshold discards 52% of the connections and 19% of the synapses, and buys three points of
 mean reliability for it. [Doc 31](31-ablation-ladder.md) measures what that trade is worth on the
-benchmark: removing the threshold entirely costs 0.028, and doubling it costs 0.071.
+benchmark: removing the threshold entirely costs 0.037 ± 0.007 and doubling it costs 0.139 ± 0.008,
+and neither is recoverable by refitting the other eight parameters. In the arena the same two rungs cost
+0.154 ± 0.051 and 0.214 ± 0.061, the second and fourth largest of twenty
+([doc 35](35-behaviour-ladder.md)) — the one place where the two objectives agree that something
+matters.
 
 ## Limits
 

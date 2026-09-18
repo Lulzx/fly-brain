@@ -131,6 +131,61 @@ def analyse(ir):
                        feedforward_loops=ffl, null_model=nullz)
     log('motifs done')
 
+    # ---- electrical motifs -------------------------------------------------
+    # The census above is chemical, and the worm's gap junctions are neither signed nor directed, so
+    # they cannot enter it as edges. What they can do is change the answers: an electrical contact makes
+    # a pair mutually coupled whether or not the chemical graph says so, which is exactly the quantity
+    # the reciprocity and mutual-inhibition counts are measuring. This section folds them in and reports
+    # the difference rather than a second table.
+    if ir['gap_indptr'] is not None:
+        G = IR.csr_of(ir, gap=True)
+        gr, gc = G.nonzero(); gm = gr < gc                       # undirected pairs, counted once
+        chem_any = ((W + W.T) > 0)
+        also_chem = np.asarray(chem_any[gr[gm], gc[gm]]).ravel() > 0
+        # Sign categories keep "unknown" separate: most of the worm's electrical partners are muscle,
+        # hypodermis and the excretory cells, which carry no neurotransmitter assignment at all, and
+        # folding them into "inhibitory" would invent the result this section is checking.
+        cell_kind = collections.Counter()
+        for a, b in zip(gr[gm], gc[gm]):
+            cell_kind['E-E' if isE[a] and isE[b] else 'I-I' if isI[a] and isI[b]
+                       else 'E-I' if (isE[a] and isI[b]) or (isI[a] and isE[b]) else 'unsigned'] += 1
+        # type level, with the chemical census's own thresholds so the two are comparable
+        TG = (P @ G @ P.T).tocsr()
+        Sg = TG.tocoo(); perg = Sg.data / cnt[Sg.col]
+        keepg = (perg >= 3) & (Sg.data >= 20) & (ut[Sg.row] != '') & (ut[Sg.col] != '')
+        Ag = sp.csr_matrix((Sg.data[keepg], (Sg.row[keepg], Sg.col[keepg])), shape=(T, T))
+        Ag = ((Ag + Ag.T) > 0).astype(np.int8)                   # symmetric by construction; re-assert
+        gtr, gtc = Ag.nonzero(); gtm = gtr < gtc
+        chem_t = ((Ab + Ab.T) > 0)
+        pure = ~(np.asarray(chem_t[gtr[gtm], gtc[gtm]]).ravel() > 0)
+        recip_t = (Ab.multiply(Ab.T) > 0)                        # already-reciprocal chemical type pairs
+        new_recip = ~(np.asarray(recip_t[gtr[gtm], gtc[gtm]]).ravel() > 0)
+        gcat = collections.Counter(cat(a, b) for a, b in zip(gtr[gtm], gtc[gtm]))
+        gtop = sorted(((str(ut[a]), str(ut[b]), int(TG[a, b])) for a, b in zip(gtr[gtm], gtc[gtm])),
+                      key=lambda p: -p[2])[:12]
+        rr, rc = recip_t.nonzero(); n_chem_recip = int((rr < rc).sum())   # pairs, diagonal excluded
+        is_neuron = np.isin(scn, ['sensory', 'interneuron', 'motor_neuron', 'pharyngeal'])
+        nn = is_neuron[gr[gm]] & is_neuron[gc[gm]]
+        R['electrical'] = dict(
+            cell_pairs=int(gm.sum()), gap_junctions=int(G.sum() / 2),
+            cell_pairs_neuron_neuron=int(nn.sum()),
+            cell_pairs_neuron_neuron_electrical_only=int((nn & ~also_chem).sum()),
+            cell_pairs_also_chemical=int(also_chem.sum()),
+            cell_pairs_electrical_only=int((~also_chem).sum()),
+            cell_pairs_by_sign=dict(cell_kind),
+            type_pairs=int(gtm.sum()), type_pairs_electrical_only=int(pure.sum()),
+            type_pairs_by_sign=dict(gcat), type_pairs_top=gtop,
+            reciprocal_type_pairs_chemical=n_chem_recip,
+            reciprocal_type_pairs_added=int(new_recip.sum()),
+            reciprocal_type_pairs_combined=n_chem_recip + int(new_recip.sum()),
+            threshold='same as the chemical census: >=3 gap junctions per target cell and >=20 in total',
+            mutual_inhibition_added=int(sum(1 for a, b in zip(gtr[gtm], gtc[gtm])
+                                            if cat(a, b) == 'I<->I' and not (recip_t[a, b] > 0))),
+            recurrent_excitation_added=int(sum(1 for a, b in zip(gtr[gtm], gtc[gtm])
+                                               if cat(a, b) == 'E<->E' and not (recip_t[a, b] > 0))))
+        log('electrical', R['electrical']['type_pairs'], 'type pairs,',
+            R['electrical']['reciprocal_type_pairs_added'], 'new reciprocal')
+
     # ---- spectral ----------------------------------------------------------
     sw = weights * sign[pre]
     Sm = sp.csr_matrix((sw, post, ir['indptr']), shape=(N, N))

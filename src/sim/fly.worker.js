@@ -1,7 +1,7 @@
 // One embodied fly per worker: its own connectome brain + MuJoCo physics world.
 import loadMujoco from '@mujoco/mujoco';
 import { FlyAgent } from './fly.js';
-import { attachBrain, attachEyes } from '../brainsetup.js';
+import { attachBrain, attachEyes, attachEyesGpu } from '../brainsetup.js';
 import { buildGroups, GroupMeter } from './groups.js';
 
 let fly = null, meter = null, running = false, speed = 1, others = [], env = null, lastReal = 0, simAhead = 0, timer = null;
@@ -16,7 +16,11 @@ onmessage = async (e) => {
     const data = { N: g.N, E: g.E, meta: m.meta, indptr: g.indptr, indices: g.indices, weights: g.weights, nt: g.nt, side: g.side, superclass: g.superclass, cls: g.cls };
     env = m.env;
     const brain = await attachBrain(m.wasmModule, m.brainMem, m.slot, data, 101 + m.id);
-    const flyvis = m.brainMem.fv ? { eyes: attachEyes(brain.instance, m.brainMem, m.slot), map: m.flyvisMap, gain: 150 } : null;
+    // the eyes follow the brain onto the GPU when there is one, sharing its device and one copy of the
+    // flyvis parameters across both eyes (and across every fly hosted in this worker)
+    const gpuEyes = await attachEyesGpu(m.brainMem);
+    const eyes = gpuEyes ? gpuEyes.eyes : (m.brainMem.fv ? attachEyes(brain.instance, m.brainMem, m.slot) : null);
+    const flyvis = eyes ? { eyes, map: m.flyvisMap, gain: 150, vRest: gpuEyes?.vRest } : null;
     fly = new FlyAgent({ brain, flyvis, mj, flyXML: m.flyXML, env, data, size: g.size, sign: g.sign, bodymap: m.bodymap, gait: m.gait, id: m.id,
       pos: m.pos, yaw: m.yaw, nProxies: m.nProxies, mode: m.mode, brainOpts: m.brainOpts, vision: m.vision, neuromod: { calib: m.neuromod }, sex: m.sex });
     meter = new GroupMeter(buildGroups(m.bodymap, data.meta.types, data.side), g.N);

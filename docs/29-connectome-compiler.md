@@ -80,8 +80,126 @@ reruns don't clobber each other.
   excluded from sign-conditioned counts rather than guessed.
 - The null model swaps ~100 edges per rewire on a 330-edge graph — the worm's type graph is
   small enough that z-scores carry wide uncertainty; treat them as directional.
-- Gap junctions are stored but not yet folded into the motif census (they are unsigned and
-  undirected — folding them in changes reciprocity measures and is a deliberate next step).
+- Sign coverage bounds the electrical section below rather than the chemical one: 1,038 of the
+  1,383 gap-coupled cell pairs have at least one partner with no neurotransmitter assignment,
+  because most of them are muscle, hypodermis or the excretory cells.
+
+## Electrical coupling, folded in
+
+Gap junctions are unsigned and undirected, so they cannot be edges in a signed, directed census.
+What they can do is change its answers, since an electrical contact makes a pair mutually coupled
+whether or not the chemical graph says so — and mutual coupling is exactly what the reciprocity and
+mutual-inhibition counts measure. `algo_ir.py` therefore reports the *difference* they make, at the
+chemical census's own thresholds (≥3 junctions per target cell, ≥20 in total), rather than a second
+table:
+
+| measure | chemical only | with gap junctions |
+|---|---|---|
+| reciprocal type pairs | 15 | **68** |
+| gap-coupled type pairs | — | 54, of which **47 have no strong chemical edge at all** |
+| mutual-inhibition (I↔I) type pairs | 0 | 4 |
+| recurrent-excitation (E↔E) type pairs | 6 | 9 |
+| gap-coupled cell pairs | — | 1,383 (11,529 junctions), 751 with no chemical edge |
+| neuron-to-neuron gap pairs | — | 1,109, of which 528 are electrical only |
+
+**Most of the worm's mutual coupling is invisible to a chemical census.** Folding the electrical
+graph in more than quadruples the reciprocal type pairs, 15 to 68, and 47 of the 54 gap-coupled type
+pairs are pairs the chemical census records no strong edge between in either direction. A reciprocity
+number computed from chemical synapses alone is not a measurement of how mutually coupled this
+nervous system is; it is a measurement of one of its two wiring systems.
+
+**The electrical layer is not a copy of the chemical one, and the sign composition says so.** The
+worm's chemical 2-cycles are inhibition-dominated — 371 I↔I against 69 E↔E at cell level, the result
+the comparison above leads with. Among gap-coupled pairs where both partners are signed, the three
+categories are nearly equal: 114 E–E, 123 E–I, 108 I–I. Whatever the electrical graph is for, it is
+not a second copy of the command-interneuron mutual-inhibition motif.
+
+**The strongest electrical coupling is not between neurons at all.** The largest gap-coupled type
+pairs are ALA–CAN (802 junctions), PVD–hmc (800), PVD–hyp (800) and ALA–PVD (500): the excretory
+canal cell, the head mesodermal cell, hypodermis and body-wall muscle. This is why the sign table is
+dominated by the unsigned category, and it is a fact about the animal rather than a gap in the data —
+in *C. elegans* the electrical network reaches well outside the nervous system. The consequence for
+this layer is that any cross-species electrical comparison has to state whether end organs are in or
+out; here they are in, and the neuron-to-neuron subset (1,109 pairs, 528 of them electrical only) is
+reported separately so the comparison can be made either way.
+
+**For the fly this section is empty, and that is the finding.** The MaleCNS release ships no
+gap-junction table, so `load_fly()` leaves the electrical graph unset. The sim adds exactly one
+electrical edge by hand — GF→TTMn, without which escape does not work at all
+([Roadmap A2](20-roadmap.md)). The worm numbers above are the argument for why that omission is not
+a detail: if the fly's electrical graph resembles the worm's in how much mutual coupling it carries
+that the chemical graph does not, then a chemical-only fly connectome is missing a comparable share
+of its recurrence, and no amount of fitting the chemical weights recovers it.
+
+## Operator detectors: the compressed layer as output
+
+`scripts/algo_operators.py` looks for three computational operators in the wiring of any dataset in the
+IR, and reports each with the evidence that fired it. The detectors are given the graph, the cell counts
+and the signs, and nothing else — no glomerulus names, no compartment tables, no "this is the mushroom
+body". Writes `public/data/ir_operators.json`.
+
+| detector | what it looks for |
+|---|---|
+| `expansion` | a layer whose cells each sample a few cells of a common, much smaller input pool |
+| `normalization` | one cell, or a pair, that reads a whole population and writes back to all of it |
+| `ring` | a recurrent population whose effective kernel depends only on distance around a circle, plus the groups that shift activity along it |
+
+The test is the fly, where the answers are known and written down in [doc 28](28-algorithmic-structures.md)
+by name. What the detectors return:
+
+**The ring detector recovers the heading circuit, and names its partners.** EPG ranks first of 1,587
+recurrent populations examined. Its kernel is circulant at cosine R² = **0.754** on the coordinate the
+detector recovers, the top eigenvalue pair is degenerate to **0.923** and every cell has comparable
+amplitude (CV 0.15) — the two pieces of evidence that separate a ring from two clusters. The kernel is
+circulant **through Delta7 specifically**: each inhibitory population that the candidate both drives and
+is driven by is tested on its own, and Delta7 is the one that makes the kernel a cosine. The shifter with
+the most synapses back onto the ring is **PEN1+PEN2**, and its per-cell angular offsets split in both
+directions (+0.19 / −0.16 rad). None of those five names was supplied.
+
+Two honest points about it. The PEN offsets the detector measures are small — ±0.17 rad against the
+±1.5 columns (≈ ±1.2 rad) that [doc 28](28-algorithmic-structures.md) measures with the protocerebral
+bridge's own column tags, because a coordinate recovered from eigenvectors is not calibrated in columns
+and the population median mixes both hemispheres. And the ER ring-neuron groups come out as "shifters"
+too, with larger offsets (±1.1–1.4 rad); they are not shifters but landmark input, and the detector
+cannot tell the difference from wiring alone, because both read the ring and write back at an offset.
+
+Below EPG the list is 77 more candidates, led by the fan-body columnar types (hDeltaE, hDeltaG, hDeltaF,
+hDeltaB, each through its own FB tangential inhibitory partner) — which is a prediction rather than a
+confirmation: the same measurement that finds the known ring says the fan body has several more.
+
+**The expansion detector returns exactly one layer in the whole fly, and it is the right one.** Of 196
+candidate groups assembled into 182 layers, one passes: 2,000 Kenyon cells drawn from four subtype
+groups, against a pool of **418** cells whose largest identified contributors are antennal-lobe
+projection neurons (DA1_lPN, VM5d_adPN, DA2_lPN). Expansion ratio 4.78, median fan-in **7 cells per
+Kenyon cell** (p10–p90: 4–9), each cell sampling 1.7% of the pool. Two details had to be right for this
+to work at all, and both are stated in the code: an expansion layer arrives split into subtypes and has
+to be re-assembled by shared input pool, and "input" has to exclude peers and feedback — without that
+rule a Kenyon subtype's pool is half Kenyon cells and the ratio comes out at 1.07.
+
+The sampling is **4.8× less independent than random**: two Kenyon cells' input sets overlap at Jaccard
+0.041 where independent draws of the same size would give 0.0084. The random-projection story is the
+right shape and quantitatively loose, which is the same conclusion doc 28 reaches from the PN-pair
+correlation (0.0234 against 0.0125 shuffled) by a different route.
+
+**The normalization detector finds 125 candidates, 86 of them inhibitory, and the famous one is not
+first.** The top rows are TuTuA_1 over LC10c (reads 0.88 of the population, writes back to 0.99),
+FB4H over the vDelta columnar types (0.91 / 0.96) and AOTU041 over LC10d (0.80 / 0.85) — all inhibitory,
+all real gain-control candidates, none of them the mushroom body. APL appears eight times, once per
+Kenyon subtype and once on the assembled layer, at 0.53 coverage in and 0.52 out. That is not the
+detector failing: APL makes about one synapse per Kenyon cell (4,210 edges over 4,064 cells), so at the
+≥3-synapse reconstruction threshold this graph uses, half of its coverage is invisible. The operator that
+[doc 30](30-hypothesis-lab.md) finds hardest to demonstrate dynamically is also the one the threshold
+hides structurally, and those two facts have the same cause.
+
+**On the worm, all three detectors return nothing, and the thresholds are the reason the zero means
+something.** Sizes scale with the dataset — a 454-cell animal has no 150-cell population — so the worm
+runs at min_layer 20, min_pop 20 and ring_min_cells 5. It still examined 4 candidate layers, 4
+populations and 10 recurrent populations, and rejected all of them. The rejection is reported with the
+counts (`candidates_examined`) so a reader can tell "no candidates" from "candidates, all rejected";
+this is the second. That is a real negative about a nervous system with no expansion layer, no global
+normaliser at this resolution, and no circulant recurrent population of five or more cells — and it is
+weakly powered, because the worm's cell classes are mostly singletons and a ring of four cells is
+something this detector cannot see.
 
 ## Where this goes
 
@@ -89,14 +207,35 @@ reruns don't clobber each other.
    Needs CAVE credentials, boundary-aware completeness filtering (most arbors are cut), and
    class-inferred sign. The payoff: every detected operator becomes falsifiable against real
    responses.
-2. **Operator detectors.** The generic layer currently produces statistics, not operators. Next:
-   detectors that output the compressed layer directly — ring-attractor detection (folded
-   inhibitory kernel + concentrated dominant mode + shifter asymmetry), expansion-layer
-   detection, normalization-cell detection — so "10,000 neurons → 47 types → 11 motifs →
-   3 operators → 1 algorithm" is a pipeline output, not prose.
-3. **Invariant search.** Any detector that fires on worm AND fly (mutual-inhibition cores,
-   feedforward motifs, command-interneuron convergence) is a candidate computational universal.
-   The male/female fly comparison is the same trick at smaller evolutionary distance.
+2. ~~**Operator detectors.**~~ Built: `scripts/algo_operators.py`, above. What is left of the item is
+   the part the build showed to be harder than the detection: **telling an operator from its
+   look-alike**. The ring detector cannot separate a shifter from landmark input, and the
+   normalization detector cannot separate divisive gain control from subtractive feedback — both
+   distinctions need dynamics or a nonlinearity, not wiring. The detectors' output is a candidate list
+   for [doc 30](30-hypothesis-lab.md)'s ensembles to adjudicate, which is the pipeline as it now
+   stands: measure structure, hand the ambiguity to a dynamical test.
+3. **Invariant search.** Any detector that fires on worm AND fly is a candidate computational
+   universal. With the operator detectors built, the first pass can be reported rather than proposed,
+   and it is short:
+
+   | structure | fly | worm |
+   |---|---|---|
+   | feedforward inhibition (type census) | 80% of strong E edges, z = 297 | 17%, z = 3.7 |
+   | reciprocal/mutual coupling | E↔I dominant | I↔I dominant, and mostly *electrical* (above) |
+   | expansion layer | 1 (Kenyon cells, ratio 4.8) | **0** of 4 candidates |
+   | global normalisation cell | 125 candidates, 86 inhibitory | **0** of 4 populations |
+   | ring / circulant recurrence | 78 candidates, led by EPG | **0** of 10 populations |
+
+   **One structure fires on both, and it is the simplest one.** Feedforward inhibition is enriched
+   against a degree- and sign-preserving null in both animals, three orders of magnitude apart in cell
+   count. Everything larger — expansion, normalisation, rings — is fly-only at these thresholds. That
+   is a candidate universal with a specific shape: the invariant is a *motif*, not an *operator*, and
+   the operators may simply be what a nervous system builds once it has 10⁵ cells to spend.
+
+   Two limits keep this from being a result yet. The worm's zeros are weakly powered (its cell classes
+   are mostly singletons, so a four-cell ring is invisible to a detector that needs five), and two
+   animals are not a sample. The male/female fly comparison is the same trick at smaller evolutionary
+   distance and is [A6](20-roadmap.md); a third dataset is item 1 above.
 
 See also: doc 28 for the fly circuit sections, `scripts/check_structures.py` for the
 fly invariants. The IR numbers regenerate with `python3 scripts/algo_ir.py`.

@@ -111,9 +111,13 @@ SPECS['sparse_associative_memory'] = {
     'populations': {
         'kc': 'KC*', 'apl': 'APL*', 'mbon': 'MBON*',
         'dan': ['PPL*', 'PAM*'],
+        # the odour has to arrive upstream of the expansion, or the layer's sparseness is the
+        # stimulus rather than a response; 'pool:kc' is every external cell with >=3 synapses onto
+        # at least two Kenyon cells, which the runner reads off the graph
+        'pn': 'pool:kc',
     },
-    'roles': {'input': 'kc', 'output': 'mbon', 'control': 'apl'},
-    'odor_size': 200, 'odor_overlap': 0.5,
+    'roles': {'input': 'kc', 'output': 'mbon', 'control': 'apl', 'drive': 'pn'},
+    'odor_size': 80, 'odor_overlap': 0.5, 'drive_rate': 150,
     'edge_params': [
         {'pre': 'KC*', 'post': 'MBON*', 'param': 'kc2mb',
          'why': 'KC->MBON readout gain (44k edges; plastic in vivo)'},

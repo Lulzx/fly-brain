@@ -36,7 +36,7 @@ outside the graph? The second list turned out to be as interesting as the first.
 
 ## Going deeper
 
-- [Full documentation index](docs/README.md). Thirty-three documents covering every subsystem,
+- [Full documentation index](docs/README.md). Thirty-five documents covering every subsystem,
   the calibration, the limitations and the roadmap.
 - [Compiling the Fly Brain](docs/textbook/) is a research monograph on candidate
   computations, connectome-constrained model families, and experiments that distinguish
