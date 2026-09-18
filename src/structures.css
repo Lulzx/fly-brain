@@ -16,7 +16,9 @@ section.card h2 { margin:0 0 2px; font-size:16px; font-weight:600; }
 section.card .algo { color:var(--acc); font-size:11px; text-transform:uppercase; letter-spacing:.08em; font-weight:600; }
 section.card p { margin:8px 0; max-width:820px; }
 .figs { display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:16px 28px; margin-top:12px; align-items:start; }
-figure { margin:0; min-width:0; }
+figure { margin:0; min-width:0; max-width:100%; }
+figure.wide { grid-column:span 2; }
+@media (max-width:760px) { figure.wide { grid-column:auto; } }
 figcaption { color:var(--dim); font-size:11px; margin-top:4px; }
 svg { display:block; max-width:100%; height:auto; font:11px ui-sans-serif, system-ui, sans-serif; }
 svg text { fill:var(--fg); } svg .dim { fill:var(--dim); } svg .axis { stroke:var(--line); }
@@ -24,9 +26,10 @@ svg text { fill:var(--fg); } svg .dim { fill:var(--dim); } svg .axis { stroke:va
 .stats div { background:rgba(255,255,255,.04); border-radius:6px; padding:6px 10px; display:flex; flex-direction:column; }
 .stats b { font-size:17px; font-variant-numeric:tabular-nums; font-weight:600; }
 .stats span { color:var(--dim); font-size:11px; }
+.tbl { max-width:100%; overflow-x:auto; overscroll-behavior-x:contain; }
 table { border-collapse:collapse; font-size:12px; width:100%; font-variant-numeric:tabular-nums; }
 th, td { text-align:left; padding:3px 8px 3px 0; border-bottom:1px solid var(--line); white-space:nowrap; }
-th { color:var(--dim); font-weight:600; font-size:11px; text-transform:uppercase; letter-spacing:.06em; }
+th { color:var(--dim); font-weight:600; font-size:11px; text-transform:uppercase; letter-spacing:.06em; white-space:normal; vertical-align:bottom; }
 td.n { text-align:right; }
 .legend { display:flex; gap:12px; flex-wrap:wrap; color:var(--dim); font-size:11px; margin-top:6px; }
 .legend i { display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:5px; vertical-align:-1px; }
