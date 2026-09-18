@@ -60,7 +60,7 @@ which covers the structural analysis and the model ensembles.
 30. [Hypothesis lab](30-hypothesis-lab.md): model ensembles, discriminating-experiment ranking, PDE ring-attractor benchmark
 31. [Ablation ladder](31-ablation-ladder.md): which levels of description the benchmark needs, measured — with and without refitting
 32. [Per-connection uncertainty](32-synapse-uncertainty.md): reconstruction error estimated from bilateral replicates, and empirical-Bayes weights
-33. [Differentiable brain](33-differentiable-brain.md): surrogate-gradient adjoint over the whole CNS, and fitting 165,122 parameters with it
+33. [Differentiable brain](33-differentiable-brain.md): surrogate-gradient adjoint over the whole CNS and the optic lobe joined to it, and the three things that stop a visual assay fitting end to end
 
 ## Repository layout
 
@@ -72,6 +72,9 @@ which covers the structural analysis and the model ensembles.
 | `src/sim/` | Fly agent, world, senses, vision, motor, endogenous behaviour, neuromodulation, flight, worker |
 | `src/lif.js`, `src/lifwasm.js`, `src/lifgpu.js`, `src/wasm/lif.c` | Brain model in JS, WebAssembly and WebGPU |
 | `src/lifdiff.js` | Differentiable LIF: same dynamics, plus an adjoint ([doc 33](33-differentiable-brain.md)) |
+| `src/flyvisdiff.js` | Differentiable optic lobe: `fv_step`'s dynamics bit-for-bit, plus an adjoint |
+| `src/visdiff.js` | The two joined into one differentiable chain, luminance to spikes |
+| `src/diffsetup.js` | The per-neuron structure `makeBrain` applies, in the form the adjoint takes |
 | `src/brainmodel.js`, `src/brainsetup.js` | Calibrated brain construction, shared memory |
 | `src/flyvis.js` | flyvis optic-lobe runtime |
 | `public/` | Preprocessed data served to the browser |

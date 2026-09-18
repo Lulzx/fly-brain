@@ -42,5 +42,25 @@ export function createBrain(data, size, opts = {}, preSign = null) {
   return applyClassPhysiology(createLIF(data, o, inScale, sensoryMask, preSign), data, o);
 }
 function createLIF(data, o, inScale, sensoryMask, preSign) {
-  return new LIFNetwork(data.N, data.indptr, data.indices, data.weights, data.nt, { ...o, inScale, sensoryMask, preSign });
+  return new LIFNetwork(data.N, data.indptr, data.indices, data.weights, data.nt, { ...o, inScale, sensoryMask, preSign, outScale: typeGains(data, o) });
+}
+// Pathway-specific synaptic scale factors: one multiplier per named cell type, applied to every outgoing
+// synapse of the matching neurons (scripts/pathway_fit.mjs, doc 07). The optic-lobe model was fitted this
+// way -- a parameter per cell type and per synapse class -- and the rest of the CNS had no equivalent.
+// Key may be an exact type name or a regular expression source; a missing or empty table returns null so
+// the graph build skips the multiply entirely.
+export const PATHWAY_TYPES = {
+  escape: ['T4a|T4b|T4c|T4d', 'T5a|T5b|T5c|T5d', 'LPLC2', 'LC4', 'DNp01', 'DNp02', 'DNp04'],
+  feeding: ['LB3b|LB3c', 'GNG232', 'DNge080', 'MN9'],
+};
+export function typeGains(data, o = {}) {
+  const spec = o.typeGain; if (!spec) return null;
+  const keys = Object.keys(spec).filter(k => spec[k] !== 1);
+  if (!keys.length) return null;
+  const types = data.meta.types, g = new Float32Array(data.N).fill(1);
+  for (const k of keys) {
+    const re = /[\\^$*+?()[\]{}|]/.test(k) ? new RegExp(`^(?:${k})$`) : null;
+    for (let i = 0; i < data.N; i++) if (re ? re.test(types[i]) : types[i] === k) g[i] *= spec[k];
+  }
+  return g;
 }

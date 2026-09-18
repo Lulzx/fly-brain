@@ -8,7 +8,7 @@ export const DEFAULTS = {
   wSyn: 0.275, noise: 0, traceTau: 30,
   adaptInc: 2.0, adaptTau: 100,   // spike-frequency adaptation: threshold rises adaptInc mV per spike, decays with adaptTau ms
   depU: 0.2, depTau: 200,          // short-term synaptic depression (per presynaptic neuron): resource x -= depU*x per spike, recovers with depTau
-  inScale: null, minSyn: 1, sensoryMask: null, ntSign: null, preSign: null,
+  inScale: null, outScale: null, minSyn: 1, sensoryMask: null, ntSign: null, preSign: null,
   coba: false, eExc: 0, eInh: -70, inhGain: 1,   // conductance-based synapses: reversal potentials (mV); weights calibrated to wSyn PSP at rest
   // preSign: per-neuron graded sign (overrides nt table)
 };
@@ -18,10 +18,11 @@ export class LIFNetwork {
     this.p = { ...DEFAULTS, ...params };
     this.sensory = this.p.sensoryMask || new Uint8Array(N);
     // per-synapse PSP = wSyn * count / s_post  (s = neuron volume relative to its region's median; bigger neuron, lower input resistance)
-    const inS = this.p.inScale;
+    const inS = this.p.inScale, outS = this.p.outScale;
     const w = new Float32Array(weights.length);
-    for (let j = 0; j < N; j++) for (let k = indptr[j]; k < indptr[j + 1]; k++) { const q = indices[k]; const c = weights[k];
-      w[k] = (c >= this.p.minSyn && !this.sensory[q]) ? c * (inS ? inS[q] : 1) : 0; }
+    for (let j = 0; j < N; j++) { const og = outS ? outS[j] : 1;
+      for (let k = indptr[j]; k < indptr[j + 1]; k++) { const q = indices[k]; const c = weights[k];
+        w[k] = (c >= this.p.minSyn && !this.sensory[q]) ? c * (inS ? inS[q] : 1) * og : 0; } }
     if (this.p.inhGain !== 1) { const PS = this.p.preSign, SG = this.p.ntSign || EXC_SIGN;
       for (let j = 0; j < N; j++) { const sg = PS ? PS[j] : SG[nt[j]]; if (sg < 0) for (let k = indptr[j]; k < indptr[j + 1]; k++) w[k] *= this.p.inhGain; } }
     this.weights = w;
