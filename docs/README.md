@@ -61,6 +61,8 @@ which covers the structural analysis and the model ensembles.
 31. [Ablation ladder](31-ablation-ladder.md): which levels of description the benchmark needs, measured — with and without refitting
 32. [Per-connection uncertainty](32-synapse-uncertainty.md): reconstruction error estimated from bilateral replicates, and empirical-Bayes weights
 33. [Differentiable brain](33-differentiable-brain.md): surrogate-gradient adjoint over the whole CNS and the optic lobe joined to it, and the three things that stop a visual assay fitting end to end
+34. [Individual validation](34-individual-validation.md): testing the model against one identified fly rather than against population averages
+35. [Behavioural ladder](35-behaviour-ladder.md): the same substitutions, measured in the arena instead of on the physiological benchmark
 
 ## Repository layout
 

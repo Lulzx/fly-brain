@@ -1,7 +1,7 @@
 // Worker process: evaluates a parameter set on the benchmark suite; used by calib_search.mjs
 import fs from 'node:fs';
 import { loadAll } from './lib_node.mjs';
-import { createBrain, brainScales, applyClassPhysiology, BRAIN_DEFAULTS, modulatorySign } from '../src/brainmodel.js';
+import { createBrain, brainScales, applyClassPhysiology, BRAIN_DEFAULTS, modulatorySign, typeGains } from '../src/brainmodel.js';
 import { graphBytes, brainBytes, writeGraph, LIFWasm } from '../src/lifwasm.js';
 import { DEFAULTS as LIF_DEFAULTS } from '../src/lif.js';
 import { FlyVis, parseFlyVis, flyvisBytes } from '../src/flyvis.js';
@@ -37,7 +37,7 @@ function weightsFor(o) {
 }
 function makeBrain(cfg) {
   const o = { ...BRAIN_DEFAULTS, ...cfg }; const { seed: cfgSeed, ...gcfg } = o; const key = JSON.stringify(gcfg) + (o.wShuffle ? '|' + cfgSeed : '');
-  if (key !== graphKey) { const { inScale, sensoryMask } = brainScales(DATA, SIZE, o); for (const sd of ['L', 'R']) for (const [i] of FVMAP.eyes[sd].pairs) sensoryMask[i] = 1; GRAPH = writeGraph(MEM, 1024, { ...DATA, weights: weightsFor(o) }, { ...LIF_DEFAULTS, ...o }, inScale, sensoryMask, modulatorySign(DATA, o.signFree ? ALL_EXC : SIGN, o)); graphKey = key; }
+  if (key !== graphKey) { const { inScale, sensoryMask } = brainScales(DATA, SIZE, o); for (const sd of ['L', 'R']) for (const [i] of FVMAP.eyes[sd].pairs) sensoryMask[i] = 1; GRAPH = writeGraph(MEM, 1024, { ...DATA, weights: weightsFor(o) }, { ...LIF_DEFAULTS, ...o }, inScale, sensoryMask, modulatorySign(DATA, o.signFree ? ALL_EXC : SIGN, o), typeGains(DATA, o)); graphKey = key; }
   const b = new LIFWasm({ instance: INST, memory: MEM, graph: GRAPH, base: (GRAPH.end + 4095) & ~4095, N: D.N, params: o, seed: cfgSeed ?? ((Math.random() * 1e9) | 0) });
   BRAIN_END = b.end;
   applyClassPhysiology(b, DATA, o);
@@ -55,6 +55,10 @@ const FRONT_SUGAR = LEGSUGAR(['T1 left', 'T1 right']), ALL_SUGAR = LEGSUGAR(['T1
 const FWD_POP = Object.entries({ DNg100: 1, DNg97: 1, DNp09: 1, DNa05: 0.7, DNa07: 0.7, DNp26: 0.7, DNg25: 0.7, DNa01: 0.4, DNa02: 0.4 }).flatMap(([t, w]) => D.byType(t).map(i => [i, w]));
 const fwdRate = (net, ms) => FWD_POP.reduce((a, [i, w]) => a + w * net.spikeCount[i], 0) / FWD_POP.reduce((a, [, w]) => a + w, 0) / (ms / 1000);
 const MDN = T('MDN'); const GF = T('DNp01');
+// Poisson sigmas above its own baseline before a neuron counts as odour-responsive. Three is the
+// conventional level, and the null is empty at three: `kcNull`/`pnFracNull` below report how much of
+// each layer clears the same bar when the stimulus is a second baseline run.
+const SIGMA = 3;
 const PHOTO = D.bodymap.eyes.flatMap(e => e.idx);
 // looming: expanding dark disc centred at az 30 deg, el 10 deg (frontal-left), radius 5 -> 70 deg over 300 ms
 const EYE_DIRS = D.bodymap.eyes.flatMap(e => e.idx.map((i, k) => [i, e.az[k] * Math.PI / 180, e.el[k] * Math.PI / 180]));
@@ -77,7 +81,13 @@ function sim(cfg, drives, ms, off = 0, bins = null) {
   const steps = (ms + off) / net.p.dt; const trace = []; let prev = new Uint32Array(D.N);
   for (let s = 1; s <= steps; s++) { if (s === ms / net.p.dt) for (const [ix] of drives) net.setDrive(ix, 0); net.step();
     if (bins && s % (bins / net.p.dt) === 0) { let a = 0; for (let i = 0; i < D.N; i++) if (net.spikeCount[i] !== prev[i]) a++; trace.push(a); prev = net.spikeCount.slice(); } }
-  return { net, trace };
+  // `sp` is a snapshot, and it is not a convenience. Every LIFWasm is laid out at the same base of the
+  // one shared WebAssembly.Memory, so two networks constructed in the same expression expose the *same*
+  // Uint32Array -- reading counts off both of them compares a run with itself. That silently made the
+  // DM1 and VA2 Kenyon-cell sets identical in every evaluation ever run here (kcJaccard = 1.000 to
+  // three decimals, which is what gave it away). Read counts from `sp`, not from `net.spikeCount`,
+  // whenever two networks are alive at once.
+  return { net, trace, sp: Uint32Array.from(net.spikeCount) };
 }
 const rate = (net, ix, ms) => mean(ix.map(i => net.spikeCount[i])) / (ms / 1000);
 function rhythm(x) { const y = x.slice(5); const m = mean(y); const z = y.map(v => v - m); const v0 = z.reduce((a, b) => a + b * b, 0); if (v0 < 1e-9) return 0;
@@ -90,23 +100,81 @@ export function evaluate(cfg) {
   r = sim(cfg, [...base, [FRONT_SUGAR, 150]], 400); o.tarsalMN9 = rate(r.net, MN9, 400);
   r = sim(cfg, [...base, [ALL_SUGAR, 150]], 400); o.sugarFwd = fwdRate(r.net, 400); o.sugarMDN = rate(r.net, MDN, 400);
   r = sim(cfg, base, 400, 0, 100); o.baseActive = mean(r.trace.slice(1)); o.baseMN9 = rate(r.net, MN9, 400); o.baseFwd = fwdRate(r.net, 400); o.baseKC = KC.filter(i => r.net.spikeCount[i] > 1).length / KC.length; o.basePN = PN.filter(i => r.net.spikeCount[i] > 1).length;
-  const a = sim(cfg, [...base, [DM1, 80]], 400), b = sim(cfg, [...base, [VA2, 80]], 400);
-  const ka = new Set(KC.filter(i => a.net.spikeCount[i] > 1)), kb = new Set(KC.filter(i => b.net.spikeCount[i] > 1)); let inter = 0; for (const x of ka) if (kb.has(x)) inter++;
-  o.kcFrac = ka.size / KC.length; o.kcJaccard = inter / Math.max(1, ka.size + kb.size - inter);
-  o.dm1PN = rate(a.net, DM1PN, 400); o.pnFrac = PN.filter(i => a.net.spikeCount[i] > 1).length / PN.length;
+  // Odour-evoked, baseline-subtracted, with a **noise-aware response threshold**. A neuron counts as
+  // responding to DM1 when its spike count exceeds its own baseline count by SIGMA Poisson sigmas of
+  // that baseline. This replaces a fixed `> 1` count, which is the same threshold at 0.5 Hz and at
+  // 50 Hz and so is not a response criterion at all: measured at the fitted point, 23% of Kenyon cells
+  // and 72% of ALPNs clear it with no odour applied, and two independently seeded baseline runs agree
+  // at Jaccard 0.93. Under the fixed threshold the terms credited DM1 with 18.4% of Kenyon cells and
+  // 60.5% of ALPNs while the raw population fraction rose by 2.1 and 0.6 points respectively -- an
+  // overshoot of eightfold, and inflatable, because raising the baseline raises the count without
+  // raising the bound. docs/20-roadmap.md A7 records the fit buying specificity exactly that way.
+  //
+  // SIGMA scales with the square root of the baseline, so a busier neuron needs a bigger rise, and the
+  // null collapses: at three sigma no Kenyon cell passes with no odour applied. The anatomy supports
+  // the smaller numbers -- DM1 drives 28 of 686 ALPNs (4.1%) directly -- and both layers come out
+  // sparser than their targets, which is the opposite of what the fixed threshold reported and is the
+  // quantity the fit should now be pushed on. The rise is still computed, and bounds the response
+  // fraction, because no response measure can exceed the population change it is measuring.
+  //
+  // The three runs share a seed: subtracting counts from independently seeded networks would measure
+  // the seed, not the odour.
+  { const sd = cfg.seed ?? ((Math.random() * 1e9) | 0), z = sim({ ...cfg, seed: sd }, base, 400);
+    const a = sim({ ...cfg, seed: sd }, [...base, [DM1, 80]], 400), b = sim({ ...cfg, seed: sd }, [...base, [VA2, 80]], 400);
+    const z2 = sim({ ...cfg, seed: sd + 1 }, base, 400);
+    const sig = (r2, i) => Math.max(0, r2.sp[i] - z.sp[i]) > SIGMA * Math.sqrt(z.sp[i] + 1);
+    const ka = new Set(KC.filter(i => sig(a, i))), kb = new Set(KC.filter(i => sig(b, i)));
+    let inter = 0; for (const x of ka) if (kb.has(x)) inter++;
+    const raw = (r2, pop) => pop.filter(i => r2.sp[i] > 1).length / pop.length;
+    o.kcRise = raw(a, KC) - raw(z, KC); o.pnRise = raw(a, PN) - raw(z, PN);
+    o.kcFracRaw = raw(a, KC); o.pnFracRaw = raw(a, PN);
+    // The null: how much of each layer the same criterion calls responsive when the "odour" is a second
+    // baseline run. Reported so the term can be read against it rather than against zero.
+    o.kcNull = KC.filter(i => Math.max(0, z2.sp[i] - z.sp[i]) > SIGMA * Math.sqrt(z.sp[i] + 1)).length / KC.length;
+    // Every responder contributes more than SIGMA spikes to the population total, because sqrt(n+1) >= 1,
+    // so the number of responders is bounded by the total evoked count over SIGMA. This is the bound the
+    // raw fraction cannot give: a cell crossing the >1 threshold and a different cell falling back under
+    // it cancel in the fraction and not in the total. It is the sense in which a response measure cannot
+    // exceed the population change it is measuring.
+    o.kcCap = Math.min(1, KC.reduce((s, i) => s + Math.max(0, a.sp[i] - z.sp[i]), 0) / (SIGMA * KC.length));
+    // The effective number of responding cells: (sum e)^2 / sum e^2, over the evoked counts. Scale
+    // invariant -- multiplying the whole odour response by any factor leaves it unchanged -- so unlike
+    // the threshold-crossing fraction it cannot be raised by making the layer more excitable or the
+    // response larger, only by making the response more concentrated in fewer cells.
+    { let s1 = 0, s2 = 0; for (const i of KC) { const e = Math.max(0, a.sp[i] - z.sp[i]); s1 += e; s2 += e * e; }
+      o.kcEff = s2 > 0 ? (s1 * s1) / s2 / KC.length : 0; }
+    o.kcFrac = Math.min(ka.size / KC.length, o.kcCap);
+    o.kcJaccard = inter / Math.max(1, ka.size + kb.size - inter);
+    o.pnFrac = PN.filter(i => sig(a, i)).length / PN.length;
+    o.pnFracNull = PN.filter(i => Math.max(0, z2.sp[i] - z.sp[i]) > SIGMA * Math.sqrt(z.sp[i] + 1)).length / PN.length;
+    // The lPN rate is odour-evoked too. Scored raw it is the baseline drive plus the response, and at
+    // the fitted point that saturates the term against its 60 Hz target before the odour is applied.
+    o.dm1PNRaw = mean(DM1PN.map(i => a.sp[i])) / 0.4; o.dm1PN = mean(DM1PN.map(i => Math.max(0, a.sp[i] - z.sp[i]))) / 0.4; }
   for (const [label, stim] of [['loom', lumLoom], ['flow', lumFlow]]) { const net = makeBrain(cfg); net.setDrive(ORN_ALL, 6); const [e0, e1, vRest] = makeEyes(); const eyes = [e0, e1];
     const prev = new Uint32Array(D.N); const TK = pop => pop.reduce((a, [i, w]) => a + w * net.spikeCount[i], 0);
     for (let s = 0; s < 1200; s++) {                        // 200 ms grey, then 400 ms stimulus
       if (s % 40 === 0) { const t = (s - 400) / 2000; for (let e = 0; e < 2; e++) { eyes[e].setInput(t < 0 ? new Float32Array(721).fill(0.5) : stim(e, t)); eyes[e].step(); } driveFromEyes(net, eyes, vRest); }
       if (s === 400) prev.set(net.spikeCount); net.step(); }
-    const gf = GF.reduce((a, i) => a + net.spikeCount[i] - prev[i], 0), to = ['DNp02', 'DNp04'].flatMap(t => D.byType(t)).reduce((a, i) => a + net.spikeCount[i] - prev[i], 0) / 4 / 0.4;
+    // Spikes per giant-fibre neuron over the 400 ms stimulus, through the trained optic lobe. von Reyn
+    // et al. 2014 record 1-3 spikes per loom and none to translation, so the unit is spikes/neuron and
+    // 2 is as many as the benchmark asks for. Reporting the raw population count here and then dividing
+    // by two in the score conflated that with the number of cells (two, one per side).
+    const gf = GF.reduce((a, i) => a + net.spikeCount[i] - prev[i], 0) / GF.length;
+    const to = ['DNp02', 'DNp04'].flatMap(t => D.byType(t)).reduce((a, i) => a + net.spikeCount[i] - prev[i], 0) / 4 / 0.4;
     o[label + 'GF'] = gf; o[label + 'TO'] = to; }
+  // Photoreceptor-driven loom, reported but not scored. It is a real stimulus and a real route
+  // (photoreceptor -> lamina -> ... -> giant fibre) and it does not work: the lamina is driven by
+  // histaminergic photoreceptors, so adding photoreceptor spikes inhibits L1-L5 rather than exciting
+  // them, and the relay is silent at every stage. Scoring this would tell the fit that zero is correct.
+  // It used to: this block wrote o.loomGF, overwriting the flyvis measurement above, and 60% of the
+  // loom term was reading a number that could not move. See docs/20-roadmap.md A3.
   { const net = makeBrain(cfg); net.setDrive(ORN_ALL, 6); net.setDrive(PHOTO, 40);
     const prevGF = new Uint32Array(D.N); let vpnBase = 0;
     for (let s = 1; s <= 1400; s++) {       // 400 ms adapted static scene, then 300 ms loom
       if (s > 800) { const rad = 5 + 65 * (s - 800) / 600; for (const [i, a] of ANG) if (a < rad) net.setDriveOne(i, 0); }
       net.step(); if (s === 800) { vpnBase = VPN.filter(i => net.spikeCount[i] > 0).length; prevGF.set(net.spikeCount); } }
-    o.loomGF = GF.reduce((a, i) => a + net.spikeCount[i] - prevGF[i], 0) / GF.length / 0.3; o.vpnBase = vpnBase; o.staticGF = GF.reduce((a, i) => a + prevGF[i], 0) / GF.length / 0.4; }
+    o.photoGF = GF.reduce((a, i) => a + net.spikeCount[i] - prevGF[i], 0) / GF.length / 0.3;
+    o.vpnBase = vpnBase; o.staticGF = GF.reduce((a, i) => a + prevGF[i], 0) / GF.length / 0.4; }
   const net = makeBrain(cfg); net.setDrive(BDN2, 150); const series = legGroups.map(() => []); let prev = new Uint32Array(D.N);
   for (let s = 1; s <= 1600; s++) { net.step(); if (s % 40 === 0) { legGroups.forEach((g, k) => series[k].push(g.idx.reduce((x, i) => x + net.spikeCount[i] - prev[i], 0) / g.idx.length / 0.02)); prev = net.spikeCount.slice(); } }
   const act = series.map(mean); const on = act.map((v, k) => [v, rhythm(series[k])]).filter(([v]) => v > 3);
@@ -115,8 +183,22 @@ export function evaluate(cfg) {
   const clamp = x => Math.max(0, Math.min(1, x));
   const terms = {
     sugar: 0.2 * clamp(o.relay / 40) + 0.2 * clamp(o.relay2 / 40) + 0.6 * clamp(o.sugarMN9 / 60), bitter: clamp(1 - o.bitterMN9 / 20), mix: o.sugarMN9 > 10 ? clamp(1 - o.mixMN9 / o.sugarMN9) : 0,
-    kcSparse: clamp(1 - Math.abs(Math.log((o.kcFrac + 1e-3) / 0.08)) / 2), kcSpecific: o.kcFrac > 0.01 ? clamp(1 - o.kcJaccard / 0.6) : 0,
-    pnSpecific: clamp(1 - (o.pnFrac - 0.05) / 0.5), dm1PN: clamp(o.dm1PN / 60),
+    // kcSparse scores the *effective* fraction of Kenyon cells carrying the odour response rather than
+    // the fraction crossing a threshold. The two disagree and the disagreement is the point: a refit
+    // that raised the baseline from 23% of cells active to 62% passed twice as many cells through the
+    // 3-sigma bar and its crossing fraction doubled (0.015 to 0.030), but the response it bought is
+    // broader and weaker, so the effective fraction rose from 0.163 to 0.364 -- the wrong way. The
+    // count is scale invariant, so no gain change can move it; only concentrating the response can.
+    // Target 0.08 is the sparseness the imaging literature reports for a food odour, which for equally
+    // responding cells is an effective fraction of 0.08. pnSpecific targets the 4.1% of ALPNs DM1
+    kcSparse: clamp(1 - Math.abs(Math.log((o.kcEff + 1e-3) / 0.08)) / 2), kcSpecific: o.kcFrac > 0.01 ? clamp(1 - o.kcJaccard / 0.6) : 0,
+    // pnSpecific is a ceiling, not a band. The wiring puts DM1 on 28 of 686 ALPNs (4.1%), so at most that
+    // fraction of the layer can be driven by it directly. A band centred on 4.1% would penalise the model
+    // for the attenuation between "innervated" and "significantly driven", which is real: at the fitted
+    // point 0.27% of the layer clears the 3-sigma bar. The connectome sets the ceiling and the term reads
+    // how far under it the layer sits. It carries little weight either way -- where the model's odour
+    // response actually lives shows up in kcSparse, kcSpecific and dm1PN.
+    pnSpecific: clamp(1 - o.pnFrac / 0.041), dm1PN: clamp(o.dm1PN / 60),
     baseline: clamp(1 - o.baseActive / 20000), offset: clamp(1 - (o.afterSugar - o.baseActive) / 3000),
     legs: clamp(o.legActive / 25), rhythm: clamp(o.legRhythm / 0.6),
     tarsalPER: clamp(o.tarsalMN9 / 30), sugarStop: o.baseFwd > 1 ? clamp((o.baseFwd - o.sugarFwd) / o.baseFwd * 2) : 0,

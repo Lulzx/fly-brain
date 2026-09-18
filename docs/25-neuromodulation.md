@@ -77,8 +77,15 @@ Arousal against held energy (15 s, two seeds): 0.85 → 0 to 0.1, 0.7 → 0.2, 0
   adding visual gain. Refitting the global parameters with neuromodulation on (`calib_search.mjs`,
   `{"coba":true,"neuromod":true}`, 20 generations) recovered the score to 0.725 mean of six (best single
   run 0.746) and the takeoff-DN response to about 30 Hz against 2 Hz for self-motion, though the giant
-  fibre still does not spike to the tethered loom. The refit also strengthened the tarsal-sugar pathway
+  fibre appeared not to spike to the tethered loom. The refit also strengthened the tarsal-sugar pathway
   (MN9 34 Hz, was 15) and silenced MDN during leg sugar (0.6 Hz).
+
+That last observation — that no refit made the giant fibre fire to a loom, whatever octopamine did — was
+the clue that the measurement rather than the model was at fault: the benchmark's photoreceptor-driven
+loom block was overwriting a working flyvis-driven measurement with one whose lamina relay is silent by
+construction. With that repaired the giant fibre spikes 1.0 to 2.0 times per neuron to a loom and zero
+times to translation ([A3](20-roadmap.md)). The octopamine result above stands on its own terms: it is a
+comparison of two fits scored against the same objective, and the objective had a dead term in it.
 - In the embodied fly, looming escape is unchanged: 1 of 5 to 10 trials with and without.
 - Backward walking is unchanged (11% of the time, four seeds of 18 s).
 - The connectome viewer runs the module at the fed steady state.

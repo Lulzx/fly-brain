@@ -15,58 +15,11 @@
 // Writes public/data/ablation_ladder.json.
 import { fork } from 'node:child_process';
 import fs from 'node:fs';
+import { RUNGS } from './rungs.mjs';
 
 const BASE = (() => { const o = JSON.parse(fs.readFileSync('public/data/brain_params.json'));
   for (const k of Object.keys(o)) if (k[0] === '_') delete o[k]; return o; })();
 
-// level: which rung of the ladder the removed quantity sits on. dir: 'drop' removes detail the fit
-// uses, 'add' switches on detail the fit chose to leave off, 'control' is a manipulation that should
-// break the benchmark (a floor) or leave it alone (a ceiling).
-const RUNGS = [
-  { key: 'baseline', level: 'calibrated', dir: '-', patch: {}, note: 'the fitted model of docs/07-calibration.md' },
-
-  { key: 'w_binary', level: 'efficacy', dir: 'drop', patch: { wBinary: true },
-    note: 'graded synapse counts replaced by their mean over retained edges: topology only' },
-  { key: 'w_shuffle', level: 'efficacy', dir: 'control', patch: { wShuffle: true },
-    note: 'same count distribution, permuted across retained edges: efficacy present but uninformative' },
-  { key: 'minsyn_1', level: 'efficacy', dir: 'drop', patch: { minSyn: 1 },
-    note: 'reconstruction threshold removed; every detected connection kept' },
-  { key: 'minsyn_12', level: 'efficacy', dir: 'drop', patch: { minSyn: 12 },
-    note: 'threshold doubled from the fitted 6 contacts' },
-  { key: 'w_eb', level: 'efficacy', dir: 'swap', patch: { wEB: true, minSyn: 1 },
-    note: 'empirical-Bayes weights from bilateral replicates (scripts/synapse_confidence.py), no threshold at all' },
-  { key: 'w_eb_gated', level: 'efficacy', dir: 'swap', patch: { wEB: true, minSyn: 3 },
-    note: 'empirical-Bayes weights with a light threshold, for comparison with the fitted 6-contact cut' },
-
-  { key: 'no_size_scaling', level: 'cellular', dir: 'drop', patch: { sizeAlpha: 0 },
-    note: 'per-neuron PSP scaling by relative volume removed' },
-  { key: 'no_kc_threshold', level: 'cellular', dir: 'drop', patch: { kcThreshold: 0 },
-    note: 'raised Kenyon-cell spike threshold removed' },
-  { key: 'no_lamina_bias', level: 'cellular', dir: 'drop', patch: { laminaBias: 0 },
-    note: 'tonic depolarisation of the graded lamina monopolar cells removed' },
-  { key: 'lamina_bias_max', level: 'cellular', dir: 'control', patch: { laminaBias: 25 },
-    note: 'lamina bias at the top of its search range: shows the parameter is not inert, only flat near the fit' },
-  { key: 'cuba', level: 'cellular', dir: 'drop', patch: { coba: false },
-    note: 'conductance-based synapses replaced by current-based ones' },
-  { key: 'nominal_einh', level: 'cellular', dir: 'drop', patch: { eInh: -70 },
-    note: 'fitted inhibitory reversal potential replaced by the nominal -70 mV' },
-  { key: 'no_inh_gain', level: 'cellular', dir: 'drop', patch: { inhGain: 1 },
-    note: 'fitted inhibitory weight scaling removed' },
-  { key: 'no_refractory', level: 'cellular', dir: 'drop', patch: { tRef: 0.5 },
-    note: 'refractory period reduced from the fitted 3.8 ms to one time step' },
-  { key: 'add_depression', level: 'cellular', dir: 'add', patch: { depU: 0.2 },
-    note: 'short-term presynaptic depression switched on at the model default; the fit chose to leave it off' },
-  { key: 'no_delay', level: 'cellular', dir: 'drop', patch: { delay: 0.5 },
-    note: 'axonal delay reduced from 1.8 ms to one time step' },
-  { key: 'add_adaptation', level: 'cellular', dir: 'add', patch: { adaptInc: 2 },
-    note: 'spike-frequency adaptation switched on; the fit chose to leave it off' },
-
-  { key: 'no_neuromod', level: 'modulatory', dir: 'drop', patch: { neuromod: false },
-    note: 'fed octopamine tone and the modulatory-synapse split removed' },
-
-  { key: 'sign_free', level: 'control', dir: 'control', patch: { signFree: true },
-    note: 'every neuron excitatory: the floor the benchmark must be able to detect' },
-];
 
 const N = +(process.argv[2] || 12), FILTER = process.argv[3] ? new RegExp(process.argv[3]) : null;
 const NW = +(process.env.NW || 12);

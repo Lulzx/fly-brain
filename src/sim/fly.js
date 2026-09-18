@@ -55,6 +55,17 @@ export class FlyAgent {
     this.log = [];
     this.takeoffPending = false;
   }
+  // MuJoCo allocates the model and its data inside the emscripten heap, where nothing is reclaimed by the
+  // garbage collector. An un-disposed fly costs about 28 MB of that heap, which is not much for one fly and
+  // is fatal for the headless tools, which build a fresh agent per scenario: scripts/behavior_eval.mjs dies
+  // with "engine error: Could not allocate memory" after 76 of them. Data must go before the model it reads.
+  dispose() {
+    if (this.disposed) return;
+    this.disposed = true;
+    this.mjd?.delete(); this.model?.delete();
+    this.mjd = null; this.model = null;
+  }
+
   requestTakeoff() { if (this.alive && !this.flight.active) this.takeoffPending = true; }
   state() {
     const d = this.mjd, xp = d.xpos, B = this.bid;

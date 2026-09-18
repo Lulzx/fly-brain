@@ -18,7 +18,11 @@ function evalAll(cfgs) { return new Promise(res => { const out = new Array(cfgs.
   workers.forEach(give); }); }
 const gauss = () => { const u = 1 - Math.random(), v = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); };
 for (let g = 0; g < GENS; g++) {
-  const U = [...Array(POP)].map((_, n) => n === 0 && best ? keys.map(k => toU(k, best.cfg[k])) : mu.map((m, i) => m + sd[i] * gauss()));
+  // Candidate 0 is the incumbent: the best point found so far, or mu at generation 0. It used to be a
+  // perturbation at generation 0, because `best` is still null there, which meant the search threw away
+  // the point it was seeded from and could finish below it -- it did, on the repaired objective in
+  // docs/20-roadmap.md A7. scripts/behavior_refit.mjs already does this correctly.
+  const U = [...Array(POP)].map((_, n) => n === 0 ? (best ? keys.map(k => toU(k, best.cfg[k])) : mu.slice()) : mu.map((m, i) => m + sd[i] * gauss()));
   const cfgs = U.map(u => ({ ...fixed, ...Object.fromEntries(keys.map((k, i) => [k, fromU(k, u[i])])) }));
   const t0 = Date.now(); const res = await evalAll(cfgs);
   const scored = res.map((r, i) => ({ u: U[i].map(x => Math.min(1, Math.max(0, x))), s: r.error ? -1 : r.out.score, r })).sort((a, b) => b.s - a.s);
