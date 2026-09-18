@@ -1,0 +1,1373 @@
+{
+ "_source": "scripts/behavior_ladder.mjs (arm one, sensitivity at the fitted point)",
+ "generated": "2026-09-18",
+ "baseParams": {
+  "coba": true,
+  "neuromod": true,
+  "wSyn": 0.562,
+  "sizeAlpha": 0.572,
+  "kcThreshold": 7.319,
+  "inhGain": 0.577,
+  "eInh": -69.079,
+  "minSyn": 6,
+  "adaptInc": 0.072,
+  "tRef": 3.682,
+  "laminaBias": 2.86
+ },
+ "seeds": [
+  1000,
+  8919,
+  16838,
+  24757,
+  32676,
+  40595,
+  48514,
+  56433,
+  64352,
+  72271,
+  80190,
+  88109
+ ],
+ "criterion": {
+  "break": 0.1,
+  "sigmas": 3,
+  "statistic": "paired per-seed difference vs baseline"
+ },
+ "terms": [
+  "alive",
+  "flips",
+  "food",
+  "feed",
+  "bout",
+  "escape"
+ ],
+ "rungs": [
+  {
+   "key": "baseline",
+   "level": "calibrated",
+   "dir": "-",
+   "patch": {},
+   "frozen": [],
+   "note": "the fitted model of docs/07-calibration.md",
+   "n": 12,
+   "score": 0.8598,
+   "scoreSem": 0.0297,
+   "obs": {
+    "flipMs": 5,
+    "totalMs": 36000,
+    "alive": 1,
+    "foodDist": 0.3106,
+    "feedLatency": 20,
+    "escapes": 0.5833,
+    "flipFrac": 0.0001,
+    "boutMedian": 2370,
+    "boutMean": 2765.2308,
+    "boutN": 8.5,
+    "bodyBoutMedian": 240,
+    "bodyBoutN": 34.9167
+   }
+  },
+  {
+   "key": "w_binary",
+   "level": "efficacy",
+   "dir": "drop",
+   "patch": {
+    "wBinary": true
+   },
+   "frozen": [],
+   "note": "graded synapse counts replaced by their mean over retained edges: topology only",
+   "n": 12,
+   "score": 0.8789,
+   "scoreSem": 0.0143,
+   "obs": {
+    "flipMs": 1320,
+    "totalMs": 36000,
+    "alive": 1,
+    "foodDist": 0.1915,
+    "feedLatency": 20,
+    "escapes": 1,
+    "flipFrac": 0.0367,
+    "boutMedian": 756.6667,
+    "boutMean": 1163.6256,
+    "boutN": 8.9167,
+    "bodyBoutMedian": 191.6667,
+    "bodyBoutN": 19.6667
+   },
+   "dScore": {
+    "d": 0.0191,
+    "se": 0.0358,
+    "n": 12
+   },
+   "terms": {
+    "alive": {
+     "d": 0,
+     "se": 0,
+     "n": 12
+    },
+    "flips": {
+     "d": -0.1639,
+     "se": 0.1128,
+     "n": 12
+    },
+    "food": {
+     "d": 0.0993,
+     "se": 0.072,
+     "n": 12
+    },
+    "feed": {
+     "d": 0,
+     "se": 0,
+     "n": 12
+    },
+    "bout": {
+     "d": -0.4476,
+     "se": 0.0827,
+     "n": 12
+    },
+    "escape": {
+     "d": 0.4167,
+     "se": 0.1486,
+     "n": 12
+    }
+   },
+   "broke": [
+    "bout"
+   ],
+   "improved": []
+  },
+  {
+   "key": "w_shuffle",
+   "level": "efficacy",
+   "dir": "control",
+   "patch": {
+    "wShuffle": true
+   },
+   "frozen": [],
+   "note": "same count distribution, permuted across retained edges: efficacy present but uninformative",
+   "n": 12,
+   "score": 0.8898,
+   "scoreSem": 0.0144,
+   "obs": {
+    "flipMs": 300,
+    "totalMs": 36000,
+    "alive": 1,
+    "foodDist": 0.1766,
+    "feedLatency": 20,
+    "escapes": 0.9167,
+    "flipFrac": 0.0083,
+    "boutMedian": 1096.6667,
+    "boutMean": 1394.4213,
+    "boutN": 8,
+    "bodyBoutMedian": 268.3333,
+    "bodyBoutN": 31.25
+   },
+   "dScore": {
+    "d": 0.03,
+    "se": 0.0396,
+    "n": 12
+   },
+   "terms": {
+    "alive": {
+     "d": 0,
+     "se": 0,
+     "n": 12
+    },
+    "flips": {
+     "d": -0.1611,
+     "se": 0.1074,
+     "n": 12
+    },
+    "food": {
+     "d": 0.1117,
+     "se": 0.0714,
+     "n": 12
+    },
+    "feed": {
+     "d": 0,
+     "se": 0,
+     "n": 12
+    },
+    "bout": {
+     "d": -0.2514,
+     "se": 0.0946,
+     "n": 12
+    },
+    "escape": {
+     "d": 0.3333,
+     "se": 0.188,
+     "n": 12
+    }
+   },
+   "broke": [],
+   "improved": []
+  },
+  {
+   "key": "minsyn_1",
+   "level": "efficacy",
+   "dir": "drop",
+   "patch": {
+    "minSyn": 1
+   },
+   "frozen": [
+    "minSyn"
+   ],
+   "note": "reconstruction threshold removed; every detected connection kept",
+   "n": 12,
+   "score": 0.7057,
+   "scoreSem": 0.0412,
+   "obs": {
+    "flipMs": 0,
+    "totalMs": 36000,
+    "alive": 0.6667,
+    "foodDist": 0.2284,
+    "feedLatency": 20,
+    "escapes": 0.0833,
+    "flipFrac": 0,
+    "boutMedian": 2870,
+    "boutMean": 3329.7568,
+    "boutN": 7.75,
+    "bodyBoutMedian": 506.6667,
+    "bodyBoutN": 29.1667
+   },
+   "dScore": {
+    "d": -0.1541,
+    "se": 0.0512,
+    "n": 12
+   },
+   "terms": {
+    "alive": {
+     "d": -0.3333,
+     "se": 0.1421,
+     "n": 12
+    },
+    "flips": {
+     "d": 0.0028,
+     "se": 0.0028,
+     "n": 12
+    },
+    "food": {
+     "d": 0.0685,
+     "se": 0.0745,
+     "n": 12
+    },
+    "feed": {
+     "d": 0,
+     "se": 0,
+     "n": 12
+    },
+    "bout": {
+     "d": 0.0014,
+     "se": 0.0297,
+     "n": 12
+    },
+    "escape": {
+     "d": -0.5,
+     "se": 0.1946,
+     "n": 12
+    }
+   },
+   "broke": [],
+   "improved": []
+  },
+  {
+   "key": "minsyn_12",
+   "level": "efficacy",
+   "dir": "drop",
+   "patch": {
+    "minSyn": 12
+   },
+   "frozen": [
+    "minSyn"
+   ],
+   "note": "threshold doubled from the fitted 6 contacts",
+   "n": 12,
+   "score": 0.6457,
+   "scoreSem": 0.0453,
+   "obs": {
+    "flipMs": 3090,
+    "totalMs": 36000,
+    "alive": 0.9167,
+    "foodDist": 0.6985,
+    "feedLatency": 20,
+    "escapes": 0.1667,
+    "flipFrac": 0.0858,
+    "boutMedian": 2200,
+    "boutMean": 2493.6166,
+    "boutN": 9.5,
+    "bodyBoutMedian": 255,
+    "bodyBoutN": 40.9167
+   },
+   "dScore": {
+    "d": -0.2142,
+    "se": 0.0612,
+    "n": 12
+   },
+   "terms": {
+    "alive": {
+     "d": -0.0833,
+     "se": 0.0833,
+     "n": 12
+    },
+    "flips": {
+     "d": -0.5398,
+     "se": 0.1287,
+     "n": 12
+    },
+    "food": {
+     "d": -0.3231,
+     "se": 0.117,
+     "n": 12
+    },
+    "feed": {
+     "d": 0,
+     "se": 0,
+     "n": 12
+    },
+    "bout": {
+     "d": -0.0041,
+     "se": 0.0422,
+     "n": 12
+    },
+    "escape": {
+     "d": -0.4167,
+     "se": 0.2289,
+     "n": 12
+    }
+   },
+   "broke": [
+    "flips"
+   ],
+   "improved": []
+  },
+  {
+   "key": "w_eb",
+   "level": "efficacy",
+   "dir": "swap",
+   "patch": {
+    "wEB": true,
+    "minSyn": 1
+   },
+   "frozen": [
+    "minSyn"
+   ],
+   "note": "empirical-Bayes weights from bilateral replicates (scripts/synapse_confidence.py), no threshold at all",
+   "n": 12,
+   "score": 0.784,
+   "scoreSem": 0.0177,
+   "obs": {
+    "flipMs": 0,
+    "totalMs": 36000,
+    "alive": 1,
+    "foodDist": 0.2215,
+    "feedLatency": 20,
+    "escapes": 0.0833,
+    "flipFrac": 0,
+    "boutMedian": 2263.3333,
+    "boutMean": 2525.19,
+    "boutN": 9,
+    "bodyBoutMedian": 113.3333,
+    "bodyBoutN": 49.75
+   },
+   "dScore": {
+    "d": -0.0758,
+    "se": 0.0432,
+    "n": 12
+   },
+   "terms": {
+    "alive": {
+     "d": 0,
+     "se": 0,
+     "n": 12
+    },
+    "flips": {
+     "d": 0.0028,
+     "se": 0.0028,
+     "n": 12
+    },
+    "food": {
+     "d": 0.0743,
+     "se": 0.0795,
+     "n": 12
+    },
+    "feed": {
+     "d": 0,
+     "se": 0,
+     "n": 12
+    },
+    "bout": {
+     "d": -0.009,
+     "se": 0.0384,
+     "n": 12
+    },
+    "escape": {
+     "d": -0.5,
+     "se": 0.1946,
+     "n": 12
+    }
+   },
+   "broke": [],
+   "improved": []
+  },
+  {
+   "key": "w_eb_gated",
+   "level": "efficacy",
+   "dir": "swap",
+   "patch": {
+    "wEB": true,
+    "minSyn": 3
+   },
+   "frozen": [
+    "minSyn"
+   ],
+   "note": "empirical-Bayes weights with a light threshold, for comparison with the fitted 6-contact cut",
+   "n": 12,
+   "score": 0.7543,
+   "scoreSem": 0.0245,
+   "obs": {
+    "flipMs": 0,
+    "totalMs": 36000,
+    "alive": 0.9167,
+    "foodDist": 0.2334,
+    "feedLatency": 20,
+    "escapes": 0.0833,
+    "flipFrac": 0,
+    "boutMedian": 1606.6667,
+    "boutMean": 2011.9525,
+    "boutN": 9.6667,
+    "bodyBoutMedian": 80,
+    "bodyBoutN": 63.9167
+   },
+   "dScore": {
+    "d": -0.1055,
+    "se": 0.0459,
+    "n": 12
+   },
+   "terms": {
+    "alive": {
+     "d": -0.0833,
+     "se": 0.0833,
+     "n": 12
+    },
+    "flips": {
+     "d": 0.0028,
+     "se": 0.0028,
+     "n": 12
+    },
+    "food": {
+     "d": 0.0644,
+     "se": 0.07,
+     "n": 12
+    },
+    "feed": {
+     "d": 0,
+     "se": 0,
+     "n": 12
+    },
+    "bout": {
+     "d": -0.0793,
+     "se": 0.0617,
+     "n": 12
+    },
+    "escape": {
+     "d": -0.5,
+     "se": 0.1946,
+     "n": 12
+    }
+   },
+   "broke": [],
+   "improved": []
+  },
+  {
+   "key": "no_size_scaling",
+   "level": "cellular",
+   "dir": "drop",
+   "patch": {
+    "sizeAlpha": 0
+   },
+   "frozen": [
+    "sizeAlpha"
+   ],
+   "note": "per-neuron PSP scaling by relative volume removed",
+   "n": 12,
+   "score": 0.7418,
+   "scoreSem": 0.0322,
+   "obs": {
+    "flipMs": 6578.3333,
+    "totalMs": 36000,
+    "alive": 1,
+    "foodDist": 0.2424,
+    "feedLatency": 80,
+    "escapes": 1,
+    "flipFrac": 0.1827,
+    "boutMedian": 2810,
+    "boutMean": 3520.9425,
+    "boutN": 7.8333,
+    "bodyBoutMedian": 943.3333,
+    "bodyBoutN": 21.8333
+   },
+   "dScore": {
+    "d": -0.118,
+    "se": 0.0357,
+    "n": 12
+   },
+   "terms": {
+    "alive": {
+     "d": 0,
+     "se": 0,
+     "n": 12
+    },
+    "flips": {
+     "d": -0.5852,
+     "se": 0.148,
+     "n": 12
+    },
+    "food": {
+     "d": 0.0568,
+     "se": 0.0767,
+     "n": 12
+    },
+    "feed": {
+     "d": -0.78,
+     "se": 0.1097,
+     "n": 12
+    },
+    "bout": {
+     "d": 0.0419,
+     "se": 0.0531,
+     "n": 12
+    },
+    "escape": {
+     "d": 0.4167,
+     "se": 0.1486,
+     "n": 12
+    }
+   },
+   "broke": [
+    "flips",
+    "feed"
+   ],
+   "improved": []
+  },
+  {
+   "key": "no_kc_threshold",
+   "level": "cellular",
+   "dir": "drop",
+   "patch": {
+    "kcThreshold": 0
+   },
+   "frozen": [
+    "kcThreshold"
+   ],
+   "note": "raised Kenyon-cell spike threshold removed",
+   "n": 12,
+   "score": 0.8024,
+   "scoreSem": 0.0258,
+   "obs": {
+    "flipMs": 1.6667,
+    "totalMs": 36000,
+    "alive": 1,
+    "foodDist": 0.3317,
+    "feedLatency": 20,
+    "escapes": 0.25,
+    "flipFrac": 0,
+    "boutMedian": 2306.6667,
+    "boutMean": 2633.4782,
+    "boutN": 8.5,
+    "bodyBoutMedian": 186.6667,
+    "bodyBoutN": 38.0833
+   },
+   "dScore": {
+    "d": -0.0574,
+    "se": 0.0393,
+    "n": 12
+   },
+   "terms": {
+    "alive": {
+     "d": 0,
+     "se": 0,
+     "n": 12
+    },
+    "flips": {
+     "d": 0.0019,
+     "se": 0.003,
+     "n": 12
+    },
+    "food": {
+     "d": -0.0176,
+     "se": 0.0752,
+     "n": 12
+    },
+    "feed": {
+     "d": 0,
+     "se": 0,
+     "n": 12
+    },
+    "bout": {
+     "d": 0.0368,
+     "se": 0.0389,
+     "n": 12
+    },
+    "escape": {
+     "d": -0.3333,
+     "se": 0.188,
+     "n": 12
+    }
+   },
+   "broke": [],
+   "improved": []
+  },
+  {
+   "key": "no_lamina_bias",
+   "level": "cellular",
+   "dir": "drop",
+   "patch": {
+    "laminaBias": 0
+   },
+   "frozen": [
+    "laminaBias"
+   ],
+   "note": "tonic depolarisation of the graded lamina monopolar cells removed",
+   "n": 12,
+   "score": 0.8598,
+   "scoreSem": 0.0297,
+   "obs": {
+    "flipMs": 5,
+    "totalMs": 36000,
+    "alive": 1,
+    "foodDist": 0.3106,
+    "feedLatency": 20,
+    "escapes": 0.5833,
+    "flipFrac": 0.0001,
+    "boutMedian": 2370,
+    "boutMean": 2765.2308,
+    "boutN": 8.5,
+    "bodyBoutMedian": 240,
+    "bodyBoutN": 34.9167
+   },
+   "dScore": {
+    "d": 0,
+    "se": 0,
+    "n": 12
+   },
+   "terms": {
+    "alive": {
+     "d": 0,
+     "se": 0,
+     "n": 12
+    },
+    "flips": {
+     "d": 0,
+     "se": 0,
+     "n": 12
+    },
+    "food": {
+     "d": 0,
+     "se": 0,
+     "n": 12
+    },
+    "feed": {
+     "d": 0,
+     "se": 0,
+     "n": 12
+    },
+    "bout": {
+     "d": 0,
+     "se": 0,
+     "n": 12
+    },
+    "escape": {
+     "d": 0,
+     "se": 0,
+     "n": 12
+    }
+   },
+   "broke": [],
+   "improved": []
+  },
+  {
+   "key": "lamina_bias_max",
+   "level": "cellular",
+   "dir": "control",
+   "patch": {
+    "laminaBias": 25
+   },
+   "frozen": [
+    "laminaBias"
+   ],
+   "note": "lamina bias at the top of its search range: shows the parameter is not inert, only flat near the fit",
+   "n": 12,
+   "score": 0.8179,
+   "scoreSem": 0.0271,
+   "obs": {
+    "flipMs": 0,
+    "totalMs": 36000,
+    "alive": 1,
+    "foodDist": 0.2227,
+    "feedLatency": 20,
+    "escapes": 0.25,
+    "flipFrac": 0,
+    "boutMedian": 2178.3333,
+    "boutMean": 2532.4046,
+    "boutN": 9,
+    "bodyBoutMedian": 345,
+    "bodyBoutN": 33.6667
+   },
+   "dScore": {
+    "d": -0.0419,
+    "se": 0.0413,
+    "n": 12
+   },
+   "terms": {
+    "alive": {
+     "d": 0,
+     "se": 0,
+     "n": 12
+    },
+    "flips": {
+     "d": 0.0028,
+     "se": 0.0028,
+     "n": 12
+    },
+    "food": {
+     "d": 0.0733,
+     "se": 0.0787,
+     "n": 12
+    },
+    "feed": {
+     "d": 0,
+     "se": 0,
+     "n": 12
+    },
+    "bout": {
+     "d": 0.0312,
+     "se": 0.027,
+     "n": 12
+    },
+    "escape": {
+     "d": -0.3333,
+     "se": 0.188,
+     "n": 12
+    }
+   },
+   "broke": [],
+   "improved": []
+  },
+  {
+   "key": "cuba",
+   "level": "cellular",
+   "dir": "drop",
+   "patch": {
+    "coba": false
+   },
+   "frozen": [],
+   "note": "conductance-based synapses replaced by current-based ones",
+   "n": 12,
+   "score": 0.7525,
+   "scoreSem": 0.0424,
+   "obs": {
+    "flipMs": 2421.6667,
+    "totalMs": 36000,
+    "alive": 0.5,
+    "foodDist": 0.2846,
+    "feedLatency": 20,
+    "escapes": 1,
+    "flipFrac": 0.0673,
+    "boutMedian": 2353.3333,
+    "boutMean": 2535.744,
+    "boutN": 8.0833,
+    "bodyBoutMedian": 1558.3333,
+    "bodyBoutN": 11
+   },
+   "dScore": {
+    "d": -0.1073,
+    "se": 0.0472,
+    "n": 12
+   },
+   "terms": {
+    "alive": {
+     "d": -0.5,
+     "se": 0.1508,
+     "n": 12
+    },
+    "flips": {
+     "d": -0.6111,
+     "se": 0.1282,
+     "n": 12
+    },
+    "food": {
+     "d": 0.0217,
+     "se": 0.0618,
+     "n": 12
+    },
+    "feed": {
+     "d": 0,
+     "se": 0,
+     "n": 12
+    },
+    "bout": {
+     "d": 0.0414,
+     "se": 0.0446,
+     "n": 12
+    },
+    "escape": {
+     "d": 0.4167,
+     "se": 0.1486,
+     "n": 12
+    }
+   },
+   "broke": [
+    "alive",
+    "flips"
+   ],
+   "improved": []
+  },
+  {
+   "key": "nominal_einh",
+   "level": "cellular",
+   "dir": "drop",
+   "patch": {
+    "eInh": -70
+   },
+   "frozen": [
+    "eInh"
+   ],
+   "note": "fitted inhibitory reversal potential replaced by the nominal -70 mV",
+   "n": 12,
+   "score": 0.7996,
+   "scoreSem": 0.0208,
+   "obs": {
+    "flipMs": 3.3333,
+    "totalMs": 36000,
+    "alive": 1,
+    "foodDist": 0.2566,
+    "feedLatency": 20,
+    "escapes": 0.1667,
+    "flipFrac": 0.0001,
+    "boutMedian": 2450,
+    "boutMean": 2660.9179,
+    "boutN": 8.75,
+    "bodyBoutMedian": 341.6667,
+    "bodyBoutN": 33.5833
+   },
+   "dScore": {
+    "d": -0.0602,
+    "se": 0.0443,
+    "n": 12
+   },
+   "terms": {
+    "alive": {
+     "d": 0,
+     "se": 0,
+     "n": 12
+    },
+    "flips": {
+     "d": 0.0009,
+     "se": 0.0035,
+     "n": 12
+    },
+    "food": {
+     "d": 0.0451,
+     "se": 0.0764,
+     "n": 12
+    },
+    "feed": {
+     "d": 0,
+     "se": 0,
+     "n": 12
+    },
+    "bout": {
+     "d": 0.0449,
+     "se": 0.0364,
+     "n": 12
+    },
+    "escape": {
+     "d": -0.4167,
+     "se": 0.2289,
+     "n": 12
+    }
+   },
+   "broke": [],
+   "improved": []
+  },
+  {
+   "key": "no_inh_gain",
+   "level": "cellular",
+   "dir": "drop",
+   "patch": {
+    "inhGain": 1
+   },
+   "frozen": [
+    "inhGain"
+   ],
+   "note": "fitted inhibitory weight scaling removed",
+   "n": 12,
+   "score": 0.5324,
+   "scoreSem": 0.0403,
+   "obs": {
+    "flipMs": 0,
+    "totalMs": 36000,
+    "alive": 0.1667,
+    "foodDist": 0.5974,
+    "feedLatency": 20,
+    "escapes": 0.0833,
+    "flipFrac": 0,
+    "boutMedian": 2043.3333,
+    "boutMean": 2922.7493,
+    "boutN": 8.5,
+    "bodyBoutMedian": 136.6667,
+    "bodyBoutN": 82.6667
+   },
+   "dScore": {
+    "d": -0.3275,
+    "se": 0.0454,
+    "n": 12
+   },
+   "terms": {
+    "alive": {
+     "d": -0.8333,
+     "se": 0.1124,
+     "n": 12
+    },
+    "flips": {
+     "d": 0.0028,
+     "se": 0.0028,
+     "n": 12
+    },
+    "food": {
+     "d": -0.239,
+     "se": 0.1224,
+     "n": 12
+    },
+    "feed": {
+     "d": 0,
+     "se": 0,
+     "n": 12
+    },
+    "bout": {
+     "d": -0.0111,
+     "se": 0.0476,
+     "n": 12
+    },
+    "escape": {
+     "d": -0.5,
+     "se": 0.1508,
+     "n": 12
+    }
+   },
+   "broke": [
+    "alive",
+    "escape"
+   ],
+   "improved": []
+  },
+  {
+   "key": "no_refractory",
+   "level": "cellular",
+   "dir": "drop",
+   "patch": {
+    "tRef": 0.5
+   },
+   "frozen": [
+    "tRef"
+   ],
+   "note": "refractory period reduced from the fitted 3.8 ms to one time step",
+   "n": 12,
+   "score": 0.742,
+   "scoreSem": 0.0239,
+   "obs": {
+    "flipMs": 483.3333,
+    "totalMs": 36000,
+    "alive": 1,
+    "foodDist": 0.4159,
+    "feedLatency": 20,
+    "escapes": 0.1667,
+    "flipFrac": 0.0134,
+    "boutMedian": 2851.6667,
+    "boutMean": 3226.8922,
+    "boutN": 8.3333,
+    "bodyBoutMedian": 70,
+    "bodyBoutN": 74.1667
+   },
+   "dScore": {
+    "d": -0.1178,
+    "se": 0.0304,
+    "n": 12
+   },
+   "terms": {
+    "alive": {
+     "d": 0,
+     "se": 0,
+     "n": 12
+    },
+    "flips": {
+     "d": -0.2269,
+     "se": 0.1147,
+     "n": 12
+    },
+    "food": {
+     "d": -0.0877,
+     "se": 0.0701,
+     "n": 12
+    },
+    "feed": {
+     "d": 0,
+     "se": 0,
+     "n": 12
+    },
+    "bout": {
+     "d": -0.0179,
+     "se": 0.0372,
+     "n": 12
+    },
+    "escape": {
+     "d": -0.4167,
+     "se": 0.1486,
+     "n": 12
+    }
+   },
+   "broke": [],
+   "improved": []
+  },
+  {
+   "key": "add_depression",
+   "level": "cellular",
+   "dir": "add",
+   "patch": {
+    "depU": 0.2
+   },
+   "frozen": [],
+   "note": "short-term presynaptic depression switched on at the model default; the fit chose to leave it off",
+   "n": 12,
+   "score": 0.9161,
+   "scoreSem": 0.0059,
+   "obs": {
+    "flipMs": 0,
+    "totalMs": 36000,
+    "alive": 1,
+    "foodDist": 0.1449,
+    "feedLatency": 20,
+    "escapes": 1,
+    "flipFrac": 0,
+    "boutMedian": 860,
+    "boutMean": 1005.668,
+    "boutN": 9,
+    "bodyBoutMedian": 148.3333,
+    "bodyBoutN": 24.0833
+   },
+   "dScore": {
+    "d": 0.0563,
+    "se": 0.0317,
+    "n": 12
+   },
+   "terms": {
+    "alive": {
+     "d": 0,
+     "se": 0,
+     "n": 12
+    },
+    "flips": {
+     "d": 0.0028,
+     "se": 0.0028,
+     "n": 12
+    },
+    "food": {
+     "d": 0.1381,
+     "se": 0.0498,
+     "n": 12
+    },
+    "feed": {
+     "d": 0,
+     "se": 0,
+     "n": 12
+    },
+    "bout": {
+     "d": -0.3567,
+     "se": 0.0626,
+     "n": 12
+    },
+    "escape": {
+     "d": 0.4167,
+     "se": 0.1486,
+     "n": 12
+    }
+   },
+   "broke": [
+    "bout"
+   ],
+   "improved": []
+  },
+  {
+   "key": "no_delay",
+   "level": "cellular",
+   "dir": "drop",
+   "patch": {
+    "delay": 0.5
+   },
+   "frozen": [],
+   "note": "axonal delay reduced from 1.8 ms to one time step",
+   "n": 12,
+   "score": 0.77,
+   "scoreSem": 0.0133,
+   "obs": {
+    "flipMs": 0,
+    "totalMs": 36000,
+    "alive": 1,
+    "foodDist": 0.3318,
+    "feedLatency": 20,
+    "escapes": 0.0833,
+    "flipFrac": 0,
+    "boutMedian": 2750,
+    "boutMean": 3127.0731,
+    "boutN": 8.0833,
+    "bodyBoutMedian": 258.3333,
+    "bodyBoutN": 35.5833
+   },
+   "dScore": {
+    "d": -0.0898,
+    "se": 0.0297,
+    "n": 12
+   },
+   "terms": {
+    "alive": {
+     "d": 0,
+     "se": 0,
+     "n": 12
+    },
+    "flips": {
+     "d": 0.0028,
+     "se": 0.0028,
+     "n": 12
+    },
+    "food": {
+     "d": -0.0176,
+     "se": 0.0946,
+     "n": 12
+    },
+    "feed": {
+     "d": 0,
+     "se": 0,
+     "n": 12
+    },
+    "bout": {
+     "d": 0.01,
+     "se": 0.0317,
+     "n": 12
+    },
+    "escape": {
+     "d": -0.5,
+     "se": 0.1508,
+     "n": 12
+    }
+   },
+   "broke": [
+    "escape"
+   ],
+   "improved": []
+  },
+  {
+   "key": "add_adaptation",
+   "level": "cellular",
+   "dir": "add",
+   "patch": {
+    "adaptInc": 2
+   },
+   "frozen": [
+    "adaptInc"
+   ],
+   "note": "spike-frequency adaptation switched on; the fit chose to leave it off",
+   "n": 12,
+   "score": 0.9066,
+   "scoreSem": 0.015,
+   "obs": {
+    "flipMs": 0,
+    "totalMs": 36000,
+    "alive": 1,
+    "foodDist": 0.1429,
+    "feedLatency": 20,
+    "escapes": 0.9167,
+    "flipFrac": 0,
+    "boutMedian": 863.3333,
+    "boutMean": 846.4146,
+    "boutN": 9,
+    "bodyBoutMedian": 78.3333,
+    "bodyBoutN": 29.25
+   },
+   "dScore": {
+    "d": 0.0468,
+    "se": 0.0316,
+    "n": 12
+   },
+   "terms": {
+    "alive": {
+     "d": 0,
+     "se": 0,
+     "n": 12
+    },
+    "flips": {
+     "d": 0.0028,
+     "se": 0.0028,
+     "n": 12
+    },
+    "food": {
+     "d": 0.1397,
+     "se": 0.0758,
+     "n": 12
+    },
+    "feed": {
+     "d": 0,
+     "se": 0,
+     "n": 12
+    },
+    "bout": {
+     "d": -0.3147,
+     "se": 0.0465,
+     "n": 12
+    },
+    "escape": {
+     "d": 0.3333,
+     "se": 0.1421,
+     "n": 12
+    }
+   },
+   "broke": [
+    "bout"
+   ],
+   "improved": []
+  },
+  {
+   "key": "no_neuromod",
+   "level": "modulatory",
+   "dir": "drop",
+   "patch": {
+    "neuromod": false
+   },
+   "frozen": [],
+   "note": "fed octopamine tone and the modulatory-synapse split removed",
+   "n": 12,
+   "score": 0.871,
+   "scoreSem": 0.0296,
+   "obs": {
+    "flipMs": 0,
+    "totalMs": 36000,
+    "alive": 1,
+    "foodDist": 0.2328,
+    "feedLatency": 20,
+    "escapes": 0.5833,
+    "flipFrac": 0,
+    "boutMedian": 2345,
+    "boutMean": 2564.4134,
+    "boutN": 8.5,
+    "bodyBoutMedian": 160,
+    "bodyBoutN": 44
+   },
+   "dScore": {
+    "d": 0.0112,
+    "se": 0.0427,
+    "n": 12
+   },
+   "terms": {
+    "alive": {
+     "d": 0,
+     "se": 0,
+     "n": 12
+    },
+    "flips": {
+     "d": 0.0028,
+     "se": 0.0028,
+     "n": 12
+    },
+    "food": {
+     "d": 0.0649,
+     "se": 0.0842,
+     "n": 12
+    },
+    "feed": {
+     "d": 0,
+     "se": 0,
+     "n": 12
+    },
+    "bout": {
+     "d": -0.0049,
+     "se": 0.0362,
+     "n": 12
+    },
+    "escape": {
+     "d": 0,
+     "se": 0.2132,
+     "n": 12
+    }
+   },
+   "broke": [],
+   "improved": []
+  },
+  {
+   "key": "sign_free",
+   "level": "control",
+   "dir": "control",
+   "patch": {
+    "signFree": true
+   },
+   "frozen": [],
+   "note": "every neuron excitatory: the floor the benchmark must be able to detect",
+   "n": 12,
+   "score": 0.6875,
+   "scoreSem": 0.036,
+   "obs": {
+    "flipMs": 566.6667,
+    "totalMs": 36000,
+    "alive": 0.8333,
+    "foodDist": 0.1667,
+    "feedLatency": 0,
+    "escapes": 1,
+    "flipFrac": 0.0157,
+    "boutMedian": 1098.3333,
+    "boutMean": 1853.1667,
+    "boutN": 5.25,
+    "bodyBoutMedian": 300,
+    "bodyBoutN": 13.75
+   },
+   "dScore": {
+    "d": -0.1724,
+    "se": 0.0516,
+    "n": 12
+   },
+   "terms": {
+    "alive": {
+     "d": -0.1667,
+     "se": 0.1124,
+     "n": 12
+    },
+    "flips": {
+     "d": -0.2574,
+     "se": 0.1269,
+     "n": 12
+    },
+    "food": {
+     "d": 0.12,
+     "se": 0.0622,
+     "n": 12
+    },
+    "feed": {
+     "d": -0.99,
+     "se": 0,
+     "n": 12
+    },
+    "bout": {
+     "d": -0.1942,
+     "se": 0.0442,
+     "n": 12
+    },
+    "escape": {
+     "d": 0.4167,
+     "se": 0.1486,
+     "n": 12
+    }
+   },
+   "broke": [
+    "feed",
+    "bout"
+   ],
+   "improved": []
+  }
+ ]
+}

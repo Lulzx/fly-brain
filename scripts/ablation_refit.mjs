@@ -18,6 +18,7 @@
 // Writes public/data/ablation_refit.json.
 import { fork } from 'node:child_process';
 import fs from 'node:fs';
+import { RUNGS } from './rungs.mjs';
 
 const SPACE = {   // identical to scripts/calib_search.mjs
   wSyn: [0.2, 1.2, 'log'], sizeAlpha: [0, 1, 'lin'], kcThreshold: [0, 30, 'lin'], inhGain: [0.5, 5, 'log'],
@@ -26,30 +27,14 @@ const SPACE = {   // identical to scripts/calib_search.mjs
 const BASE = (() => { const o = JSON.parse(fs.readFileSync('public/data/brain_params.json'));
   for (const k of Object.keys(o)) if (k[0] === '_') delete o[k]; return o; })();
 
-// `frozen` lists the search parameters the ablation itself pins, which are therefore dropped from the
-// search space; everything else stays free to compensate.
-const RUNGS = [
-  { key: 'baseline', patch: {}, frozen: [] },
-  { key: 'w_binary', patch: { wBinary: true }, frozen: [] },
-  { key: 'w_shuffle', patch: { wShuffle: true }, frozen: [] },
-  { key: 'w_eb', patch: { wEB: true, minSyn: 1 }, frozen: ['minSyn'] },
-  { key: 'w_eb_gated', patch: { wEB: true, minSyn: 3 }, frozen: ['minSyn'] },
-  { key: 'no_size_scaling', patch: { sizeAlpha: 0 }, frozen: ['sizeAlpha'] },
-  { key: 'cuba', patch: { coba: false }, frozen: [] },
-  { key: 'no_inh_gain', patch: { inhGain: 1 }, frozen: ['inhGain'] },
-  { key: 'no_refractory', patch: { tRef: 0.5 }, frozen: ['tRef'] },
-  { key: 'add_depression', patch: { depU: 0.2 }, frozen: [] },
-  { key: 'add_adaptation', patch: { adaptInc: 2 }, frozen: ['adaptInc'] },
-  { key: 'no_delay', patch: { delay: 0.5 }, frozen: [] },
-  { key: 'no_neuromod', patch: { neuromod: false }, frozen: [] },
-  { key: 'sign_free', patch: { signFree: true }, frozen: [] },
-];
-
 const GENS = +(process.argv[2] || 10), POP = +(process.argv[3] || 16);
 const FILTER = process.argv[4] ? new RegExp(process.argv[4]) : null;
 const NW = +(process.env.NW || 12), FIT_SEED = 1000;
 const SEEDS = [...Array(12)].map((_, i) => 1000 + i * 7919);   // same seeds as ablation_ladder.mjs
-const rungs = RUNGS.filter(r => !FILTER || r.key === 'baseline' || FILTER.test(r.key));
+// A filter restricts the run to the rungs it matches. Baseline is only forced in for a full run: a
+// filtered run re-uses the baseline already in the file, so that adding rungs later cannot shift every
+// gap in the table by re-drawing one number from `Math.random`.
+const rungs = FILTER ? RUNGS.filter(r => FILTER.test(r.key)) : RUNGS;
 
 const workers = [...Array(NW)].map(() => fork('scripts/calib_eval.mjs'));
 const evalAll = cfgs => new Promise(res => { const out = new Array(cfgs.length); let next = 0, done = 0;
@@ -95,12 +80,18 @@ for (const r of rungs) { const t0 = Date.now(); results[r.key] = await refit(r);
 workers.forEach(w => w.kill());
 
 const ladder = fs.existsSync('public/data/ablation_ladder.json') ? JSON.parse(fs.readFileSync('public/data/ablation_ladder.json')) : null;
-const baseRefit = mean(results.baseline.runs.map(o => o.score));
-const TERMS = Object.keys(results.baseline.runs[0].terms);
+const prevFile = fs.existsSync('public/data/ablation_refit.json') ? JSON.parse(fs.readFileSync('public/data/ablation_refit.json')) : null;
+const prev = new Map((prevFile?.rungs || []).map(r => [r.key, r]));
+// A filtered run does not re-measure the baseline; it carries the one already in the file, so that
+// adding rungs later cannot shift every gap in the table by re-drawing a single random number.
+const baseRow = results.baseline || prev.get('baseline');
+if (!baseRow) { console.error('no baseline in this run and none in public/data/ablation_refit.json'); process.exit(1); }
+const baseRefit = mean(results.baseline ? results.baseline.runs.map(o => o.score) : [baseRow.refit]);
+const TERMS = Object.keys(results.baseline ? results.baseline.runs[0].terms : baseRow.terms);
 const rows = rungs.map(r => {
   const runs = results[r.key].runs, scores = runs.map(o => o.score);
   const before = ladder?.rungs.find(x => x.key === r.key);
-  return { key: r.key, frozen: r.frozen, cfg: results[r.key].cfg,
+  return { key: r.key, frozen: r.frozen, cfg: results[r.key].cfg, search: { gens: GENS, pop: POP, fitSeed: FIT_SEED },
     refit: +mean(scores).toFixed(4), refitSem: +sem(scores).toFixed(4),
     noRefit: before ? before.score : null,
     // fraction of the un-refitted loss that refitting buys back: 1 means fully compensable
@@ -111,9 +102,17 @@ const rows = rungs.map(r => {
     gapToBaseline: +(mean(scores) - baseRefit).toFixed(4),
     terms: Object.fromEntries(TERMS.map(t => [t, +mean(runs.map(o => o.terms[t])).toFixed(3)])) };
 });
+// A filtered run measures only the rungs it was given; the rest of the table is carried over from the
+// previous file rather than dropped, so a single-rung top-up does not destroy the full measurement.
+const merged = [...prev.values()].filter(p => !rows.some(r => r.key === p.key)).concat(rows);
+const order = (ladder?.rungs || []).map(r => r.key);
+merged.sort((a, b) => order.indexOf(a.key) - order.indexOf(b.key));
+const keptBase = merged.find(r => r.key === 'baseline');
 fs.writeFileSync('public/data/ablation_refit.json', JSON.stringify({
   _source: 'scripts/ablation_refit.mjs', generated: new Date().toISOString().slice(0, 10),
-  search: { gens: GENS, pop: POP, fitSeed: FIT_SEED, space: SPACE }, seeds: SEEDS, baseParams: BASE, rungs: rows,
+  search: { gens: GENS, pop: POP, fitSeed: FIT_SEED, space: SPACE }, seeds: SEEDS, baseParams: BASE,
+  refitBaseline: keptBase ? keptBase.refit : +baseRefit.toFixed(4),
+  rungs: merged,
 }, null, 1));
 
 const pad = (s, n) => String(s).padEnd(n);
