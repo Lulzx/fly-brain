@@ -1,0 +1,6155 @@
+{
+ "malecns": {
+  "name": "malecns",
+  "n_cells": 165122,
+  "n_groups": 11552,
+  "thresholds": {
+   "min_layer": 50,
+   "min_pop": 150,
+   "ring_min_cells": 8
+  },
+  "expansion": [
+   {
+    "layer": "KCab-s+KCab-m+KCab-c+KCa'b'-ap2+PAM06",
+    "n_groups_merged": 4,
+    "n_layer": 2000,
+    "n_pool": 418,
+    "expansion_ratio": 4.78,
+    "pool_share_of_layer_input": 0.383,
+    "fanin_median": 7.0,
+    "fanin_p10_90": [
+     4.0,
+     9.0
+    ],
+    "pool_sampled_frac": 0.0167,
+    "overlap_jaccard": 0.0407,
+    "overlap_jaccard_random": 0.0084,
+    "overlap_over_random": 4.81,
+    "pool_top_groups": [
+     [
+      "KCa'b'-ap1+PAM05+PAM02+1 more",
+      21
+     ],
+     [
+      "DA1_lPN",
+      13
+     ],
+     [
+      "VM5d_adPN",
+      12
+     ],
+     [
+      "KCab-p+PAM09",
+      11
+     ],
+     [
+      "DA2_lPN",
+      10
+     ],
+     [
+      "KCa'b'-m+PAM14",
+      10
+     ]
+    ],
+    "score": 1.801
+   }
+  ],
+  "normalization": [
+   {
+    "cell": "TuTuA_1",
+    "n_cells": 2,
+    "population": "LC10c-1+LC10c-2",
+    "n_population": 255,
+    "reads_frac": 0.875,
+    "writes_frac": 0.988,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 12737,
+    "synapses_out": 18555,
+    "score": 2.08
+   },
+   {
+    "cell": "PPL103",
+    "n_cells": 2,
+    "population": "KCg-d",
+    "n_population": 206,
+    "reads_frac": 0.908,
+    "writes_frac": 0.976,
+    "sign": 1.0,
+    "kind": "recurrent excitation",
+    "synapses_in": 2392,
+    "synapses_out": 3134,
+    "score": 2.049
+   },
+   {
+    "cell": "FB4H",
+    "n_cells": 2,
+    "population": "vDeltaM+vDeltaK+vDeltaL+1 more",
+    "n_population": 150,
+    "reads_frac": 0.913,
+    "writes_frac": 0.96,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 2089,
+    "synapses_out": 5873,
+    "score": 1.908
+   },
+   {
+    "cell": "AOTU041",
+    "n_cells": 4,
+    "population": "LC10d",
+    "n_population": 214,
+    "reads_frac": 0.799,
+    "writes_frac": 0.846,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 28428,
+    "synapses_out": 10377,
+    "score": 1.575
+   },
+   {
+    "cell": "DNge122",
+    "n_cells": 2,
+    "population": "SNta02,SNta09",
+    "n_population": 241,
+    "reads_frac": 0.809,
+    "writes_frac": 0.805,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 4837,
+    "synapses_out": 5227,
+    "score": 1.551
+   },
+   {
+    "cell": "PPL103",
+    "n_cells": 2,
+    "population": "KCg-m+PAM08+PAM01+1 more",
+    "n_population": 1450,
+    "reads_frac": 0.697,
+    "writes_frac": 0.699,
+    "sign": 1.0,
+    "kind": "recurrent excitation",
+    "synapses_in": 9251,
+    "synapses_out": 10514,
+    "score": 1.54
+   },
+   {
+    "cell": "TuTuA_2",
+    "n_cells": 2,
+    "population": "LC10a",
+    "n_population": 275,
+    "reads_frac": 0.742,
+    "writes_frac": 0.825,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 23306,
+    "synapses_out": 18061,
+    "score": 1.494
+   },
+   {
+    "cell": "PPL103",
+    "n_cells": 2,
+    "population": "KCa'b'-m+PAM14",
+    "n_population": 223,
+    "reads_frac": 0.789,
+    "writes_frac": 0.758,
+    "sign": 1.0,
+    "kind": "recurrent excitation",
+    "synapses_in": 2005,
+    "synapses_out": 1883,
+    "score": 1.405
+   },
+   {
+    "cell": "PVLP018",
+    "n_cells": 2,
+    "population": "LC17",
+    "n_population": 353,
+    "reads_frac": 0.708,
+    "writes_frac": 0.745,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 6721,
+    "synapses_out": 3227,
+    "score": 1.344
+   },
+   {
+    "cell": "lLN2F_b",
+    "n_cells": 4,
+    "population": "ORN_DA1",
+    "n_population": 204,
+    "reads_frac": 0.725,
+    "writes_frac": 0.779,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 6879,
+    "synapses_out": 2584,
+    "score": 1.306
+   },
+   {
+    "cell": "PPL103",
+    "n_cells": 2,
+    "population": "KCa'b'-ap1+PAM05+PAM02+1 more",
+    "n_population": 252,
+    "reads_frac": 0.79,
+    "writes_frac": 0.619,
+    "sign": 1.0,
+    "kind": "recurrent excitation",
+    "synapses_in": 4760,
+    "synapses_out": 1548,
+    "score": 1.174
+   },
+   {
+    "cell": "lLN2T_b",
+    "n_cells": 4,
+    "population": "ORN_DA1",
+    "n_population": 204,
+    "reads_frac": 0.765,
+    "writes_frac": 0.662,
+    "sign": 1.0,
+    "kind": "recurrent excitation",
+    "synapses_in": 6109,
+    "synapses_out": 1750,
+    "score": 1.169
+   },
+   {
+    "cell": "APL",
+    "n_cells": 2,
+    "population": "KCab-s",
+    "n_population": 657,
+    "reads_frac": 0.644,
+    "writes_frac": 0.644,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 25082,
+    "synapses_out": 24854,
+    "score": 1.168
+   },
+   {
+    "cell": "APL",
+    "n_cells": 2,
+    "population": "KCa'b'-ap2+PAM06",
+    "n_population": 319,
+    "reads_frac": 0.702,
+    "writes_frac": 0.658,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 16331,
+    "synapses_out": 19317,
+    "score": 1.157
+   },
+   {
+    "cell": "il3LN6",
+    "n_cells": 2,
+    "population": "ORN_DA1",
+    "n_population": 204,
+    "reads_frac": 0.946,
+    "writes_frac": 0.529,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 8311,
+    "synapses_out": 1068,
+    "score": 1.157
+   },
+   {
+    "cell": "PPL101",
+    "n_cells": 2,
+    "population": "KCg-m+PAM08+PAM01+1 more",
+    "n_population": 1450,
+    "reads_frac": 0.773,
+    "writes_frac": 0.469,
+    "sign": 1.0,
+    "kind": "recurrent excitation",
+    "synapses_in": 13099,
+    "synapses_out": 5769,
+    "score": 1.146
+   },
+   {
+    "cell": "PPL103",
+    "n_cells": 2,
+    "population": "KCa'b'-ap2+PAM06",
+    "n_population": 319,
+    "reads_frac": 0.834,
+    "writes_frac": 0.549,
+    "sign": 1.0,
+    "kind": "recurrent excitation",
+    "synapses_in": 3373,
+    "synapses_out": 1543,
+    "score": 1.145
+   },
+   {
+    "cell": "DPM",
+    "n_cells": 2,
+    "population": "KCab-s",
+    "n_population": 657,
+    "reads_frac": 0.642,
+    "writes_frac": 0.618,
+    "sign": 1.0,
+    "kind": "recurrent excitation",
+    "synapses_in": 14111,
+    "synapses_out": 4703,
+    "score": 1.118
+   },
+   {
+    "cell": "PPL105",
+    "n_cells": 2,
+    "population": "KCa'b'-m+PAM14",
+    "n_population": 223,
+    "reads_frac": 0.767,
+    "writes_frac": 0.587,
+    "sign": 1.0,
+    "kind": "recurrent excitation",
+    "synapses_in": 1727,
+    "synapses_out": 1158,
+    "score": 1.058
+   },
+   {
+    "cell": "CB1088",
+    "n_cells": 4,
+    "population": "LC18+Li15",
+    "n_population": 249,
+    "reads_frac": 0.667,
+    "writes_frac": 0.647,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 4500,
+    "synapses_out": 4040,
+    "score": 1.033
+   },
+   {
+    "cell": "DNge153",
+    "n_cells": 2,
+    "population": "LgLG3",
+    "n_population": 162,
+    "reads_frac": 0.827,
+    "writes_frac": 0.556,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 4096,
+    "synapses_out": 1113,
+    "score": 1.015
+   },
+   {
+    "cell": "FB4G",
+    "n_cells": 2,
+    "population": "vDeltaM+vDeltaK+vDeltaL+1 more",
+    "n_population": 150,
+    "reads_frac": 0.573,
+    "writes_frac": 0.807,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 989,
+    "synapses_out": 3554,
+    "score": 1.006
+   },
+   {
+    "cell": "APL",
+    "n_cells": 2,
+    "population": "KCa'b'-ap1+PAM05+PAM02+1 more",
+    "n_population": 252,
+    "reads_frac": 0.726,
+    "writes_frac": 0.54,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 14500,
+    "synapses_out": 12203,
+    "score": 0.941
+   },
+   {
+    "cell": "APL",
+    "n_cells": 2,
+    "population": "KCab-m",
+    "n_population": 536,
+    "reads_frac": 0.584,
+    "writes_frac": 0.578,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 23418,
+    "synapses_out": 17038,
+    "score": 0.922
+   },
+   {
+    "cell": "APL",
+    "n_cells": 2,
+    "population": "KCab-s+KCab-m+KCab-c+KCa'b'-ap2+PAM06 [layer]",
+    "n_population": 2000,
+    "reads_frac": 0.531,
+    "writes_frac": 0.516,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 87410,
+    "synapses_out": 74023,
+    "score": 0.905
+   },
+   {
+    "cell": "IN05B033",
+    "n_cells": 4,
+    "population": "SNta02,SNta09",
+    "n_population": 241,
+    "reads_frac": 0.506,
+    "writes_frac": 0.743,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 1777,
+    "synapses_out": 3137,
+    "score": 0.896
+   },
+   {
+    "cell": "DPM",
+    "n_cells": 2,
+    "population": "KCab-m",
+    "n_population": 536,
+    "reads_frac": 0.578,
+    "writes_frac": 0.558,
+    "sign": 1.0,
+    "kind": "recurrent excitation",
+    "synapses_in": 8025,
+    "synapses_out": 3004,
+    "score": 0.881
+   },
+   {
+    "cell": "APL",
+    "n_cells": 2,
+    "population": "KCab-c",
+    "n_population": 488,
+    "reads_frac": 0.576,
+    "writes_frac": 0.568,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 22579,
+    "synapses_out": 12814,
+    "score": 0.879
+   },
+   {
+    "cell": "APL",
+    "n_cells": 2,
+    "population": "KCa'b'-m+PAM14",
+    "n_population": 223,
+    "reads_frac": 0.655,
+    "writes_frac": 0.565,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 11934,
+    "synapses_out": 13158,
+    "score": 0.869
+   },
+   {
+    "cell": "DPM",
+    "n_cells": 2,
+    "population": "KCg-m+PAM08+PAM01+1 more",
+    "n_population": 1450,
+    "reads_frac": 0.505,
+    "writes_frac": 0.523,
+    "sign": 1.0,
+    "kind": "recurrent excitation",
+    "synapses_in": 35415,
+    "synapses_out": 13806,
+    "score": 0.834
+   },
+   {
+    "cell": "DPM",
+    "n_cells": 2,
+    "population": "KCa'b'-m+PAM14",
+    "n_population": 223,
+    "reads_frac": 0.65,
+    "writes_frac": 0.534,
+    "sign": 1.0,
+    "kind": "recurrent excitation",
+    "synapses_in": 6853,
+    "synapses_out": 2130,
+    "score": 0.815
+   },
+   {
+    "cell": "CT1",
+    "n_cells": 2,
+    "population": "T4b",
+    "n_population": 1690,
+    "reads_frac": 0.492,
+    "writes_frac": 0.498,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 11931,
+    "synapses_out": 21430,
+    "score": 0.791
+   },
+   {
+    "cell": "CT1",
+    "n_cells": 2,
+    "population": "Tm9",
+    "n_population": 1771,
+    "reads_frac": 0.496,
+    "writes_frac": 0.491,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 52113,
+    "synapses_out": 17256,
+    "score": 0.791
+   },
+   {
+    "cell": "CT1",
+    "n_cells": 2,
+    "population": "T4a",
+    "n_population": 1684,
+    "reads_frac": 0.484,
+    "writes_frac": 0.502,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 10036,
+    "synapses_out": 23081,
+    "score": 0.784
+   },
+   {
+    "cell": "LPi2b",
+    "n_cells": 2,
+    "population": "T4b",
+    "n_population": 1690,
+    "reads_frac": 0.485,
+    "writes_frac": 0.499,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 19311,
+    "synapses_out": 19554,
+    "score": 0.782
+   },
+   {
+    "cell": "APL",
+    "n_cells": 2,
+    "population": "KCg-m+PAM08+PAM01+1 more",
+    "n_population": 1450,
+    "reads_frac": 0.507,
+    "writes_frac": 0.483,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 79865,
+    "synapses_out": 79301,
+    "score": 0.775
+   },
+   {
+    "cell": "LPi2b",
+    "n_cells": 2,
+    "population": "T5b",
+    "n_population": 1715,
+    "reads_frac": 0.482,
+    "writes_frac": 0.497,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 18226,
+    "synapses_out": 16154,
+    "score": 0.775
+   },
+   {
+    "cell": "CT1",
+    "n_cells": 2,
+    "population": "T5a",
+    "n_population": 1664,
+    "reads_frac": 0.469,
+    "writes_frac": 0.504,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 8726,
+    "synapses_out": 39413,
+    "score": 0.761
+   },
+   {
+    "cell": "DPM",
+    "n_cells": 2,
+    "population": "KCa'b'-ap1+PAM05+PAM02+1 more",
+    "n_population": 252,
+    "reads_frac": 0.583,
+    "writes_frac": 0.54,
+    "sign": 1.0,
+    "kind": "recurrent excitation",
+    "synapses_in": 7643,
+    "synapses_out": 1816,
+    "score": 0.756
+   },
+   {
+    "cell": "CT1",
+    "n_cells": 2,
+    "population": "T5b",
+    "n_population": 1715,
+    "reads_frac": 0.46,
+    "writes_frac": 0.5,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 8074,
+    "synapses_out": 40664,
+    "score": 0.744
+   },
+   {
+    "cell": "LPi4b",
+    "n_cells": 2,
+    "population": "T4d",
+    "n_population": 1709,
+    "reads_frac": 0.5,
+    "writes_frac": 0.459,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 31830,
+    "synapses_out": 12059,
+    "score": 0.742
+   },
+   {
+    "cell": "CT1",
+    "n_cells": 2,
+    "population": "T4d",
+    "n_population": 1709,
+    "reads_frac": 0.458,
+    "writes_frac": 0.499,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 7982,
+    "synapses_out": 20475,
+    "score": 0.739
+   },
+   {
+    "cell": "CT1",
+    "n_cells": 2,
+    "population": "T4c",
+    "n_population": 1778,
+    "reads_frac": 0.456,
+    "writes_frac": 0.491,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 9193,
+    "synapses_out": 20139,
+    "score": 0.728
+   },
+   {
+    "cell": "Li32",
+    "n_cells": 2,
+    "population": "Y3",
+    "n_population": 627,
+    "reads_frac": 0.507,
+    "writes_frac": 0.51,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 19683,
+    "synapses_out": 16941,
+    "score": 0.724
+   },
+   {
+    "cell": "DPM",
+    "n_cells": 2,
+    "population": "KCa'b'-ap2+PAM06",
+    "n_population": 319,
+    "reads_frac": 0.589,
+    "writes_frac": 0.486,
+    "sign": 1.0,
+    "kind": "recurrent excitation",
+    "synapses_in": 9870,
+    "synapses_out": 2685,
+    "score": 0.717
+   },
+   {
+    "cell": "PVLP025",
+    "n_cells": 4,
+    "population": "LC12",
+    "n_population": 498,
+    "reads_frac": 0.548,
+    "writes_frac": 0.468,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 51791,
+    "synapses_out": 3889,
+    "score": 0.692
+   },
+   {
+    "cell": "DPM",
+    "n_cells": 2,
+    "population": "KCab-s+KCab-m+KCab-c+KCa'b'-ap2+PAM06 [layer]",
+    "n_population": 2000,
+    "reads_frac": 0.493,
+    "writes_frac": 0.421,
+    "sign": 1.0,
+    "kind": "recurrent excitation",
+    "synapses_in": 36608,
+    "synapses_out": 12084,
+    "score": 0.686
+   },
+   {
+    "cell": "LT58",
+    "n_cells": 2,
+    "population": "Tm5a",
+    "n_population": 624,
+    "reads_frac": 0.5,
+    "writes_frac": 0.482,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 18853,
+    "synapses_out": 7042,
+    "score": 0.674
+   },
+   {
+    "cell": "CT1",
+    "n_cells": 2,
+    "population": "T5c",
+    "n_population": 1720,
+    "reads_frac": 0.407,
+    "writes_frac": 0.499,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 6401,
+    "synapses_out": 33881,
+    "score": 0.657
+   },
+   {
+    "cell": "Cm34",
+    "n_cells": 2,
+    "population": "TmY17",
+    "n_population": 395,
+    "reads_frac": 0.504,
+    "writes_frac": 0.501,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 8444,
+    "synapses_out": 5700,
+    "score": 0.656
+   },
+   {
+    "cell": "LT33",
+    "n_cells": 2,
+    "population": "T5d",
+    "n_population": 1620,
+    "reads_frac": 0.456,
+    "writes_frac": 0.447,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 9479,
+    "synapses_out": 8032,
+    "score": 0.654
+   },
+   {
+    "cell": "PVLP011",
+    "n_cells": 2,
+    "population": "LC17",
+    "n_population": 353,
+    "reads_frac": 0.504,
+    "writes_frac": 0.504,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 37386,
+    "synapses_out": 31453,
+    "score": 0.648
+   },
+   {
+    "cell": "IN05B019",
+    "n_cells": 2,
+    "population": "SNta02,SNta09",
+    "n_population": 241,
+    "reads_frac": 0.373,
+    "writes_frac": 0.726,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 608,
+    "synapses_out": 2007,
+    "score": 0.646
+   },
+   {
+    "cell": "LT56",
+    "n_cells": 2,
+    "population": "LC9",
+    "n_population": 219,
+    "reads_frac": 0.525,
+    "writes_frac": 0.525,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 5587,
+    "synapses_out": 6613,
+    "score": 0.645
+   },
+   {
+    "cell": "LT33",
+    "n_cells": 2,
+    "population": "T5b",
+    "n_population": 1715,
+    "reads_frac": 0.46,
+    "writes_frac": 0.427,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 11646,
+    "synapses_out": 8402,
+    "score": 0.636
+   },
+   {
+    "cell": "PLP008",
+    "n_cells": 2,
+    "population": "LC13",
+    "n_population": 177,
+    "reads_frac": 0.531,
+    "writes_frac": 0.531,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 7211,
+    "synapses_out": 6481,
+    "score": 0.634
+   },
+   {
+    "cell": "DPM",
+    "n_cells": 2,
+    "population": "KCg-d",
+    "n_population": 206,
+    "reads_frac": 0.519,
+    "writes_frac": 0.515,
+    "sign": 1.0,
+    "kind": "recurrent excitation",
+    "synapses_in": 5404,
+    "synapses_out": 2031,
+    "score": 0.618
+   },
+   {
+    "cell": "PPL106",
+    "n_cells": 2,
+    "population": "KCab-m",
+    "n_population": 536,
+    "reads_frac": 0.668,
+    "writes_frac": 0.338,
+    "sign": 1.0,
+    "kind": "recurrent excitation",
+    "synapses_in": 3269,
+    "synapses_out": 1251,
+    "score": 0.616
+   },
+   {
+    "cell": "APL",
+    "n_cells": 2,
+    "population": "KCg-d",
+    "n_population": 206,
+    "reads_frac": 0.515,
+    "writes_frac": 0.515,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 10108,
+    "synapses_out": 10652,
+    "score": 0.613
+   },
+   {
+    "cell": "LoVC16",
+    "n_cells": 4,
+    "population": "LC17",
+    "n_population": 353,
+    "reads_frac": 0.504,
+    "writes_frac": 0.476,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 30763,
+    "synapses_out": 4564,
+    "score": 0.611
+   },
+   {
+    "cell": "Li32",
+    "n_cells": 2,
+    "population": "TmY17",
+    "n_population": 395,
+    "reads_frac": 0.461,
+    "writes_frac": 0.504,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 4058,
+    "synapses_out": 10725,
+    "score": 0.603
+   },
+   {
+    "cell": "LT58",
+    "n_cells": 2,
+    "population": "Tm29",
+    "n_population": 544,
+    "reads_frac": 0.491,
+    "writes_frac": 0.449,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 6393,
+    "synapses_out": 3052,
+    "score": 0.602
+   },
+   {
+    "cell": "Pm11",
+    "n_cells": 4,
+    "population": "Tm2",
+    "n_population": 1766,
+    "reads_frac": 0.492,
+    "writes_frac": 0.37,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 64923,
+    "synapses_out": 9756,
+    "score": 0.591
+   },
+   {
+    "cell": "IN23B005",
+    "n_cells": 4,
+    "population": "SNta02,SNta09",
+    "n_population": 241,
+    "reads_frac": 0.851,
+    "writes_frac": 0.29,
+    "sign": 1.0,
+    "kind": "recurrent excitation",
+    "synapses_in": 9924,
+    "synapses_out": 318,
+    "score": 0.589
+   },
+   {
+    "cell": "PVLP011",
+    "n_cells": 2,
+    "population": "LPLC2",
+    "n_population": 185,
+    "reads_frac": 0.508,
+    "writes_frac": 0.508,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 11623,
+    "synapses_out": 9657,
+    "score": 0.585
+   },
+   {
+    "cell": "LT33",
+    "n_cells": 2,
+    "population": "T5c",
+    "n_population": 1720,
+    "reads_frac": 0.401,
+    "writes_frac": 0.445,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 6656,
+    "synapses_out": 9129,
+    "score": 0.578
+   },
+   {
+    "cell": "Li31",
+    "n_cells": 2,
+    "population": "Y3",
+    "n_population": 627,
+    "reads_frac": 0.404,
+    "writes_frac": 0.512,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 3109,
+    "synapses_out": 6077,
+    "score": 0.578
+   },
+   {
+    "cell": "Li33",
+    "n_cells": 2,
+    "population": "Tm38",
+    "n_population": 223,
+    "reads_frac": 0.502,
+    "writes_frac": 0.48,
+    "sign": 1.0,
+    "kind": "recurrent excitation",
+    "synapses_in": 3068,
+    "synapses_out": 1825,
+    "score": 0.566
+   },
+   {
+    "cell": "CT1",
+    "n_cells": 2,
+    "population": "T5d",
+    "n_population": 1620,
+    "reads_frac": 0.353,
+    "writes_frac": 0.499,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 5223,
+    "synapses_out": 31373,
+    "score": 0.565
+   },
+   {
+    "cell": "Cm35",
+    "n_cells": 2,
+    "population": "Mi15",
+    "n_population": 1151,
+    "reads_frac": 0.392,
+    "writes_frac": 0.468,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 6061,
+    "synapses_out": 9639,
+    "score": 0.562
+   },
+   {
+    "cell": "LPi4b",
+    "n_cells": 2,
+    "population": "T5d",
+    "n_population": 1620,
+    "reads_frac": 0.499,
+    "writes_frac": 0.342,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 32064,
+    "synapses_out": 5304,
+    "score": 0.548
+   },
+   {
+    "cell": "Li39",
+    "n_cells": 2,
+    "population": "Tm40",
+    "n_population": 180,
+    "reads_frac": 0.483,
+    "writes_frac": 0.494,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 1570,
+    "synapses_out": 1898,
+    "score": 0.539
+   },
+   {
+    "cell": "Li32",
+    "n_cells": 2,
+    "population": "TmY5a",
+    "n_population": 1364,
+    "reads_frac": 0.444,
+    "writes_frac": 0.388,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 9766,
+    "synapses_out": 6703,
+    "score": 0.539
+   },
+   {
+    "cell": "LoVC16",
+    "n_cells": 4,
+    "population": "LC18+Li15",
+    "n_population": 249,
+    "reads_frac": 0.446,
+    "writes_frac": 0.502,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 5749,
+    "synapses_out": 4839,
+    "score": 0.536
+   },
+   {
+    "cell": "INXXX004",
+    "n_cells": 2,
+    "population": "SNta31+SNta34+SNta32+1 more",
+    "n_population": 226,
+    "reads_frac": 0.469,
+    "writes_frac": 0.478,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 3420,
+    "synapses_out": 3592,
+    "score": 0.528
+   },
+   {
+    "cell": "Cm31b",
+    "n_cells": 2,
+    "population": "Tm39",
+    "n_population": 426,
+    "reads_frac": 0.423,
+    "writes_frac": 0.474,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 3169,
+    "synapses_out": 4565,
+    "score": 0.527
+   },
+   {
+    "cell": "PPL106",
+    "n_cells": 2,
+    "population": "KCab-c",
+    "n_population": 488,
+    "reads_frac": 0.66,
+    "writes_frac": 0.293,
+    "sign": 1.0,
+    "kind": "recurrent excitation",
+    "synapses_in": 2649,
+    "synapses_out": 924,
+    "score": 0.52
+   },
+   {
+    "cell": "PPL105",
+    "n_cells": 2,
+    "population": "KCa'b'-ap2+PAM06",
+    "n_population": 319,
+    "reads_frac": 0.614,
+    "writes_frac": 0.335,
+    "sign": 1.0,
+    "kind": "recurrent excitation",
+    "synapses_in": 1702,
+    "synapses_out": 819,
+    "score": 0.516
+   },
+   {
+    "cell": "PVLP151",
+    "n_cells": 4,
+    "population": "LPLC2",
+    "n_population": 185,
+    "reads_frac": 0.584,
+    "writes_frac": 0.389,
+    "sign": 1.0,
+    "kind": "recurrent excitation",
+    "synapses_in": 6587,
+    "synapses_out": 552,
+    "score": 0.515
+   },
+   {
+    "cell": "LT88",
+    "n_cells": 2,
+    "population": "TmY21",
+    "n_population": 372,
+    "reads_frac": 0.427,
+    "writes_frac": 0.465,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 3688,
+    "synapses_out": 5237,
+    "score": 0.511
+   },
+   {
+    "cell": "v2LN36",
+    "n_cells": 2,
+    "population": "ORN_DA1",
+    "n_population": 204,
+    "reads_frac": 0.667,
+    "writes_frac": 0.328,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 4135,
+    "synapses_out": 378,
+    "score": 0.506
+   },
+   {
+    "cell": "Li33",
+    "n_cells": 2,
+    "population": "Li14",
+    "n_population": 217,
+    "reads_frac": 0.516,
+    "writes_frac": 0.415,
+    "sign": 1.0,
+    "kind": "recurrent excitation",
+    "synapses_in": 2914,
+    "synapses_out": 1563,
+    "score": 0.5
+   },
+   {
+    "cell": "DPM",
+    "n_cells": 2,
+    "population": "KCab-c",
+    "n_population": 488,
+    "reads_frac": 0.52,
+    "writes_frac": 0.342,
+    "sign": 1.0,
+    "kind": "recurrent excitation",
+    "synapses_in": 4602,
+    "synapses_out": 1692,
+    "score": 0.479
+   },
+   {
+    "cell": "lLN2T_d",
+    "n_cells": 4,
+    "population": "ORN_DA1",
+    "n_population": 204,
+    "reads_frac": 0.402,
+    "writes_frac": 0.515,
+    "sign": -0.02,
+    "kind": "unsigned",
+    "synapses_in": 551,
+    "synapses_out": 826,
+    "score": 0.478
+   },
+   {
+    "cell": "LoVC16",
+    "n_cells": 4,
+    "population": "LC12",
+    "n_population": 498,
+    "reads_frac": 0.514,
+    "writes_frac": 0.331,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 22618,
+    "synapses_out": 2863,
+    "score": 0.459
+   },
+   {
+    "cell": "Cm31a",
+    "n_cells": 4,
+    "population": "Tm29",
+    "n_population": 544,
+    "reads_frac": 0.494,
+    "writes_frac": 0.338,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 14197,
+    "synapses_out": 3347,
+    "score": 0.458
+   },
+   {
+    "cell": "FB4Y",
+    "n_cells": 4,
+    "population": "vDeltaM+vDeltaK+vDeltaL+1 more",
+    "n_population": 150,
+    "reads_frac": 0.333,
+    "writes_frac": 0.62,
+    "sign": 1.0,
+    "kind": "recurrent excitation",
+    "synapses_in": 671,
+    "synapses_out": 2435,
+    "score": 0.45
+   },
+   {
+    "cell": "INXXX213",
+    "n_cells": 4,
+    "population": "SNxx03",
+    "n_population": 186,
+    "reads_frac": 0.392,
+    "writes_frac": 0.484,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 917,
+    "synapses_out": 3195,
+    "score": 0.431
+   },
+   {
+    "cell": "LT33",
+    "n_cells": 2,
+    "population": "T5a",
+    "n_population": 1664,
+    "reads_frac": 0.304,
+    "writes_frac": 0.436,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 3807,
+    "synapses_out": 7737,
+    "score": 0.427
+   },
+   {
+    "cell": "IN01B001",
+    "n_cells": 2,
+    "population": "SNta29+SNta37+SNta20+7 more",
+    "n_population": 864,
+    "reads_frac": 0.443,
+    "writes_frac": 0.324,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 13139,
+    "synapses_out": 7508,
+    "score": 0.422
+   },
+   {
+    "cell": "TuTuB_a",
+    "n_cells": 2,
+    "population": "Cm4+MeTu3c+MeTu3b",
+    "n_population": 504,
+    "reads_frac": 0.371,
+    "writes_frac": 0.415,
+    "sign": -0.05,
+    "kind": "unsigned",
+    "synapses_in": 8278,
+    "synapses_out": 3961,
+    "score": 0.416
+   },
+   {
+    "cell": "AOTU035",
+    "n_cells": 2,
+    "population": "LC10c-1+LC10c-2",
+    "n_population": 255,
+    "reads_frac": 0.325,
+    "writes_frac": 0.529,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 885,
+    "synapses_out": 4126,
+    "score": 0.415
+   },
+   {
+    "cell": "LT36",
+    "n_cells": 2,
+    "population": "Li21",
+    "n_population": 207,
+    "reads_frac": 0.386,
+    "writes_frac": 0.459,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 2222,
+    "synapses_out": 2413,
+    "score": 0.411
+   },
+   {
+    "cell": "PPL106",
+    "n_cells": 2,
+    "population": "KCab-s",
+    "n_population": 657,
+    "reads_frac": 0.54,
+    "writes_frac": 0.262,
+    "sign": 1.0,
+    "kind": "recurrent excitation",
+    "synapses_in": 3082,
+    "synapses_out": 1124,
+    "score": 0.399
+   },
+   {
+    "cell": "Li32",
+    "n_cells": 2,
+    "population": "TmY13",
+    "n_population": 432,
+    "reads_frac": 0.486,
+    "writes_frac": 0.31,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 6098,
+    "synapses_out": 1442,
+    "score": 0.397
+   },
+   {
+    "cell": "lLN2F_a",
+    "n_cells": 4,
+    "population": "ORN_DA1",
+    "n_population": 204,
+    "reads_frac": 0.505,
+    "writes_frac": 0.338,
+    "sign": 0.04,
+    "kind": "unsigned",
+    "synapses_in": 2510,
+    "synapses_out": 687,
+    "score": 0.394
+   },
+   {
+    "cell": "Li33",
+    "n_cells": 2,
+    "population": "TmY17",
+    "n_population": 395,
+    "reads_frac": 0.294,
+    "writes_frac": 0.506,
+    "sign": 1.0,
+    "kind": "recurrent excitation",
+    "synapses_in": 1207,
+    "synapses_out": 20584,
+    "score": 0.386
+   },
+   {
+    "cell": "AOTU041",
+    "n_cells": 4,
+    "population": "LC10a",
+    "n_population": 275,
+    "reads_frac": 0.458,
+    "writes_frac": 0.342,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 14186,
+    "synapses_out": 2638,
+    "score": 0.382
+   },
+   {
+    "cell": "Li39",
+    "n_cells": 2,
+    "population": "Tm5a",
+    "n_population": 624,
+    "reads_frac": 0.505,
+    "writes_frac": 0.258,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 10367,
+    "synapses_out": 1525,
+    "score": 0.364
+   },
+   {
+    "cell": "MBON09",
+    "n_cells": 4,
+    "population": "KCa'b'-m+PAM14",
+    "n_population": 223,
+    "reads_frac": 0.574,
+    "writes_frac": 0.269,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 6902,
+    "synapses_out": 269,
+    "score": 0.363
+   },
+   {
+    "cell": "PPL101",
+    "n_cells": 2,
+    "population": "KCg-d",
+    "n_population": 206,
+    "reads_frac": 0.573,
+    "writes_frac": 0.267,
+    "sign": 1.0,
+    "kind": "recurrent excitation",
+    "synapses_in": 967,
+    "synapses_out": 322,
+    "score": 0.354
+   },
+   {
+    "cell": "PPL104",
+    "n_cells": 2,
+    "population": "KCa'b'-ap1+PAM05+PAM02+1 more",
+    "n_population": 252,
+    "reads_frac": 0.468,
+    "writes_frac": 0.294,
+    "sign": 1.0,
+    "kind": "recurrent excitation",
+    "synapses_in": 1151,
+    "synapses_out": 577,
+    "score": 0.33
+   },
+   {
+    "cell": "Li39",
+    "n_cells": 2,
+    "population": "Tm36",
+    "n_population": 155,
+    "reads_frac": 0.503,
+    "writes_frac": 0.284,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 4608,
+    "synapses_out": 465,
+    "score": 0.313
+   },
+   {
+    "cell": "Cm32",
+    "n_cells": 2,
+    "population": "Cm1",
+    "n_population": 472,
+    "reads_frac": 0.35,
+    "writes_frac": 0.331,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 1857,
+    "synapses_out": 1543,
+    "score": 0.309
+   },
+   {
+    "cell": "DCH",
+    "n_cells": 2,
+    "population": "T4a",
+    "n_population": 1684,
+    "reads_frac": 0.322,
+    "writes_frac": 0.295,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 17019,
+    "synapses_out": 6855,
+    "score": 0.306
+   },
+   {
+    "cell": "DCH",
+    "n_cells": 2,
+    "population": "T5a",
+    "n_population": 1664,
+    "reads_frac": 0.322,
+    "writes_frac": 0.285,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 20997,
+    "synapses_out": 5728,
+    "score": 0.295
+   },
+   {
+    "cell": "lLN2T_e",
+    "n_cells": 4,
+    "population": "ORN_DA1",
+    "n_population": 204,
+    "reads_frac": 0.333,
+    "writes_frac": 0.377,
+    "sign": 1.0,
+    "kind": "recurrent excitation",
+    "synapses_in": 687,
+    "synapses_out": 669,
+    "score": 0.291
+   },
+   {
+    "cell": "GNG102",
+    "n_cells": 2,
+    "population": "BM_InOm",
+    "n_population": 745,
+    "reads_frac": 0.338,
+    "writes_frac": 0.286,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 2475,
+    "synapses_out": 1273,
+    "score": 0.278
+   },
+   {
+    "cell": "KCg-s1",
+    "n_cells": 2,
+    "population": "KCg-d",
+    "n_population": 206,
+    "reads_frac": 0.335,
+    "writes_frac": 0.354,
+    "sign": 1.0,
+    "kind": "recurrent excitation",
+    "synapses_in": 644,
+    "synapses_out": 736,
+    "score": 0.275
+   },
+   {
+    "cell": "AVLP086",
+    "n_cells": 2,
+    "population": "LC18+Li15",
+    "n_population": 249,
+    "reads_frac": 0.289,
+    "writes_frac": 0.39,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 792,
+    "synapses_out": 1471,
+    "score": 0.27
+   },
+   {
+    "cell": "KCg-s2",
+    "n_cells": 2,
+    "population": "KCg-d",
+    "n_population": 206,
+    "reads_frac": 0.359,
+    "writes_frac": 0.32,
+    "sign": 1.0,
+    "kind": "recurrent excitation",
+    "synapses_in": 819,
+    "synapses_out": 766,
+    "score": 0.266
+   },
+   {
+    "cell": "PPL105",
+    "n_cells": 2,
+    "population": "KCab-s",
+    "n_population": 657,
+    "reads_frac": 0.358,
+    "writes_frac": 0.263,
+    "sign": 1.0,
+    "kind": "recurrent excitation",
+    "synapses_in": 1715,
+    "synapses_out": 1252,
+    "score": 0.265
+   },
+   {
+    "cell": "VCH",
+    "n_cells": 2,
+    "population": "T4a",
+    "n_population": 1684,
+    "reads_frac": 0.311,
+    "writes_frac": 0.264,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 16803,
+    "synapses_out": 5983,
+    "score": 0.265
+   },
+   {
+    "cell": "VCH",
+    "n_cells": 2,
+    "population": "T5a",
+    "n_population": 1664,
+    "reads_frac": 0.315,
+    "writes_frac": 0.254,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 18168,
+    "synapses_out": 4846,
+    "score": 0.258
+   },
+   {
+    "cell": "PVLP120",
+    "n_cells": 2,
+    "population": "LC9",
+    "n_population": 219,
+    "reads_frac": 0.342,
+    "writes_frac": 0.32,
+    "sign": 1.0,
+    "kind": "recurrent excitation",
+    "synapses_in": 855,
+    "synapses_out": 1790,
+    "score": 0.256
+   },
+   {
+    "cell": "PVLP011",
+    "n_cells": 2,
+    "population": "LPC1+LPi2e+LPi2c",
+    "n_population": 373,
+    "reads_frac": 0.308,
+    "writes_frac": 0.308,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 6597,
+    "synapses_out": 1998,
+    "score": 0.244
+   },
+   {
+    "cell": "PVLP140",
+    "n_cells": 2,
+    "population": "LC9",
+    "n_population": 219,
+    "reads_frac": 0.347,
+    "writes_frac": 0.297,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 2604,
+    "synapses_out": 1486,
+    "score": 0.241
+   },
+   {
+    "cell": "PVLP020",
+    "n_cells": 2,
+    "population": "LC9",
+    "n_population": 219,
+    "reads_frac": 0.301,
+    "writes_frac": 0.338,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 1295,
+    "synapses_out": 1758,
+    "score": 0.238
+   },
+   {
+    "cell": "AOTU042",
+    "n_cells": 4,
+    "population": "LC10a",
+    "n_population": 275,
+    "reads_frac": 0.269,
+    "writes_frac": 0.338,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 3549,
+    "synapses_out": 14477,
+    "score": 0.222
+   },
+   {
+    "cell": "PVLP093",
+    "n_cells": 2,
+    "population": "LC12",
+    "n_population": 498,
+    "reads_frac": 0.295,
+    "writes_frac": 0.275,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 1577,
+    "synapses_out": 1078,
+    "score": 0.219
+   },
+   {
+    "cell": "LT65",
+    "n_cells": 2,
+    "population": "Li14",
+    "n_population": 217,
+    "reads_frac": 0.286,
+    "writes_frac": 0.327,
+    "sign": 1.0,
+    "kind": "recurrent excitation",
+    "synapses_in": 503,
+    "synapses_out": 952,
+    "score": 0.218
+   },
+   {
+    "cell": "PPL104",
+    "n_cells": 2,
+    "population": "KCa'b'-ap2+PAM06",
+    "n_population": 319,
+    "reads_frac": 0.329,
+    "writes_frac": 0.26,
+    "sign": 1.0,
+    "kind": "recurrent excitation",
+    "synapses_in": 825,
+    "synapses_out": 606,
+    "score": 0.214
+   },
+   {
+    "cell": "Cm34",
+    "n_cells": 2,
+    "population": "Cm8",
+    "n_population": 182,
+    "reads_frac": 0.341,
+    "writes_frac": 0.269,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 645,
+    "synapses_out": 698,
+    "score": 0.207
+   },
+   {
+    "cell": "CB1562",
+    "n_cells": 2,
+    "population": "LC21",
+    "n_population": 153,
+    "reads_frac": 0.255,
+    "writes_frac": 0.333,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 308,
+    "synapses_out": 346,
+    "score": 0.186
+   },
+   {
+    "cell": "LT36",
+    "n_cells": 2,
+    "population": "Tm36",
+    "n_population": 155,
+    "reads_frac": 0.258,
+    "writes_frac": 0.303,
+    "sign": -1.0,
+    "kind": "divisive (inhibitory)",
+    "synapses_in": 345,
+    "synapses_out": 856,
+    "score": 0.171
+   }
+  ],
+  "ring": [
+   {
+    "group": "EPG",
+    "members": [
+     "EPG"
+    ],
+    "n_cells": 46,
+    "sign": 1.0,
+    "kernel_via": [
+     "Delta7"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.754,
+    "kernel_amplitude": 33.95,
+    "first_harmonic_r2": 0.754,
+    "second_harmonic_r2": 0.018,
+    "eig_degeneracy": 0.923,
+    "next_eig_ratio": 0.226,
+    "amplitude_cv": 0.152,
+    "inhibitory_loops": [
+     {
+      "group": "Delta7",
+      "n": 42,
+      "synapses_in": 19446,
+      "synapses_out": 4118
+     }
+    ],
+    "shifters": [
+     {
+      "group": "PEN_b(PEN2)+PEN_a(PEN1)",
+      "n": 42,
+      "n_measured": 42,
+      "median_offset_rad": -0.024,
+      "n_positive": 4,
+      "n_negative": 5,
+      "median_positive": 0.185,
+      "median_negative": -0.162,
+      "bidirectional": true,
+      "synapses_from_ring": 12215,
+      "synapses_to_ring": 23960
+     },
+     {
+      "group": "ER2_c+ER2_a",
+      "n": 32,
+      "n_measured": 32,
+      "median_offset_rad": -0.422,
+      "n_positive": 6,
+      "n_negative": 22,
+      "median_positive": 1.365,
+      "median_negative": -1.091,
+      "bidirectional": true,
+      "synapses_from_ring": 3111,
+      "synapses_to_ring": 22815
+     },
+     {
+      "group": "ER4m",
+      "n": 11,
+      "n_measured": 11,
+      "median_offset_rad": 0.093,
+      "n_positive": 5,
+      "n_negative": 4,
+      "median_positive": 0.685,
+      "median_negative": -0.772,
+      "bidirectional": true,
+      "synapses_from_ring": 4457,
+      "synapses_to_ring": 21202
+     },
+     {
+      "group": "ER4d",
+      "n": 26,
+      "n_measured": 26,
+      "median_offset_rad": -0.45,
+      "n_positive": 9,
+      "n_negative": 15,
+      "median_positive": 0.555,
+      "median_negative": -1.124,
+      "bidirectional": true,
+      "synapses_from_ring": 1775,
+      "synapses_to_ring": 12305
+     },
+     {
+      "group": "ER1_b+ER1_a",
+      "n": 24,
+      "n_measured": 16,
+      "median_offset_rad": -0.312,
+      "n_positive": 7,
+      "n_negative": 9,
+      "median_positive": 1.559,
+      "median_negative": -1.215,
+      "bidirectional": true,
+      "synapses_from_ring": 766,
+      "synapses_to_ring": 9893
+     },
+     {
+      "group": "ExR1",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": -0.67,
+      "n_positive": 2,
+      "n_negative": 2,
+      "median_positive": 1.602,
+      "median_negative": -2.144,
+      "bidirectional": true,
+      "synapses_from_ring": 2246,
+      "synapses_to_ring": 6272
+     }
+    ],
+    "has_bidirectional_shifter": true,
+    "score": 1.043
+   },
+   {
+    "group": "hDeltaE",
+    "members": [
+     "hDeltaE"
+    ],
+    "n_cells": 8,
+    "sign": 1.0,
+    "kernel_via": [
+     "FB7J",
+     "FB7D_a",
+     "FB7G",
+     "FB8B",
+     "FB7I"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.571,
+    "kernel_amplitude": 19.12,
+    "first_harmonic_r2": 0.571,
+    "second_harmonic_r2": 0.12,
+    "eig_degeneracy": 0.904,
+    "next_eig_ratio": 0.823,
+    "amplitude_cv": 0.078,
+    "inhibitory_loops": [
+     {
+      "group": "FB7J",
+      "n": 4,
+      "synapses_in": 993,
+      "synapses_out": 1237
+     },
+     {
+      "group": "FB7D_a",
+      "n": 4,
+      "synapses_in": 401,
+      "synapses_out": 676
+     },
+     {
+      "group": "FB7G",
+      "n": 4,
+      "synapses_in": 385,
+      "synapses_out": 817
+     },
+     {
+      "group": "FB8B",
+      "n": 4,
+      "synapses_in": 316,
+      "synapses_out": 414
+     },
+     {
+      "group": "FB7I",
+      "n": 5,
+      "synapses_in": 233,
+      "synapses_out": 917
+     }
+    ],
+    "shifters": [
+     {
+      "group": "FB7J",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 1.166,
+      "n_positive": 3,
+      "n_negative": 1,
+      "median_positive": 1.93,
+      "median_negative": -1.455,
+      "bidirectional": false,
+      "synapses_from_ring": 993,
+      "synapses_to_ring": 1237
+     },
+     {
+      "group": "FB7G",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": -0.097,
+      "n_positive": 2,
+      "n_negative": 2,
+      "median_positive": 0.992,
+      "median_negative": -1.761,
+      "bidirectional": true,
+      "synapses_from_ring": 385,
+      "synapses_to_ring": 817
+     },
+     {
+      "group": "FB7D_a",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": -0.111,
+      "n_positive": 1,
+      "n_negative": 2,
+      "median_positive": 1.218,
+      "median_negative": -0.85,
+      "bidirectional": false,
+      "synapses_from_ring": 401,
+      "synapses_to_ring": 676
+     },
+     {
+      "group": "FB8B",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 0.745,
+      "n_positive": 2,
+      "n_negative": 2,
+      "median_positive": 2.163,
+      "median_negative": -1.568,
+      "bidirectional": true,
+      "synapses_from_ring": 316,
+      "synapses_to_ring": 414
+     },
+     {
+      "group": "hDeltaF",
+      "n": 8,
+      "n_measured": 6,
+      "median_offset_rad": -0.143,
+      "n_positive": 0,
+      "n_negative": 3,
+      "median_positive": null,
+      "median_negative": -0.276,
+      "bidirectional": false,
+      "synapses_from_ring": 528,
+      "synapses_to_ring": 232
+     }
+    ],
+    "has_bidirectional_shifter": true,
+    "score": 0.774
+   },
+   {
+    "group": "hDeltaG",
+    "members": [
+     "hDeltaG"
+    ],
+    "n_cells": 8,
+    "sign": 1.0,
+    "kernel_via": [
+     "FB6K"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.554,
+    "kernel_amplitude": 16.71,
+    "first_harmonic_r2": 0.554,
+    "second_harmonic_r2": 0.261,
+    "eig_degeneracy": 0.843,
+    "next_eig_ratio": 0.94,
+    "amplitude_cv": 0.294,
+    "inhibitory_loops": [
+     {
+      "group": "FB6K",
+      "n": 4,
+      "synapses_in": 289,
+      "synapses_out": 1570
+     }
+    ],
+    "shifters": [
+     {
+      "group": "vDeltaE+vDeltaF",
+      "n": 36,
+      "n_measured": 30,
+      "median_offset_rad": 0.031,
+      "n_positive": 9,
+      "n_negative": 6,
+      "median_positive": 0.29,
+      "median_negative": -0.278,
+      "bidirectional": true,
+      "synapses_from_ring": 1141,
+      "synapses_to_ring": 3935
+     },
+     {
+      "group": "FB5S",
+      "n": 9,
+      "n_measured": 9,
+      "median_offset_rad": 0.204,
+      "n_positive": 5,
+      "n_negative": 1,
+      "median_positive": 0.444,
+      "median_negative": -0.498,
+      "bidirectional": false,
+      "synapses_from_ring": 1796,
+      "synapses_to_ring": 1827
+     },
+     {
+      "group": "FB6K",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": -0.292,
+      "n_positive": 1,
+      "n_negative": 3,
+      "median_positive": 0.159,
+      "median_negative": -0.378,
+      "bidirectional": false,
+      "synapses_from_ring": 289,
+      "synapses_to_ring": 1570
+     },
+     {
+      "group": "FB6J",
+      "n": 5,
+      "n_measured": 4,
+      "median_offset_rad": 0.796,
+      "n_positive": 3,
+      "n_negative": 1,
+      "median_positive": 0.803,
+      "median_negative": -1.702,
+      "bidirectional": false,
+      "synapses_from_ring": 319,
+      "synapses_to_ring": 468
+     },
+     {
+      "group": "FB5U",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": -0.151,
+      "n_positive": 2,
+      "n_negative": 2,
+      "median_positive": 0.594,
+      "median_negative": -1.541,
+      "bidirectional": true,
+      "synapses_from_ring": 240,
+      "synapses_to_ring": 212
+     }
+    ],
+    "has_bidirectional_shifter": true,
+    "score": 0.701
+   },
+   {
+    "group": "INXXX297",
+    "members": [
+     "INXXX297"
+    ],
+    "n_cells": 8,
+    "sign": 1.0,
+    "kernel_via": [
+     "IN06A064"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.574,
+    "kernel_amplitude": 7.77,
+    "first_harmonic_r2": 0.574,
+    "second_harmonic_r2": 0.031,
+    "eig_degeneracy": 0.704,
+    "next_eig_ratio": 0.797,
+    "amplitude_cv": 0.08,
+    "inhibitory_loops": [
+     {
+      "group": "IN06A064",
+      "n": 6,
+      "synapses_in": 1003,
+      "synapses_out": 430
+     }
+    ],
+    "shifters": [
+     {
+      "group": "INXXX231",
+      "n": 8,
+      "n_measured": 8,
+      "median_offset_rad": -0.301,
+      "n_positive": 3,
+      "n_negative": 5,
+      "median_positive": 0.701,
+      "median_negative": -0.554,
+      "bidirectional": true,
+      "synapses_from_ring": 1512,
+      "synapses_to_ring": 589
+     },
+     {
+      "group": "INXXX217",
+      "n": 10,
+      "n_measured": 6,
+      "median_offset_rad": -0.193,
+      "n_positive": 1,
+      "n_negative": 4,
+      "median_positive": 0.229,
+      "median_negative": -1.242,
+      "bidirectional": false,
+      "synapses_from_ring": 348,
+      "synapses_to_ring": 463
+     },
+     {
+      "group": "IN06A064",
+      "n": 6,
+      "n_measured": 6,
+      "median_offset_rad": -2.879,
+      "n_positive": 2,
+      "n_negative": 4,
+      "median_positive": 2.964,
+      "median_negative": -2.953,
+      "bidirectional": true,
+      "synapses_from_ring": 1003,
+      "synapses_to_ring": 430
+     },
+     {
+      "group": "IN02A030",
+      "n": 14,
+      "n_measured": 6,
+      "median_offset_rad": -0.084,
+      "n_positive": 3,
+      "n_negative": 3,
+      "median_positive": 1.432,
+      "median_negative": -1.568,
+      "bidirectional": true,
+      "synapses_from_ring": 770,
+      "synapses_to_ring": 334
+     }
+    ],
+    "has_bidirectional_shifter": true,
+    "score": 0.607
+   },
+   {
+    "group": "hDeltaF",
+    "members": [
+     "hDeltaF"
+    ],
+    "n_cells": 8,
+    "sign": 1.0,
+    "kernel_via": [
+     "FB6A_b"
+    ],
+    "harmonic": 2,
+    "kernel_cos_r2": 0.477,
+    "kernel_amplitude": 21.86,
+    "first_harmonic_r2": 0.459,
+    "second_harmonic_r2": 0.477,
+    "eig_degeneracy": 0.848,
+    "next_eig_ratio": 0.37,
+    "amplitude_cv": 0.37,
+    "inhibitory_loops": [
+     {
+      "group": "FB6A_b",
+      "n": 2,
+      "synapses_in": 248,
+      "synapses_out": 4628
+     }
+    ],
+    "shifters": [
+     {
+      "group": "hDeltaC",
+      "n": 20,
+      "n_measured": 20,
+      "median_offset_rad": -0.016,
+      "n_positive": 6,
+      "n_negative": 6,
+      "median_positive": 0.376,
+      "median_negative": -0.47,
+      "bidirectional": true,
+      "synapses_from_ring": 947,
+      "synapses_to_ring": 1561
+     },
+     {
+      "group": "hDeltaE",
+      "n": 8,
+      "n_measured": 7,
+      "median_offset_rad": -0.116,
+      "n_positive": 0,
+      "n_negative": 3,
+      "median_positive": null,
+      "median_negative": -0.249,
+      "bidirectional": false,
+      "synapses_from_ring": 232,
+      "synapses_to_ring": 528
+     }
+    ],
+    "has_bidirectional_shifter": true,
+    "score": 0.606
+   },
+   {
+    "group": "hDeltaB",
+    "members": [
+     "hDeltaB"
+    ],
+    "n_cells": 19,
+    "sign": 1.0,
+    "kernel_via": [
+     "FB4B",
+     "FB4C",
+     "FB3A",
+     "FB4K",
+     "FB4D_b",
+     "FB4J"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.407,
+    "kernel_amplitude": 5.32,
+    "first_harmonic_r2": 0.407,
+    "second_harmonic_r2": 0.12,
+    "eig_degeneracy": 0.869,
+    "next_eig_ratio": 0.838,
+    "amplitude_cv": 0.407,
+    "inhibitory_loops": [
+     {
+      "group": "FB4B",
+      "n": 2,
+      "synapses_in": 2835,
+      "synapses_out": 5373
+     },
+     {
+      "group": "FB4C",
+      "n": 2,
+      "synapses_in": 1806,
+      "synapses_out": 1135
+     },
+     {
+      "group": "FB3A",
+      "n": 4,
+      "synapses_in": 776,
+      "synapses_out": 883
+     },
+     {
+      "group": "FB4K",
+      "n": 4,
+      "synapses_in": 397,
+      "synapses_out": 377
+     },
+     {
+      "group": "FB4D_b",
+      "n": 2,
+      "synapses_in": 613,
+      "synapses_out": 207
+     },
+     {
+      "group": "FB4J",
+      "n": 2,
+      "synapses_in": 462,
+      "synapses_out": 206
+     }
+    ],
+    "shifters": [
+     {
+      "group": "FB4M",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": -0.095,
+      "n_positive": 1,
+      "n_negative": 2,
+      "median_positive": 0.603,
+      "median_negative": -0.405,
+      "bidirectional": false,
+      "synapses_from_ring": 734,
+      "synapses_to_ring": 3391
+     },
+     {
+      "group": "FB4L",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": -0.56,
+      "n_positive": 1,
+      "n_negative": 3,
+      "median_positive": 0.18,
+      "median_negative": -0.917,
+      "bidirectional": false,
+      "synapses_from_ring": 291,
+      "synapses_to_ring": 1207
+     },
+     {
+      "group": "FB3A",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": -0.214,
+      "n_positive": 0,
+      "n_negative": 3,
+      "median_positive": null,
+      "median_negative": -0.247,
+      "bidirectional": false,
+      "synapses_from_ring": 776,
+      "synapses_to_ring": 883
+     },
+     {
+      "group": "PFR_a",
+      "n": 28,
+      "n_measured": 18,
+      "median_offset_rad": 0.049,
+      "n_positive": 2,
+      "n_negative": 3,
+      "median_positive": 0.173,
+      "median_negative": -0.186,
+      "bidirectional": true,
+      "synapses_from_ring": 6699,
+      "synapses_to_ring": 670
+     },
+     {
+      "group": "FB4K",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 0.1,
+      "n_positive": 2,
+      "n_negative": 2,
+      "median_positive": 1.038,
+      "median_negative": -1.189,
+      "bidirectional": true,
+      "synapses_from_ring": 397,
+      "synapses_to_ring": 377
+     }
+    ],
+    "has_bidirectional_shifter": true,
+    "score": 0.531
+   },
+   {
+    "group": "SNta11,SNta14",
+    "members": [
+     "SNta11,SNta14"
+    ],
+    "n_cells": 42,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.504,
+    "kernel_amplitude": 6.03,
+    "first_harmonic_r2": 0.504,
+    "second_harmonic_r2": 0.276,
+    "eig_degeneracy": 0.702,
+    "next_eig_ratio": 0.733,
+    "amplitude_cv": 0.31,
+    "inhibitory_loops": [],
+    "shifters": [
+     {
+      "group": "SNta11",
+      "n": 67,
+      "n_measured": 13,
+      "median_offset_rad": -0.002,
+      "n_positive": 2,
+      "n_negative": 3,
+      "median_positive": 0.285,
+      "median_negative": -0.17,
+      "bidirectional": true,
+      "synapses_from_ring": 772,
+      "synapses_to_ring": 878
+     },
+     {
+      "group": "SNta14",
+      "n": 12,
+      "n_measured": 10,
+      "median_offset_rad": -0.001,
+      "n_positive": 0,
+      "n_negative": 0,
+      "median_positive": null,
+      "median_negative": null,
+      "bidirectional": false,
+      "synapses_from_ring": 603,
+      "synapses_to_ring": 662
+     }
+    ],
+    "has_bidirectional_shifter": true,
+    "score": 0.53
+   },
+   {
+    "group": "hDeltaL",
+    "members": [
+     "hDeltaL"
+    ],
+    "n_cells": 11,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 2,
+    "kernel_cos_r2": 0.372,
+    "kernel_amplitude": 7.19,
+    "first_harmonic_r2": 0.338,
+    "second_harmonic_r2": 0.372,
+    "eig_degeneracy": 0.943,
+    "next_eig_ratio": 0.959,
+    "amplitude_cv": 0.152,
+    "inhibitory_loops": [],
+    "shifters": [
+     {
+      "group": "vDeltaC+vDeltaD",
+      "n": 48,
+      "n_measured": 31,
+      "median_offset_rad": 0.232,
+      "n_positive": 17,
+      "n_negative": 8,
+      "median_positive": 1.234,
+      "median_negative": -0.518,
+      "bidirectional": true,
+      "synapses_from_ring": 1254,
+      "synapses_to_ring": 4503
+     },
+     {
+      "group": "FB6J",
+      "n": 5,
+      "n_measured": 5,
+      "median_offset_rad": -2.475,
+      "n_positive": 1,
+      "n_negative": 4,
+      "median_positive": 0.791,
+      "median_negative": -2.581,
+      "bidirectional": false,
+      "synapses_from_ring": 1061,
+      "synapses_to_ring": 1259
+     },
+     {
+      "group": "FB6K",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": -0.377,
+      "n_positive": 0,
+      "n_negative": 3,
+      "median_positive": null,
+      "median_negative": -0.413,
+      "bidirectional": false,
+      "synapses_from_ring": 367,
+      "synapses_to_ring": 955
+     },
+     {
+      "group": "FB7D_b",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": -1.732,
+      "n_positive": 1,
+      "n_negative": 3,
+      "median_positive": 0.973,
+      "median_negative": -2.559,
+      "bidirectional": false,
+      "synapses_from_ring": 774,
+      "synapses_to_ring": 913
+     },
+     {
+      "group": "vDeltaE+vDeltaF",
+      "n": 36,
+      "n_measured": 5,
+      "median_offset_rad": 2.798,
+      "n_positive": 3,
+      "n_negative": 2,
+      "median_positive": 2.864,
+      "median_negative": -2.848,
+      "bidirectional": true,
+      "synapses_from_ring": 212,
+      "synapses_to_ring": 818
+     },
+     {
+      "group": "FB7D_a",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 1.29,
+      "n_positive": 3,
+      "n_negative": 1,
+      "median_positive": 1.384,
+      "median_negative": -0.978,
+      "bidirectional": false,
+      "synapses_from_ring": 628,
+      "synapses_to_ring": 652
+     }
+    ],
+    "has_bidirectional_shifter": true,
+    "score": 0.526
+   },
+   {
+    "group": "hDeltaH",
+    "members": [
+     "hDeltaH"
+    ],
+    "n_cells": 8,
+    "sign": 1.0,
+    "kernel_via": [
+     "FB5S"
+    ],
+    "harmonic": 2,
+    "kernel_cos_r2": 0.464,
+    "kernel_amplitude": 9.03,
+    "first_harmonic_r2": 0.444,
+    "second_harmonic_r2": 0.464,
+    "eig_degeneracy": 0.733,
+    "next_eig_ratio": 0.37,
+    "amplitude_cv": 0.497,
+    "inhibitory_loops": [
+     {
+      "group": "FB5S",
+      "n": 9,
+      "synapses_in": 868,
+      "synapses_out": 613
+     }
+    ],
+    "shifters": [
+     {
+      "group": "vDeltaI_b+vDeltaG+vDeltaI_a+1 more",
+      "n": 64,
+      "n_measured": 16,
+      "median_offset_rad": -0.033,
+      "n_positive": 3,
+      "n_negative": 4,
+      "median_positive": 0.605,
+      "median_negative": -0.209,
+      "bidirectional": true,
+      "synapses_from_ring": 735,
+      "synapses_to_ring": 4659
+     },
+     {
+      "group": "vDeltaE+vDeltaF",
+      "n": 36,
+      "n_measured": 9,
+      "median_offset_rad": -0.003,
+      "n_positive": 1,
+      "n_negative": 3,
+      "median_positive": 1.153,
+      "median_negative": -0.399,
+      "bidirectional": false,
+      "synapses_from_ring": 360,
+      "synapses_to_ring": 1456
+     },
+     {
+      "group": "FB5U",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 0.402,
+      "n_positive": 3,
+      "n_negative": 1,
+      "median_positive": 0.618,
+      "median_negative": -0.404,
+      "bidirectional": false,
+      "synapses_from_ring": 1429,
+      "synapses_to_ring": 1399
+     },
+     {
+      "group": "FB5S",
+      "n": 9,
+      "n_measured": 6,
+      "median_offset_rad": -0.005,
+      "n_positive": 2,
+      "n_negative": 1,
+      "median_positive": 0.909,
+      "median_negative": -0.166,
+      "bidirectional": false,
+      "synapses_from_ring": 868,
+      "synapses_to_ring": 613
+     },
+     {
+      "group": "PFR_a",
+      "n": 28,
+      "n_measured": 15,
+      "median_offset_rad": 0.008,
+      "n_positive": 3,
+      "n_negative": 2,
+      "median_positive": 0.167,
+      "median_negative": -0.416,
+      "bidirectional": true,
+      "synapses_from_ring": 1145,
+      "synapses_to_ring": 584
+     },
+     {
+      "group": "FB5R",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 0.15,
+      "n_positive": 2,
+      "n_negative": 0,
+      "median_positive": 0.69,
+      "median_negative": null,
+      "bidirectional": false,
+      "synapses_from_ring": 674,
+      "synapses_to_ring": 535
+     }
+    ],
+    "has_bidirectional_shifter": true,
+    "score": 0.51
+   },
+   {
+    "group": "IN20A.22A007",
+    "members": [
+     "IN20A.22A007"
+    ],
+    "n_cells": 12,
+    "sign": 1.0,
+    "kernel_via": [
+     "IN02A003",
+     "IN12B012"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.369,
+    "kernel_amplitude": 2.16,
+    "first_harmonic_r2": 0.369,
+    "second_harmonic_r2": 0.001,
+    "eig_degeneracy": 0.914,
+    "next_eig_ratio": 0.741,
+    "amplitude_cv": 0.328,
+    "inhibitory_loops": [
+     {
+      "group": "IN02A003",
+      "n": 4,
+      "synapses_in": 413,
+      "synapses_out": 357
+     },
+     {
+      "group": "IN12B012",
+      "n": 6,
+      "synapses_in": 773,
+      "synapses_out": 217
+     }
+    ],
+    "shifters": [
+     {
+      "group": "IN02A003",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": -0.009,
+      "n_positive": 2,
+      "n_negative": 2,
+      "median_positive": 2.986,
+      "median_negative": -2.999,
+      "bidirectional": true,
+      "synapses_from_ring": 413,
+      "synapses_to_ring": 357
+     },
+     {
+      "group": "IN12B012",
+      "n": 6,
+      "n_measured": 5,
+      "median_offset_rad": -0.0,
+      "n_positive": 0,
+      "n_negative": 0,
+      "median_positive": null,
+      "median_negative": null,
+      "bidirectional": false,
+      "synapses_from_ring": 773,
+      "synapses_to_ring": 217
+     }
+    ],
+    "has_bidirectional_shifter": true,
+    "score": 0.506
+   },
+   {
+    "group": "DL2v_adPN",
+    "members": [
+     "DL2v_adPN"
+    ],
+    "n_cells": 8,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.551,
+    "kernel_amplitude": 8.31,
+    "first_harmonic_r2": 0.551,
+    "second_harmonic_r2": 0.015,
+    "eig_degeneracy": 0.606,
+    "next_eig_ratio": 0.802,
+    "amplitude_cv": 0.465,
+    "inhibitory_loops": [],
+    "shifters": [
+     {
+      "group": "lLN1_bc+lLN2X12",
+      "n": 41,
+      "n_measured": 39,
+      "median_offset_rad": -0.0,
+      "n_positive": 2,
+      "n_negative": 9,
+      "median_positive": 0.196,
+      "median_negative": -0.286,
+      "bidirectional": true,
+      "synapses_from_ring": 2694,
+      "synapses_to_ring": 2842
+     },
+     {
+      "group": "lLN2P_c",
+      "n": 9,
+      "n_measured": 4,
+      "median_offset_rad": -0.019,
+      "n_positive": 0,
+      "n_negative": 1,
+      "median_positive": null,
+      "median_negative": -0.219,
+      "bidirectional": false,
+      "synapses_from_ring": 608,
+      "synapses_to_ring": 548
+     },
+     {
+      "group": "lLN2T_a",
+      "n": 5,
+      "n_measured": 5,
+      "median_offset_rad": -0.013,
+      "n_positive": 0,
+      "n_negative": 0,
+      "median_positive": null,
+      "median_negative": null,
+      "bidirectional": false,
+      "synapses_from_ring": 557,
+      "synapses_to_ring": 472
+     },
+     {
+      "group": "lLN2P_b",
+      "n": 12,
+      "n_measured": 7,
+      "median_offset_rad": -0.0,
+      "n_positive": 1,
+      "n_negative": 1,
+      "median_positive": 0.171,
+      "median_negative": -0.359,
+      "bidirectional": false,
+      "synapses_from_ring": 649,
+      "synapses_to_ring": 339
+     },
+     {
+      "group": "lLN2T_d",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": -0.024,
+      "n_positive": 0,
+      "n_negative": 1,
+      "median_positive": null,
+      "median_negative": -0.188,
+      "bidirectional": false,
+      "synapses_from_ring": 205,
+      "synapses_to_ring": 331
+     },
+     {
+      "group": "lLN2F_a",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 0.043,
+      "n_positive": 1,
+      "n_negative": 0,
+      "median_positive": 0.185,
+      "median_negative": null,
+      "bidirectional": false,
+      "synapses_from_ring": 221,
+      "synapses_to_ring": 307
+     }
+    ],
+    "has_bidirectional_shifter": true,
+    "score": 0.502
+   },
+   {
+    "group": "INXXX269",
+    "members": [
+     "INXXX269"
+    ],
+    "n_cells": 10,
+    "sign": 1.0,
+    "kernel_via": [
+     "IN02A030"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.434,
+    "kernel_amplitude": 26.65,
+    "first_harmonic_r2": 0.434,
+    "second_harmonic_r2": 0.017,
+    "eig_degeneracy": 0.764,
+    "next_eig_ratio": 0.898,
+    "amplitude_cv": 0.104,
+    "inhibitory_loops": [
+     {
+      "group": "IN02A030",
+      "n": 14,
+      "synapses_in": 328,
+      "synapses_out": 271
+     }
+    ],
+    "shifters": [
+     {
+      "group": "IN02A030",
+      "n": 14,
+      "n_measured": 6,
+      "median_offset_rad": 0.771,
+      "n_positive": 4,
+      "n_negative": 2,
+      "median_positive": 1.751,
+      "median_negative": -1.5,
+      "bidirectional": true,
+      "synapses_from_ring": 328,
+      "synapses_to_ring": 271
+     }
+    ],
+    "has_bidirectional_shifter": true,
+    "score": 0.497
+   },
+   {
+    "group": "hDeltaD",
+    "members": [
+     "hDeltaD"
+    ],
+    "n_cells": 8,
+    "sign": 1.0,
+    "kernel_via": [
+     "FB8C"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.371,
+    "kernel_amplitude": 6.28,
+    "first_harmonic_r2": 0.371,
+    "second_harmonic_r2": 0.141,
+    "eig_degeneracy": 0.798,
+    "next_eig_ratio": 0.937,
+    "amplitude_cv": 0.333,
+    "inhibitory_loops": [
+     {
+      "group": "FB8C",
+      "n": 4,
+      "synapses_in": 1382,
+      "synapses_out": 1540
+     }
+    ],
+    "shifters": [
+     {
+      "group": "vDeltaA_a+FB9C",
+      "n": 78,
+      "n_measured": 8,
+      "median_offset_rad": 0.173,
+      "n_positive": 4,
+      "n_negative": 2,
+      "median_positive": 0.35,
+      "median_negative": -0.554,
+      "bidirectional": true,
+      "synapses_from_ring": 667,
+      "synapses_to_ring": 3974
+     },
+     {
+      "group": "vDeltaA_b",
+      "n": 31,
+      "n_measured": 22,
+      "median_offset_rad": -0.115,
+      "n_positive": 6,
+      "n_negative": 10,
+      "median_positive": 0.44,
+      "median_negative": -0.282,
+      "bidirectional": true,
+      "synapses_from_ring": 760,
+      "synapses_to_ring": 1793
+     },
+     {
+      "group": "FB8C",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 0.343,
+      "n_positive": 2,
+      "n_negative": 1,
+      "median_positive": 0.815,
+      "median_negative": -0.445,
+      "bidirectional": false,
+      "synapses_from_ring": 1382,
+      "synapses_to_ring": 1540
+     },
+     {
+      "group": "FB8G",
+      "n": 6,
+      "n_measured": 4,
+      "median_offset_rad": -0.565,
+      "n_positive": 1,
+      "n_negative": 3,
+      "median_positive": 0.424,
+      "median_negative": -0.575,
+      "bidirectional": false,
+      "synapses_from_ring": 201,
+      "synapses_to_ring": 599
+     },
+     {
+      "group": "FB8B",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": -0.498,
+      "n_positive": 0,
+      "n_negative": 3,
+      "median_positive": null,
+      "median_negative": -0.695,
+      "bidirectional": false,
+      "synapses_from_ring": 805,
+      "synapses_to_ring": 547
+     },
+     {
+      "group": "FB7J",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 0.586,
+      "n_positive": 3,
+      "n_negative": 0,
+      "median_positive": 0.96,
+      "median_negative": null,
+      "bidirectional": false,
+      "synapses_from_ring": 265,
+      "synapses_to_ring": 454
+     }
+    ],
+    "has_bidirectional_shifter": true,
+    "score": 0.444
+   },
+   {
+    "group": "INXXX468",
+    "members": [
+     "INXXX468"
+    ],
+    "n_cells": 12,
+    "sign": 1.0,
+    "kernel_via": [
+     "IN09A004"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.336,
+    "kernel_amplitude": 2.48,
+    "first_harmonic_r2": 0.336,
+    "second_harmonic_r2": 0.002,
+    "eig_degeneracy": 0.852,
+    "next_eig_ratio": 0.593,
+    "amplitude_cv": 0.367,
+    "inhibitory_loops": [
+     {
+      "group": "IN09A004",
+      "n": 4,
+      "synapses_in": 200,
+      "synapses_out": 691
+     }
+    ],
+    "shifters": [
+     {
+      "group": "IN09A004",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 0.266,
+      "n_positive": 2,
+      "n_negative": 2,
+      "median_positive": 2.997,
+      "median_negative": -2.77,
+      "bidirectional": true,
+      "synapses_from_ring": 200,
+      "synapses_to_ring": 691
+     },
+     {
+      "group": "IN13B004",
+      "n": 6,
+      "n_measured": 6,
+      "median_offset_rad": 0.0,
+      "n_positive": 0,
+      "n_negative": 0,
+      "median_positive": null,
+      "median_negative": null,
+      "bidirectional": false,
+      "synapses_from_ring": 1621,
+      "synapses_to_ring": 476
+     },
+     {
+      "group": "IN03A010",
+      "n": 6,
+      "n_measured": 6,
+      "median_offset_rad": -0.0,
+      "n_positive": 0,
+      "n_negative": 0,
+      "median_positive": null,
+      "median_negative": null,
+      "bidirectional": false,
+      "synapses_from_ring": 662,
+      "synapses_to_ring": 298
+     }
+    ],
+    "has_bidirectional_shifter": true,
+    "score": 0.43
+   },
+   {
+    "group": "hDeltaM",
+    "members": [
+     "hDeltaM"
+    ],
+    "n_cells": 8,
+    "sign": 1.0,
+    "kernel_via": [
+     "FB5A"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.318,
+    "kernel_amplitude": 20.25,
+    "first_harmonic_r2": 0.318,
+    "second_harmonic_r2": 0.242,
+    "eig_degeneracy": 0.857,
+    "next_eig_ratio": 0.755,
+    "amplitude_cv": 0.366,
+    "inhibitory_loops": [
+     {
+      "group": "FB5A",
+      "n": 4,
+      "synapses_in": 888,
+      "synapses_out": 1611
+     }
+    ],
+    "shifters": [
+     {
+      "group": "FB5A",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": -0.169,
+      "n_positive": 1,
+      "n_negative": 2,
+      "median_positive": 0.75,
+      "median_negative": -0.476,
+      "bidirectional": false,
+      "synapses_from_ring": 888,
+      "synapses_to_ring": 1611
+     },
+     {
+      "group": "FB5Q",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 0.036,
+      "n_positive": 2,
+      "n_negative": 1,
+      "median_positive": 0.278,
+      "median_negative": -0.65,
+      "bidirectional": false,
+      "synapses_from_ring": 200,
+      "synapses_to_ring": 1256
+     },
+     {
+      "group": "FC2B",
+      "n": 27,
+      "n_measured": 18,
+      "median_offset_rad": 0.094,
+      "n_positive": 8,
+      "n_negative": 2,
+      "median_positive": 0.401,
+      "median_negative": -0.451,
+      "bidirectional": true,
+      "synapses_from_ring": 937,
+      "synapses_to_ring": 1033
+     },
+     {
+      "group": "FC2A",
+      "n": 18,
+      "n_measured": 5,
+      "median_offset_rad": 0.105,
+      "n_positive": 2,
+      "n_negative": 1,
+      "median_positive": 0.401,
+      "median_negative": -0.286,
+      "bidirectional": false,
+      "synapses_from_ring": 369,
+      "synapses_to_ring": 427
+     }
+    ],
+    "has_bidirectional_shifter": true,
+    "score": 0.409
+   },
+   {
+    "group": "SNpp16",
+    "members": [
+     "SNpp16"
+    ],
+    "n_cells": 13,
+    "sign": 1.0,
+    "kernel_via": [
+     "IN19A056",
+     "IN19A043"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.331,
+    "kernel_amplitude": 2.76,
+    "first_harmonic_r2": 0.331,
+    "second_harmonic_r2": 0.003,
+    "eig_degeneracy": 0.819,
+    "next_eig_ratio": 0.518,
+    "amplitude_cv": 0.319,
+    "inhibitory_loops": [
+     {
+      "group": "IN19A056",
+      "n": 5,
+      "synapses_in": 634,
+      "synapses_out": 871
+     },
+     {
+      "group": "IN19A043",
+      "n": 4,
+      "synapses_in": 413,
+      "synapses_out": 277
+     }
+    ],
+    "shifters": [
+     {
+      "group": "IN19A056",
+      "n": 5,
+      "n_measured": 5,
+      "median_offset_rad": -0.01,
+      "n_positive": 2,
+      "n_negative": 2,
+      "median_positive": 2.133,
+      "median_negative": -2.61,
+      "bidirectional": true,
+      "synapses_from_ring": 634,
+      "synapses_to_ring": 871
+     },
+     {
+      "group": "IN19A043",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 1.102,
+      "n_positive": 2,
+      "n_negative": 1,
+      "median_positive": 2.636,
+      "median_negative": -0.386,
+      "bidirectional": false,
+      "synapses_from_ring": 413,
+      "synapses_to_ring": 277
+     }
+    ],
+    "has_bidirectional_shifter": true,
+    "score": 0.407
+   },
+   {
+    "group": "WG3",
+    "members": [
+     "WG3"
+    ],
+    "n_cells": 96,
+    "sign": -0.09,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.32,
+    "kernel_amplitude": 3.02,
+    "first_harmonic_r2": 0.32,
+    "second_harmonic_r2": 0.247,
+    "eig_degeneracy": 0.824,
+    "next_eig_ratio": 0.956,
+    "amplitude_cv": 0.339,
+    "inhibitory_loops": [],
+    "shifters": [
+     {
+      "group": "WG4",
+      "n": 96,
+      "n_measured": 89,
+      "median_offset_rad": 0.004,
+      "n_positive": 3,
+      "n_negative": 2,
+      "median_positive": 0.207,
+      "median_negative": -0.408,
+      "bidirectional": true,
+      "synapses_from_ring": 9637,
+      "synapses_to_ring": 3765
+     }
+    ],
+    "has_bidirectional_shifter": true,
+    "score": 0.396
+   },
+   {
+    "group": "SNxx02",
+    "members": [
+     "SNxx02"
+    ],
+    "n_cells": 25,
+    "sign": 1.0,
+    "kernel_via": [
+     "AN01B002"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.31,
+    "kernel_amplitude": 4.0,
+    "first_harmonic_r2": 0.31,
+    "second_harmonic_r2": 0.011,
+    "eig_degeneracy": 0.834,
+    "next_eig_ratio": 0.696,
+    "amplitude_cv": 0.402,
+    "inhibitory_loops": [
+     {
+      "group": "AN01B002",
+      "n": 6,
+      "synapses_in": 635,
+      "synapses_out": 510
+     }
+    ],
+    "shifters": [
+     {
+      "group": "AN01B002",
+      "n": 6,
+      "n_measured": 5,
+      "median_offset_rad": -0.652,
+      "n_positive": 1,
+      "n_negative": 3,
+      "median_positive": 0.698,
+      "median_negative": -1.67,
+      "bidirectional": false,
+      "synapses_from_ring": 635,
+      "synapses_to_ring": 510
+     },
+     {
+      "group": "SNxx11",
+      "n": 11,
+      "n_measured": 5,
+      "median_offset_rad": 0.074,
+      "n_positive": 2,
+      "n_negative": 2,
+      "median_positive": 0.415,
+      "median_negative": -0.193,
+      "bidirectional": true,
+      "synapses_from_ring": 456,
+      "synapses_to_ring": 253
+     }
+    ],
+    "has_bidirectional_shifter": true,
+    "score": 0.388
+   },
+   {
+    "group": "hDeltaA",
+    "members": [
+     "hDeltaA"
+    ],
+    "n_cells": 12,
+    "sign": 1.0,
+    "kernel_via": [
+     "FB4Z_a",
+     "FB4Z_c",
+     "FB4Z_b",
+     "FB4K",
+     "FB4P_b"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.285,
+    "kernel_amplitude": 4.79,
+    "first_harmonic_r2": 0.285,
+    "second_harmonic_r2": 0.095,
+    "eig_degeneracy": 0.867,
+    "next_eig_ratio": 0.933,
+    "amplitude_cv": 0.488,
+    "inhibitory_loops": [
+     {
+      "group": "FB4Z_a",
+      "n": 8,
+      "synapses_in": 2691,
+      "synapses_out": 1721
+     },
+     {
+      "group": "FB4Z_c",
+      "n": 4,
+      "synapses_in": 1544,
+      "synapses_out": 907
+     },
+     {
+      "group": "FB4Z_b",
+      "n": 3,
+      "synapses_in": 428,
+      "synapses_out": 345
+     },
+     {
+      "group": "FB4K",
+      "n": 4,
+      "synapses_in": 244,
+      "synapses_out": 2754
+     },
+     {
+      "group": "FB4P_b",
+      "n": 3,
+      "synapses_in": 218,
+      "synapses_out": 2833
+     }
+    ],
+    "shifters": [
+     {
+      "group": "FB4K",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 1.214,
+      "n_positive": 3,
+      "n_negative": 1,
+      "median_positive": 1.449,
+      "median_negative": -0.277,
+      "bidirectional": false,
+      "synapses_from_ring": 244,
+      "synapses_to_ring": 2754
+     },
+     {
+      "group": "PFR_a",
+      "n": 28,
+      "n_measured": 28,
+      "median_offset_rad": -0.01,
+      "n_positive": 3,
+      "n_negative": 1,
+      "median_positive": 0.156,
+      "median_negative": -0.286,
+      "bidirectional": false,
+      "synapses_from_ring": 2174,
+      "synapses_to_ring": 2626
+     },
+     {
+      "group": "FB4Z_a",
+      "n": 8,
+      "n_measured": 8,
+      "median_offset_rad": 0.263,
+      "n_positive": 5,
+      "n_negative": 2,
+      "median_positive": 0.351,
+      "median_negative": -0.562,
+      "bidirectional": true,
+      "synapses_from_ring": 2691,
+      "synapses_to_ring": 1721
+     },
+     {
+      "group": "FB4Z_c",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 0.209,
+      "n_positive": 2,
+      "n_negative": 0,
+      "median_positive": 0.322,
+      "median_negative": null,
+      "bidirectional": false,
+      "synapses_from_ring": 1544,
+      "synapses_to_ring": 907
+     }
+    ],
+    "has_bidirectional_shifter": true,
+    "score": 0.371
+   },
+   {
+    "group": "SNxx07",
+    "members": [
+     "SNxx07"
+    ],
+    "n_cells": 27,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.488,
+    "kernel_amplitude": 6.54,
+    "first_harmonic_r2": 0.488,
+    "second_harmonic_r2": 0.321,
+    "eig_degeneracy": 0.758,
+    "next_eig_ratio": 0.804,
+    "amplitude_cv": 0.304,
+    "inhibitory_loops": [],
+    "shifters": [
+     {
+      "group": "INXXX258",
+      "n": 12,
+      "n_measured": 6,
+      "median_offset_rad": 0.134,
+      "n_positive": 3,
+      "n_negative": 1,
+      "median_positive": 0.297,
+      "median_negative": -0.194,
+      "bidirectional": false,
+      "synapses_from_ring": 1122,
+      "synapses_to_ring": 2257
+     },
+     {
+      "group": "",
+      "n": 2605,
+      "n_measured": 5,
+      "median_offset_rad": 0.034,
+      "n_positive": 0,
+      "n_negative": 0,
+      "median_positive": null,
+      "median_negative": null,
+      "bidirectional": false,
+      "synapses_from_ring": 495,
+      "synapses_to_ring": 229
+     }
+    ],
+    "has_bidirectional_shifter": false,
+    "score": 0.37
+   },
+   {
+    "group": "PEN_b(PEN2)+PEN_a(PEN1)",
+    "members": [
+     "PEN_b(PEN2)",
+     "PEN_a(PEN1)"
+    ],
+    "n_cells": 42,
+    "sign": 1.0,
+    "kernel_via": [
+     "ExR4"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.436,
+    "kernel_amplitude": 14.2,
+    "first_harmonic_r2": 0.436,
+    "second_harmonic_r2": 0.032,
+    "eig_degeneracy": 0.533,
+    "next_eig_ratio": 0.575,
+    "amplitude_cv": 0.192,
+    "inhibitory_loops": [
+     {
+      "group": "ExR4",
+      "n": 2,
+      "synapses_in": 1091,
+      "synapses_out": 7122
+     }
+    ],
+    "shifters": [
+     {
+      "group": "GLNO",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 0.001,
+      "n_positive": 1,
+      "n_negative": 1,
+      "median_positive": 0.205,
+      "median_negative": -0.161,
+      "bidirectional": false,
+      "synapses_from_ring": 3496,
+      "synapses_to_ring": 16371
+     },
+     {
+      "group": "EPG",
+      "n": 46,
+      "n_measured": 46,
+      "median_offset_rad": 0.005,
+      "n_positive": 23,
+      "n_negative": 23,
+      "median_positive": 0.794,
+      "median_negative": -0.949,
+      "bidirectional": true,
+      "synapses_from_ring": 23960,
+      "synapses_to_ring": 12215
+     },
+     {
+      "group": "ER1_b+ER1_a",
+      "n": 24,
+      "n_measured": 24,
+      "median_offset_rad": 0.077,
+      "n_positive": 7,
+      "n_negative": 2,
+      "median_positive": 0.255,
+      "median_negative": -0.196,
+      "bidirectional": true,
+      "synapses_from_ring": 2463,
+      "synapses_to_ring": 3184
+     },
+     {
+      "group": "PEG",
+      "n": 18,
+      "n_measured": 5,
+      "median_offset_rad": -0.324,
+      "n_positive": 0,
+      "n_negative": 4,
+      "median_positive": null,
+      "median_negative": -0.365,
+      "bidirectional": false,
+      "synapses_from_ring": 366,
+      "synapses_to_ring": 2341
+     },
+     {
+      "group": "FB4Y",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 0.151,
+      "n_positive": 2,
+      "n_negative": 1,
+      "median_positive": 0.485,
+      "median_negative": -0.247,
+      "bidirectional": false,
+      "synapses_from_ring": 2233,
+      "synapses_to_ring": 531
+     },
+     {
+      "group": "ExR2",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": -0.107,
+      "n_positive": 2,
+      "n_negative": 2,
+      "median_positive": 0.386,
+      "median_negative": -1.316,
+      "bidirectional": true,
+      "synapses_from_ring": 2285,
+      "synapses_to_ring": 433
+     }
+    ],
+    "has_bidirectional_shifter": true,
+    "score": 0.348
+   },
+   {
+    "group": "PFL3+PFL2",
+    "members": [
+     "PFL3",
+     "PFL2"
+    ],
+    "n_cells": 36,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.473,
+    "kernel_amplitude": 2.13,
+    "first_harmonic_r2": 0.473,
+    "second_harmonic_r2": 0.47,
+    "eig_degeneracy": 0.725,
+    "next_eig_ratio": 0.603,
+    "amplitude_cv": 0.218,
+    "inhibitory_loops": [],
+    "shifters": [
+     {
+      "group": "FB5A",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 0.505,
+      "n_positive": 2,
+      "n_negative": 1,
+      "median_positive": 1.712,
+      "median_negative": -1.616,
+      "bidirectional": false,
+      "synapses_from_ring": 1420,
+      "synapses_to_ring": 2520
+     }
+    ],
+    "has_bidirectional_shifter": false,
+    "score": 0.343
+   },
+   {
+    "group": "DL2d_adPN",
+    "members": [
+     "DL2d_adPN"
+    ],
+    "n_cells": 9,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.355,
+    "kernel_amplitude": 10.75,
+    "first_harmonic_r2": 0.355,
+    "second_harmonic_r2": 0.006,
+    "eig_degeneracy": 0.623,
+    "next_eig_ratio": 0.794,
+    "amplitude_cv": 0.436,
+    "inhibitory_loops": [],
+    "shifters": [
+     {
+      "group": "lLN1_bc+lLN2X12",
+      "n": 41,
+      "n_measured": 36,
+      "median_offset_rad": -0.013,
+      "n_positive": 4,
+      "n_negative": 8,
+      "median_positive": 0.232,
+      "median_negative": -0.209,
+      "bidirectional": true,
+      "synapses_from_ring": 2050,
+      "synapses_to_ring": 1759
+     },
+     {
+      "group": "lLN2T_a",
+      "n": 5,
+      "n_measured": 5,
+      "median_offset_rad": 0.012,
+      "n_positive": 1,
+      "n_negative": 1,
+      "median_positive": 0.231,
+      "median_negative": -0.196,
+      "bidirectional": false,
+      "synapses_from_ring": 518,
+      "synapses_to_ring": 344
+     },
+     {
+      "group": "lLN2P_c",
+      "n": 9,
+      "n_measured": 4,
+      "median_offset_rad": 0.17,
+      "n_positive": 2,
+      "n_negative": 0,
+      "median_positive": 0.339,
+      "median_negative": null,
+      "bidirectional": false,
+      "synapses_from_ring": 459,
+      "synapses_to_ring": 275
+     }
+    ],
+    "has_bidirectional_shifter": true,
+    "score": 0.332
+   },
+   {
+    "group": "DNge094",
+    "members": [
+     "DNge094"
+    ],
+    "n_cells": 13,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.495,
+    "kernel_amplitude": 6.51,
+    "first_harmonic_r2": 0.495,
+    "second_harmonic_r2": 0.286,
+    "eig_degeneracy": 0.662,
+    "next_eig_ratio": 0.896,
+    "amplitude_cv": 0.405,
+    "inhibitory_loops": [],
+    "shifters": [],
+    "has_bidirectional_shifter": false,
+    "score": 0.328
+   },
+   {
+    "group": "aPhM1",
+    "members": [
+     "aPhM1"
+    ],
+    "n_cells": 21,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.528,
+    "kernel_amplitude": 4.44,
+    "first_harmonic_r2": 0.528,
+    "second_harmonic_r2": 0.43,
+    "eig_degeneracy": 0.616,
+    "next_eig_ratio": 0.599,
+    "amplitude_cv": 0.457,
+    "inhibitory_loops": [],
+    "shifters": [],
+    "has_bidirectional_shifter": false,
+    "score": 0.325
+   },
+   {
+    "group": "IN12A036",
+    "members": [
+     "IN12A036"
+    ],
+    "n_cells": 8,
+    "sign": 1.0,
+    "kernel_via": [
+     "AN02A001"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.463,
+    "kernel_amplitude": 4.27,
+    "first_harmonic_r2": 0.463,
+    "second_harmonic_r2": 0.149,
+    "eig_degeneracy": 0.7,
+    "next_eig_ratio": 0.495,
+    "amplitude_cv": 0.148,
+    "inhibitory_loops": [
+     {
+      "group": "AN02A001",
+      "n": 2,
+      "synapses_in": 345,
+      "synapses_out": 438
+     }
+    ],
+    "shifters": [],
+    "has_bidirectional_shifter": false,
+    "score": 0.324
+   },
+   {
+    "group": "SNpp32",
+    "members": [
+     "SNpp32"
+    ],
+    "n_cells": 8,
+    "sign": 1.0,
+    "kernel_via": [
+     "INXXX044"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.376,
+    "kernel_amplitude": 9.07,
+    "first_harmonic_r2": 0.376,
+    "second_harmonic_r2": 0.209,
+    "eig_degeneracy": 0.814,
+    "next_eig_ratio": 0.992,
+    "amplitude_cv": 0.292,
+    "inhibitory_loops": [
+     {
+      "group": "INXXX044",
+      "n": 8,
+      "synapses_in": 1032,
+      "synapses_out": 527
+     }
+    ],
+    "shifters": [
+     {
+      "group": "IN05B016",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 0.015,
+      "n_positive": 1,
+      "n_negative": 1,
+      "median_positive": 0.92,
+      "median_negative": -0.322,
+      "bidirectional": false,
+      "synapses_from_ring": 1856,
+      "synapses_to_ring": 1875
+     }
+    ],
+    "has_bidirectional_shifter": false,
+    "score": 0.306
+   },
+   {
+    "group": "lLN1_bc+lLN2X12",
+    "members": [
+     "lLN1_bc",
+     "lLN2X12"
+    ],
+    "n_cells": 41,
+    "sign": 1.0,
+    "kernel_via": [
+     "lLN2P_a"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.601,
+    "kernel_amplitude": 61.45,
+    "first_harmonic_r2": 0.601,
+    "second_harmonic_r2": 0.49,
+    "eig_degeneracy": 0.334,
+    "next_eig_ratio": 0.515,
+    "amplitude_cv": 0.187,
+    "inhibitory_loops": [
+     {
+      "group": "lLN2P_a",
+      "n": 7,
+      "synapses_in": 2430,
+      "synapses_out": 2402
+     }
+    ],
+    "shifters": [
+     {
+      "group": "lLN2T_c",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": -0.043,
+      "n_positive": 1,
+      "n_negative": 2,
+      "median_positive": 0.195,
+      "median_negative": -0.229,
+      "bidirectional": false,
+      "synapses_from_ring": 2986,
+      "synapses_to_ring": 9529
+     },
+     {
+      "group": "",
+      "n": 2605,
+      "n_measured": 8,
+      "median_offset_rad": -0.017,
+      "n_positive": 2,
+      "n_negative": 3,
+      "median_positive": 0.353,
+      "median_negative": -0.213,
+      "bidirectional": true,
+      "synapses_from_ring": 4647,
+      "synapses_to_ring": 7169
+     },
+     {
+      "group": "lLN2X11",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 0.018,
+      "n_positive": 2,
+      "n_negative": 2,
+      "median_positive": 0.383,
+      "median_negative": -0.351,
+      "bidirectional": true,
+      "synapses_from_ring": 4872,
+      "synapses_to_ring": 6279
+     },
+     {
+      "group": "lLN2F_a",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 0.07,
+      "n_positive": 2,
+      "n_negative": 2,
+      "median_positive": 0.384,
+      "median_negative": -0.295,
+      "bidirectional": true,
+      "synapses_from_ring": 7768,
+      "synapses_to_ring": 5724
+     },
+     {
+      "group": "lLN2X05",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": -0.014,
+      "n_positive": 2,
+      "n_negative": 2,
+      "median_positive": 0.364,
+      "median_negative": -0.401,
+      "bidirectional": true,
+      "synapses_from_ring": 3212,
+      "synapses_to_ring": 3419
+     },
+     {
+      "group": "lLN2T_e",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": -0.019,
+      "n_positive": 1,
+      "n_negative": 1,
+      "median_positive": 0.154,
+      "median_negative": -0.178,
+      "bidirectional": false,
+      "synapses_from_ring": 1849,
+      "synapses_to_ring": 3381
+     }
+    ],
+    "has_bidirectional_shifter": true,
+    "score": 0.301
+   },
+   {
+    "group": "IN03A037",
+    "members": [
+     "IN03A037"
+    ],
+    "n_cells": 10,
+    "sign": 1.0,
+    "kernel_via": [
+     "IN19A002"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.32,
+    "kernel_amplitude": 11.66,
+    "first_harmonic_r2": 0.32,
+    "second_harmonic_r2": 0.069,
+    "eig_degeneracy": 0.906,
+    "next_eig_ratio": 0.784,
+    "amplitude_cv": 0.232,
+    "inhibitory_loops": [
+     {
+      "group": "IN19A002",
+      "n": 6,
+      "synapses_in": 352,
+      "synapses_out": 335
+     }
+    ],
+    "shifters": [],
+    "has_bidirectional_shifter": false,
+    "score": 0.29
+   },
+   {
+    "group": "SNpp29,SNpp63",
+    "members": [
+     "SNpp29,SNpp63"
+    ],
+    "n_cells": 18,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.395,
+    "kernel_amplitude": 2.87,
+    "first_harmonic_r2": 0.395,
+    "second_harmonic_r2": 0.237,
+    "eig_degeneracy": 0.711,
+    "next_eig_ratio": 0.916,
+    "amplitude_cv": 0.475,
+    "inhibitory_loops": [],
+    "shifters": [],
+    "has_bidirectional_shifter": false,
+    "score": 0.281
+   },
+   {
+    "group": "FB2I_a",
+    "members": [
+     "FB2I_a"
+    ],
+    "n_cells": 10,
+    "sign": -1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.334,
+    "kernel_amplitude": 14.17,
+    "first_harmonic_r2": 0.334,
+    "second_harmonic_r2": 0.027,
+    "eig_degeneracy": 0.839,
+    "next_eig_ratio": 0.784,
+    "amplitude_cv": 0.4,
+    "inhibitory_loops": [],
+    "shifters": [
+     {
+      "group": "FB2E",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": -0.162,
+      "n_positive": 0,
+      "n_negative": 2,
+      "median_positive": null,
+      "median_negative": -0.257,
+      "bidirectional": false,
+      "synapses_from_ring": 1114,
+      "synapses_to_ring": 1090
+     },
+     {
+      "group": "FB2A",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": -0.795,
+      "n_positive": 0,
+      "n_negative": 3,
+      "median_positive": null,
+      "median_negative": -1.239,
+      "bidirectional": false,
+      "synapses_from_ring": 252,
+      "synapses_to_ring": 400
+     }
+    ],
+    "has_bidirectional_shifter": false,
+    "score": 0.28
+   },
+   {
+    "group": "PLP054",
+    "members": [
+     "PLP054"
+    ],
+    "n_cells": 8,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.601,
+    "kernel_amplitude": 8.26,
+    "first_harmonic_r2": 0.601,
+    "second_harmonic_r2": 0.021,
+    "eig_degeneracy": 0.459,
+    "next_eig_ratio": 0.944,
+    "amplitude_cv": 0.426,
+    "inhibitory_loops": [],
+    "shifters": [],
+    "has_bidirectional_shifter": false,
+    "score": 0.276
+   },
+   {
+    "group": "MeTu2b",
+    "members": [
+     "MeTu2b"
+    ],
+    "n_cells": 31,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.379,
+    "kernel_amplitude": 6.72,
+    "first_harmonic_r2": 0.379,
+    "second_harmonic_r2": 0.274,
+    "eig_degeneracy": 0.714,
+    "next_eig_ratio": 0.792,
+    "amplitude_cv": 0.314,
+    "inhibitory_loops": [],
+    "shifters": [],
+    "has_bidirectional_shifter": false,
+    "score": 0.27
+   },
+   {
+    "group": "ORN_DL2d",
+    "members": [
+     "ORN_DL2d"
+    ],
+    "n_cells": 15,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.288,
+    "kernel_amplitude": 5.32,
+    "first_harmonic_r2": 0.288,
+    "second_harmonic_r2": 0.008,
+    "eig_degeneracy": 0.596,
+    "next_eig_ratio": 0.802,
+    "amplitude_cv": 0.411,
+    "inhibitory_loops": [],
+    "shifters": [
+     {
+      "group": "lLN2F_b",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 0.013,
+      "n_positive": 2,
+      "n_negative": 2,
+      "median_positive": 2.592,
+      "median_negative": -2.69,
+      "bidirectional": true,
+      "synapses_from_ring": 900,
+      "synapses_to_ring": 797
+     },
+     {
+      "group": "lLN2T_d",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 0.69,
+      "n_positive": 2,
+      "n_negative": 2,
+      "median_positive": 2.036,
+      "median_negative": -1.494,
+      "bidirectional": true,
+      "synapses_from_ring": 598,
+      "synapses_to_ring": 449
+     },
+     {
+      "group": "lLN2P_b",
+      "n": 12,
+      "n_measured": 4,
+      "median_offset_rad": 0.565,
+      "n_positive": 3,
+      "n_negative": 1,
+      "median_positive": 0.932,
+      "median_negative": -0.779,
+      "bidirectional": false,
+      "synapses_from_ring": 280,
+      "synapses_to_ring": 310
+     },
+     {
+      "group": "lLN2F_a",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": -2.462,
+      "n_positive": 1,
+      "n_negative": 3,
+      "median_positive": 2.934,
+      "median_negative": -2.533,
+      "bidirectional": false,
+      "synapses_from_ring": 694,
+      "synapses_to_ring": 260
+     }
+    ],
+    "has_bidirectional_shifter": true,
+    "score": 0.258
+   },
+   {
+    "group": "AN17A015",
+    "members": [
+     "AN17A015"
+    ],
+    "n_cells": 8,
+    "sign": 1.0,
+    "kernel_via": [
+     "IN00A031"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.29,
+    "kernel_amplitude": 11.11,
+    "first_harmonic_r2": 0.29,
+    "second_harmonic_r2": 0.096,
+    "eig_degeneracy": 0.883,
+    "next_eig_ratio": 0.923,
+    "amplitude_cv": 0.513,
+    "inhibitory_loops": [
+     {
+      "group": "IN00A031",
+      "n": 9,
+      "synapses_in": 857,
+      "synapses_out": 366
+     }
+    ],
+    "shifters": [
+     {
+      "group": "IN00A031",
+      "n": 9,
+      "n_measured": 8,
+      "median_offset_rad": -0.743,
+      "n_positive": 0,
+      "n_negative": 5,
+      "median_positive": null,
+      "median_negative": -1.172,
+      "bidirectional": false,
+      "synapses_from_ring": 857,
+      "synapses_to_ring": 366
+     },
+     {
+      "group": "AVLP204",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": -0.034,
+      "n_positive": 1,
+      "n_negative": 1,
+      "median_positive": 2.968,
+      "median_negative": -0.245,
+      "bidirectional": false,
+      "synapses_from_ring": 226,
+      "synapses_to_ring": 274
+     }
+    ],
+    "has_bidirectional_shifter": false,
+    "score": 0.256
+   },
+   {
+    "group": "PFR_b",
+    "members": [
+     "PFR_b"
+    ],
+    "n_cells": 16,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.597,
+    "kernel_amplitude": 8.17,
+    "first_harmonic_r2": 0.597,
+    "second_harmonic_r2": 0.023,
+    "eig_degeneracy": 0.281,
+    "next_eig_ratio": 0.944,
+    "amplitude_cv": 0.447,
+    "inhibitory_loops": [],
+    "shifters": [
+     {
+      "group": "hDeltaA",
+      "n": 12,
+      "n_measured": 6,
+      "median_offset_rad": -0.574,
+      "n_positive": 2,
+      "n_negative": 3,
+      "median_positive": 0.704,
+      "median_negative": -1.16,
+      "bidirectional": true,
+      "synapses_from_ring": 223,
+      "synapses_to_ring": 1018
+     },
+     {
+      "group": "FB4M",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 0.239,
+      "n_positive": 3,
+      "n_negative": 1,
+      "median_positive": 0.316,
+      "median_negative": -3.076,
+      "bidirectional": false,
+      "synapses_from_ring": 247,
+      "synapses_to_ring": 400
+     }
+    ],
+    "has_bidirectional_shifter": true,
+    "score": 0.252
+   },
+   {
+    "group": "SNxx22",
+    "members": [
+     "SNxx22"
+    ],
+    "n_cells": 34,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.306,
+    "kernel_amplitude": 1.73,
+    "first_harmonic_r2": 0.306,
+    "second_harmonic_r2": 0.265,
+    "eig_degeneracy": 0.814,
+    "next_eig_ratio": 0.695,
+    "amplitude_cv": 0.369,
+    "inhibitory_loops": [],
+    "shifters": [],
+    "has_bidirectional_shifter": false,
+    "score": 0.249
+   },
+   {
+    "group": "SMP007",
+    "members": [
+     "SMP007"
+    ],
+    "n_cells": 8,
+    "sign": 1.0,
+    "kernel_via": [
+     "oviIN"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.306,
+    "kernel_amplitude": 1.27,
+    "first_harmonic_r2": 0.306,
+    "second_harmonic_r2": 0.009,
+    "eig_degeneracy": 0.788,
+    "next_eig_ratio": 0.713,
+    "amplitude_cv": 0.234,
+    "inhibitory_loops": [
+     {
+      "group": "oviIN",
+      "n": 2,
+      "synapses_in": 348,
+      "synapses_out": 359
+     }
+    ],
+    "shifters": [],
+    "has_bidirectional_shifter": false,
+    "score": 0.241
+   },
+   {
+    "group": "MeTu3a",
+    "members": [
+     "MeTu3a"
+    ],
+    "n_cells": 42,
+    "sign": 1.0,
+    "kernel_via": [
+     "MeVPMe10"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.349,
+    "kernel_amplitude": 1.0,
+    "first_harmonic_r2": 0.349,
+    "second_harmonic_r2": 0.021,
+    "eig_degeneracy": 0.458,
+    "next_eig_ratio": 0.671,
+    "amplitude_cv": 0.37,
+    "inhibitory_loops": [
+     {
+      "group": "MeVPMe10",
+      "n": 4,
+      "synapses_in": 264,
+      "synapses_out": 2461
+     }
+    ],
+    "shifters": [
+     {
+      "group": "Cm14",
+      "n": 48,
+      "n_measured": 41,
+      "median_offset_rad": -0.06,
+      "n_positive": 15,
+      "n_negative": 17,
+      "median_positive": 0.329,
+      "median_negative": -0.42,
+      "bidirectional": true,
+      "synapses_from_ring": 3965,
+      "synapses_to_ring": 5844
+     },
+     {
+      "group": "MeVPMe10",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": -2.909,
+      "n_positive": 1,
+      "n_negative": 3,
+      "median_positive": 3.12,
+      "median_negative": -2.927,
+      "bidirectional": false,
+      "synapses_from_ring": 264,
+      "synapses_to_ring": 2461
+     }
+    ],
+    "has_bidirectional_shifter": true,
+    "score": 0.24
+   },
+   {
+    "group": "SNxx11",
+    "members": [
+     "SNxx11"
+    ],
+    "n_cells": 11,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.357,
+    "kernel_amplitude": 7.73,
+    "first_harmonic_r2": 0.357,
+    "second_harmonic_r2": 0.063,
+    "eig_degeneracy": 0.44,
+    "next_eig_ratio": 0.903,
+    "amplitude_cv": 0.48,
+    "inhibitory_loops": [],
+    "shifters": [
+     {
+      "group": "INXXX395",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": -0.081,
+      "n_positive": 2,
+      "n_negative": 2,
+      "median_positive": 2.483,
+      "median_negative": -2.807,
+      "bidirectional": true,
+      "synapses_from_ring": 409,
+      "synapses_to_ring": 560
+     },
+     {
+      "group": "SNxx02",
+      "n": 25,
+      "n_measured": 5,
+      "median_offset_rad": -0.06,
+      "n_positive": 1,
+      "n_negative": 2,
+      "median_positive": 0.447,
+      "median_negative": -0.396,
+      "bidirectional": false,
+      "synapses_from_ring": 253,
+      "synapses_to_ring": 456
+     }
+    ],
+    "has_bidirectional_shifter": true,
+    "score": 0.235
+   },
+   {
+    "group": "DA2_lPN",
+    "members": [
+     "DA2_lPN"
+    ],
+    "n_cells": 10,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.589,
+    "kernel_amplitude": 4.24,
+    "first_harmonic_r2": 0.589,
+    "second_harmonic_r2": 0.051,
+    "eig_degeneracy": 0.4,
+    "next_eig_ratio": 0.984,
+    "amplitude_cv": 0.426,
+    "inhibitory_loops": [],
+    "shifters": [
+     {
+      "group": "lLN2P_c",
+      "n": 9,
+      "n_measured": 4,
+      "median_offset_rad": 0.002,
+      "n_positive": 1,
+      "n_negative": 0,
+      "median_positive": 0.218,
+      "median_negative": null,
+      "bidirectional": false,
+      "synapses_from_ring": 240,
+      "synapses_to_ring": 301
+     }
+    ],
+    "has_bidirectional_shifter": false,
+    "score": 0.235
+   },
+   {
+    "group": "EL",
+    "members": [
+     "EL"
+    ],
+    "n_cells": 18,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.306,
+    "kernel_amplitude": 3.74,
+    "first_harmonic_r2": 0.306,
+    "second_harmonic_r2": 0.0,
+    "eig_degeneracy": 0.51,
+    "next_eig_ratio": 0.709,
+    "amplitude_cv": 0.49,
+    "inhibitory_loops": [],
+    "shifters": [
+     {
+      "group": "ER5",
+      "n": 21,
+      "n_measured": 8,
+      "median_offset_rad": 0.294,
+      "n_positive": 5,
+      "n_negative": 2,
+      "median_positive": 0.473,
+      "median_negative": -0.859,
+      "bidirectional": true,
+      "synapses_from_ring": 361,
+      "synapses_to_ring": 10073
+     },
+     {
+      "group": "EPG",
+      "n": 46,
+      "n_measured": 46,
+      "median_offset_rad": 0.021,
+      "n_positive": 13,
+      "n_negative": 8,
+      "median_positive": 0.37,
+      "median_negative": -0.395,
+      "bidirectional": true,
+      "synapses_from_ring": 3562,
+      "synapses_to_ring": 8961
+     },
+     {
+      "group": "ER2_c+ER2_a",
+      "n": 32,
+      "n_measured": 32,
+      "median_offset_rad": -0.161,
+      "n_positive": 9,
+      "n_negative": 17,
+      "median_positive": 1.091,
+      "median_negative": -0.591,
+      "bidirectional": true,
+      "synapses_from_ring": 1978,
+      "synapses_to_ring": 5748
+     },
+     {
+      "group": "ExR1",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": -0.724,
+      "n_positive": 0,
+      "n_negative": 4,
+      "median_positive": null,
+      "median_negative": -0.724,
+      "bidirectional": false,
+      "synapses_from_ring": 842,
+      "synapses_to_ring": 4754
+     },
+     {
+      "group": "ER4m",
+      "n": 11,
+      "n_measured": 11,
+      "median_offset_rad": -0.038,
+      "n_positive": 4,
+      "n_negative": 5,
+      "median_positive": 1.506,
+      "median_negative": -0.419,
+      "bidirectional": true,
+      "synapses_from_ring": 347,
+      "synapses_to_ring": 4052
+     },
+     {
+      "group": "ER4d",
+      "n": 26,
+      "n_measured": 26,
+      "median_offset_rad": -0.276,
+      "n_positive": 7,
+      "n_negative": 15,
+      "median_positive": 1.292,
+      "median_negative": -0.527,
+      "bidirectional": true,
+      "synapses_from_ring": 4120,
+      "synapses_to_ring": 3861
+     }
+    ],
+    "has_bidirectional_shifter": true,
+    "score": 0.234
+   },
+   {
+    "group": "PFNp_c+PFNm_b+PFNm_a",
+    "members": [
+     "PFNp_c",
+     "PFNm_b",
+     "PFNm_a"
+    ],
+    "n_cells": 87,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.294,
+    "kernel_amplitude": 2.26,
+    "first_harmonic_r2": 0.294,
+    "second_harmonic_r2": 0.065,
+    "eig_degeneracy": 0.524,
+    "next_eig_ratio": 0.693,
+    "amplitude_cv": 0.263,
+    "inhibitory_loops": [],
+    "shifters": [
+     {
+      "group": "PFNp_a+PFNp_d+PFNp_e",
+      "n": 115,
+      "n_measured": 5,
+      "median_offset_rad": -0.219,
+      "n_positive": 0,
+      "n_negative": 3,
+      "median_positive": null,
+      "median_negative": -0.236,
+      "bidirectional": false,
+      "synapses_from_ring": 639,
+      "synapses_to_ring": 2602
+     },
+     {
+      "group": "PFNp_b",
+      "n": 136,
+      "n_measured": 13,
+      "median_offset_rad": -0.064,
+      "n_positive": 4,
+      "n_negative": 5,
+      "median_positive": 0.431,
+      "median_negative": -0.288,
+      "bidirectional": true,
+      "synapses_from_ring": 2213,
+      "synapses_to_ring": 1444
+     },
+     {
+      "group": "FB1C",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 0.282,
+      "n_positive": 2,
+      "n_negative": 0,
+      "median_positive": 0.693,
+      "median_negative": null,
+      "bidirectional": false,
+      "synapses_from_ring": 794,
+      "synapses_to_ring": 1351
+     }
+    ],
+    "has_bidirectional_shifter": true,
+    "score": 0.231
+   },
+   {
+    "group": "SNpp62",
+    "members": [
+     "SNpp62"
+    ],
+    "n_cells": 9,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.551,
+    "kernel_amplitude": 10.85,
+    "first_harmonic_r2": 0.551,
+    "second_harmonic_r2": 0.054,
+    "eig_degeneracy": 0.42,
+    "next_eig_ratio": 0.945,
+    "amplitude_cv": 0.444,
+    "inhibitory_loops": [],
+    "shifters": [
+     {
+      "group": "INXXX044",
+      "n": 8,
+      "n_measured": 4,
+      "median_offset_rad": -0.176,
+      "n_positive": 0,
+      "n_negative": 2,
+      "median_positive": null,
+      "median_negative": -0.402,
+      "bidirectional": false,
+      "synapses_from_ring": 560,
+      "synapses_to_ring": 303
+     }
+    ],
+    "has_bidirectional_shifter": false,
+    "score": 0.231
+   },
+   {
+    "group": "LB4b",
+    "members": [
+     "LB4b"
+    ],
+    "n_cells": 8,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.271,
+    "kernel_amplitude": 6.39,
+    "first_harmonic_r2": 0.271,
+    "second_harmonic_r2": 0.012,
+    "eig_degeneracy": 0.836,
+    "next_eig_ratio": 0.66,
+    "amplitude_cv": 0.516,
+    "inhibitory_loops": [],
+    "shifters": [],
+    "has_bidirectional_shifter": false,
+    "score": 0.227
+   },
+   {
+    "group": "LHAV1a3",
+    "members": [
+     "LHAV1a3"
+    ],
+    "n_cells": 12,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.405,
+    "kernel_amplitude": 3.84,
+    "first_harmonic_r2": 0.405,
+    "second_harmonic_r2": 0.004,
+    "eig_degeneracy": 0.538,
+    "next_eig_ratio": 0.843,
+    "amplitude_cv": 0.514,
+    "inhibitory_loops": [],
+    "shifters": [],
+    "has_bidirectional_shifter": false,
+    "score": 0.218
+   },
+   {
+    "group": "SNta18",
+    "members": [
+     "SNta18"
+    ],
+    "n_cells": 55,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.395,
+    "kernel_amplitude": 2.81,
+    "first_harmonic_r2": 0.395,
+    "second_harmonic_r2": 0.13,
+    "eig_degeneracy": 0.541,
+    "next_eig_ratio": 0.925,
+    "amplitude_cv": 0.504,
+    "inhibitory_loops": [],
+    "shifters": [
+     {
+      "group": "INXXX044",
+      "n": 8,
+      "n_measured": 4,
+      "median_offset_rad": -0.002,
+      "n_positive": 1,
+      "n_negative": 1,
+      "median_positive": 0.527,
+      "median_negative": -0.247,
+      "bidirectional": false,
+      "synapses_from_ring": 2335,
+      "synapses_to_ring": 982
+     },
+     {
+      "group": "IN05B033",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 0.068,
+      "n_positive": 1,
+      "n_negative": 0,
+      "median_positive": 0.694,
+      "median_negative": null,
+      "bidirectional": false,
+      "synapses_from_ring": 626,
+      "synapses_to_ring": 677
+     }
+    ],
+    "has_bidirectional_shifter": false,
+    "score": 0.214
+   },
+   {
+    "group": "M_lPNm11D",
+    "members": [
+     "M_lPNm11D"
+    ],
+    "n_cells": 12,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.427,
+    "kernel_amplitude": 10.25,
+    "first_harmonic_r2": 0.427,
+    "second_harmonic_r2": 0.008,
+    "eig_degeneracy": 0.498,
+    "next_eig_ratio": 0.708,
+    "amplitude_cv": 0.511,
+    "inhibitory_loops": [],
+    "shifters": [
+     {
+      "group": "lLN1_bc+lLN2X12",
+      "n": 41,
+      "n_measured": 41,
+      "median_offset_rad": 0.011,
+      "n_positive": 4,
+      "n_negative": 0,
+      "median_positive": 0.226,
+      "median_negative": null,
+      "bidirectional": false,
+      "synapses_from_ring": 2774,
+      "synapses_to_ring": 3147
+     },
+     {
+      "group": "lLN2X02",
+      "n": 6,
+      "n_measured": 6,
+      "median_offset_rad": 0.006,
+      "n_positive": 1,
+      "n_negative": 0,
+      "median_positive": 0.19,
+      "median_negative": null,
+      "bidirectional": false,
+      "synapses_from_ring": 397,
+      "synapses_to_ring": 1300
+     },
+     {
+      "group": "LN60",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": -0.087,
+      "n_positive": 0,
+      "n_negative": 2,
+      "median_positive": null,
+      "median_negative": -0.322,
+      "bidirectional": false,
+      "synapses_from_ring": 333,
+      "synapses_to_ring": 812
+     },
+     {
+      "group": "lLN2P_c",
+      "n": 9,
+      "n_measured": 8,
+      "median_offset_rad": -0.003,
+      "n_positive": 0,
+      "n_negative": 0,
+      "median_positive": null,
+      "median_negative": null,
+      "bidirectional": false,
+      "synapses_from_ring": 1069,
+      "synapses_to_ring": 655
+     },
+     {
+      "group": "lLN2T_a",
+      "n": 5,
+      "n_measured": 5,
+      "median_offset_rad": 0.012,
+      "n_positive": 0,
+      "n_negative": 0,
+      "median_positive": null,
+      "median_negative": null,
+      "bidirectional": false,
+      "synapses_from_ring": 1853,
+      "synapses_to_ring": 536
+     },
+     {
+      "group": "lLN2X05",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": -0.014,
+      "n_positive": 0,
+      "n_negative": 0,
+      "median_positive": null,
+      "median_negative": null,
+      "bidirectional": false,
+      "synapses_from_ring": 246,
+      "synapses_to_ring": 320
+     }
+    ],
+    "has_bidirectional_shifter": false,
+    "score": 0.213
+   },
+   {
+    "group": "PS221",
+    "members": [
+     "PS221"
+    ],
+    "n_cells": 8,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.322,
+    "kernel_amplitude": 5.06,
+    "first_harmonic_r2": 0.322,
+    "second_harmonic_r2": 0.038,
+    "eig_degeneracy": 0.642,
+    "next_eig_ratio": 0.75,
+    "amplitude_cv": 0.366,
+    "inhibitory_loops": [],
+    "shifters": [],
+    "has_bidirectional_shifter": false,
+    "score": 0.207
+   },
+   {
+    "group": "SNta04,SNta11",
+    "members": [
+     "SNta04,SNta11"
+    ],
+    "n_cells": 53,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.392,
+    "kernel_amplitude": 2.47,
+    "first_harmonic_r2": 0.392,
+    "second_harmonic_r2": 0.175,
+    "eig_degeneracy": 0.516,
+    "next_eig_ratio": 0.875,
+    "amplitude_cv": 0.347,
+    "inhibitory_loops": [],
+    "shifters": [
+     {
+      "group": "SNta04",
+      "n": 83,
+      "n_measured": 13,
+      "median_offset_rad": 0.043,
+      "n_positive": 3,
+      "n_negative": 0,
+      "median_positive": 0.451,
+      "median_negative": null,
+      "bidirectional": false,
+      "synapses_from_ring": 842,
+      "synapses_to_ring": 1014
+     },
+     {
+      "group": "SNta11",
+      "n": 67,
+      "n_measured": 15,
+      "median_offset_rad": -0.003,
+      "n_positive": 1,
+      "n_negative": 0,
+      "median_positive": 0.184,
+      "median_negative": null,
+      "bidirectional": false,
+      "synapses_from_ring": 959,
+      "synapses_to_ring": 803
+     }
+    ],
+    "has_bidirectional_shifter": false,
+    "score": 0.202
+   },
+   {
+    "group": "ORN_DC1",
+    "members": [
+     "ORN_DC1"
+    ],
+    "n_cells": 32,
+    "sign": 1.0,
+    "kernel_via": [
+     "lLN2F_b",
+     "lLN2P_b",
+     "il3LN6"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.344,
+    "kernel_amplitude": 4.59,
+    "first_harmonic_r2": 0.344,
+    "second_harmonic_r2": 0.009,
+    "eig_degeneracy": 0.382,
+    "next_eig_ratio": 0.957,
+    "amplitude_cv": 0.369,
+    "inhibitory_loops": [
+     {
+      "group": "lLN2F_b",
+      "n": 4,
+      "synapses_in": 1873,
+      "synapses_out": 1911
+     },
+     {
+      "group": "lLN2P_b",
+      "n": 12,
+      "synapses_in": 598,
+      "synapses_out": 502
+     },
+     {
+      "group": "il3LN6",
+      "n": 2,
+      "synapses_in": 1323,
+      "synapses_out": 286
+     }
+    ],
+    "shifters": [
+     {
+      "group": "lLN2F_b",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 0.502,
+      "n_positive": 2,
+      "n_negative": 2,
+      "median_positive": 2.88,
+      "median_negative": -2.117,
+      "bidirectional": true,
+      "synapses_from_ring": 1873,
+      "synapses_to_ring": 1911
+     },
+     {
+      "group": "lLN2T_e",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": -0.156,
+      "n_positive": 0,
+      "n_negative": 2,
+      "median_positive": null,
+      "median_negative": -0.584,
+      "bidirectional": false,
+      "synapses_from_ring": 254,
+      "synapses_to_ring": 653
+     },
+     {
+      "group": "lLN2F_a",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 0.523,
+      "n_positive": 2,
+      "n_negative": 1,
+      "median_positive": 1.317,
+      "median_negative": -0.654,
+      "bidirectional": false,
+      "synapses_from_ring": 1151,
+      "synapses_to_ring": 554
+     },
+     {
+      "group": "lLN2P_b",
+      "n": 12,
+      "n_measured": 4,
+      "median_offset_rad": 0.101,
+      "n_positive": 2,
+      "n_negative": 2,
+      "median_positive": 0.569,
+      "median_negative": -0.223,
+      "bidirectional": true,
+      "synapses_from_ring": 598,
+      "synapses_to_ring": 502
+     },
+     {
+      "group": "lLN2T_b",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 0.487,
+      "n_positive": 3,
+      "n_negative": 1,
+      "median_positive": 0.664,
+      "median_negative": -1.003,
+      "bidirectional": false,
+      "synapses_from_ring": 1379,
+      "synapses_to_ring": 386
+     }
+    ],
+    "has_bidirectional_shifter": true,
+    "score": 0.197
+   },
+   {
+    "group": "dorsal_tpGRN",
+    "members": [
+     "dorsal_tpGRN"
+    ],
+    "n_cells": 10,
+    "sign": 1.0,
+    "kernel_via": [
+     "GNG078"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.434,
+    "kernel_amplitude": 2.34,
+    "first_harmonic_r2": 0.434,
+    "second_harmonic_r2": 0.028,
+    "eig_degeneracy": 0.45,
+    "next_eig_ratio": 0.792,
+    "amplitude_cv": 0.247,
+    "inhibitory_loops": [
+     {
+      "group": "GNG078",
+      "n": 2,
+      "synapses_in": 681,
+      "synapses_out": 202
+     }
+    ],
+    "shifters": [],
+    "has_bidirectional_shifter": false,
+    "score": 0.195
+   },
+   {
+    "group": "LgAG1",
+    "members": [
+     "LgAG1"
+    ],
+    "n_cells": 25,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.544,
+    "kernel_amplitude": 21.62,
+    "first_harmonic_r2": 0.544,
+    "second_harmonic_r2": 0.118,
+    "eig_degeneracy": 0.349,
+    "next_eig_ratio": 0.979,
+    "amplitude_cv": 0.306,
+    "inhibitory_loops": [],
+    "shifters": [],
+    "has_bidirectional_shifter": false,
+    "score": 0.19
+   },
+   {
+    "group": "LAL034",
+    "members": [
+     "LAL034"
+    ],
+    "n_cells": 8,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.287,
+    "kernel_amplitude": 6.5,
+    "first_harmonic_r2": 0.287,
+    "second_harmonic_r2": 0.009,
+    "eig_degeneracy": 0.636,
+    "next_eig_ratio": 0.86,
+    "amplitude_cv": 0.418,
+    "inhibitory_loops": [],
+    "shifters": [],
+    "has_bidirectional_shifter": false,
+    "score": 0.182
+   },
+   {
+    "group": "DL3_lPN",
+    "members": [
+     "DL3_lPN"
+    ],
+    "n_cells": 11,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.462,
+    "kernel_amplitude": 8.36,
+    "first_harmonic_r2": 0.462,
+    "second_harmonic_r2": 0.061,
+    "eig_degeneracy": 0.388,
+    "next_eig_ratio": 0.96,
+    "amplitude_cv": 0.354,
+    "inhibitory_loops": [],
+    "shifters": [
+     {
+      "group": "lLN2P_b",
+      "n": 12,
+      "n_measured": 5,
+      "median_offset_rad": 0.016,
+      "n_positive": 0,
+      "n_negative": 1,
+      "median_positive": null,
+      "median_negative": -0.154,
+      "bidirectional": false,
+      "synapses_from_ring": 488,
+      "synapses_to_ring": 451
+     },
+     {
+      "group": "LHAV4a4+LH008m",
+      "n": 28,
+      "n_measured": 4,
+      "median_offset_rad": -0.049,
+      "n_positive": 0,
+      "n_negative": 1,
+      "median_positive": null,
+      "median_negative": -0.68,
+      "bidirectional": false,
+      "synapses_from_ring": 580,
+      "synapses_to_ring": 241
+     }
+    ],
+    "has_bidirectional_shifter": false,
+    "score": 0.179
+   },
+   {
+    "group": "LgAG2",
+    "members": [
+     "LgAG2"
+    ],
+    "n_cells": 11,
+    "sign": 1.0,
+    "kernel_via": [
+     "DNg103"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.325,
+    "kernel_amplitude": 10.43,
+    "first_harmonic_r2": 0.325,
+    "second_harmonic_r2": 0.063,
+    "eig_degeneracy": 0.51,
+    "next_eig_ratio": 0.773,
+    "amplitude_cv": 0.284,
+    "inhibitory_loops": [
+     {
+      "group": "DNg103",
+      "n": 2,
+      "synapses_in": 478,
+      "synapses_out": 1035
+     }
+    ],
+    "shifters": [],
+    "has_bidirectional_shifter": false,
+    "score": 0.166
+   },
+   {
+    "group": "WG1",
+    "members": [
+     "WG1"
+    ],
+    "n_cells": 96,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.283,
+    "kernel_amplitude": 1.94,
+    "first_harmonic_r2": 0.283,
+    "second_harmonic_r2": 0.128,
+    "eig_degeneracy": 0.589,
+    "next_eig_ratio": 0.757,
+    "amplitude_cv": 0.389,
+    "inhibitory_loops": [],
+    "shifters": [],
+    "has_bidirectional_shifter": false,
+    "score": 0.166
+   },
+   {
+    "group": "TRN_VP1m",
+    "members": [
+     "TRN_VP1m"
+    ],
+    "n_cells": 11,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.383,
+    "kernel_amplitude": 4.65,
+    "first_harmonic_r2": 0.383,
+    "second_harmonic_r2": 0.0,
+    "eig_degeneracy": 0.433,
+    "next_eig_ratio": 0.971,
+    "amplitude_cv": 0.486,
+    "inhibitory_loops": [],
+    "shifters": [
+     {
+      "group": "lLN2F_b",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": -0.003,
+      "n_positive": 0,
+      "n_negative": 0,
+      "median_positive": null,
+      "median_negative": null,
+      "bidirectional": false,
+      "synapses_from_ring": 1307,
+      "synapses_to_ring": 1211
+     },
+     {
+      "group": "lLN1_bc+lLN2X12",
+      "n": 41,
+      "n_measured": 19,
+      "median_offset_rad": -0.006,
+      "n_positive": 3,
+      "n_negative": 1,
+      "median_positive": 0.275,
+      "median_negative": -0.208,
+      "bidirectional": false,
+      "synapses_from_ring": 1394,
+      "synapses_to_ring": 911
+     },
+     {
+      "group": "lLN2F_a",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 0.002,
+      "n_positive": 0,
+      "n_negative": 0,
+      "median_positive": null,
+      "median_negative": null,
+      "bidirectional": false,
+      "synapses_from_ring": 894,
+      "synapses_to_ring": 647
+     },
+     {
+      "group": "lLN2X11",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 0.002,
+      "n_positive": 0,
+      "n_negative": 0,
+      "median_positive": null,
+      "median_negative": null,
+      "bidirectional": false,
+      "synapses_from_ring": 400,
+      "synapses_to_ring": 286
+     }
+    ],
+    "has_bidirectional_shifter": false,
+    "score": 0.166
+   },
+   {
+    "group": "IN04B013",
+    "members": [
+     "IN04B013"
+    ],
+    "n_cells": 9,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.287,
+    "kernel_amplitude": 3.94,
+    "first_harmonic_r2": 0.287,
+    "second_harmonic_r2": 0.007,
+    "eig_degeneracy": 0.578,
+    "next_eig_ratio": 0.8,
+    "amplitude_cv": 0.496,
+    "inhibitory_loops": [],
+    "shifters": [],
+    "has_bidirectional_shifter": false,
+    "score": 0.166
+   },
+   {
+    "group": "WG4",
+    "members": [
+     "WG4"
+    ],
+    "n_cells": 96,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.282,
+    "kernel_amplitude": 2.64,
+    "first_harmonic_r2": 0.282,
+    "second_harmonic_r2": 0.067,
+    "eig_degeneracy": 0.586,
+    "next_eig_ratio": 0.875,
+    "amplitude_cv": 0.494,
+    "inhibitory_loops": [],
+    "shifters": [
+     {
+      "group": "WG3",
+      "n": 96,
+      "n_measured": 88,
+      "median_offset_rad": 0.005,
+      "n_positive": 0,
+      "n_negative": 10,
+      "median_positive": null,
+      "median_negative": -0.245,
+      "bidirectional": false,
+      "synapses_from_ring": 3765,
+      "synapses_to_ring": 9637
+     }
+    ],
+    "has_bidirectional_shifter": false,
+    "score": 0.165
+   },
+   {
+    "group": "SNta14",
+    "members": [
+     "SNta14"
+    ],
+    "n_cells": 12,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.418,
+    "kernel_amplitude": 10.86,
+    "first_harmonic_r2": 0.418,
+    "second_harmonic_r2": 0.069,
+    "eig_degeneracy": 0.385,
+    "next_eig_ratio": 0.883,
+    "amplitude_cv": 0.494,
+    "inhibitory_loops": [],
+    "shifters": [
+     {
+      "group": "INXXX044",
+      "n": 8,
+      "n_measured": 5,
+      "median_offset_rad": -0.005,
+      "n_positive": 0,
+      "n_negative": 0,
+      "median_positive": null,
+      "median_negative": null,
+      "bidirectional": false,
+      "synapses_from_ring": 1514,
+      "synapses_to_ring": 869
+     },
+     {
+      "group": "SNta11,SNta14",
+      "n": 42,
+      "n_measured": 10,
+      "median_offset_rad": -0.014,
+      "n_positive": 0,
+      "n_negative": 1,
+      "median_positive": null,
+      "median_negative": -0.15,
+      "bidirectional": false,
+      "synapses_from_ring": 662,
+      "synapses_to_ring": 603
+     }
+    ],
+    "has_bidirectional_shifter": false,
+    "score": 0.161
+   },
+   {
+    "group": "aSP10C_a",
+    "members": [
+     "aSP10C_a"
+    ],
+    "n_cells": 9,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.261,
+    "kernel_amplitude": 4.23,
+    "first_harmonic_r2": 0.261,
+    "second_harmonic_r2": 0.006,
+    "eig_degeneracy": 0.594,
+    "next_eig_ratio": 0.899,
+    "amplitude_cv": 0.55,
+    "inhibitory_loops": [],
+    "shifters": [],
+    "has_bidirectional_shifter": false,
+    "score": 0.155
+   },
+   {
+    "group": "MeVP5",
+    "members": [
+     "MeVP5"
+    ],
+    "n_cells": 17,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.418,
+    "kernel_amplitude": 5.12,
+    "first_harmonic_r2": 0.418,
+    "second_harmonic_r2": 0.106,
+    "eig_degeneracy": 0.365,
+    "next_eig_ratio": 0.86,
+    "amplitude_cv": 0.394,
+    "inhibitory_loops": [],
+    "shifters": [],
+    "has_bidirectional_shifter": false,
+    "score": 0.152
+   },
+   {
+    "group": "ORN_DP1m",
+    "members": [
+     "ORN_DP1m"
+    ],
+    "n_cells": 31,
+    "sign": 1.0,
+    "kernel_via": [
+     "il3LN6"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.295,
+    "kernel_amplitude": 6.84,
+    "first_harmonic_r2": 0.295,
+    "second_harmonic_r2": 0.009,
+    "eig_degeneracy": 0.335,
+    "next_eig_ratio": 0.874,
+    "amplitude_cv": 0.391,
+    "inhibitory_loops": [
+     {
+      "group": "il3LN6",
+      "n": 2,
+      "synapses_in": 5997,
+      "synapses_out": 1596
+     }
+    ],
+    "shifters": [
+     {
+      "group": "lLN2F_b",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 0.365,
+      "n_positive": 2,
+      "n_negative": 2,
+      "median_positive": 2.86,
+      "median_negative": -2.362,
+      "bidirectional": true,
+      "synapses_from_ring": 5357,
+      "synapses_to_ring": 5620
+     },
+     {
+      "group": "lLN2T_d",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 0.398,
+      "n_positive": 2,
+      "n_negative": 2,
+      "median_positive": 2.967,
+      "median_negative": -2.191,
+      "bidirectional": true,
+      "synapses_from_ring": 2339,
+      "synapses_to_ring": 1978
+     },
+     {
+      "group": "lLN2F_a",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 0.165,
+      "n_positive": 2,
+      "n_negative": 2,
+      "median_positive": 2.636,
+      "median_negative": -2.461,
+      "bidirectional": true,
+      "synapses_from_ring": 2274,
+      "synapses_to_ring": 1287
+     },
+     {
+      "group": "lLN2P_b",
+      "n": 12,
+      "n_measured": 6,
+      "median_offset_rad": 0.028,
+      "n_positive": 1,
+      "n_negative": 2,
+      "median_positive": 0.21,
+      "median_negative": -0.743,
+      "bidirectional": false,
+      "synapses_from_ring": 388,
+      "synapses_to_ring": 494
+     },
+     {
+      "group": "lLN2X02",
+      "n": 6,
+      "n_measured": 6,
+      "median_offset_rad": 0.033,
+      "n_positive": 3,
+      "n_negative": 3,
+      "median_positive": 0.451,
+      "median_negative": -0.323,
+      "bidirectional": true,
+      "synapses_from_ring": 1210,
+      "synapses_to_ring": 440
+     },
+     {
+      "group": "lLN2T_b",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": -0.756,
+      "n_positive": 1,
+      "n_negative": 3,
+      "median_positive": 2.522,
+      "median_negative": -1.272,
+      "bidirectional": false,
+      "synapses_from_ring": 2622,
+      "synapses_to_ring": 439
+     }
+    ],
+    "has_bidirectional_shifter": true,
+    "score": 0.148
+   },
+   {
+    "group": "ORN_DC4",
+    "members": [
+     "ORN_DC4"
+    ],
+    "n_cells": 23,
+    "sign": 1.0,
+    "kernel_via": [
+     "lLN2F_b",
+     "lLN2P_b"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.251,
+    "kernel_amplitude": 2.63,
+    "first_harmonic_r2": 0.251,
+    "second_harmonic_r2": 0.012,
+    "eig_degeneracy": 0.578,
+    "next_eig_ratio": 0.966,
+    "amplitude_cv": 0.324,
+    "inhibitory_loops": [
+     {
+      "group": "lLN2F_b",
+      "n": 4,
+      "synapses_in": 2654,
+      "synapses_out": 1717
+     },
+     {
+      "group": "lLN2P_b",
+      "n": 12,
+      "synapses_in": 1104,
+      "synapses_out": 265
+     }
+    ],
+    "shifters": [
+     {
+      "group": "lLN2F_b",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 1.574,
+      "n_positive": 3,
+      "n_negative": 1,
+      "median_positive": 2.059,
+      "median_negative": -2.657,
+      "bidirectional": false,
+      "synapses_from_ring": 2654,
+      "synapses_to_ring": 1717
+     },
+     {
+      "group": "lLN2F_a",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 0.172,
+      "n_positive": 2,
+      "n_negative": 1,
+      "median_positive": 0.585,
+      "median_negative": -0.319,
+      "bidirectional": false,
+      "synapses_from_ring": 1383,
+      "synapses_to_ring": 577
+     },
+     {
+      "group": "lLN2T_b",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": -1.196,
+      "n_positive": 1,
+      "n_negative": 3,
+      "median_positive": 0.538,
+      "median_negative": -2.119,
+      "bidirectional": false,
+      "synapses_from_ring": 1401,
+      "synapses_to_ring": 324
+     },
+     {
+      "group": "lLN2P_b",
+      "n": 12,
+      "n_measured": 4,
+      "median_offset_rad": 2.321,
+      "n_positive": 3,
+      "n_negative": 1,
+      "median_positive": 2.387,
+      "median_negative": -1.349,
+      "bidirectional": false,
+      "synapses_from_ring": 1104,
+      "synapses_to_ring": 265
+     }
+    ],
+    "has_bidirectional_shifter": false,
+    "score": 0.145
+   },
+   {
+    "group": "LgLG6",
+    "members": [
+     "LgLG6"
+    ],
+    "n_cells": 16,
+    "sign": 1.0,
+    "kernel_via": [
+     "AN05B035"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.277,
+    "kernel_amplitude": 10.54,
+    "first_harmonic_r2": 0.277,
+    "second_harmonic_r2": 0.044,
+    "eig_degeneracy": 0.518,
+    "next_eig_ratio": 0.644,
+    "amplitude_cv": 0.611,
+    "inhibitory_loops": [
+     {
+      "group": "AN05B035",
+      "n": 2,
+      "synapses_in": 1475,
+      "synapses_out": 950
+     }
+    ],
+    "shifters": [],
+    "has_bidirectional_shifter": false,
+    "score": 0.144
+   },
+   {
+    "group": "KCab-p+PAM09",
+    "members": [
+     "KCab-p",
+     "PAM09"
+    ],
+    "n_cells": 138,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.314,
+    "kernel_amplitude": 2.27,
+    "first_harmonic_r2": 0.314,
+    "second_harmonic_r2": 0.021,
+    "eig_degeneracy": 0.292,
+    "next_eig_ratio": 0.899,
+    "amplitude_cv": 0.353,
+    "inhibitory_loops": [],
+    "shifters": [
+     {
+      "group": "PAM10",
+      "n": 15,
+      "n_measured": 11,
+      "median_offset_rad": 0.59,
+      "n_positive": 6,
+      "n_negative": 5,
+      "median_positive": 1.046,
+      "median_negative": -1.109,
+      "bidirectional": true,
+      "synapses_from_ring": 1549,
+      "synapses_to_ring": 2175
+     },
+     {
+      "group": "KCab-s",
+      "n": 657,
+      "n_measured": 11,
+      "median_offset_rad": 0.012,
+      "n_positive": 5,
+      "n_negative": 2,
+      "median_positive": 0.285,
+      "median_negative": -0.342,
+      "bidirectional": true,
+      "synapses_from_ring": 1062,
+      "synapses_to_ring": 1746
+     },
+     {
+      "group": "PAM11",
+      "n": 15,
+      "n_measured": 4,
+      "median_offset_rad": 0.143,
+      "n_positive": 2,
+      "n_negative": 1,
+      "median_positive": 0.705,
+      "median_negative": -2.735,
+      "bidirectional": false,
+      "synapses_from_ring": 316,
+      "synapses_to_ring": 515
+     },
+     {
+      "group": "PAM04",
+      "n": 32,
+      "n_measured": 6,
+      "median_offset_rad": 0.049,
+      "n_positive": 2,
+      "n_negative": 1,
+      "median_positive": 0.31,
+      "median_negative": -0.21,
+      "bidirectional": false,
+      "synapses_from_ring": 755,
+      "synapses_to_ring": 508
+     }
+    ],
+    "has_bidirectional_shifter": true,
+    "score": 0.138
+   },
+   {
+    "group": "FR1",
+    "members": [
+     "FR1"
+    ],
+    "n_cells": 18,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.695,
+    "kernel_amplitude": 32.43,
+    "first_harmonic_r2": 0.695,
+    "second_harmonic_r2": 0.027,
+    "eig_degeneracy": 0.195,
+    "next_eig_ratio": 0.946,
+    "amplitude_cv": 0.436,
+    "inhibitory_loops": [],
+    "shifters": [],
+    "has_bidirectional_shifter": false,
+    "score": 0.136
+   },
+   {
+    "group": "PS353",
+    "members": [
+     "PS353"
+    ],
+    "n_cells": 10,
+    "sign": -1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.449,
+    "kernel_amplitude": 11.57,
+    "first_harmonic_r2": 0.449,
+    "second_harmonic_r2": 0.115,
+    "eig_degeneracy": 0.281,
+    "next_eig_ratio": 0.858,
+    "amplitude_cv": 0.262,
+    "inhibitory_loops": [],
+    "shifters": [],
+    "has_bidirectional_shifter": false,
+    "score": 0.126
+   },
+   {
+    "group": "AN09B004",
+    "members": [
+     "AN09B004"
+    ],
+    "n_cells": 10,
+    "sign": 1.0,
+    "kernel_via": [
+     "IN09B043"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.26,
+    "kernel_amplitude": 65.59,
+    "first_harmonic_r2": 0.26,
+    "second_harmonic_r2": 0.175,
+    "eig_degeneracy": 0.479,
+    "next_eig_ratio": 0.742,
+    "amplitude_cv": 0.356,
+    "inhibitory_loops": [
+     {
+      "group": "IN09B043",
+      "n": 6,
+      "synapses_in": 346,
+      "synapses_out": 786
+     }
+    ],
+    "shifters": [
+     {
+      "group": "IN00A031",
+      "n": 9,
+      "n_measured": 8,
+      "median_offset_rad": 0.828,
+      "n_positive": 8,
+      "n_negative": 0,
+      "median_positive": 0.828,
+      "median_negative": null,
+      "bidirectional": false,
+      "synapses_from_ring": 933,
+      "synapses_to_ring": 1281
+     },
+     {
+      "group": "IN09B043",
+      "n": 6,
+      "n_measured": 6,
+      "median_offset_rad": -2.423,
+      "n_positive": 0,
+      "n_negative": 6,
+      "median_positive": null,
+      "median_negative": -2.423,
+      "bidirectional": false,
+      "synapses_from_ring": 346,
+      "synapses_to_ring": 786
+     },
+     {
+      "group": "IN09B008",
+      "n": 6,
+      "n_measured": 6,
+      "median_offset_rad": 2.399,
+      "n_positive": 6,
+      "n_negative": 0,
+      "median_positive": 2.399,
+      "median_negative": null,
+      "bidirectional": false,
+      "synapses_from_ring": 250,
+      "synapses_to_ring": 562
+     },
+     {
+      "group": "IN09B005",
+      "n": 6,
+      "n_measured": 6,
+      "median_offset_rad": 2.428,
+      "n_positive": 6,
+      "n_negative": 0,
+      "median_positive": 2.428,
+      "median_negative": null,
+      "bidirectional": false,
+      "synapses_from_ring": 301,
+      "synapses_to_ring": 478
+     },
+     {
+      "group": "IN09B049",
+      "n": 6,
+      "n_measured": 6,
+      "median_offset_rad": -2.605,
+      "n_positive": 0,
+      "n_negative": 6,
+      "median_positive": null,
+      "median_negative": -2.605,
+      "bidirectional": false,
+      "synapses_from_ring": 265,
+      "synapses_to_ring": 362
+     },
+     {
+      "group": "IN09B044",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": -2.416,
+      "n_positive": 0,
+      "n_negative": 4,
+      "median_positive": null,
+      "median_negative": -2.416,
+      "bidirectional": false,
+      "synapses_from_ring": 308,
+      "synapses_to_ring": 297
+     }
+    ],
+    "has_bidirectional_shifter": false,
+    "score": 0.124
+   },
+   {
+    "group": "PFNd",
+    "members": [
+     "PFNd"
+    ],
+    "n_cells": 40,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.437,
+    "kernel_amplitude": 5.44,
+    "first_harmonic_r2": 0.437,
+    "second_harmonic_r2": 0.018,
+    "eig_degeneracy": 0.18,
+    "next_eig_ratio": 0.923,
+    "amplitude_cv": 0.475,
+    "inhibitory_loops": [],
+    "shifters": [
+     {
+      "group": "FB3A",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 0.035,
+      "n_positive": 1,
+      "n_negative": 0,
+      "median_positive": 0.179,
+      "median_negative": null,
+      "bidirectional": false,
+      "synapses_from_ring": 4020,
+      "synapses_to_ring": 5765
+     },
+     {
+      "group": "LNO1",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": -0.0,
+      "n_positive": 0,
+      "n_negative": 0,
+      "median_positive": null,
+      "median_negative": null,
+      "bidirectional": false,
+      "synapses_from_ring": 408,
+      "synapses_to_ring": 2982
+     },
+     {
+      "group": "FB4M",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 0.552,
+      "n_positive": 3,
+      "n_negative": 0,
+      "median_positive": 0.827,
+      "median_negative": null,
+      "bidirectional": false,
+      "synapses_from_ring": 635,
+      "synapses_to_ring": 964
+     },
+     {
+      "group": "FB4L",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": -0.114,
+      "n_positive": 2,
+      "n_negative": 2,
+      "median_positive": 0.173,
+      "median_negative": -0.422,
+      "bidirectional": true,
+      "synapses_from_ring": 506,
+      "synapses_to_ring": 398
+     }
+    ],
+    "has_bidirectional_shifter": true,
+    "score": 0.118
+   },
+   {
+    "group": "LAL302m",
+    "members": [
+     "LAL302m"
+    ],
+    "n_cells": 8,
+    "sign": 1.0,
+    "kernel_via": [
+     "PVLP140"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.425,
+    "kernel_amplitude": 5.12,
+    "first_harmonic_r2": 0.425,
+    "second_harmonic_r2": 0.017,
+    "eig_degeneracy": 0.278,
+    "next_eig_ratio": 0.719,
+    "amplitude_cv": 0.298,
+    "inhibitory_loops": [
+     {
+      "group": "PVLP140",
+      "n": 2,
+      "synapses_in": 425,
+      "synapses_out": 445
+     }
+    ],
+    "shifters": [],
+    "has_bidirectional_shifter": false,
+    "score": 0.118
+   },
+   {
+    "group": "PFL1",
+    "members": [
+     "PFL1"
+    ],
+    "n_cells": 14,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.3,
+    "kernel_amplitude": 2.74,
+    "first_harmonic_r2": 0.3,
+    "second_harmonic_r2": 0.042,
+    "eig_degeneracy": 0.39,
+    "next_eig_ratio": 0.986,
+    "amplitude_cv": 0.337,
+    "inhibitory_loops": [],
+    "shifters": [
+     {
+      "group": "FB2B_b",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 0.412,
+      "n_positive": 2,
+      "n_negative": 1,
+      "median_positive": 1.899,
+      "median_negative": -3.132,
+      "bidirectional": false,
+      "synapses_from_ring": 889,
+      "synapses_to_ring": 1123
+     }
+    ],
+    "has_bidirectional_shifter": false,
+    "score": 0.117
+   },
+   {
+    "group": "PFNv",
+    "members": [
+     "PFNv"
+    ],
+    "n_cells": 20,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.524,
+    "kernel_amplitude": 26.11,
+    "first_harmonic_r2": 0.524,
+    "second_harmonic_r2": 0.0,
+    "eig_degeneracy": 0.212,
+    "next_eig_ratio": 0.923,
+    "amplitude_cv": 0.44,
+    "inhibitory_loops": [],
+    "shifters": [
+     {
+      "group": "LNO1",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": -0.014,
+      "n_positive": 0,
+      "n_negative": 0,
+      "median_positive": null,
+      "median_negative": null,
+      "bidirectional": false,
+      "synapses_from_ring": 2764,
+      "synapses_to_ring": 3989
+     },
+     {
+      "group": "FB4M",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 1.494,
+      "n_positive": 4,
+      "n_negative": 0,
+      "median_positive": 1.494,
+      "median_negative": null,
+      "bidirectional": false,
+      "synapses_from_ring": 1168,
+      "synapses_to_ring": 276
+     }
+    ],
+    "has_bidirectional_shifter": false,
+    "score": 0.111
+   },
+   {
+    "group": "DNg12_c",
+    "members": [
+     "DNg12_c"
+    ],
+    "n_cells": 8,
+    "sign": 1.0,
+    "kernel_via": [
+     "GNG150"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.402,
+    "kernel_amplitude": 11.46,
+    "first_harmonic_r2": 0.402,
+    "second_harmonic_r2": 0.01,
+    "eig_degeneracy": 0.244,
+    "next_eig_ratio": 0.616,
+    "amplitude_cv": 0.441,
+    "inhibitory_loops": [
+     {
+      "group": "GNG150",
+      "n": 2,
+      "synapses_in": 519,
+      "synapses_out": 367
+     }
+    ],
+    "shifters": [
+     {
+      "group": "DNge019",
+      "n": 11,
+      "n_measured": 9,
+      "median_offset_rad": -0.063,
+      "n_positive": 0,
+      "n_negative": 2,
+      "median_positive": null,
+      "median_negative": -0.614,
+      "bidirectional": false,
+      "synapses_from_ring": 490,
+      "synapses_to_ring": 1196
+     }
+    ],
+    "has_bidirectional_shifter": false,
+    "score": 0.098
+   },
+   {
+    "group": "DNge019",
+    "members": [
+     "DNge019"
+    ],
+    "n_cells": 11,
+    "sign": 1.0,
+    "kernel_via": [
+     "GNG150"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.398,
+    "kernel_amplitude": 28.8,
+    "first_harmonic_r2": 0.398,
+    "second_harmonic_r2": 0.002,
+    "eig_degeneracy": 0.243,
+    "next_eig_ratio": 0.943,
+    "amplitude_cv": 0.467,
+    "inhibitory_loops": [
+     {
+      "group": "GNG150",
+      "n": 2,
+      "synapses_in": 449,
+      "synapses_out": 529
+     }
+    ],
+    "shifters": [
+     {
+      "group": "DNg12_c",
+      "n": 8,
+      "n_measured": 6,
+      "median_offset_rad": 0.012,
+      "n_positive": 1,
+      "n_negative": 0,
+      "median_positive": 0.28,
+      "median_negative": null,
+      "bidirectional": false,
+      "synapses_from_ring": 1196,
+      "synapses_to_ring": 490
+     }
+    ],
+    "has_bidirectional_shifter": false,
+    "score": 0.097
+   },
+   {
+    "group": "PFNa",
+    "members": [
+     "PFNa"
+    ],
+    "n_cells": 58,
+    "sign": 1.0,
+    "kernel_via": [
+     "direct"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.507,
+    "kernel_amplitude": 4.78,
+    "first_harmonic_r2": 0.507,
+    "second_harmonic_r2": 0.03,
+    "eig_degeneracy": 0.137,
+    "next_eig_ratio": 0.94,
+    "amplitude_cv": 0.508,
+    "inhibitory_loops": [],
+    "shifters": [
+     {
+      "group": "FB2A",
+      "n": 4,
+      "n_measured": 4,
+      "median_offset_rad": 0.099,
+      "n_positive": 1,
+      "n_negative": 1,
+      "median_positive": 0.469,
+      "median_negative": -0.574,
+      "bidirectional": false,
+      "synapses_from_ring": 664,
+      "synapses_to_ring": 229
+     }
+    ],
+    "has_bidirectional_shifter": false,
+    "score": 0.07
+   },
+   {
+    "group": "LPi2d",
+    "members": [
+     "LPi2d"
+    ],
+    "n_cells": 61,
+    "sign": -1.0,
+    "kernel_via": [
+     "H1"
+    ],
+    "harmonic": 1,
+    "kernel_cos_r2": 0.269,
+    "kernel_amplitude": 2.44,
+    "first_harmonic_r2": 0.269,
+    "second_harmonic_r2": 0.023,
+    "eig_degeneracy": 0.224,
+    "next_eig_ratio": 0.704,
+    "amplitude_cv": 0.378,
+    "inhibitory_loops": [
+     {
+      "group": "H1",
+      "n": 2,
+      "synapses_in": 609,
+      "synapses_out": 674
+     }
+    ],
+    "shifters": [
+     {
+      "group": "LPT23",
+      "n": 6,
+      "n_measured": 6,
+      "median_offset_rad": -0.093,
+      "n_positive": 0,
+      "n_negative": 1,
+      "median_positive": null,
+      "median_negative": -0.226,
+      "bidirectional": false,
+      "synapses_from_ring": 3747,
+      "synapses_to_ring": 3046
+     }
+    ],
+    "has_bidirectional_shifter": false,
+    "score": 0.06
+   }
+  ],
+  "candidates_examined": {
+   "expansion_groups_examined": 196,
+   "expansion_layers_assembled": 182,
+   "normalization_populations_examined": 126,
+   "normalization_small_cells_examined": 8132,
+   "ring_groups_examined": 1587
+  }
+ },
+ "celegans_herm": {
+  "name": "celegans_herm",
+  "n_cells": 454,
+  "n_groups": 165,
+  "thresholds": {
+   "min_layer": 20,
+   "min_pop": 20,
+   "ring_min_cells": 5
+  },
+  "expansion": [],
+  "normalization": [],
+  "ring": [],
+  "candidates_examined": {
+   "expansion_groups_examined": 4,
+   "expansion_layers_assembled": 4,
+   "normalization_populations_examined": 4,
+   "normalization_small_cells_examined": 155,
+   "ring_groups_examined": 10
+  }
+ }
+}

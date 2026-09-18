@@ -1,21 +1,19 @@
 {
- "seed": 42,
+ "seed": 20260704,
  "spec": "ring_attractor",
  "summary": {
   "ensemble_size": 48,
   "hypotheses": {
-   "silent": 30,
-   "attractor_tonic": 11,
-   "filter": 7
+   "silent": 33,
+   "attractor_tonic": 10,
+   "filter": 5
   },
   "mechanisms": {
-   "essential": 31,
-   "confines_width": 3,
-   "sculpts_sharp": 7,
-   "confines": 7
+   "sculpts_sharp": 8,
+   "confines": 2
   },
   "best_experiment": "tonic_sweep",
-  "best_experiment_separation": 0.393
+  "best_experiment_separation": 0.401
  },
  "spec_def": {
   "geometry": "ring",
@@ -149,7 +147,7 @@
    "baseline": {
     "persistence": {
      "concentration": 0,
-     "seeded": 1,
+     "seeded": 0.992,
      "total_rate": 0,
      "width_wedges": 0
     },
@@ -161,6 +159,12 @@
      "drift": null,
      "tracked": 0
     }
+   },
+   "baseline_repeat": {
+    "concentration": 0,
+    "seeded": 0.995,
+    "total_rate": 0,
+    "width_wedges": 0
    },
    "perturbations": {
     "d7_silence": {
@@ -176,12 +180,380 @@
      "width_wedges": 0
     }
    },
-   "mechanism": "essential"
+   "mechanism": null
   },
   {
    "params": {
     "epgRecur": 1,
     "d7Gain": 0.5,
+    "epgTonic": 3,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.976,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "baseline_repeat": {
+    "concentration": 0,
+    "seeded": 0.976,
+    "total_rate": 0,
+    "width_wedges": 0
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.976,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.973,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   },
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 1,
+    "d7Gain": 0.5,
+    "epgTonic": 5,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.967,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "baseline_repeat": {
+    "concentration": 0,
+    "seeded": 0.976,
+    "total_rate": 0,
+    "width_wedges": 0
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.967,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.978,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   },
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 1,
+    "d7Gain": 0.5,
+    "epgTonic": 7,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.752,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "baseline_repeat": {
+    "concentration": 0,
+    "seeded": 0.831,
+    "total_rate": 0,
+    "width_wedges": 0
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.752,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.668,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   },
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 1,
+    "d7Gain": 1,
+    "epgTonic": 0,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.988,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "baseline_repeat": {
+    "concentration": 0,
+    "seeded": 0.989,
+    "total_rate": 0,
+    "width_wedges": 0
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.988,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.989,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   },
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 1,
+    "d7Gain": 1,
+    "epgTonic": 3,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.975,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "baseline_repeat": {
+    "concentration": 0,
+    "seeded": 0.988,
+    "total_rate": 0,
+    "width_wedges": 0
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.975,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.983,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   },
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 1,
+    "d7Gain": 1,
+    "epgTonic": 5,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.956,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "baseline_repeat": {
+    "concentration": 0,
+    "seeded": 0.973,
+    "total_rate": 0,
+    "width_wedges": 0
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.956,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.976,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   },
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 1,
+    "d7Gain": 1,
+    "epgTonic": 7,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.791,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "rotL": {
+     "drift": 3.56,
+     "tracked": 4
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "baseline_repeat": {
+    "concentration": 0,
+    "seeded": 0.61,
+    "total_rate": 0,
+    "width_wedges": 0
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0.76,
+     "seeded": 0.775,
+     "total_rate": 6.5,
+     "width_wedges": 3
+    },
+    "peg_lesion": {
+     "concentration": 0.644,
+     "seeded": 0.838,
+     "total_rate": 6.467,
+     "width_wedges": 3
+    }
+   },
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 1,
+    "d7Gain": 1.3,
+    "epgTonic": 0,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 1,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "baseline_repeat": {
+    "concentration": 0,
+    "seeded": 0.995,
+    "total_rate": 0,
+    "width_wedges": 0
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 1,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.991,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   },
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 1,
+    "d7Gain": 1.3,
     "epgTonic": 3,
     "penGain": 1
    },
@@ -202,27 +574,125 @@
      "tracked": 0
     }
    },
+   "baseline_repeat": {
+    "concentration": 0,
+    "seeded": 0.979,
+    "total_rate": 0,
+    "width_wedges": 0
+   },
    "perturbations": {
     "d7_silence": {
      "concentration": 0,
-     "seeded": 0.977,
+     "seeded": 0.983,
      "total_rate": 0,
      "width_wedges": 0
     },
     "peg_lesion": {
      "concentration": 0,
-     "seeded": 0.978,
+     "seeded": 0.976,
      "total_rate": 0,
      "width_wedges": 0
     }
    },
-   "mechanism": "essential"
+   "mechanism": null
   },
   {
    "params": {
     "epgRecur": 1,
-    "d7Gain": 0.5,
+    "d7Gain": 1.3,
     "epgTonic": 5,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.971,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "baseline_repeat": {
+    "concentration": 0,
+    "seeded": 0.967,
+    "total_rate": 0,
+    "width_wedges": 0
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.971,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.962,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   },
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 1,
+    "d7Gain": 1.3,
+    "epgTonic": 7,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.692,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "rotL": {
+     "drift": -3.407,
+     "tracked": 4
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "baseline_repeat": {
+    "concentration": 0,
+    "seeded": 0.72,
+    "total_rate": 0,
+    "width_wedges": 0
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.692,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.56,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   },
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 3,
+    "d7Gain": 0.5,
+    "epgTonic": 0,
     "penGain": 1
    },
    "hypothesis": "silent",
@@ -242,421 +712,27 @@
      "tracked": 0
     }
    },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.971,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.969,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   },
-   "mechanism": "essential"
-  },
-  {
-   "params": {
-    "epgRecur": 1,
-    "d7Gain": 0.5,
-    "epgTonic": 7,
-    "penGain": 1
-   },
-   "hypothesis": "silent",
-   "baseline": {
-    "persistence": {
-     "concentration": 0,
-     "seeded": 0.663,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": -0.682,
-     "tracked": 4
-    }
+   "baseline_repeat": {
+    "concentration": 0,
+    "seeded": 0.972,
+    "total_rate": 0,
+    "width_wedges": 0
    },
    "perturbations": {
     "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.662,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.823,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   },
-   "mechanism": "essential"
-  },
-  {
-   "params": {
-    "epgRecur": 1,
-    "d7Gain": 1,
-    "epgTonic": 0,
-    "penGain": 1
-   },
-   "hypothesis": "silent",
-   "baseline": {
-    "persistence": {
-     "concentration": 0,
-     "seeded": 0.99,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.991,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.992,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   },
-   "mechanism": "essential"
-  },
-  {
-   "params": {
-    "epgRecur": 1,
-    "d7Gain": 1,
-    "epgTonic": 3,
-    "penGain": 1
-   },
-   "hypothesis": "silent",
-   "baseline": {
-    "persistence": {
      "concentration": 0,
      "seeded": 0.974,
      "total_rate": 0,
      "width_wedges": 0
     },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.981,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
     "peg_lesion": {
      "concentration": 0,
-     "seeded": 0.979,
+     "seeded": 0.963,
      "total_rate": 0,
      "width_wedges": 0
     }
    },
-   "mechanism": "essential"
-  },
-  {
-   "params": {
-    "epgRecur": 1,
-    "d7Gain": 1,
-    "epgTonic": 5,
-    "penGain": 1
-   },
-   "hypothesis": "silent",
-   "baseline": {
-    "persistence": {
-     "concentration": 0,
-     "seeded": 0.969,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.977,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.968,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   },
-   "mechanism": "essential"
-  },
-  {
-   "params": {
-    "epgRecur": 1,
-    "d7Gain": 1,
-    "epgTonic": 7,
-    "penGain": 1
-   },
-   "hypothesis": "silent",
-   "baseline": {
-    "persistence": {
-     "concentration": 0,
-     "seeded": 0.631,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0.831,
-     "seeded": 0.701,
-     "total_rate": 4.033,
-     "width_wedges": 2
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.306,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   },
-   "mechanism": "confines_width"
-  },
-  {
-   "params": {
-    "epgRecur": 1,
-    "d7Gain": 1.3,
-    "epgTonic": 0,
-    "penGain": 1
-   },
-   "hypothesis": "silent",
-   "baseline": {
-    "persistence": {
-     "concentration": 0,
-     "seeded": 0.991,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.992,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.99,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   },
-   "mechanism": "essential"
-  },
-  {
-   "params": {
-    "epgRecur": 1,
-    "d7Gain": 1.3,
-    "epgTonic": 3,
-    "penGain": 1
-   },
-   "hypothesis": "silent",
-   "baseline": {
-    "persistence": {
-     "concentration": 0,
-     "seeded": 0.979,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.98,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.977,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   },
-   "mechanism": "essential"
-  },
-  {
-   "params": {
-    "epgRecur": 1,
-    "d7Gain": 1.3,
-    "epgTonic": 5,
-    "penGain": 1
-   },
-   "hypothesis": "silent",
-   "baseline": {
-    "persistence": {
-     "concentration": 0,
-     "seeded": 0.976,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.976,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.969,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   },
-   "mechanism": "essential"
-  },
-  {
-   "params": {
-    "epgRecur": 1,
-    "d7Gain": 1.3,
-    "epgTonic": 7,
-    "penGain": 1
-   },
-   "hypothesis": "silent",
-   "baseline": {
-    "persistence": {
-     "concentration": 0,
-     "seeded": 0.741,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0.947,
-     "seeded": 0.583,
-     "total_rate": 0.867,
-     "width_wedges": 1
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.691,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   },
-   "mechanism": "sculpts_sharp"
-  },
-  {
-   "params": {
-    "epgRecur": 3,
-    "d7Gain": 0.5,
-    "epgTonic": 0,
-    "penGain": 1
-   },
-   "hypothesis": "silent",
-   "baseline": {
-    "persistence": {
-     "concentration": 0,
-     "seeded": 0.969,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.969,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.973,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   },
-   "mechanism": "essential"
+   "mechanism": null
   },
   {
    "params": {
@@ -669,7 +745,7 @@
    "baseline": {
     "persistence": {
      "concentration": 0,
-     "seeded": 0.952,
+     "seeded": 0.933,
      "total_rate": 0,
      "width_wedges": 0
     },
@@ -682,21 +758,27 @@
      "tracked": 0
     }
    },
+   "baseline_repeat": {
+    "concentration": 0,
+    "seeded": 0.945,
+    "total_rate": 0,
+    "width_wedges": 0
+   },
    "perturbations": {
     "d7_silence": {
      "concentration": 0,
-     "seeded": 0.944,
+     "seeded": 0.933,
      "total_rate": 0,
      "width_wedges": 0
     },
     "peg_lesion": {
      "concentration": 0,
-     "seeded": 0.948,
+     "seeded": 0.92,
      "total_rate": 0,
      "width_wedges": 0
     }
    },
-   "mechanism": "essential"
+   "mechanism": null
   },
   {
    "params": {
@@ -709,34 +791,40 @@
    "baseline": {
     "persistence": {
      "concentration": 0,
-     "seeded": 0.892,
+     "seeded": 0.908,
      "total_rate": 0,
      "width_wedges": 0
     },
     "rotL": {
-     "drift": 2.18,
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": -4.748,
      "tracked": 4
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
     }
+   },
+   "baseline_repeat": {
+    "concentration": 0,
+    "seeded": 0.899,
+    "total_rate": 0,
+    "width_wedges": 0
    },
    "perturbations": {
     "d7_silence": {
-     "concentration": 0.832,
-     "seeded": 0.237,
-     "total_rate": 7.7,
-     "width_wedges": 2
+     "concentration": 0,
+     "seeded": 0.908,
+     "total_rate": 0,
+     "width_wedges": 0
     },
     "peg_lesion": {
-     "concentration": 0.827,
-     "seeded": 0.233,
-     "total_rate": 8.1,
-     "width_wedges": 2
+     "concentration": 0.79,
+     "seeded": 0.169,
+     "total_rate": 5.633,
+     "width_wedges": 3
     }
    },
-   "mechanism": "confines_width"
+   "mechanism": null
   },
   {
    "params": {
@@ -748,312 +836,38 @@
    "hypothesis": "attractor_tonic",
    "baseline": {
     "persistence": {
-     "concentration": 0.938,
-     "seeded": 0.174,
-     "total_rate": 1.4,
+     "concentration": 0.888,
+     "seeded": 0.118,
+     "total_rate": 1.7,
      "width_wedges": 1
     },
     "rotL": {
-     "drift": 3.004,
-     "tracked": 4
+     "drift": null,
+     "tracked": 0
     },
     "rotR": {
-     "drift": -9.012,
-     "tracked": 4
+     "drift": null,
+     "tracked": 0
     }
+   },
+   "baseline_repeat": {
+    "concentration": 0.854,
+    "seeded": 0.185,
+    "total_rate": 1.033,
+    "width_wedges": 2
    },
    "perturbations": {
     "d7_silence": {
-     "concentration": 0.271,
-     "seeded": 0.171,
-     "total_rate": 3.567,
+     "concentration": 0.925,
+     "seeded": 0.097,
+     "total_rate": 1.8,
      "width_wedges": 2
     },
     "peg_lesion": {
-     "concentration": 0.947,
-     "seeded": 0.18,
-     "total_rate": 0.867,
-     "width_wedges": 1
-    }
-   },
-   "mechanism": "confines"
-  },
-  {
-   "params": {
-    "epgRecur": 3,
-    "d7Gain": 1,
-    "epgTonic": 0,
-    "penGain": 1
-   },
-   "hypothesis": "silent",
-   "baseline": {
-    "persistence": {
-     "concentration": 0,
-     "seeded": 0.97,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.97,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.971,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   },
-   "mechanism": "essential"
-  },
-  {
-   "params": {
-    "epgRecur": 3,
-    "d7Gain": 1,
-    "epgTonic": 3,
-    "penGain": 1
-   },
-   "hypothesis": "silent",
-   "baseline": {
-    "persistence": {
-     "concentration": 0,
-     "seeded": 0.934,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.927,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.936,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   },
-   "mechanism": "essential"
-  },
-  {
-   "params": {
-    "epgRecur": 3,
-    "d7Gain": 1,
-    "epgTonic": 5,
-    "penGain": 1
-   },
-   "hypothesis": "silent",
-   "baseline": {
-    "persistence": {
-     "concentration": 0,
-     "seeded": 0.898,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "rotL": {
-     "drift": 2.912,
-     "tracked": 4
-    },
-    "rotR": {
-     "drift": 6.336,
-     "tracked": 4
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.899,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "peg_lesion": {
-     "concentration": 0.828,
-     "seeded": 0.253,
-     "total_rate": 7.533,
-     "width_wedges": 2
-    }
-   },
-   "mechanism": "essential"
-  },
-  {
-   "params": {
-    "epgRecur": 3,
-    "d7Gain": 1,
-    "epgTonic": 7,
-    "penGain": 1
-   },
-   "hypothesis": "attractor_tonic",
-   "baseline": {
-    "persistence": {
      "concentration": 1,
-     "seeded": 0.174,
+     "seeded": 0.147,
      "total_rate": 0.833,
      "width_wedges": 1
-    },
-    "rotL": {
-     "drift": 0.102,
-     "tracked": 4
-    },
-    "rotR": {
-     "drift": -1.898,
-     "tracked": 4
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.197,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "peg_lesion": {
-     "concentration": 0.129,
-     "seeded": 0.172,
-     "total_rate": 4.267,
-     "width_wedges": 5
-    }
-   },
-   "mechanism": "essential"
-  },
-  {
-   "params": {
-    "epgRecur": 3,
-    "d7Gain": 1.3,
-    "epgTonic": 0,
-    "penGain": 1
-   },
-   "hypothesis": "silent",
-   "baseline": {
-    "persistence": {
-     "concentration": 0,
-     "seeded": 0.973,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.97,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.969,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   },
-   "mechanism": "essential"
-  },
-  {
-   "params": {
-    "epgRecur": 3,
-    "d7Gain": 1.3,
-    "epgTonic": 3,
-    "penGain": 1
-   },
-   "hypothesis": "silent",
-   "baseline": {
-    "persistence": {
-     "concentration": 0,
-     "seeded": 0.934,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.94,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.947,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   },
-   "mechanism": "essential"
-  },
-  {
-   "params": {
-    "epgRecur": 3,
-    "d7Gain": 1.3,
-    "epgTonic": 5,
-    "penGain": 1
-   },
-   "hypothesis": "attractor_tonic",
-   "baseline": {
-    "persistence": {
-     "concentration": 0.82,
-     "seeded": 0.224,
-     "total_rate": 9.2,
-     "width_wedges": 2
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0.832,
-     "seeded": 0.225,
-     "total_rate": 7.033,
-     "width_wedges": 2
-    },
-    "peg_lesion": {
-     "concentration": 0.81,
-     "seeded": 0.215,
-     "total_rate": 7.7,
-     "width_wedges": 2
     }
    },
    "mechanism": "sculpts_sharp"
@@ -1061,47 +875,7 @@
   {
    "params": {
     "epgRecur": 3,
-    "d7Gain": 1.3,
-    "epgTonic": 7,
-    "penGain": 1
-   },
-   "hypothesis": "attractor_tonic",
-   "baseline": {
-    "persistence": {
-     "concentration": 0.938,
-     "seeded": 0.139,
-     "total_rate": 1.4,
-     "width_wedges": 1
-    },
-    "rotL": {
-     "drift": -4.826,
-     "tracked": 4
-    },
-    "rotR": {
-     "drift": 8.55,
-     "tracked": 4
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0.677,
-     "seeded": 0.144,
-     "total_rate": 2.833,
-     "width_wedges": 2
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.189,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   },
-   "mechanism": "sculpts_sharp"
-  },
-  {
-   "params": {
-    "epgRecur": 4,
-    "d7Gain": 0.5,
+    "d7Gain": 1,
     "epgTonic": 0,
     "penGain": 1
    },
@@ -1122,36 +896,42 @@
      "tracked": 0
     }
    },
+   "baseline_repeat": {
+    "concentration": 0,
+    "seeded": 0.967,
+    "total_rate": 0,
+    "width_wedges": 0
+   },
    "perturbations": {
     "d7_silence": {
      "concentration": 0,
-     "seeded": 0.953,
+     "seeded": 0.96,
      "total_rate": 0,
      "width_wedges": 0
     },
     "peg_lesion": {
      "concentration": 0,
-     "seeded": 0.951,
+     "seeded": 0.964,
      "total_rate": 0,
      "width_wedges": 0
     }
    },
-   "mechanism": "essential"
+   "mechanism": null
   },
   {
    "params": {
-    "epgRecur": 4,
-    "d7Gain": 0.5,
+    "epgRecur": 3,
+    "d7Gain": 1,
     "epgTonic": 3,
     "penGain": 1
    },
-   "hypothesis": "attractor_tonic",
+   "hypothesis": "silent",
    "baseline": {
     "persistence": {
-     "concentration": 0.88,
-     "seeded": 0.23,
-     "total_rate": 3.9,
-     "width_wedges": 2
+     "concentration": 0,
+     "seeded": 0.945,
+     "total_rate": 0,
+     "width_wedges": 0
     },
     "rotL": {
      "drift": null,
@@ -1162,21 +942,395 @@
      "tracked": 0
     }
    },
+   "baseline_repeat": {
+    "concentration": 0,
+    "seeded": 0.945,
+    "total_rate": 0,
+    "width_wedges": 0
+   },
    "perturbations": {
     "d7_silence": {
-     "concentration": 0.928,
-     "seeded": 0.178,
-     "total_rate": 2.167,
+     "concentration": 0,
+     "seeded": 0.945,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.929,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   },
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 3,
+    "d7Gain": 1,
+    "epgTonic": 5,
+    "penGain": 1
+   },
+   "hypothesis": "attractor_tonic",
+   "baseline": {
+    "persistence": {
+     "concentration": 0.828,
+     "seeded": 0.235,
+     "total_rate": 6.867,
+     "width_wedges": 2
+    },
+    "rotL": {
+     "drift": -3.449,
+     "tracked": 4
+    },
+    "rotR": {
+     "drift": 5.822,
+     "tracked": 4
+    }
+   },
+   "baseline_repeat": {
+    "concentration": 0,
+    "seeded": 0.9,
+    "total_rate": 0,
+    "width_wedges": 0
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0.834,
+     "seeded": 0.221,
+     "total_rate": 6.367,
      "width_wedges": 2
     },
     "peg_lesion": {
-     "concentration": 0.952,
-     "seeded": 0.154,
-     "total_rate": 0.833,
-     "width_wedges": 1
+     "concentration": 0,
+     "seeded": 0.173,
+     "total_rate": 0,
+     "width_wedges": 0
     }
    },
    "mechanism": "sculpts_sharp"
+  },
+  {
+   "params": {
+    "epgRecur": 3,
+    "d7Gain": 1,
+    "epgTonic": 7,
+    "penGain": 1
+   },
+   "hypothesis": "filter",
+   "baseline": {
+    "persistence": {
+     "concentration": 0.232,
+     "seeded": 0.134,
+     "total_rate": 3.767,
+     "width_wedges": 4
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": -2.951,
+     "tracked": 4
+    }
+   },
+   "baseline_repeat": {
+    "concentration": 0.896,
+    "seeded": 0.149,
+    "total_rate": 1.033,
+    "width_wedges": 1
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0.318,
+     "seeded": 0.173,
+     "total_rate": 4.733,
+     "width_wedges": 5
+    },
+    "peg_lesion": {
+     "concentration": 0.165,
+     "seeded": 0.15,
+     "total_rate": 3.767,
+     "width_wedges": 4
+    }
+   },
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 3,
+    "d7Gain": 1.3,
+    "epgTonic": 0,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.973,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "baseline_repeat": {
+    "concentration": 0,
+    "seeded": 0.97,
+    "total_rate": 0,
+    "width_wedges": 0
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.973,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.959,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   },
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 3,
+    "d7Gain": 1.3,
+    "epgTonic": 3,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.935,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "baseline_repeat": {
+    "concentration": 0,
+    "seeded": 0.953,
+    "total_rate": 0,
+    "width_wedges": 0
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.935,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.909,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   },
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 3,
+    "d7Gain": 1.3,
+    "epgTonic": 5,
+    "penGain": 1
+   },
+   "hypothesis": "attractor_tonic",
+   "baseline": {
+    "persistence": {
+     "concentration": 0.82,
+     "seeded": 0.209,
+     "total_rate": 7.167,
+     "width_wedges": 3
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "baseline_repeat": {
+    "concentration": 0,
+    "seeded": 0.901,
+    "total_rate": 0,
+    "width_wedges": 0
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0.824,
+     "seeded": 0.196,
+     "total_rate": 6.367,
+     "width_wedges": 2
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.19,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   },
+   "mechanism": "sculpts_sharp"
+  },
+  {
+   "params": {
+    "epgRecur": 3,
+    "d7Gain": 1.3,
+    "epgTonic": 7,
+    "penGain": 1
+   },
+   "hypothesis": "attractor_tonic",
+   "baseline": {
+    "persistence": {
+     "concentration": 0.929,
+     "seeded": 0.131,
+     "total_rate": 1.6,
+     "width_wedges": 2
+    },
+    "rotL": {
+     "drift": -0.658,
+     "tracked": 4
+    },
+    "rotR": {
+     "drift": 0.007,
+     "tracked": 4
+    }
+   },
+   "baseline_repeat": {
+    "concentration": 0.862,
+    "seeded": 0.189,
+    "total_rate": 1.9,
+    "width_wedges": 1
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0.947,
+     "seeded": 0.147,
+     "total_rate": 0.867,
+     "width_wedges": 1
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.162,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   },
+   "mechanism": "sculpts_sharp"
+  },
+  {
+   "params": {
+    "epgRecur": 4,
+    "d7Gain": 0.5,
+    "epgTonic": 0,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.943,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "baseline_repeat": {
+    "concentration": 0,
+    "seeded": 0.95,
+    "total_rate": 0,
+    "width_wedges": 0
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.943,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.914,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   },
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 4,
+    "d7Gain": 0.5,
+    "epgTonic": 3,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.879,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "rotL": {
+     "drift": 16.994,
+     "tracked": 2
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "baseline_repeat": {
+    "concentration": 0.93,
+    "seeded": 0.164,
+    "total_rate": 1.833,
+    "width_wedges": 2
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.879,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.175,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   },
+   "mechanism": null
   },
   {
    "params": {
@@ -1189,7 +1343,7 @@
    "baseline": {
     "persistence": {
      "concentration": 0,
-     "seeded": 0.157,
+     "seeded": 0.146,
      "total_rate": 0,
      "width_wedges": 0
     },
@@ -1202,21 +1356,27 @@
      "tracked": 0
     }
    },
+   "baseline_repeat": {
+    "concentration": 0,
+    "seeded": 0.168,
+    "total_rate": 0,
+    "width_wedges": 0
+   },
    "perturbations": {
     "d7_silence": {
      "concentration": 0,
-     "seeded": 0.156,
+     "seeded": 0.153,
      "total_rate": 0,
      "width_wedges": 0
     },
     "peg_lesion": {
      "concentration": 0,
-     "seeded": 0.129,
+     "seeded": 0.116,
      "total_rate": 0,
      "width_wedges": 0
     }
    },
-   "mechanism": "essential"
+   "mechanism": null
   },
   {
    "params": {
@@ -1228,35 +1388,41 @@
    "hypothesis": "attractor_tonic",
    "baseline": {
     "persistence": {
-     "concentration": 0.888,
-     "seeded": 0.141,
-     "total_rate": 1.7,
-     "width_wedges": 1
+     "concentration": 0.548,
+     "seeded": 0.163,
+     "total_rate": 15.167,
+     "width_wedges": 4
     },
     "rotL": {
-     "drift": -8.22,
-     "tracked": 4
+     "drift": null,
+     "tracked": 0
     },
     "rotR": {
      "drift": null,
      "tracked": 0
     }
    },
+   "baseline_repeat": {
+    "concentration": 0.12,
+    "seeded": 0.202,
+    "total_rate": 24.3,
+    "width_wedges": 7
+   },
    "perturbations": {
     "d7_silence": {
-     "concentration": 0.099,
-     "seeded": 0.125,
-     "total_rate": 27.033,
-     "width_wedges": 7
+     "concentration": 0.551,
+     "seeded": 0.162,
+     "total_rate": 16.367,
+     "width_wedges": 4
     },
     "peg_lesion": {
-     "concentration": 1,
-     "seeded": 0.136,
-     "total_rate": 0.5,
+     "concentration": 0,
+     "seeded": 0.138,
+     "total_rate": 0,
      "width_wedges": 0
     }
    },
-   "mechanism": "confines"
+   "mechanism": "sculpts_sharp"
   },
   {
    "params": {
@@ -1269,7 +1435,7 @@
    "baseline": {
     "persistence": {
      "concentration": 0,
-     "seeded": 0.954,
+     "seeded": 0.957,
      "total_rate": 0,
      "width_wedges": 0
     },
@@ -1282,10 +1448,16 @@
      "tracked": 0
     }
    },
+   "baseline_repeat": {
+    "concentration": 0,
+    "seeded": 0.945,
+    "total_rate": 0,
+    "width_wedges": 0
+   },
    "perturbations": {
     "d7_silence": {
      "concentration": 0,
-     "seeded": 0.927,
+     "seeded": 0.957,
      "total_rate": 0,
      "width_wedges": 0
     },
@@ -1296,7 +1468,7 @@
      "width_wedges": 0
     }
    },
-   "mechanism": "essential"
+   "mechanism": null
   },
   {
    "params": {
@@ -1308,9 +1480,9 @@
    "hypothesis": "attractor_tonic",
    "baseline": {
     "persistence": {
-     "concentration": 0.845,
-     "seeded": 0.255,
-     "total_rate": 7.767,
+     "concentration": 0.938,
+     "seeded": 0.218,
+     "total_rate": 2.333,
      "width_wedges": 1
     },
     "rotL": {
@@ -1322,51 +1494,17 @@
      "tracked": 1
     }
    },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0.868,
-     "seeded": 0.148,
-     "total_rate": 5.167,
-     "width_wedges": 2
-    },
-    "peg_lesion": {
-     "concentration": 0.903,
-     "seeded": 0.2,
-     "total_rate": 3.867,
-     "width_wedges": 2
-    }
-   },
-   "mechanism": "sculpts_sharp"
-  },
-  {
-   "params": {
-    "epgRecur": 4,
-    "d7Gain": 1,
-    "epgTonic": 5,
-    "penGain": 1
-   },
-   "hypothesis": "attractor_tonic",
-   "baseline": {
-    "persistence": {
-     "concentration": 1,
-     "seeded": 0.168,
-     "total_rate": 0.2,
-     "width_wedges": 0
-    },
-    "rotL": {
-     "drift": -3.095,
-     "tracked": 4
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
+   "baseline_repeat": {
+    "concentration": 0,
+    "seeded": 0.874,
+    "total_rate": 0,
+    "width_wedges": 0
    },
    "perturbations": {
     "d7_silence": {
-     "concentration": 0.925,
-     "seeded": 0.173,
-     "total_rate": 1.1,
+     "concentration": 0.93,
+     "seeded": 0.194,
+     "total_rate": 1.833,
      "width_wedges": 2
     },
     "peg_lesion": {
@@ -1376,132 +1514,12 @@
      "width_wedges": 0
     }
    },
-   "mechanism": "confines_width"
-  },
-  {
-   "params": {
-    "epgRecur": 4,
-    "d7Gain": 1,
-    "epgTonic": 7,
-    "penGain": 1
-   },
-   "hypothesis": "filter",
-   "baseline": {
-    "persistence": {
-     "concentration": 0.104,
-     "seeded": 0.135,
-     "total_rate": 25.8,
-     "width_wedges": 7
-    },
-    "rotL": {
-     "drift": 0.832,
-     "tracked": 4
-    },
-    "rotR": {
-     "drift": 7.028,
-     "tracked": 4
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0.159,
-     "seeded": 0.142,
-     "total_rate": 27.033,
-     "width_wedges": 5
-    },
-    "peg_lesion": {
-     "concentration": 0.929,
-     "seeded": 0.163,
-     "total_rate": 1.333,
-     "width_wedges": 2
-    }
-   },
-   "mechanism": "confines"
-  },
-  {
-   "params": {
-    "epgRecur": 4,
-    "d7Gain": 1.3,
-    "epgTonic": 0,
-    "penGain": 1
-   },
-   "hypothesis": "silent",
-   "baseline": {
-    "persistence": {
-     "concentration": 0,
-     "seeded": 0.951,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.952,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.952,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   },
-   "mechanism": "essential"
-  },
-  {
-   "params": {
-    "epgRecur": 4,
-    "d7Gain": 1.3,
-    "epgTonic": 3,
-    "penGain": 1
-   },
-   "hypothesis": "attractor_tonic",
-   "baseline": {
-    "persistence": {
-     "concentration": 0.93,
-     "seeded": 0.21,
-     "total_rate": 2.333,
-     "width_wedges": 2
-    },
-    "rotL": {
-     "drift": 11.826,
-     "tracked": 2
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 1
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0.892,
-     "seeded": 0.274,
-     "total_rate": 5.867,
-     "width_wedges": 2
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.872,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   },
    "mechanism": "sculpts_sharp"
   },
   {
    "params": {
     "epgRecur": 4,
-    "d7Gain": 1.3,
+    "d7Gain": 1,
     "epgTonic": 5,
     "penGain": 1
    },
@@ -1509,7 +1527,7 @@
    "baseline": {
     "persistence": {
      "concentration": 0,
-     "seeded": 0.157,
+     "seeded": 0.167,
      "total_rate": 0,
      "width_wedges": 0
     },
@@ -1522,21 +1540,211 @@
      "tracked": 0
     }
    },
+   "baseline_repeat": {
+    "concentration": 0.928,
+    "seeded": 0.141,
+    "total_rate": 1.3,
+    "width_wedges": 2
+   },
    "perturbations": {
     "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.163,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "peg_lesion": {
      "concentration": 0,
      "seeded": 0.15,
      "total_rate": 0,
      "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.14,
+     "total_rate": 0,
+     "width_wedges": 0
     }
    },
-   "mechanism": "essential"
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 4,
+    "d7Gain": 1,
+    "epgTonic": 7,
+    "penGain": 1
+   },
+   "hypothesis": "filter",
+   "baseline": {
+    "persistence": {
+     "concentration": 0.216,
+     "seeded": 0.149,
+     "total_rate": 24.833,
+     "width_wedges": 6
+    },
+    "rotL": {
+     "drift": -9.396,
+     "tracked": 4
+    },
+    "rotR": {
+     "drift": 9.514,
+     "tracked": 4
+    }
+   },
+   "baseline_repeat": {
+    "concentration": 0,
+    "seeded": 0.187,
+    "total_rate": 0,
+    "width_wedges": 0
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0.108,
+     "seeded": 0.147,
+     "total_rate": 24.367,
+     "width_wedges": 7
+    },
+    "peg_lesion": {
+     "concentration": 0.129,
+     "seeded": 0.142,
+     "total_rate": 11.567,
+     "width_wedges": 3
+    }
+   },
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 4,
+    "d7Gain": 1.3,
+    "epgTonic": 0,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.952,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "baseline_repeat": {
+    "concentration": 0,
+    "seeded": 0.953,
+    "total_rate": 0,
+    "width_wedges": 0
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.952,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.936,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   },
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 4,
+    "d7Gain": 1.3,
+    "epgTonic": 3,
+    "penGain": 1
+   },
+   "hypothesis": "attractor_tonic",
+   "baseline": {
+    "persistence": {
+     "concentration": 0.901,
+     "seeded": 0.216,
+     "total_rate": 3.833,
+     "width_wedges": 2
+    },
+    "rotL": {
+     "drift": 15.999,
+     "tracked": 2
+    },
+    "rotR": {
+     "drift": 22.019,
+     "tracked": 2
+    }
+   },
+   "baseline_repeat": {
+    "concentration": 0.929,
+    "seeded": 0.167,
+    "total_rate": 1.333,
+    "width_wedges": 2
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0.927,
+     "seeded": 0.205,
+     "total_rate": 3.333,
+     "width_wedges": 2
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.156,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   },
+   "mechanism": "sculpts_sharp"
+  },
+  {
+   "params": {
+    "epgRecur": 4,
+    "d7Gain": 1.3,
+    "epgTonic": 5,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.148,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "baseline_repeat": {
+    "concentration": 0,
+    "seeded": 0.168,
+    "total_rate": 0,
+    "width_wedges": 0
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.14,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.144,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   },
+   "mechanism": null
   },
   {
    "params": {
@@ -1548,133 +1756,13 @@
    "hypothesis": "attractor_tonic",
    "baseline": {
     "persistence": {
-     "concentration": 1,
-     "seeded": 0.162,
-     "total_rate": 0.833,
+     "concentration": 0.888,
+     "seeded": 0.218,
+     "total_rate": 1.7,
      "width_wedges": 1
     },
     "rotL": {
-     "drift": -3.686,
-     "tracked": 4
-    },
-    "rotR": {
-     "drift": 4.064,
-     "tracked": 4
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0.111,
-     "seeded": 0.154,
-     "total_rate": 24.733,
-     "width_wedges": 7
-    },
-    "peg_lesion": {
-     "concentration": 0.196,
-     "seeded": 0.16,
-     "total_rate": 24.233,
-     "width_wedges": 6
-    }
-   },
-   "mechanism": "confines"
-  },
-  {
-   "params": {
-    "epgRecur": 6,
-    "d7Gain": 0.5,
-    "epgTonic": 0,
-    "penGain": 1
-   },
-   "hypothesis": "silent",
-   "baseline": {
-    "persistence": {
-     "concentration": 0,
-     "seeded": 0.133,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.12,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.121,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   },
-   "mechanism": "essential"
-  },
-  {
-   "params": {
-    "epgRecur": 6,
-    "d7Gain": 0.5,
-    "epgTonic": 3,
-    "penGain": 1
-   },
-   "hypothesis": "silent",
-   "baseline": {
-    "persistence": {
-     "concentration": 0,
-     "seeded": 0.108,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.108,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.114,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   },
-   "mechanism": "essential"
-  },
-  {
-   "params": {
-    "epgRecur": 6,
-    "d7Gain": 0.5,
-    "epgTonic": 5,
-    "penGain": 1
-   },
-   "hypothesis": "filter",
-   "baseline": {
-    "persistence": {
-     "concentration": 0.039,
-     "seeded": 0.111,
-     "total_rate": 85.933,
-     "width_wedges": 8
-    },
-    "rotL": {
-     "drift": -3.58,
+     "drift": 5.976,
      "tracked": 4
     },
     "rotR": {
@@ -1682,178 +1770,24 @@
      "tracked": 0
     }
    },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.132,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "peg_lesion": {
-     "concentration": 0.068,
-     "seeded": 0.105,
-     "total_rate": 88.433,
-     "width_wedges": 8
-    }
-   },
-   "mechanism": "essential"
-  },
-  {
-   "params": {
-    "epgRecur": 6,
-    "d7Gain": 0.5,
-    "epgTonic": 7,
-    "penGain": 1
-   },
-   "hypothesis": "filter",
-   "baseline": {
-    "persistence": {
-     "concentration": 0.092,
-     "seeded": 0.146,
-     "total_rate": 100.967,
-     "width_wedges": 8
-    },
-    "rotL": {
-     "drift": -2.367,
-     "tracked": 4
-    },
-    "rotR": {
-     "drift": -3.933,
-     "tracked": 4
-    }
+   "baseline_repeat": {
+    "concentration": 0.624,
+    "seeded": 0.154,
+    "total_rate": 13.367,
+    "width_wedges": 3
    },
    "perturbations": {
     "d7_silence": {
-     "concentration": 0.089,
-     "seeded": 0.144,
-     "total_rate": 97.767,
-     "width_wedges": 8
+     "concentration": 0.933,
+     "seeded": 0.221,
+     "total_rate": 1.5,
+     "width_wedges": 1
     },
     "peg_lesion": {
-     "concentration": 0.115,
-     "seeded": 0.142,
-     "total_rate": 99.867,
-     "width_wedges": 8
-    }
-   },
-   "mechanism": "confines"
-  },
-  {
-   "params": {
-    "epgRecur": 6,
-    "d7Gain": 1,
-    "epgTonic": 0,
-    "penGain": 1
-   },
-   "hypothesis": "silent",
-   "baseline": {
-    "persistence": {
-     "concentration": 0,
-     "seeded": 0.119,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.126,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.128,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   },
-   "mechanism": "essential"
-  },
-  {
-   "params": {
-    "epgRecur": 6,
-    "d7Gain": 1,
-    "epgTonic": 3,
-    "penGain": 1
-   },
-   "hypothesis": "attractor_tonic",
-   "baseline": {
-    "persistence": {
-     "concentration": 1,
-     "seeded": 0.104,
-     "total_rate": 0.2,
-     "width_wedges": 0
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.12,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.119,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   },
-   "mechanism": "essential"
-  },
-  {
-   "params": {
-    "epgRecur": 6,
-    "d7Gain": 1,
-    "epgTonic": 5,
-    "penGain": 1
-   },
-   "hypothesis": "filter",
-   "baseline": {
-    "persistence": {
-     "concentration": 0.062,
-     "seeded": 0.102,
-     "total_rate": 85.6,
-     "width_wedges": 8
-    },
-    "rotL": {
-     "drift": -3.438,
-     "tracked": 4
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0.925,
-     "seeded": 0.144,
-     "total_rate": 1.1,
-     "width_wedges": 2
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.125,
-     "total_rate": 0,
-     "width_wedges": 0
+     "concentration": 0.27,
+     "seeded": 0.143,
+     "total_rate": 24.1,
+     "width_wedges": 5
     }
    },
    "mechanism": "sculpts_sharp"
@@ -1861,47 +1795,7 @@
   {
    "params": {
     "epgRecur": 6,
-    "d7Gain": 1,
-    "epgTonic": 7,
-    "penGain": 1
-   },
-   "hypothesis": "filter",
-   "baseline": {
-    "persistence": {
-     "concentration": 0.106,
-     "seeded": 0.127,
-     "total_rate": 99.567,
-     "width_wedges": 8
-    },
-    "rotL": {
-     "drift": -9.972,
-     "tracked": 4
-    },
-    "rotR": {
-     "drift": 5.862,
-     "tracked": 4
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0.109,
-     "seeded": 0.128,
-     "total_rate": 99.5,
-     "width_wedges": 8
-    },
-    "peg_lesion": {
-     "concentration": 0.122,
-     "seeded": 0.129,
-     "total_rate": 91.333,
-     "width_wedges": 8
-    }
-   },
-   "mechanism": "confines"
-  },
-  {
-   "params": {
-    "epgRecur": 6,
-    "d7Gain": 1.3,
+    "d7Gain": 0.5,
     "epgTonic": 0,
     "penGain": 1
    },
@@ -1909,7 +1803,7 @@
    "baseline": {
     "persistence": {
      "concentration": 0,
-     "seeded": 0.116,
+     "seeded": 0.122,
      "total_rate": 0,
      "width_wedges": 0
     },
@@ -1922,37 +1816,181 @@
      "tracked": 0
     }
    },
+   "baseline_repeat": {
+    "concentration": 0,
+    "seeded": 0.128,
+    "total_rate": 0,
+    "width_wedges": 0
+   },
    "perturbations": {
     "d7_silence": {
      "concentration": 0,
-     "seeded": 0.1,
+     "seeded": 0.131,
      "total_rate": 0,
      "width_wedges": 0
     },
     "peg_lesion": {
      "concentration": 0,
-     "seeded": 0.13,
+     "seeded": 0.119,
      "total_rate": 0,
      "width_wedges": 0
     }
    },
-   "mechanism": "essential"
+   "mechanism": null
   },
   {
    "params": {
     "epgRecur": 6,
-    "d7Gain": 1.3,
+    "d7Gain": 0.5,
     "epgTonic": 3,
     "penGain": 1
    },
    "hypothesis": "silent",
    "baseline": {
     "persistence": {
+     "concentration": 0,
+     "seeded": 0.129,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "baseline_repeat": {
+    "concentration": 0,
+    "seeded": 0.111,
+    "total_rate": 0,
+    "width_wedges": 0
+   },
+   "perturbations": {
+    "d7_silence": {
      "concentration": 0,
      "seeded": 0.115,
      "total_rate": 0,
      "width_wedges": 0
     },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.127,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   },
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 6,
+    "d7Gain": 0.5,
+    "epgTonic": 5,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.136,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": -3.924,
+     "tracked": 4
+    }
+   },
+   "baseline_repeat": {
+    "concentration": 0.073,
+    "seeded": 0.096,
+    "total_rate": 87.633,
+    "width_wedges": 8
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.125,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.109,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   },
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 6,
+    "d7Gain": 0.5,
+    "epgTonic": 7,
+    "penGain": 1
+   },
+   "hypothesis": "attractor_tonic",
+   "baseline": {
+    "persistence": {
+     "concentration": 0.927,
+     "seeded": 0.128,
+     "total_rate": 0.833,
+     "width_wedges": 2
+    },
+    "rotL": {
+     "drift": -5.31,
+     "tracked": 4
+    },
+    "rotR": {
+     "drift": -9.385,
+     "tracked": 4
+    }
+   },
+   "baseline_repeat": {
+    "concentration": 0.437,
+    "seeded": 0.14,
+    "total_rate": 24.433,
+    "width_wedges": 5
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0.104,
+     "seeded": 0.126,
+     "total_rate": 94.933,
+     "width_wedges": 8
+    },
+    "peg_lesion": {
+     "concentration": 0.089,
+     "seeded": 0.118,
+     "total_rate": 99.6,
+     "width_wedges": 8
+    }
+   },
+   "mechanism": "confines"
+  },
+  {
+   "params": {
+    "epgRecur": 6,
+    "d7Gain": 1,
+    "epgTonic": 0,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.107,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
     "rotL": {
      "drift": null,
      "tracked": 0
@@ -1961,6 +1999,104 @@
      "drift": null,
      "tracked": 0
     }
+   },
+   "baseline_repeat": {
+    "concentration": 0,
+    "seeded": 0.121,
+    "total_rate": 0,
+    "width_wedges": 0
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.107,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.112,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   },
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 6,
+    "d7Gain": 1,
+    "epgTonic": 3,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.105,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "baseline_repeat": {
+    "concentration": 0,
+    "seeded": 0.116,
+    "total_rate": 0,
+    "width_wedges": 0
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.123,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.119,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   },
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 6,
+    "d7Gain": 1,
+    "epgTonic": 5,
+    "penGain": 1
+   },
+   "hypothesis": "filter",
+   "baseline": {
+    "persistence": {
+     "concentration": 0.073,
+     "seeded": 0.104,
+     "total_rate": 86.567,
+     "width_wedges": 8
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "baseline_repeat": {
+    "concentration": 0.178,
+    "seeded": 0.129,
+    "total_rate": 31.7,
+    "width_wedges": 7
    },
    "perturbations": {
     "d7_silence": {
@@ -1970,13 +2106,151 @@
      "width_wedges": 0
     },
     "peg_lesion": {
+     "concentration": 0.083,
+     "seeded": 0.089,
+     "total_rate": 88.767,
+     "width_wedges": 8
+    }
+   },
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 6,
+    "d7Gain": 1,
+    "epgTonic": 7,
+    "penGain": 1
+   },
+   "hypothesis": "filter",
+   "baseline": {
+    "persistence": {
+     "concentration": 0.092,
+     "seeded": 0.115,
+     "total_rate": 100.133,
+     "width_wedges": 8
+    },
+    "rotL": {
+     "drift": 6.808,
+     "tracked": 4
+    },
+    "rotR": {
+     "drift": -10.359,
+     "tracked": 4
+    }
+   },
+   "baseline_repeat": {
+    "concentration": 0.086,
+    "seeded": 0.112,
+    "total_rate": 96.567,
+    "width_wedges": 8
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0.284,
+     "seeded": 0.098,
+     "total_rate": 24.167,
+     "width_wedges": 6
+    },
+    "peg_lesion": {
+     "concentration": 0.115,
+     "seeded": 0.113,
+     "total_rate": 99.733,
+     "width_wedges": 8
+    }
+   },
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 6,
+    "d7Gain": 1.3,
+    "epgTonic": 0,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "baseline": {
+    "persistence": {
      "concentration": 0,
-     "seeded": 0.104,
+     "seeded": 0.125,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "baseline_repeat": {
+    "concentration": 0,
+    "seeded": 0.099,
+    "total_rate": 0,
+    "width_wedges": 0
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.125,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.116,
      "total_rate": 0,
      "width_wedges": 0
     }
    },
-   "mechanism": "essential"
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 6,
+    "d7Gain": 1.3,
+    "epgTonic": 3,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.113,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "baseline_repeat": {
+    "concentration": 1,
+    "seeded": 0.123,
+    "total_rate": 0.2,
+    "width_wedges": 0
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.114,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.135,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   },
+   "mechanism": null
   },
   {
    "params": {
@@ -1985,38 +2259,44 @@
     "epgTonic": 5,
     "penGain": 1
    },
-   "hypothesis": "filter",
+   "hypothesis": "attractor_tonic",
    "baseline": {
     "persistence": {
-     "concentration": 0.057,
-     "seeded": 0.077,
-     "total_rate": 86.067,
-     "width_wedges": 8
+     "concentration": 0.752,
+     "seeded": 0.132,
+     "total_rate": 12.367,
+     "width_wedges": 3
     },
     "rotL": {
      "drift": null,
      "tracked": 0
     },
     "rotR": {
-     "drift": -8.592,
-     "tracked": 4
+     "drift": null,
+     "tracked": 0
     }
+   },
+   "baseline_repeat": {
+    "concentration": 1,
+    "seeded": 0.105,
+    "total_rate": 0.167,
+    "width_wedges": 0
    },
    "perturbations": {
     "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.134,
-     "total_rate": 0,
-     "width_wedges": 0
+     "concentration": 0.045,
+     "seeded": 0.129,
+     "total_rate": 86.033,
+     "width_wedges": 8
     },
     "peg_lesion": {
-     "concentration": 0.805,
-     "seeded": 0.099,
-     "total_rate": 12.6,
-     "width_wedges": 3
+     "concentration": 0,
+     "seeded": 0.12,
+     "total_rate": 0,
+     "width_wedges": 0
     }
    },
-   "mechanism": "essential"
+   "mechanism": "confines"
   },
   {
    "params": {
@@ -2028,41 +2308,47 @@
    "hypothesis": "filter",
    "baseline": {
     "persistence": {
-     "concentration": 0.353,
-     "seeded": 0.122,
-     "total_rate": 22.167,
-     "width_wedges": 5
+     "concentration": 0.099,
+     "seeded": 0.137,
+     "total_rate": 98.433,
+     "width_wedges": 8
     },
     "rotL": {
-     "drift": -7.808,
+     "drift": 6.198,
      "tracked": 4
     },
     "rotR": {
-     "drift": 10.093,
+     "drift": -10.311,
      "tracked": 4
     }
    },
+   "baseline_repeat": {
+    "concentration": 0.097,
+    "seeded": 0.102,
+    "total_rate": 96.033,
+    "width_wedges": 8
+   },
    "perturbations": {
     "d7_silence": {
-     "concentration": 0.092,
-     "seeded": 0.148,
-     "total_rate": 96.1,
+     "concentration": 0.121,
+     "seeded": 0.134,
+     "total_rate": 93.967,
      "width_wedges": 8
     },
     "peg_lesion": {
-     "concentration": 0.097,
-     "seeded": 0.124,
-     "total_rate": 97.7,
+     "concentration": 0.083,
+     "seeded": 0.132,
+     "total_rate": 102.733,
      "width_wedges": 8
     }
    },
-   "mechanism": "confines"
+   "mechanism": null
   }
  ],
  "ranked_experiments": [
   {
    "experiment": "tonic_sweep",
-   "separation": 0.393,
+   "separation": 0.401,
    "outcomes": [
     "decays",
     "decays",
@@ -2076,56 +2362,6 @@
     "decays",
     "decays",
     "decays",
-    "decays",
-    "decays",
-    "decays",
-    "sustains",
-    "decays",
-    "decays",
-    "decays",
-    "sustains",
-    "decays",
-    "decays",
-    "sustains",
-    "sustains",
-    "decays",
-    "sustains",
-    "decays",
-    "sustains",
-    "decays",
-    "sustains",
-    "sustains",
-    "decays",
-    "decays",
-    "sustains",
-    "decays",
-    "sustains",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "sustains",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "partial"
-   ]
-  },
-  {
-   "experiment": "d7_silence",
-   "separation": 0.37,
-   "outcomes": [
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "sustains",
     "decays",
     "decays",
     "decays",
@@ -2136,27 +2372,20 @@
     "partial",
     "decays",
     "decays",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
     "sustains",
-    "sustains",
-    "decays",
     "sustains",
     "decays",
     "decays",
     "decays",
     "sustains",
-    "sustains",
-    "decays",
     "decays",
     "sustains",
     "decays",
+    "partial",
     "decays",
+    "sustains",
     "decays",
-    "decays",
-    "decays",
+    "sustains",
     "decays",
     "decays",
     "decays",
@@ -2165,12 +2394,15 @@
     "decays",
     "decays",
     "decays",
+    "decays",
+    "decays",
+    "sustains",
     "decays"
    ]
   },
   {
-   "experiment": "peg_lesion",
-   "separation": 0.311,
+   "experiment": "d7_silence",
+   "separation": 0.377,
    "outcomes": [
     "decays",
     "decays",
@@ -2179,30 +2411,6 @@
     "decays",
     "decays",
     "decays",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "sustains",
-    "sustains",
-    "decays",
-    "decays",
-    "sustains",
-    "decays",
-    "decays",
-    "decays",
-    "sustains",
-    "decays",
-    "decays",
-    "sustains",
-    "decays",
-    "sustains",
-    "decays",
-    "sustains",
-    "decays",
     "sustains",
     "decays",
     "decays",
@@ -2211,19 +2419,97 @@
     "decays",
     "decays",
     "decays",
+    "sustains",
     "decays",
     "decays",
+    "sustains",
+    "partial",
     "decays",
     "decays",
+    "sustains",
+    "sustains",
     "decays",
     "decays",
     "decays",
     "sustains",
+    "decays",
+    "sustains",
+    "decays",
+    "decays",
+    "decays",
+    "sustains",
+    "decays",
+    "sustains",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "partial",
+    "decays",
+    "decays",
+    "decays",
     "decays"
    ]
   },
   {
    "experiment": "unilateral_L",
+   "separation": 0.223,
+   "outcomes": [
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "rotates",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "rotates",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "rotates",
+    "none",
+    "rotates",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "rotates",
+    "none",
+    "none",
+    "none",
+    "rotates"
+   ]
+  },
+  {
+   "experiment": "unilateral_R",
    "separation": 0.223,
    "outcomes": [
     "none",
@@ -2241,93 +2527,93 @@
     "none",
     "none",
     "rotates",
-    "rotates",
-    "none",
-    "none",
-    "rotates",
-    "rotates",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
     "none",
     "none",
     "none",
     "none",
     "rotates",
     "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "rotates",
     "rotates",
     "none",
     "none",
     "none",
+    "rotates",
     "none",
     "none",
     "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none"
+    "rotates"
    ]
   },
   {
-   "experiment": "unilateral_R",
-   "separation": 0.191,
+   "experiment": "peg_lesion",
+   "separation": 0.159,
    "outcomes": [
-    "none",
-    "none",
-    "none",
-    "rotates",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "rotates",
-    "none",
-    "none",
-    "none",
-    "rotates",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "rotates",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "rotates",
-    "none"
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "sustains",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "sustains",
+    "sustains",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "partial",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays"
    ]
   }
  ]

@@ -42,7 +42,7 @@ export class FlyAgent {
     this.lc10 = { left: [], right: [] };
     for (let i = 0; i < typeOf.length; i++) if (/^LC10[ad]$/.test(typeOf[i])) this.lc10[sideOf[i] === 2 ? 'right' : 'left'].push(i);
     // vision: flyvis optic-lobe model driving the male-CNS optic lobe (if provided), else the simple photoreceptor eye
-    this.fv = vision && flyvis ? new FlyVisionFV(mj, M, this.mjd, bodymap, flyvis.map, flyvis.eyes, this.bid.head, this.bid.thorax, flyvis.gain ?? 150) : null;
+    this.fv = vision && flyvis ? new FlyVisionFV(mj, M, this.mjd, bodymap, flyvis.map, flyvis.eyes, this.bid.head, this.bid.thorax, flyvis.gain ?? 150, flyvis.vRest || null) : null;
     this.eye = vision && !this.fv ? new CompoundEye(mj, M, this.mjd, bodymap, this.bid.head, this.bid.thorax) : null;
     this.motor = new Motor(mj, M, this.mjd, bodymap, typeOf, sideOf, gait, mode);
     this.intrinsic = intrinsic ? new Intrinsic(typeOf, sideOf, id + 1 + (seed || 0), bodymap.feeding) : null;
@@ -130,6 +130,22 @@ export class FlyAgent {
     if (this.neuromod) this.neuromod.update(1, this.energy, this.flight.active ? 1 : this.motor.stepAmp || 0);
     // courtship context for a male: the nearest other fly's range and bearing in his head frame, plus the
     // connectome's own courtship-circuit readout (pIP10, DNp13) from the previous step
+    // A courted female's own context: the nearest male, his range and bearing in her head frame, and
+    // whether he is singing if the host passes it on. This is the mirror of the male's court block and
+    // it is supplied machinery, not connectome output — the release is a male CNS, so a female's own
+    // rejection circuitry (pC1/pCd, the vpoDN decision) is not in the graph (docs/26-courtship.md).
+    let suitor = null;
+    if (this.sex === 'f' && st.otherFlies.length) {
+      const fx = Rt9(d.xmat, this.bid.thorax), yaw = Math.atan2(fx[1], fx[0]);
+      for (const o of st.otherFlies) {
+        if (o.sex === 'f') continue;
+        const dd = Math.hypot(o.x - st.pos[0], o.y - st.pos[1]);
+        if (!suitor || dd < suitor.dist) {
+          const a = Math.atan2(o.y - st.pos[1], o.x - st.pos[0]) - yaw;
+          suitor = { dist: dd, bearing: Math.atan2(Math.sin(a), Math.cos(a)), singing: !!o.singing };
+        }
+      }
+    }
     let court = null;
     if (this.sex !== 'f' && st.otherFlies.length) {
       const fx = Rt9(d.xmat, this.bid.thorax), yaw = Math.atan2(fx[1], fx[0]);
@@ -157,7 +173,7 @@ export class FlyAgent {
     // The former 80 ms pulse silently expired if the user clicked just after loading.
     if (this.takeoffPending && this.intrinsic) this.intrinsic.takeoffUntil = this.intrinsic.t + 80;
     if (this.intrinsic) this.intrinsic.update(1, B, { energy: this.energy, arousal: this.neuromod?.arousal, touch: st.antTouch, rearing: st.pitchUp > 0.45 && this.motor.jumpT < 0 && !this.motor.righting,
-      heat: { left: heatAt(st.antenna.left, this.env), right: heatAt(st.antenna.right, this.env) }, sugar: this._sugar || 0, flying: this.flight.active, ahead: st.ahead, court,
+      heat: { left: heatAt(st.antenna.left, this.env), right: heatAt(st.antenna.right, this.env) }, sugar: this._sugar || 0, flying: this.flight.active, ahead: st.ahead, court, suitor,
       mouthOnFood: this.env.food.some(f => f.amount > 0 && Math.hypot(st.labellum[0] - f.x, st.labellum[1] - f.y) < f.r - 0.02) });
     const nd = new Int32Array(rates.size); let k = 0; for (const [i, hz] of rates) { B.setDriveOne(i, hz); nd[k++] = i; } this.driven = nd;
     // GF -> TTMn electrical synapse (not in the chemical connectome): GF spikes depolarise TTMn directly
@@ -174,7 +190,11 @@ export class FlyAgent {
     const gated = this.t - (this.lastTouch ?? -1e9) < 500 || this.t - (this.lastPivot ?? -1e9) < 300;
     this.motor.flying = this.flight.active;
     this.cmd = this.motor.apply(this.t, 1, { up: this.mjd.xmat[this.bid.thorax * 9 + 8], touching: gated, voluntary: this.takeoffPending || (this.intrinsic && this.t < this.intrinsic.takeoffUntil),
-      court: this.intrinsic?.state === 'court' ? { sing: !!this.intrinsic.courtSing, side: this.intrinsic.courtSide } : null,
+      // song mode needs his range to her and his own ground speed (src/sim/song.js); the kick is the
+      // female's rejection, which the intrinsic module times
+      court: this.intrinsic?.state === 'court' ? { sing: !!this.intrinsic.courtSing, side: this.intrinsic.courtSide,
+        dist: court?.dist, speed: Math.hypot(st.vel[0], st.vel[1]) } : null,
+      kick: this.intrinsic?.kick || null,
       contact: st.bodyContact.left || st.bodyContact.right || st.antTouch.left || st.antTouch.right });   // no takeoff while pressed against something
     // takeoff: once the jump has pushed off, the wings start (tarsal reflex); an escape banks away from the threat
     if (this.motor.launchT === this.t && !this.flight.active) {

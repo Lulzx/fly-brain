@@ -94,11 +94,22 @@ all three bound what the arm can say.
 The rung set is restricted to the manipulations arm one *resolved* — the paired drop is at least three
 standard errors, or at least one term broke. That is eleven of the twenty, and it is the same criterion
 arm one uses to decide what counts as a result, so nothing that arm one could not see is refitted. The
-search is shortened from twelve generations of twenty to five of eight, and the winner is re-scored on
-six seeds rather than twelve, which brings the arm to 552 evaluations and about four hours. The
-shortened search makes a failure to recover weaker evidence than it is in [doc 31](31-ablation-ladder.md),
-where the search is nearly three times the size; a recovered rung still shows compensability, and that
-is the direction that survives.
+search is shortened from twelve generations of twenty to **five of twelve**, and the winner is re-scored
+on all twelve of arm one's seeds, so the two arms are paired seed for seed. That is 72 evaluations per
+rung and 864 for the arm: about fifteen hours on twelve workers, against the ninety a full-size search
+over all twenty rungs would have cost.
+
+The re-score is not an optional extra here, and the baseline row shows why. The search selects on a
+single seed, where the winning point scores 0.981; the same point across twelve seeds scores 0.812. A
+one-seed-selected winner is optimistic by about 0.17 in this objective — far more than the 0.009 the
+physiological search's own selection noise comes to ([doc 31](31-ablation-ladder.md)) — because an
+embodied run's seed-to-seed spread is large and CEM will happily climb it. Every number in the table
+below is the twelve-seed re-score, and the single-seed figure is reported alongside only to show the
+size of that gap.
+
+The shortened search makes a failure to recover weaker evidence than it is in
+[doc 31](31-ablation-ladder.md), where the search is nearly three times the size; a recovered rung still
+shows compensability, and that is the direction that survives.
 
 ## Arm one
 

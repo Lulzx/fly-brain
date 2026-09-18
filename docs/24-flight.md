@@ -45,6 +45,54 @@ attitude feedback is evaluated.
    legs. Attitude support continues during that transfer. Wing force then stops; a 300 ms stance allows
    walking to resume. The renderer restores the parked wing geometry.
 
+## The wing motor neurons are in the dataset, and they carry nothing useful
+
+The roadmap's next step for flight was to drive the stroke from the wing motor neurons rather than
+from the engineered controller. Those motor neurons are annotated in this release — both sets, which
+is more than the leg map gets:
+
+| pool | types | cells |
+|---|---|---|
+| power | `DLMn a,b`, `DLMn c-f`, `DVMn 1a-c`, `DVMn 2a,b`, `DVMn 3a,b` | 24 (12 per side) |
+| basalar | `b1 MN`, `b2 MN`, `b3 MN` | 6 |
+| first axillary | `i1 MN`, `i2 MN`, `hi1 MN`, `hi2 MN` | 10 |
+| third axillary | `iii1 MN`, `iii3 MN`, `hiii2 MN` | 6 |
+| hg group | `hg1 MN` … `hg4 MN` | 8 |
+| pitch / tergopleural | `ps1 MN`, `tp1 MN`, `tp2 MN`, `tpn MN`, `hDVM MN` | 10 |
+
+`scripts/wing_mn.mjs` flies the fly headless and records what each pool does, per side, through
+takeoff, cruise and turns (`public/data/wing_mn.json`). Six seconds, one takeoff at 1.5 s, 117 flying
+samples and 183 on the ground:
+
+| pool | ground (Hz) | flight (Hz) | r(L−R asymmetry, commanded turn) |
+|---|---|---|---|
+| power | 101.7 | 109.2 | 0.08 |
+| basalar | 47.6 | 39.9 | 0.08 |
+| first axillary | 69.5 | 71.4 | 0.06 |
+| third axillary | 33.4 | 40.5 | 0.06 |
+| hg | 51.6 | 44.3 | 0.04 |
+| pitch | 61.5 | 69.4 | −0.06 |
+
+**Two things are wrong with these numbers, and together they close the item.** The pools barely notice
+that the fly has taken off — the power motor neurons, which in the animal are silent on the ground and
+drive the asynchronous muscle only in flight, change by 7% — and their left-right asymmetry, which is
+the entire mechanism by which steering muscles steer, is uncorrelated with the turn the brain is
+commanding (|r| ≤ 0.08 in every pool). A stroke driven from these pools would be a constant, almost
+symmetric command that does not know whether the animal is flying.
+
+**The cause is upstream and is the same one as the walking gap.** Flight in this model is initiated and
+maintained by the endogenous module, not by the connectome ([Behaviour](23-behaviour.md)), so no
+descending signal ever tells the wing motor pools that flight has begun; they run on whatever tonic
+drive the graph gives them. This is the flight version of [Limitations](19-limitations.md)'s
+observation about the nerve cord: the motor neurons are wired, and nothing is driving them in a way
+that carries the behaviour. Until a descending flight command exists in the model, "drive the stroke
+from the motor neurons" would replace a working controller with an unsteerable one.
+
+**What this makes the item.** Not "wire the MNs to the wings" but "give the wing system something to
+listen to" — a descending flight command read from the graph, scored on the pools' flight-versus-ground
+contrast and on asymmetry-versus-turn correlation, both of which `wing_mn.mjs` now measures. Those two
+numbers are the success criterion, and they are near zero today.
+
 ## Why the prior flight failed
 
 The old controller repeatedly evaluated a virtual stroke inside each physics step while the solver's

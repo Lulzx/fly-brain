@@ -31,13 +31,16 @@ PEN drive. Perturbations: Delta7 silence, PEG lesion, EPG excitability sweep, un
   EPG bias — the wiring supports the attractor geometry, but the dynamics needs an excitability
   floor. ~15–25% of the grid (recur ≈ 3–6×, tonic ≈ 3–7 mV) sustains a bump at all.
 - **Among bump-sustaining members, three mechanisms produce the same baseline bump** and are
-  separated by Delta7 silencing:
+  nominally separated by Delta7 silencing — but see the floor measurement below, which finds the
+  silencing effect smaller than the ensemble's own member-to-member spread, so this separation is
+  mostly not a measurement:
   - `d7_sculpts` — bump survives silencing; Delta7 sharpens it but isn't required
   - `d7_confines` — silencing releases runaway/uniform firing; Delta7 is what confines the bump
   - `d7_essential` — silencing extinguishes activity (released excitation drives adaptation
     shutdown — flagged as a possible LIF artifact, not a biological claim)
 - **Ranked experiments** (consistent top-3, order shuffles across seeds): EPG excitability
-  manipulation, PEG lesion, Delta7 silencing. Each maps to a real experiment: depolarize EPGs
+  manipulation, PEG lesion, Delta7 silencing. The ranking counts a member changing class for any
+  reason, including noise, which is the flaw the floor measurement below exposes. Each maps to a real experiment: depolarize EPGs
   while imaging the ring; kill the PEG copy; silence Delta7 and watch bump width/continuity.
 
 The literature check: real Delta7→EPG is glutamate→GluClα inhibition that suppresses EPGs
@@ -96,15 +99,42 @@ spatial geometry. Two overlapping KC "odors" (200 cells, 50% shared) are driven;
 measured transform is KC→MBON readout, and the free question is whether the KC↔APL
 feedback loop provides gain control (compresses KC output as drive doubles).
 
-**Result: an honest negative.** 18 members over `{kc2mb, aplGain, mbonTonic, mbRecur}`:
-9 silent, 9 collapsed/linear — no `gain_controlled` member. APL recruitment saturates
-(~16 spikes in 200ms at 5× drive) while KC output scales ~3.4×; with ~1 APL synapse per
-KC (4210 edges / 4064 cells), count-calibrated feedback cannot compress. The MBON
-transform is near-linear (expansion < 1 for 50%-overlap odors — expected: decorrelation
-happens upstream, at odor→KC, not at the readout). Interpretation: the wiring does not
-by itself establish divisive normalization — per-synapse conductance, which the
-connectome doesn't carry, is the missing parameter. That is the lab working as intended:
-it reports where structure underdetermines function.
+**The first result was an honest negative, and it was an artefact of the lab rather than a fact about
+the mushroom body.** It read: 18 members, 9 silent and 9 collapsed, no `gain_controlled` member;
+count-calibrated APL feedback cannot compress. Two things were wrong with the measurement, and both
+were visible in the artifact for anyone who looked at the right column.
+
+**The odour was injected into the layer whose sparseness was being measured.** `kc_active` was exactly
+0.049 in all eighteen members and under every perturbation — which is 200 driven Kenyon cells divided
+by 4,064, not a property of the model at all. Driving Kenyon cells directly bypasses the expansion the
+sparseness is supposed to come out of, so the observable could not move: the same arithmetically-pinned
+term the [roadmap's A7](20-roadmap.md) documents twice over on the physiological benchmark. The odour
+now arrives on the Kenyon cells' input pool (`pool:kc` — every external cell with ≥3 synapses onto at
+least two Kenyon cells, read off the graph: 491 cells), and the layer's sparseness is a response.
+
+**Silencing a population did nothing.** `clean()` reset threshold offsets, and every probe calls it
+*after* the caller has raised them, so `apl_silence` — and `d7_silence` in Lab 1, and the silencing
+perturbations in Lab 2 — ran an unperturbed network. The silenced set is now recorded on the network so
+the reset cannot outlive it.
+
+**With both fixed, the negative reverses.** 9 of 18 members are `gain_controlled` and the Kenyon-cell
+code is under APL's control in exactly the way the sparse-memory hypothesis requires:
+
+| | before | after |
+|---|---|---|
+| hypotheses | 9 silent, 9 collapsed, **0 gain_controlled** | 9 gain_controlled, 4 collapsed, 3 silent, 2 linear_passthrough |
+| KC active fraction | 0.049 in every member (pinned) | 0.062–0.133, scaling inversely with APL gain (0.133 / 0.083 / 0.062 at gain 0.5 / 1 / 2) |
+| KC active fraction, APL silenced | 0.049 (unperturbed run) | **0.093 → 0.858** |
+| odour separation, APL silenced | unchanged | 0.78 → 0.25 |
+
+Silencing APL densifies the Kenyon-cell code by a factor of nine and destroys the separation between
+two 50%-overlapping odours. The structure does establish gain control; the previous conclusion was
+measuring a stimulus and an unperturbed network.
+
+What survives from the original reading is narrower and still worth having: the compression is weak in
+absolute terms (the drive has to double before the composite moves), which is consistent with ~1 APL
+synapse per Kenyon cell, and [doc 29](29-connectome-compiler.md)'s operator detector finds the same
+thing structurally — APL clears the ≥3-synapse reconstruction threshold on only about half the layer.
 
 **Meta-finding across all three circuits: structure overstates what dynamics delivers.**
 Cosine kernel → realised; phase shift → realised at ~⅓ amplitude and only via dynamics
@@ -213,11 +243,100 @@ EPG↔EPG/PEG recurrence exists but not its strength); real PEN dynamics are gra
 pure advection. The claim is "this mechanism class is competitive in this regime," not "the fly
 beats Kalman filters."
 
+## Every perturbation is now read against a measured floor, and one headline does not survive it
+
+The ensembles are stochastic, and until now nothing said how stochastic. Two additions:
+
+**Members are re-seeded from their own index.** The labs shared one global random stream, so anything
+that changed one trajectory shifted every member after it. Measured directly: two runs of the ring spec
+at the same seed disagreed on the *baseline* of 18 of 48 members, mean |Δconcentration| 0.149. Member
+results were partly a function of execution order. They are now independent of it.
+
+**Each member is drawn twice.** Every member records a `baseline_repeat` — the same parameters, a
+different stream — so a perturbation's effect can be read against the spread of the thing it perturbs,
+the way [doc 31](31-ablation-ladder.md) reads an ablation against its null rung.
+
+| lab | observable | repeat-draw floor | perturbation effect |
+|---|---|---|---|
+| mushroom body | KC active fraction | 0.008 | **0.766** (APL silenced) |
+| mushroom body | odour separation | 0.243 | 0.661 (APL silenced) |
+| ring | bump concentration | **0.168** | 0.061 (Delta7 silenced) |
+| ring | bump concentration | 0.168 | 0.186 (PEG lesion) |
+
+**The mushroom-body result clears its floor by ninety-five times. The ring lab's top-ranked discriminator
+does not clear its floor at all.** Delta7 silencing moves bump concentration by 0.061 against a
+member-level spread of 0.168, and only 3 of 48 members show an effect twice their own floor. That is the
+finding, and it costs this document its cleanest-looking claim: the mechanism classes `d7_sculpts`,
+`d7_confines` and `d7_essential` were never resolved by the experiment that was supposed to separate
+them. The classification is a sorting of noise for most of the ensemble.
+
+Two things follow. The ranked-experiment table ranks by *outcome separation across members*, which
+counts a member flipping class for any reason at all — so it will rank a noisy experiment highly, and
+did. And a discriminating experiment has to be specified with an effect size, not just a direction: what
+Lab 1 can actually ask for is a manipulation whose predicted effect exceeds 0.17 in bump concentration,
+which Delta7 silencing does not, and which the real measurement below says it does not in the animal
+either.
+
+## The withheld prediction, closed — and it goes against this document's own model
+
+The discriminating experiment this lab ranked first was Delta7 silencing, read out as bump width.
+The measurement exists. In Turner-Evans et al. (2020), Δ7 neurons (line 55G08) were silenced with
+shibire^ts and E-PG calcium imaged in the ellipsoid body at permissive and restrictive temperature,
+in darkness and in closed-loop stripe tracking. The result:
+
+| observable under Δ7 block | measured (Turner-Evans 2020) | field model (`perturb_pde.py`, d7 → 0) |
+|---|---|---|
+| bump survives | yes | yes |
+| bump width (FWHM) | **unchanged**, adj. p = 0.45 and 0.48 | **90.5° → 143.1°**, +58% |
+| bump amplitude | lower, adj. p = 0.015 | 106.6 → 95.8, −10% |
+| heading tracking | erratic, slope distribution broadens (p = 0.0016, closed loop) | drift, not modelled as width |
+
+**Which class it selects.** Of the three LIF mechanism classes, the data picks `d7_sculpts` — the bump
+survives Δ7 silencing, at unchanged width — and rules out `d7_confines` and `d7_essential` outright:
+nothing runs away and nothing extinguishes. The re-run LIF ensemble's majority class is the same one
+(`sculpts_sharp`, 8 of the 10 members that hold a bump), so model and animal agree.
+
+That agreement is worth less than it looks, and the floor measured above is why: the ensemble's Delta7
+effect is smaller than its own member-level spread, so the LIF lab did not *discriminate* this class, it
+defaulted to it. The data has resolved the question; the simulation had not. Which is the useful
+direction for a lab like this to fail in — the real experiment turned out to be cheaper to interpret
+than the ensemble it was supposed to arbitrate.
+
+**But the class is not the interesting part; the magnitude is, and the field model got it wrong.**
+The corrected two-channel field model was built to fix a failure that the same paper had already
+exposed — the pure-Delta7 version dissolved the bump below d7 ≈ 0.3, which contradicts a bump that
+survives. Adding the ring-neuron surround fixed survival, and in doing so predicted a monotonic
+widening to 143° that the measurement says does not happen. The correction repaired the sign of the
+result and overshot its size. The honest reading is that the second inhibitory channel is doing too
+little of the width-setting work in the model: in the fly, whatever sets bump width is almost
+entirely *not* Delta7, where the corrected model still has Delta7 supplying about a third of it.
+
+**What the amplitude column adds.** Both agree that amplitude falls, and the model's −10% is at
+least the right direction against a significant drop. Read together with an unchanged width, the
+measured phenotype is a bump that is weaker but not broader, which is what a loss of *stabilising*
+input looks like rather than a loss of *confining* input — exactly the authors' own reading, that
+"the Δ7 neurons instead stabilize the bump's movements". The model's failure mode is that it has no
+way to express that distinction: in an Amari field, removing surround inhibition necessarily widens
+the bump, so no parameter setting of this model class can produce the measured phenotype. That is
+a statement about the model class, and it is the most useful thing this closure produced.
+
+**What it costs to fix, and why that is not done here.** Matching an unchanged width means the
+width has to be set by something the current field does not carry — a saturating nonlinearity, a
+second population with its own spatial scale, or an input tuning width that dominates the recurrent
+one. Each is a different model class, and choosing among them from one width measurement would be
+fitting a class to a single number. The benchmark numbers above already carry the cost of the first
+correction (0.48 rad against 0.41 for the uncorrected version); a second correction should be made
+against the width *and* amplitude curves together, which is the experiment to ask for rather than
+the fix to guess.
+
 ## What's next
 
-- Third circuit candidate: KC/APL sparse coding under ensemble gains — does the sparse-memory
-  hypothesis survive dynamics, or does the code densify?
-- Withheld-prediction closure: find the specific measured bump-width change under Delta7
-  perturbation in the literature and check which mechanism class it selects.
+- **Effect sizes in the spec.** The floor measurement says a perturbation is only informative if its
+  predicted effect exceeds the member-level spread. That number belongs in the spec next to each
+  perturbation, and `rankExperiments` should score effect-over-floor rather than raw outcome
+  separation — which would have demoted Delta7 silencing before the measurement did.
+- **A width-and-amplitude field model.** The closure above shows no Amari-type field can produce the
+  measured phenotype (amplitude down, width unchanged). Fitting a class that can — saturating
+  nonlinearity, second spatial scale, or input-dominated width — against both curves at once.
 - Provenance: each lab JSON records params, observables, perturbation outcomes, mechanism
-  class, and seed — the inspectable chain from wiring to claim.
+  class, seed, and now a second draw of every member — the inspectable chain from wiring to claim.

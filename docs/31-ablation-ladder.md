@@ -340,8 +340,15 @@ a random variable whose own spread, 0.019 measured on a rung that changes nothin
 arm-one cost of six of the twenty substitutions — so the refit arm can speak to the mechanisms that cost
 0.1 or more and is silent about the rest. And the benchmark is physiological, not behavioural. The substitutions that [Chapter 16](textbook/16-upload.md) treats as
 most informative — posture, stepping, bout structure — are supplied by machinery outside the graph
-([Limitations](19-limitations.md)), so they cannot break here. Extending both arms to the embodied
-assays is the next item on the [roadmap](20-roadmap.md).
+([Limitations](19-limitations.md)), so they cannot break here.
+
+That limit has since been measured rather than argued. [Doc 35](35-behaviour-ladder.md) runs the same
+twenty rungs through the arena, and the two orderings agree at a Spearman correlation of −0.05. The
+disagreements run one way: the three substitutions this table ranks as the most costly things that can
+be done to the graph — binarising the weights, permuting them, switching on depression — are free or
+better than free when the score is what the animal does. Nothing below is withdrawn, because the two
+documents score different objectives, but every sentence here about what the model *needs* should be
+read as a statement about this benchmark until doc 35 agrees with it.
 
 ## The rungs
 

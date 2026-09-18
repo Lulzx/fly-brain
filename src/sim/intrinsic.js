@@ -30,6 +30,12 @@ export const INTRINSIC = {
   // courtship: the connectome's pIP10 + DNp13 rate (ctx.court.level, see motor.js) tells the male a fly is
   // near; he chases it by steering on its bearing and sings with the wing on its side (Ewing & Bennet-Clark 1968)
   courtEnter: 0.4, courtExit: 0.2, courtRange: 1.8, courtLostMs: 1500, courtSing: 0.45, courtDrive: 9, courtTurn: 12,
+  // rejection, for a female target. An unreceptive female decamps — turns away and runs — and kicks
+  // with a hind leg when he is at close range behind or beside her (Connolly & Cook 1973; Bussell et
+  // al. 2014 for the receptivity decision this stands in for). Receptivity is a parameter here rather
+  // than a state of a circuit, because the female's own nervous system is not in this dataset.
+  rejectRange: 0.55, rejectMs: [400, 900], rejectDrive: 16, rejectTurn: 14, rejectRefractory: 600,
+  kickRange: 0.3, kickMs: 90, kickRefractory: 500, receptivity: 0,
 };
 function mulberry(seed) { let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
 
@@ -66,6 +72,25 @@ export class Intrinsic {
         if ((this.courting.lost += dtMs) > P.courtLostMs) { this.courting = null; this.courtSing = false; if (this.state === 'court') { this.state = 'stop'; this.left = 400 + 600 * this.rand(); } }
       } else this.courting.lost = 0;
     }
+    // rejection: a female with a male inside her rejection range turns away and runs, and kicks if he
+    // is closer still. She yields instead if P.receptivity says so, which is the one knob standing in
+    // for the receptivity decision the male connectome cannot make.
+    const su = ctx.suitor;
+    if (su && !this.avoid && this.state !== 'feed' && this.rand() >= P.receptivity) {
+      if (!this.rejecting && su.dist < P.rejectRange && t - (this.lastReject || -1e9) > P.rejectRefractory) {
+        this.rejecting = { t: 0, dur: P.rejectMs[0] + (P.rejectMs[1] - P.rejectMs[0]) * this.rand(),
+                           dir: su.bearing > 0 ? -1 : 1 };
+        this.sacc = null; this.state = 'reject'; this.rejections = (this.rejections || 0) + 1;
+      }
+      if (su.dist < P.kickRange && t - (this.lastKick || -1e9) > P.kickRefractory) {
+        this.kick = { t: 0, side: su.bearing > 0 ? 'left' : 'right' }; this.lastKick = t; this.kicks = (this.kicks || 0) + 1;
+      }
+    }
+    if (this.rejecting && (this.rejecting.t += dtMs) > this.rejecting.dur) {
+      this.rejecting = null; this.lastReject = t;
+      if (this.state === 'reject') { this.state = 'walk'; this.left = 500 + 700 * this.rand(); }
+    }
+    if (this.kick && (this.kick.t += dtMs) > P.kickMs) this.kick = null;
     const headOn = ctx.rearing || (t - this.touchL < 150 && t - this.touchR < 150);
     const graze = ctx.touch.left !== ctx.touch.right;
     if (!courting && !this.avoid && headOn) {
@@ -100,6 +125,9 @@ export class Intrinsic {
       const a = this.avoid; a.t += dtMs;
       if (a.t > P.avoidMs && !this.sacc) this.sacc = { t: 0, dur: a.turn, dir: a.dir };   // pivot away
       if (a.t > P.avoidMs + a.turn) { if (a.fly) this.takeoffUntil = t + 80; this.avoid = null; this.lastDir = a.dir; this.sinceSacc = 0; this.state = 'walk'; this.left = Math.max(this.left, 1000); }
+    } else if (this.rejecting) {
+      // decamping is a bout of its own: no spontaneous saccades and no scheduler transition while it runs
+      this.sinceSacc = 0;
     } else if (this.state === 'court' && court) {
       // chasing: no spontaneous saccades or bout transitions; steering is set from the target's bearing below
       const b = court.bearing;   // rad; >0 = target to the left
@@ -137,6 +165,13 @@ export class Intrinsic {
       const b = court.bearing;
       B.turnL = b > 0.04 ? P.courtTurn * Math.min(1, b) : 0; B.turnR = b < -0.04 ? P.courtTurn * Math.min(1, -b) : 0;
       B.fwd = court.dist > 0.6 ? P.courtDrive : court.dist > 0.4 ? P.courtDrive * 0.4 : P.courtDrive * 0.15;
+    }
+    if (this.rejecting) {
+      // decamping: turn away from his side and run. The turn is on for the first third of the bout so
+      // that the run that follows points away from him rather than across him.
+      const r = this.rejecting, turning = r.t < r.dur / 3;
+      B.turnL = turning && r.dir > 0 ? P.rejectTurn : 0; B.turnR = turning && r.dir < 0 ? P.rejectTurn : 0;
+      B.fwd = P.rejectDrive; B.groom = 0;
     }
     B.takeoff = t < this.takeoffUntil ? P.takeoffDrive : 0;
     // hunger gates the proboscis extension reflex: a hungry fly tasting sugar extends and pumps (MN9, pump MNs)

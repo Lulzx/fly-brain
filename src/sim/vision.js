@@ -2,7 +2,7 @@
 // 2024) at 50 Hz -> drives the matching male-CNS optic-lobe neurons (same type, same column). Male-CNS
 // photoreceptors are driven by the luminance of their nearest column with light adaptation.
 export class FlyVisionFV {
-  constructor(mj, model, data, bodymap, fvmap, eyes, headBodyId, thoraxBodyId, gain = 60) {
+  constructor(mj, model, data, bodymap, fvmap, eyes, headBodyId, thoraxBodyId, gain = 60, vRest = null) {
     this.mj = mj; this.model = model; this.data = data; this.head = headBodyId; this.eyes = eyes; this.gain = gain; this.map = fvmap;
     this.sides = ['L', 'R'];
     mj.mj_forward(model, data);
@@ -27,8 +27,15 @@ export class FlyVisionFV {
     this.lumEye = [new Float32Array(this.nCol), new Float32Array(this.nCol)];
     // resting activity of every model node under a uniform grey field: neurons are driven by deviations from rest
     const grey = new Float32Array(this.nCol).fill(0.5);
-    for (const e of eyes) { e.reset(); e.setInput(grey); for (let k = 0; k < 150; k++) e.step(); }
-    this.vRest = eyes[0].v.slice(0);
+    if (vRest) {
+      // the GPU eyes update their CPU shadow asynchronously, so their resting vector is measured at
+      // handover (brainsetup.attachEyesGpu) where it can be awaited, and passed in here
+      this.vRest = vRest;
+      for (const e of eyes) { e.reset(); e.setInput(grey); for (let k = 0; k < 150; k++) e.step(); }
+    } else {
+      for (const e of eyes) { e.reset(); e.setInput(grey); for (let k = 0; k < 150; k++) e.step(); }
+      this.vRest = eyes[0].v.slice(0);
+    }
     this.settled = false;
   }
   /** let the optic-lobe state settle to the current scene (avoids an onset transient) */

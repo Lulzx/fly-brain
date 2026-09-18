@@ -61,7 +61,12 @@ function bumpWidth(r) {
 function clean(net, biasPops) {
   net.drive.fill(0); net.bias.fill(0); net.thr.fill(0); net.reset();
   for (const bp of biasPops) net.setBias(bp.pop, bp.val);
+  // Threshold offsets are how a population is silenced, and clearing them here silently undid every
+  // silencing perturbation in all three labs: the probes call clean() after the caller has raised the
+  // thresholds. Silenced cells are recorded on the net so the reset cannot outlive them.
+  if (net.__silenced) for (const i of net.__silenced) net.setThr(i, 1e6);
 }
+const silencePop = (net, idx) => { net.__silenced = idx; for (const i of idx) net.setThr(i, 1e6); return net; };
 
 // ---- ring probes ----
 function ringPersistence(net, wedges, biasPops) {
@@ -117,12 +122,37 @@ const spec = specs[specName];
 if (!spec) { console.error(`no spec '${specName}' in ensemble_specs.json`); process.exit(1); }
 console.log(`spec: ${specName} (geometry=${spec.geometry})`);
 
-const byPattern = (t) => t.endsWith('*')
-  ? Array.from({ length: D.N }, (_, i) => i).filter(i => meta.types[i]?.startsWith(t.slice(0, -1)))
-  : D.byType(t);
+// 'KC*' = type prefix, 'class:ALPN' = every cell of that annotated class, 'pool:kc' = every
+// presynaptic cell of population kc (the graph's own answer to "what feeds this layer?").
+// Every member is re-seeded from its own index before it runs. Without this the labs share one
+// global RNG stream, so anything that changes one trajectory shifts every member after it: two runs of
+// the same spec and seed disagreed on the *baseline* of 18 of 48 ring members, by more than the
+// Delta7-silencing effect being measured. Perturbation results were partly reading that drift.
+const memberSeed = (i) => seedRng(SEED + 1000003 * (i + 1));
+
+const byPattern = (t) => t.startsWith('class:')
+  ? Array.from({ length: D.N }, (_, i) => i).filter(i => meta.classes[D.cls[i]] === t.slice(6))
+  : t.endsWith('*')
+    ? Array.from({ length: D.N }, (_, i) => i).filter(i => meta.types[i]?.startsWith(t.slice(0, -1)))
+    : D.byType(t);
 const pop = {};
 for (const [k, t] of Object.entries(spec.populations))
-  pop[k] = [...new Set((Array.isArray(t) ? t : [t]).flatMap(byPattern))];
+  if (!String(t).startsWith('pool:')) pop[k] = [...new Set((Array.isArray(t) ? t : [t]).flatMap(byPattern))];
+for (const [k, t] of Object.entries(spec.populations)) {
+  if (!String(t).startsWith('pool:')) continue;
+  const target = new Set(pop[String(t).slice(5)]);
+  const hits = new Map();                       // presynaptic cell -> how many target cells it reaches
+  for (let i = 0; i < D.N; i++)
+    for (let e = D.indptr[i]; e < D.indptr[i + 1]; e++)
+      if (D.weights[e] >= 3 && target.has(D.indices[e])) hits.set(i, (hits.get(i) || 0) + 1);
+  // the pool is the operator's *external* input, so cells already named as parts of the operator
+  // (its feedback interneuron, its teaching neurons, its readout) do not belong in it
+  const own = new Set(Object.entries(spec.populations)
+    .filter(([k2, t2]) => k2 !== k && !String(t2).startsWith('pool:'))
+    .flatMap(([k2]) => pop[k2]));
+  pop[k] = [...hits.entries()].filter(([i, c]) => c >= 2 && !target.has(i) && !own.has(i)).map(([i]) => i);
+  console.log(`  pool ${k} = ${pop[k].length} presynaptic cells of ${String(t).slice(5)}`);
+}
 
 const resolve = (x) => x instanceof Set ? x : new Set((Array.isArray(x) ? x : [x]).flatMap(tt => pop[tt] || byPattern(tt)));
 const build = makeBuilder(D, spec.edge_params.map(r => ({
@@ -149,10 +179,15 @@ if (spec.geometry === 'ring') {
   const wedges = G.group(pop[spec.roles.bump]);
   const shifterL = pop[spec.roles.shifter].filter(i => G.side(i) === 'L');
   const shifterR = pop[spec.roles.shifter].filter(i => G.side(i) === 'R');
-  for (const p of grid) {
+  for (const [mi, p] of grid.entries()) {
+    memberSeed(mi);
     const net = build(p), bp = biasOf(p);
     const base = ringPersistence(net, wedges, bp);
     const rotL = ringRotation(net, wedges, shifterL, bp), rotR = ringRotation(net, wedges, shifterR, bp);
+    // a second draw of the same member, from a different stream: the floor any perturbation has to clear
+    seedRng(SEED + 7777771 * (mi + 1));
+    const baseRepeat = ringPersistence(build(p), wedges, bp);
+    memberSeed(mi);                        // perturbations start from the member's own stream again
     const persists = base.concentration > 0.5;
     const hyp = !persists ? (base.total_rate < 0.2 ? 'silent' : 'filter')
               : base.total_rate < 0.2 ? 'frozen'
@@ -160,10 +195,11 @@ if (spec.geometry === 'ring') {
     const pert = {};
     for (const pt of spec.perturbations) {
       const n2 = build(p);
-      for (const i of pop[pt.silence]) n2.setThr(i, 1e6);
+      if (pt.silence) silencePop(n2, pop[pt.silence]);
       pert[pt.name] = ringPersistence(n2, wedges, bp);
     }
-    members.push({ params: p, hypothesis: hyp, baseline: { persistence: base, rotL, rotR }, perturbations: pert });
+    members.push({ params: p, hypothesis: hyp, baseline: { persistence: base, rotL, rotR },
+      baseline_repeat: baseRepeat, perturbations: pert });
     console.log(`  ${JSON.stringify(p)}: ${hyp} | persist ${base.concentration} w${base.width_wedges} | rotL ${rotL.drift} rotR ${rotR.drift}`);
   }
   var ranked = rankExperiments({
@@ -185,8 +221,13 @@ if (spec.geometry === 'ring') {
   // input population (an "odor"), measure whether the output population's
   // response separates overlapping inputs better than the inputs overlap.
   const kc = pop[spec.roles.input], out = pop[spec.roles.output];
+  // The odour is injected into whatever the spec says the stimulus arrives on. Driving the
+  // expansion layer itself makes its sparseness unmeasurable: the active fraction is then the
+  // stimulus size divided by the layer size, identical in every member and under every
+  // perturbation, which is what the first version of this lab reported (0.049, always).
+  const drivePop = spec.roles.drive ? pop[spec.roles.drive] : kc;
   const nOdor = spec.odor_size || 200, shared = Math.floor(nOdor * (spec.odor_overlap ?? 0.5));
-  const shuffled = [...kc].sort(() => Math.random() - 0.5);          // deterministic (seeded)
+  const shuffled = [...drivePop].sort(() => Math.random() - 0.5);     // deterministic (seeded)
   const odorA = shuffled.slice(0, nOdor);
   const odorB = [...shuffled.slice(0, shared), ...shuffled.slice(nOdor, nOdor + nOdor - shared)];
   const inSim = shared / nOdor;                                      // input overlap
@@ -196,22 +237,29 @@ if (spec.geometry === 'ring') {
     for (let k = 0; k < a.length; k++) { d += a[k] * b[k]; na += a[k] * a[k]; nb += b[k] * b[k]; }
     return na * nb > 0 ? d / Math.sqrt(na * nb) : 0;
   };
-  function odorProbe(net, odor, drive = 60, ms = 200) {
+  const DR = spec.drive_rate || 60;        // stimulus rate; the gain-control probe doubles it
+  function odorProbe(net, odor, drive = DR, ms = 200) {
     net.drive.fill(0); net.reset();
     net.setDrive(odor, drive); run(net, ms); net.setDrive(odor, 0);
     return { prof: profOf(net), kc_active: kc.filter(i => net.spikeCount[i] > 0).length / kc.length,
              kc_spikes: kc.reduce((a, i) => a + net.spikeCount[i], 0) };
   }
-  for (const p of grid) {
+  for (const [mi, p] of grid.entries()) {
+    memberSeed(mi);
     const net = build(p), bp = biasOf(p);
     clean(net, bp);
     const A = odorProbe(net, odorA), B = odorProbe(net, odorB);
+    seedRng(SEED + 7777771 * (mi + 1));
+    const A2 = odorProbe(build(p), odorA), B2 = odorProbe(build(p), odorB);
+    const repeat = { kc_active: f2(A2.kc_active),
+                     expansion: f2((1 - cosSim(A2.prof, B2.prof)) / Math.max(1 - (shared / nOdor), 1e-9)) };
+    memberSeed(mi);
     const outSim = cosSim(A.prof, B.prof);
     const expansion = f2((1 - outSim) / Math.max(1 - inSim, 1e-9));  // >1 = decorrelation
     const rate = A.prof.reduce((a, b) => a + b, 0) + B.prof.reduce((a, b) => a + b, 0);
     // gain control: double the odor drive — does KC output scale sub-linearly?
     // APL feedback should compress; without it KC spikes ~2x.
-    const A2x = odorProbe(net, odorA, 120);
+    const A2x = odorProbe(net, odorA, 2 * DR);
     const compression = f2(A2x.kc_spikes / Math.max(A.kc_spikes, 1));
     const hyp = rate < 10 ? 'silent'
       : compression < 1.5 ? 'gain_controlled'
@@ -219,16 +267,16 @@ if (spec.geometry === 'ring') {
     const pert = {};
     for (const pt of spec.perturbations) {
       const n2 = build(pt.set != null ? { ...p, [pt.param]: pt.set } : p);
-      if (pt.silence) for (const i of pop[pt.silence]) n2.setThr(i, 1e6);
+      if (pt.silence) silencePop(n2, pop[pt.silence]);
       clean(n2, bp);
-      const Ap = odorProbe(n2, odorA), Bp = odorProbe(n2, odorB), Ap2x = odorProbe(n2, odorA, 120);
+      const Ap = odorProbe(n2, odorA), Bp = odorProbe(n2, odorB), Ap2x = odorProbe(n2, odorA, 2 * DR);
       pert[pt.name] = { expansion: f2((1 - cosSim(Ap.prof, Bp.prof)) / Math.max(1 - inSim, 1e-9)),
                         compression: f2(Ap2x.kc_spikes / Math.max(Ap.kc_spikes, 1)),
                         kc_active: f2(Ap.kc_active), rate: Ap.prof.reduce((a, b) => a + b, 0) + Bp.prof.reduce((a, b) => a + b, 0) };
     }
     members.push({ params: p, hypothesis: hyp,
       baseline: { expansion, compression, in_sim: inSim, out_sim: f2(outSim), kc_active: f2(A.kc_active), rate },
-      perturbations: pert });
+      baseline_repeat: repeat, perturbations: pert });
     console.log(`  ${JSON.stringify(p)}: ${hyp} | expansion ${expansion} compression ${compression} kc_act ${f2(A.kc_active)}`);
   }
   var ranked = rankExperiments({
@@ -253,7 +301,8 @@ if (spec.geometry === 'ring') {
   const expect = spec.structural_offsets;
   const src0 = spec.roles.sources[0];
   const offCls = (o, e) => o == null || o.offset == null ? 'silent' : Math.abs(o.offset - e) <= 1 ? 'shift' : Math.abs(o.offset) <= 1 ? 'pass' : 'other';
-  for (const p of grid) {
+  for (const [mi, p] of grid.entries()) {
+    memberSeed(mi);
     const net = build(p), bp = biasOf(p);
     clean(net, bp);
     const offs = {}, arms = {};
@@ -287,7 +336,7 @@ if (spec.geometry === 'ring') {
     const pert = {};
     for (const pt of spec.perturbations) {
       const n2 = build(pt.set ? { ...p, [pt.param]: pt.set } : p);
-      if (pt.silence) for (const i of pop[pt.silence]) n2.setThr(i, 1e6);
+      if (pt.silence) silencePop(n2, pop[pt.silence]);
       clean(n2, bp);
       pert[pt.name] = {};
       for (const src of spec.roles.sources) pert[pt.name][src] = colProbe(n2, srcMaps[src], hcol, target, G.colOf, driveCol);

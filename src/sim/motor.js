@@ -4,6 +4,8 @@
 //     steering; a stepping pattern generator (optimised tripod gait) executes it. Proboscis, antennae and the
 //     giant-fibre jump are driven directly by their motor neurons.
 //  'connectome': every mapped leg muscle is driven by its own motor neurons through the VNC connectome.
+import { Song } from './song.js';
+
 export const DN_ROLES = {
   // Locomotion phenotypes of DN activation: Cande et al. 2018 (eLife 7:e34275), Bidaye et al. 2014/2020,
   // Sapkal et al. 2024 (BDN2, oDN1), Rayshubskiy et al. 2020 (DNa02 steering), von Reyn 2014 (GF).
@@ -33,6 +35,7 @@ const PHASE = { T1_left: 0, T2_right: 0, T3_left: 0, T1_right: Math.PI, T2_left:
 export class Motor {
   constructor(mj, model, data, bodymap, typeOf, sideOf, gait, mode = 'descending') {
     this.model = model; this.data = data; this.mode = mode; this.gait = gait;
+    this.song = new Song(1);          // courtship song timing (src/sim/song.js)
     this.act = {}; for (let i = 0; i < model.nu; i++) this.act[model.actuator(i).name] = i;
     this.range = {}; const cr = model.actuator_ctrlrange; for (let i = 0; i < model.nu; i++) this.range[model.actuator(i).name] = [cr[2 * i], cr[2 * i + 1]];
     const byType = (t, s) => { const o = []; for (let i = 0; i < typeOf.length; i++) if (typeOf[i] === t && (s === undefined || sideOf[i] === s)) o.push(i); return o; };
@@ -109,12 +112,30 @@ export class Motor {
       }
     }
     // --- courtship song: one wing (on the side facing the other fly) extended and vibrating ---
-    if (extra.court?.sing && !this.jumping && !this.flying && !this.righting) {
-      const sd = extra.court.side === 'right' ? 'right' : 'left';
-      const w = 0.5 + 0.5 * Math.sin(2 * Math.PI * 30 * tMs / 1000);   // song pulses rendered as a visible flutter
-      set(`wing_yaw_${sd}`, 1.35); set(`wing_roll_${sd}`, 0.5); set(`wing_pitch_${sd}`, -0.5 - 0.4 * w);
-      this.cmd.singing = true;
+    // The envelope comes from src/sim/song.js, which carries the real pulse/sine structure: pulse
+    // trains at a 35 ms inter-pulse interval when he is moving or further away, a 160 Hz sine hum
+    // when he is slow and close (Coen et al. 2014 for the switch, Arthur et al. 2013 for the IPI).
+    {
+      const singing = !!extra.court?.sing && !this.jumping && !this.flying && !this.righting;
+      const sg = this.song.update(tMs, dtMs, singing
+        ? { sing: true, dist: extra.court.dist, speed: extra.court.speed } : null);
+      if (sg.mode) {
+        const sd = extra.court.side === 'right' ? 'right' : 'left';
+        const reach = sg.mode === 'sine' ? 1.1 : 1.35;      // sine song is the smaller display
+        set(`wing_yaw_${sd}`, reach); set(`wing_roll_${sd}`, 0.5);
+        set(`wing_pitch_${sd}`, -0.5 - 0.4 * sg.amp);
+        this.cmd.singing = true; this.cmd.songMode = sg.mode; this.cmd.songPulse = sg.pulse;
+      } else { this.cmd.songMode = null; this.cmd.songPulse = false; }
     }
+    // --- rejection kick: a hind leg extends sharply toward the male's side (Connolly & Cook 1973) ---
+    if (extra.kick && !this.jumping && !this.flying && !this.righting) {
+      const sd = extra.kick.side === 'right' ? 'right' : 'left';
+      const ph = Math.min(1, extra.kick.t / 45);                       // out fast, back slower
+      const ext = ph < 1 ? ph : Math.max(0, 2 - extra.kick.t / 45);
+      set(`coxa_T3_${sd}`, -0.5 * ext); set(`femur_T3_${sd}`, 0.8 * ext);
+      set(`tibia_T3_${sd}`, 1.2 * ext); set(`adhere_claw_T3_${sd}`, 0);
+      this.cmd.kicking = true;
+    } else this.cmd.kicking = false;
     // --- head grooming (DNg07/08/12): front legs lift and sweep over the head/eyes in antiphase (~7 Hz) ---
     if (this.cmd.grooming && this.mode !== 'connectome') {
       this.groomPhase = (this.groomPhase || 0) + 2 * Math.PI * 7 * dtMs / 1000;
