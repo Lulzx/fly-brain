@@ -1,0 +1,401 @@
+{
+ "spec": {
+  "id": "stand-scramble",
+  "question": "Which scaffolds does standing need — and does scrambling the premotor graph destroy what the CPG supplies?",
+  "operators": [
+   "vnc.posture",
+   "cpg.pattern"
+  ],
+  "splitRule": "standUpright < 0.5 * baseline.standUpright",
+  "backend": "arena",
+  "status": "ready"
+ },
+ "ensemble": {
+  "n": 9,
+  "params": [
+   "scaffold.cpg.pivotAmp",
+   "scaffold.steeringAdapt.turnAdaptTau"
+  ],
+  "seed": 2
+ },
+ "observables": [
+  {
+   "id": "standUpright",
+   "where": "arena",
+   "measure": "standUpright"
+  },
+  {
+   "id": "walk",
+   "where": "arena",
+   "measure": "walkDist"
+  }
+ ],
+ "members": [
+  {
+   "params": {
+    "scaffold.cpg.pivotAmp": 0.05,
+    "scaffold.steeringAdapt.turnAdaptTau": 0.3
+   },
+   "baseline": {
+    "standUpright": 1,
+    "walk": 13.168314179583271
+   },
+   "perturbations": {
+    "cpg_off": {
+     "values": {
+      "standUpright": 1,
+      "walk": 0.00984317464391346
+     },
+     "kills": false
+    },
+    "righting_off": {
+     "values": {
+      "standUpright": 1,
+      "walk": 13.294594700557008
+     },
+     "kills": false
+    },
+    "steering_off": {
+     "values": {
+      "standUpright": 1,
+      "walk": 22.473786983668912
+     },
+     "kills": false
+    }
+   }
+  },
+  {
+   "params": {
+    "scaffold.cpg.pivotAmp": 0.05,
+    "scaffold.steeringAdapt.turnAdaptTau": 1
+   },
+   "baseline": {
+    "standUpright": 1,
+    "walk": 13.298541423029267
+   },
+   "perturbations": {
+    "cpg_off": {
+     "values": {
+      "standUpright": 1,
+      "walk": 0.00984317464391346
+     },
+     "kills": false
+    },
+    "righting_off": {
+     "values": {
+      "standUpright": 1,
+      "walk": 13.11476813835989
+     },
+     "kills": false
+    },
+    "steering_off": {
+     "values": {
+      "standUpright": 1,
+      "walk": 22.473786983668912
+     },
+     "kills": false
+    }
+   }
+  },
+  {
+   "params": {
+    "scaffold.cpg.pivotAmp": 0.05,
+    "scaffold.steeringAdapt.turnAdaptTau": 3
+   },
+   "baseline": {
+    "standUpright": 1,
+    "walk": 13.973606023423958
+   },
+   "perturbations": {
+    "cpg_off": {
+     "values": {
+      "standUpright": 1,
+      "walk": 0.00984317464391346
+     },
+     "kills": false
+    },
+    "righting_off": {
+     "values": {
+      "standUpright": 1,
+      "walk": 14.404365454834926
+     },
+     "kills": false
+    },
+    "steering_off": {
+     "values": {
+      "standUpright": 1,
+      "walk": 22.473786983668912
+     },
+     "kills": false
+    }
+   }
+  },
+  {
+   "params": {
+    "scaffold.cpg.pivotAmp": 0.1,
+    "scaffold.steeringAdapt.turnAdaptTau": 0.3
+   },
+   "baseline": {
+    "standUpright": 1,
+    "walk": 13.168314179583271
+   },
+   "perturbations": {
+    "cpg_off": {
+     "values": {
+      "standUpright": 1,
+      "walk": 0.00984317464391346
+     },
+     "kills": false
+    },
+    "righting_off": {
+     "values": {
+      "standUpright": 1,
+      "walk": 13.294594700557008
+     },
+     "kills": false
+    },
+    "steering_off": {
+     "values": {
+      "standUpright": 1,
+      "walk": 22.473786983668912
+     },
+     "kills": false
+    }
+   }
+  },
+  {
+   "params": {
+    "scaffold.cpg.pivotAmp": 0.1,
+    "scaffold.steeringAdapt.turnAdaptTau": 1
+   },
+   "baseline": {
+    "standUpright": 1,
+    "walk": 13.298541423029267
+   },
+   "perturbations": {
+    "cpg_off": {
+     "values": {
+      "standUpright": 1,
+      "walk": 0.00984317464391346
+     },
+     "kills": false
+    },
+    "righting_off": {
+     "values": {
+      "standUpright": 1,
+      "walk": 13.11476813835989
+     },
+     "kills": false
+    },
+    "steering_off": {
+     "values": {
+      "standUpright": 1,
+      "walk": 22.473786983668912
+     },
+     "kills": false
+    }
+   }
+  },
+  {
+   "params": {
+    "scaffold.cpg.pivotAmp": 0.1,
+    "scaffold.steeringAdapt.turnAdaptTau": 3
+   },
+   "baseline": {
+    "standUpright": 1,
+    "walk": 13.973606023423958
+   },
+   "perturbations": {
+    "cpg_off": {
+     "values": {
+      "standUpright": 1,
+      "walk": 0.00984317464391346
+     },
+     "kills": false
+    },
+    "righting_off": {
+     "values": {
+      "standUpright": 1,
+      "walk": 14.404365454834926
+     },
+     "kills": false
+    },
+    "steering_off": {
+     "values": {
+      "standUpright": 1,
+      "walk": 22.473786983668912
+     },
+     "kills": false
+    }
+   }
+  },
+  {
+   "params": {
+    "scaffold.cpg.pivotAmp": 0.2,
+    "scaffold.steeringAdapt.turnAdaptTau": 0.3
+   },
+   "baseline": {
+    "standUpright": 1,
+    "walk": 13.168314179583271
+   },
+   "perturbations": {
+    "cpg_off": {
+     "values": {
+      "standUpright": 1,
+      "walk": 0.00984317464391346
+     },
+     "kills": false
+    },
+    "righting_off": {
+     "values": {
+      "standUpright": 1,
+      "walk": 13.294594700557008
+     },
+     "kills": false
+    },
+    "steering_off": {
+     "values": {
+      "standUpright": 1,
+      "walk": 22.473786983668912
+     },
+     "kills": false
+    }
+   }
+  },
+  {
+   "params": {
+    "scaffold.cpg.pivotAmp": 0.2,
+    "scaffold.steeringAdapt.turnAdaptTau": 1
+   },
+   "baseline": {
+    "standUpright": 1,
+    "walk": 13.298541423029267
+   },
+   "perturbations": {
+    "cpg_off": {
+     "values": {
+      "standUpright": 1,
+      "walk": 0.00984317464391346
+     },
+     "kills": false
+    },
+    "righting_off": {
+     "values": {
+      "standUpright": 1,
+      "walk": 13.11476813835989
+     },
+     "kills": false
+    },
+    "steering_off": {
+     "values": {
+      "standUpright": 1,
+      "walk": 22.473786983668912
+     },
+     "kills": false
+    }
+   }
+  },
+  {
+   "params": {
+    "scaffold.cpg.pivotAmp": 0.2,
+    "scaffold.steeringAdapt.turnAdaptTau": 3
+   },
+   "baseline": {
+    "standUpright": 1,
+    "walk": 13.973606023423958
+   },
+   "perturbations": {
+    "cpg_off": {
+     "values": {
+      "standUpright": 1,
+      "walk": 0.00984317464391346
+     },
+     "kills": false
+    },
+    "righting_off": {
+     "values": {
+      "standUpright": 1,
+      "walk": 14.404365454834926
+     },
+     "kills": false
+    },
+    "steering_off": {
+     "values": {
+      "standUpright": 1,
+      "walk": 22.473786983668912
+     },
+     "kills": false
+    }
+   }
+  }
+ ],
+ "skipped": [
+  {
+   "member": 0,
+   "perturbation": "premotor_scramble",
+   "reason": "kind 'swapCompartment' has no arena backend yet"
+  },
+  {
+   "member": 1,
+   "perturbation": "premotor_scramble",
+   "reason": "kind 'swapCompartment' has no arena backend yet"
+  },
+  {
+   "member": 2,
+   "perturbation": "premotor_scramble",
+   "reason": "kind 'swapCompartment' has no arena backend yet"
+  },
+  {
+   "member": 3,
+   "perturbation": "premotor_scramble",
+   "reason": "kind 'swapCompartment' has no arena backend yet"
+  },
+  {
+   "member": 4,
+   "perturbation": "premotor_scramble",
+   "reason": "kind 'swapCompartment' has no arena backend yet"
+  },
+  {
+   "member": 5,
+   "perturbation": "premotor_scramble",
+   "reason": "kind 'swapCompartment' has no arena backend yet"
+  },
+  {
+   "member": 6,
+   "perturbation": "premotor_scramble",
+   "reason": "kind 'swapCompartment' has no arena backend yet"
+  },
+  {
+   "member": 7,
+   "perturbation": "premotor_scramble",
+   "reason": "kind 'swapCompartment' has no arena backend yet"
+  },
+  {
+   "member": 8,
+   "perturbation": "premotor_scramble",
+   "reason": "kind 'swapCompartment' has no arena backend yet"
+  }
+ ],
+ "ranked": [
+  {
+   "experiment": "cpg_off",
+   "separation": 0
+  },
+  {
+   "experiment": "righting_off",
+   "separation": 0
+  },
+  {
+   "experiment": "steering_off",
+   "separation": 0
+  },
+  {
+   "experiment": "obs:standUpright",
+   "separation": 0
+  },
+  {
+   "experiment": "obs:walk",
+   "separation": 0
+  }
+ ]
+}

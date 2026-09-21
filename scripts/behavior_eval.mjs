@@ -161,7 +161,7 @@ async function runSeed(cfg, seed) {
     // kill matrix can attribute a collapse to a mechanism rather than to a shared score
     obs.byScenario[name] = { ms: sc.secs * 1000, flipMs: scFlipMs, groomMs: scGroomMs, turnMs: scTurnMs, courtMs: scCourtMs,
       dist: fly.dist, foodMin: scFoodMin > 1e8 ? null : scFoodMin, fed, feedLatency: name === 'onfood' && fed ? obs.feedLatency : null,
-      escapes: escaped ? 1 : 0, rejections: fly.intrinsic?.rejections || 0, kicks: fly.intrinsic?.kicks || 0, alive: fly.alive ? 1 : 0 };
+      escapes: escaped ? 1 : 0, jumps: fly.jumps, rejections: fly.intrinsic?.rejections || 0, kicks: fly.intrinsic?.kicks || 0, alive: fly.alive ? 1 : 0 };
     // The agent owns ~28 MB of emscripten heap that the collector never sees; five scenarios per
     // evaluation and dozens of evaluations per worker reach the 2 GB heap limit without this.
     fly.dispose();
@@ -230,7 +230,7 @@ process.on('message', async msg => {
   try { const out = await evaluate(msg.cfg, msg.seeds); process.send({ id: msg.id, cfg: msg.cfg, out }); }
   catch (e) { process.send({ id: msg.id, cfg: msg.cfg, error: String(e.stack) }); }
 });
-if (process.argv[2]) {
+if (process.argv[1]?.endsWith('behavior_eval.mjs') && process.argv[2]) {
   const t0 = Date.now();
   const cfg = JSON.parse(process.argv[2]);
   const seeds = cfg.seeds || [cfg.seed ?? 1000];

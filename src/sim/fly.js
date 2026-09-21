@@ -51,7 +51,7 @@ export class FlyAgent {
     // one scaffold set for the whole animal: every non-graph mechanism (stepping generator, escape
     // gate, bout scheduler, ...) is a plugin from src/sim/scaffold/, switched by brainOpts.scaffolds
     // and listed in this.scaffoldManifest for the ledger.
-    this.setScaffolds(brainOpts.scaffolds);
+    this.setScaffolds(brainOpts.scaffolds, brainOpts.scaffoldParams);
     this.flights = 0;
     this.driven = new Int32Array(0);
     // physiology
@@ -75,8 +75,8 @@ export class FlyAgent {
   /** (re)build the scaffold set and hand the same one to every subsystem, so a kill switch turns a
    *  mechanism off everywhere at once. Called at construction (brainOpts.scaffolds) and live by the
    *  arena's scaffold toggles; rebuilding loses plugin state, which is fine for a debug toggle. */
-  setScaffolds(config = {}) {
-    this.scaffolds = createScaffoldSet(config);
+  setScaffolds(config = {}, paramOverrides) {
+    this.scaffolds = createScaffoldSet(config, paramOverrides);
     this.senses.scaffolds = this.scaffolds;
     this.motor.scaffolds = this.scaffolds;
     if (this.intrinsic) this.intrinsic.scaffolds = this.scaffolds;

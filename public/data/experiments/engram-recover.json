@@ -1,0 +1,46 @@
+{
+ "spec": {
+  "id": "engram-recover",
+  "question": "Does the engram recover learned odour-valence behaviour after partial lesion?",
+  "operators": [
+   "engram.write",
+   "engram.lesion",
+   "engram.recover"
+  ],
+  "splitRule": "engramRecall < 0.5 * baseline.engramRecall",
+  "status": "pending"
+ },
+ "ensemble": {
+  "n": 3,
+  "params": [
+   "engramGain"
+  ],
+  "seed": 8
+ },
+ "observables": [
+  {
+   "id": "engramRecall",
+   "where": "circuit",
+   "measure": "engramRecall",
+   "value": null
+  },
+  {
+   "id": "approachFrac",
+   "where": "arena",
+   "measure": "approachFrac",
+   "value": null
+  }
+ ],
+ "members": [],
+ "skipped": [
+  {
+   "perturbation": "lesion_25",
+   "reason": "pending: backend lands with its spec section"
+  },
+  {
+   "perturbation": "lesion_50",
+   "reason": "pending: backend lands with its spec section"
+  }
+ ],
+ "ranked": []
+}

@@ -1,0 +1,4108 @@
+{
+ "spec": {
+  "id": "heading-lab",
+  "question": "Which dynamical model does the heading-circuit wiring actually support?",
+  "operators": [
+   "epg.recurrence",
+   "d7.kernel",
+   "epg.tonic",
+   "pen.push"
+  ],
+  "splitRule": "persistence.concentration < 0.5 * baseline.persistence.concentration",
+  "backend": "heading",
+  "status": "ready"
+ },
+ "ensemble": {
+  "n": 48,
+  "params": [
+   "epgRecur",
+   "d7Gain",
+   "epgTonic",
+   "penGain"
+  ],
+  "seed": 20260704
+ },
+ "observables": [
+  {
+   "id": "persistence",
+   "where": "circuit",
+   "measure": "bumpPersistence"
+  },
+  {
+   "id": "kernel",
+   "where": "circuit",
+   "measure": "d7Kernel"
+  },
+  {
+   "id": "rotL",
+   "where": "circuit",
+   "measure": "penRotation:L"
+  },
+  {
+   "id": "rotR",
+   "where": "circuit",
+   "measure": "penRotation:R"
+  }
+ ],
+ "members": [
+  {
+   "params": {
+    "epgRecur": 1,
+    "d7Gain": 0.5,
+    "epgTonic": 0,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.99,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 30,
+     "contrast": 1.71,
+     "r2": 0.601,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.991,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 33,
+       "contrast": 1.703,
+       "r2": 0.598,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 1,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 33,
+       "contrast": 1.725,
+       "r2": 0.593,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "silent",
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 1,
+    "d7Gain": 0.5,
+    "epgTonic": 3,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.978,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 40,
+     "contrast": 1.758,
+     "r2": 0.518,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.985,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 34,
+       "contrast": 1.672,
+       "r2": 0.679,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.967,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 32,
+       "contrast": 1.72,
+       "r2": 0.649,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "silent",
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 1,
+    "d7Gain": 0.5,
+    "epgTonic": 5,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.967,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 33,
+     "contrast": 1.719,
+     "r2": 0.645,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.97,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 35,
+       "contrast": 1.684,
+       "r2": 0.655,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.961,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 33,
+       "contrast": 1.771,
+       "r2": 0.519,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "silent",
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 1,
+    "d7Gain": 0.5,
+    "epgTonic": 7,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.859,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 35,
+     "contrast": 1.739,
+     "r2": 0.585,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.65,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 31,
+       "contrast": 1.74,
+       "r2": 0.602,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.512,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 35,
+       "contrast": 1.699,
+       "r2": 0.708,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": -1.585,
+       "tracked": 4
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "silent",
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 1,
+    "d7Gain": 1,
+    "epgTonic": 0,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.991,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 37,
+     "contrast": 1.77,
+     "r2": 0.565,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.993,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 33,
+       "contrast": 1.696,
+       "r2": 0.683,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.995,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 36,
+       "contrast": 1.774,
+       "r2": 0.569,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "silent",
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 1,
+    "d7Gain": 1,
+    "epgTonic": 3,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.979,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 41,
+     "contrast": 1.728,
+     "r2": 0.567,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.977,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 36,
+       "contrast": 1.73,
+       "r2": 0.511,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.975,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 35,
+       "contrast": 1.6,
+       "r2": 0.795,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "silent",
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 1,
+    "d7Gain": 1,
+    "epgTonic": 5,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.97,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 33,
+     "contrast": 1.741,
+     "r2": 0.572,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.972,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 32,
+       "contrast": 1.712,
+       "r2": 0.603,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.968,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 38,
+       "contrast": 1.761,
+       "r2": 0.511,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "silent",
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 1,
+    "d7Gain": 1,
+    "epgTonic": 7,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0.933,
+     "seeded": 0.627,
+     "total_rate": 0.5,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 38,
+     "contrast": 1.622,
+     "r2": 0.65,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.664,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 33,
+       "contrast": 1.729,
+       "r2": 0.675,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": 3.166,
+       "tracked": 4
+      }
+     },
+     "kills": true
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 1,
+       "seeded": 0.537,
+       "total_rate": 0.5,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 37,
+       "contrast": 1.763,
+       "r2": 0.612,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "attractor_tonic",
+   "mechanism": "d7_essential"
+  },
+  {
+   "params": {
+    "epgRecur": 1,
+    "d7Gain": 1.3,
+    "epgTonic": 0,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.992,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 40,
+     "contrast": 1.774,
+     "r2": 0.54,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.991,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 41,
+       "contrast": 1.703,
+       "r2": 0.654,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 1,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 39,
+       "contrast": 1.761,
+       "r2": 0.588,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "silent",
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 1,
+    "d7Gain": 1.3,
+    "epgTonic": 3,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.977,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 34,
+     "contrast": 1.766,
+     "r2": 0.545,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.975,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 37,
+       "contrast": 1.766,
+       "r2": 0.593,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.971,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 39,
+       "contrast": 1.75,
+       "r2": 0.614,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "silent",
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 1,
+    "d7Gain": 1.3,
+    "epgTonic": 5,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.968,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 38,
+     "contrast": 1.745,
+     "r2": 0.586,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.965,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 39,
+       "contrast": 1.722,
+       "r2": 0.619,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.964,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 34,
+       "contrast": 1.749,
+       "r2": 0.569,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "silent",
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 1,
+    "d7Gain": 1.3,
+    "epgTonic": 7,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.575,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 30,
+     "contrast": 1.765,
+     "r2": 0.586,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.823,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 39,
+       "contrast": 1.761,
+       "r2": 0.598,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0.854,
+       "seeded": 0.583,
+       "total_rate": 1.533,
+       "width_wedges": 2
+      },
+      "kernel": {
+       "n_d7": 33,
+       "contrast": 1.752,
+       "r2": 0.55,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "silent",
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 3,
+    "d7Gain": 0.5,
+    "epgTonic": 0,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.972,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 34,
+     "contrast": 1.742,
+     "r2": 0.532,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.966,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 34,
+       "contrast": 1.702,
+       "r2": 0.647,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.964,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 37,
+       "contrast": 1.697,
+       "r2": 0.631,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "silent",
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 3,
+    "d7Gain": 0.5,
+    "epgTonic": 3,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.454,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 32,
+     "contrast": 1.662,
+     "r2": 0.632,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.899,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 35,
+       "contrast": 1.725,
+       "r2": 0.59,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.928,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 34,
+       "contrast": 1.708,
+       "r2": 0.577,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "silent",
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 3,
+    "d7Gain": 0.5,
+    "epgTonic": 5,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0.818,
+     "seeded": 0.235,
+     "total_rate": 5.633,
+     "width_wedges": 2
+    },
+    "kernel": {
+     "n_d7": 31,
+     "contrast": 1.772,
+     "r2": 0.56,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": 5.241,
+     "tracked": 4
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.893,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 31,
+       "contrast": 1.714,
+       "r2": 0.611,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": 0.705,
+       "tracked": 4
+      }
+     },
+     "kills": true
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.173,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 33,
+       "contrast": 1.736,
+       "r2": 0.589,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": 8.989,
+       "tracked": 4
+      },
+      "rotR": {
+       "drift": 8.177,
+       "tracked": 4
+      }
+     },
+     "kills": true
+    }
+   },
+   "hypothesis": "attractor_tonic",
+   "mechanism": "d7_essential"
+  },
+  {
+   "params": {
+    "epgRecur": 3,
+    "d7Gain": 0.5,
+    "epgTonic": 7,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0.926,
+     "seeded": 0.163,
+     "total_rate": 1.433,
+     "width_wedges": 2
+    },
+    "kernel": {
+     "n_d7": 35,
+     "contrast": 1.672,
+     "r2": 0.643,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": 9.923,
+     "tracked": 4
+    },
+    "rotR": {
+     "drift": -7.714,
+     "tracked": 4
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.204,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 31,
+       "contrast": 1.682,
+       "r2": 0.673,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": 2.672,
+       "tracked": 4
+      },
+      "rotR": {
+       "drift": -0.498,
+       "tracked": 4
+      }
+     },
+     "kills": true
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0.934,
+       "seeded": 0.159,
+       "total_rate": 1.233,
+       "width_wedges": 1
+      },
+      "kernel": {
+       "n_d7": 38,
+       "contrast": 1.763,
+       "r2": 0.539,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": 0.027,
+       "tracked": 4
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "attractor_tonic",
+   "mechanism": "d7_essential"
+  },
+  {
+   "params": {
+    "epgRecur": 3,
+    "d7Gain": 1,
+    "epgTonic": 0,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.971,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 38,
+     "contrast": 1.728,
+     "r2": 0.604,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.972,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 36,
+       "contrast": 1.762,
+       "r2": 0.554,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.964,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 39,
+       "contrast": 1.66,
+       "r2": 0.655,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "silent",
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 3,
+    "d7Gain": 1,
+    "epgTonic": 3,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0.943,
+     "seeded": 0.513,
+     "total_rate": 1.333,
+     "width_wedges": 1
+    },
+    "kernel": {
+     "n_d7": 32,
+     "contrast": 1.819,
+     "r2": 0.502,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.943,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 33,
+       "contrast": 1.682,
+       "r2": 0.686,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": true
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.918,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 35,
+       "contrast": 1.688,
+       "r2": 0.696,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": true
+    }
+   },
+   "hypothesis": "attractor_tonic",
+   "mechanism": "d7_essential"
+  },
+  {
+   "params": {
+    "epgRecur": 3,
+    "d7Gain": 1,
+    "epgTonic": 5,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0.835,
+     "seeded": 0.199,
+     "total_rate": 7.067,
+     "width_wedges": 2
+    },
+    "kernel": {
+     "n_d7": 36,
+     "contrast": 1.695,
+     "r2": 0.644,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": 10.272,
+     "tracked": 4
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.905,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 36,
+       "contrast": 1.737,
+       "r2": 0.58,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": -7.12,
+       "tracked": 4
+      },
+      "rotR": {
+       "drift": -0.405,
+       "tracked": 4
+      }
+     },
+     "kills": true
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.126,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 36,
+       "contrast": 1.677,
+       "r2": 0.618,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": true
+    }
+   },
+   "hypothesis": "attractor_tonic",
+   "mechanism": "d7_essential"
+  },
+  {
+   "params": {
+    "epgRecur": 3,
+    "d7Gain": 1,
+    "epgTonic": 7,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0.925,
+     "seeded": 0.155,
+     "total_rate": 1.8,
+     "width_wedges": 2
+    },
+    "kernel": {
+     "n_d7": 39,
+     "contrast": 1.721,
+     "r2": 0.589,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": -5.452,
+     "tracked": 4
+    },
+    "rotR": {
+     "drift": -0.493,
+     "tracked": 4
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0.801,
+       "seeded": 0.154,
+       "total_rate": 1.867,
+       "width_wedges": 1
+      },
+      "kernel": {
+       "n_d7": 35,
+       "contrast": 1.751,
+       "r2": 0.609,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": 0.642,
+       "tracked": 4
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.169,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 34,
+       "contrast": 1.698,
+       "r2": 0.638,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": 1.824,
+       "tracked": 4
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": true
+    }
+   },
+   "hypothesis": "attractor_tonic",
+   "mechanism": "d7_essential"
+  },
+  {
+   "params": {
+    "epgRecur": 3,
+    "d7Gain": 1.3,
+    "epgTonic": 0,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.968,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 34,
+     "contrast": 1.687,
+     "r2": 0.603,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.971,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 36,
+       "contrast": 1.757,
+       "r2": 0.559,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.969,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 39,
+       "contrast": 1.731,
+       "r2": 0.603,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "silent",
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 3,
+    "d7Gain": 1.3,
+    "epgTonic": 3,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.946,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 34,
+     "contrast": 1.722,
+     "r2": 0.572,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.924,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 33,
+       "contrast": 1.795,
+       "r2": 0.49,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.92,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 36,
+       "contrast": 1.723,
+       "r2": 0.656,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "silent",
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 3,
+    "d7Gain": 1.3,
+    "epgTonic": 5,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.899,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 38,
+     "contrast": 1.729,
+     "r2": 0.588,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": 7.917,
+     "tracked": 4
+    },
+    "rotR": {
+     "drift": -10.005,
+     "tracked": 4
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.904,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 38,
+       "contrast": 1.715,
+       "r2": 0.657,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": 1.817,
+       "tracked": 4
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0.864,
+       "seeded": 0.159,
+       "total_rate": 1.5,
+       "width_wedges": 2
+      },
+      "kernel": {
+       "n_d7": 34,
+       "contrast": 1.72,
+       "r2": 0.675,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": -1.06,
+       "tracked": 4
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "silent",
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 3,
+    "d7Gain": 1.3,
+    "epgTonic": 7,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0.864,
+     "seeded": 0.159,
+     "total_rate": 1.933,
+     "width_wedges": 2
+    },
+    "kernel": {
+     "n_d7": 36,
+     "contrast": 1.807,
+     "r2": 0.509,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": 5.403,
+     "tracked": 4
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0.938,
+       "seeded": 0.213,
+       "total_rate": 1.167,
+       "width_wedges": 1
+      },
+      "kernel": {
+       "n_d7": 37,
+       "contrast": 1.749,
+       "r2": 0.562,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": 7.942,
+       "tracked": 4
+      },
+      "rotR": {
+       "drift": 1.095,
+       "tracked": 4
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0.37,
+       "seeded": 0.09,
+       "total_rate": 3.033,
+       "width_wedges": 3
+      },
+      "kernel": {
+       "n_d7": 37,
+       "contrast": 1.731,
+       "r2": 0.563,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": 1.977,
+       "tracked": 4
+      },
+      "rotR": {
+       "drift": 2.625,
+       "tracked": 4
+      }
+     },
+     "kills": true
+    }
+   },
+   "hypothesis": "attractor_tonic",
+   "mechanism": "d7_essential"
+  },
+  {
+   "params": {
+    "epgRecur": 4,
+    "d7Gain": 0.5,
+    "epgTonic": 0,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.935,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 36,
+     "contrast": 1.706,
+     "r2": 0.592,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.933,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 36,
+       "contrast": 1.771,
+       "r2": 0.563,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.935,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 37,
+       "contrast": 1.642,
+       "r2": 0.723,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "silent",
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 4,
+    "d7Gain": 0.5,
+    "epgTonic": 3,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0.879,
+     "seeded": 0.274,
+     "total_rate": 5.567,
+     "width_wedges": 2
+    },
+    "kernel": {
+     "n_d7": 30,
+     "contrast": 1.711,
+     "r2": 0.574,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 1
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0.904,
+       "seeded": 0.271,
+       "total_rate": 4.167,
+       "width_wedges": 2
+      },
+      "kernel": {
+       "n_d7": 34,
+       "contrast": 1.722,
+       "r2": 0.622,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 1
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.143,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 38,
+       "contrast": 1.658,
+       "r2": 0.706,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": true
+    }
+   },
+   "hypothesis": "attractor_tonic",
+   "mechanism": "d7_essential"
+  },
+  {
+   "params": {
+    "epgRecur": 4,
+    "d7Gain": 0.5,
+    "epgTonic": 5,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.136,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 39,
+     "contrast": 1.691,
+     "r2": 0.662,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.121,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 32,
+       "contrast": 1.717,
+       "r2": 0.6,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.097,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 30,
+       "contrast": 1.738,
+       "r2": 0.579,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "silent",
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 4,
+    "d7Gain": 0.5,
+    "epgTonic": 7,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0.104,
+     "seeded": 0.162,
+     "total_rate": 72.833,
+     "width_wedges": 8
+    },
+    "kernel": {
+     "n_d7": 35,
+     "contrast": 1.753,
+     "r2": 0.575,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": 6.358,
+     "tracked": 4
+    },
+    "rotR": {
+     "drift": -1.082,
+     "tracked": 4
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0.108,
+       "seeded": 0.135,
+       "total_rate": 24.533,
+       "width_wedges": 7
+      },
+      "kernel": {
+       "n_d7": 32,
+       "contrast": 1.778,
+       "r2": 0.577,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": 5.344,
+       "tracked": 4
+      },
+      "rotR": {
+       "drift": 8.032,
+       "tracked": 4
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0.095,
+       "seeded": 0.154,
+       "total_rate": 11.1,
+       "width_wedges": 4
+      },
+      "kernel": {
+       "n_d7": 31,
+       "contrast": 1.73,
+       "r2": 0.585,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": 6.487,
+       "tracked": 4
+      },
+      "rotR": {
+       "drift": 4.336,
+       "tracked": 4
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "filter",
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 4,
+    "d7Gain": 1,
+    "epgTonic": 0,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.953,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 35,
+     "contrast": 1.796,
+     "r2": 0.51,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.937,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 30,
+       "contrast": 1.748,
+       "r2": 0.63,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.93,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 35,
+       "contrast": 1.665,
+       "r2": 0.695,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "silent",
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 4,
+    "d7Gain": 1,
+    "epgTonic": 3,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0.892,
+     "seeded": 0.265,
+     "total_rate": 5.7,
+     "width_wedges": 2
+    },
+    "kernel": {
+     "n_d7": 35,
+     "contrast": 1.683,
+     "r2": 0.697,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 1
+    },
+    "rotR": {
+     "drift": 4.322,
+     "tracked": 2
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0.892,
+       "seeded": 0.227,
+       "total_rate": 5.7,
+       "width_wedges": 2
+      },
+      "kernel": {
+       "n_d7": 37,
+       "contrast": 1.731,
+       "r2": 0.619,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 1
+      },
+      "rotR": {
+       "drift": 10.246,
+       "tracked": 2
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.174,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 34,
+       "contrast": 1.78,
+       "r2": 0.521,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": true
+    }
+   },
+   "hypothesis": "attractor_tonic",
+   "mechanism": "d7_essential"
+  },
+  {
+   "params": {
+    "epgRecur": 4,
+    "d7Gain": 1,
+    "epgTonic": 5,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.153,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 39,
+     "contrast": 1.72,
+     "r2": 0.637,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 1,
+       "seeded": 0.163,
+       "total_rate": 0.2,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 38,
+       "contrast": 1.712,
+       "r2": 0.63,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.154,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 38,
+       "contrast": 1.711,
+       "r2": 0.632,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "silent",
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 4,
+    "d7Gain": 1,
+    "epgTonic": 7,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.17,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 39,
+     "contrast": 1.751,
+     "r2": 0.595,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": -9.433,
+     "tracked": 4
+    },
+    "rotR": {
+     "drift": -0.677,
+     "tracked": 4
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0.84,
+       "seeded": 0.183,
+       "total_rate": 2.3,
+       "width_wedges": 2
+      },
+      "kernel": {
+       "n_d7": 36,
+       "contrast": 1.726,
+       "r2": 0.626,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": 2.489,
+       "tracked": 4
+      },
+      "rotR": {
+       "drift": -2.599,
+       "tracked": 4
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0.025,
+       "seeded": 0.121,
+       "total_rate": 9.967,
+       "width_wedges": 4
+      },
+      "kernel": {
+       "n_d7": 38,
+       "contrast": 1.636,
+       "r2": 0.689,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": -5.516,
+       "tracked": 4
+      },
+      "rotR": {
+       "drift": -4.961,
+       "tracked": 4
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "silent",
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 4,
+    "d7Gain": 1.3,
+    "epgTonic": 0,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.952,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 38,
+     "contrast": 1.751,
+     "r2": 0.542,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.956,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 36,
+       "contrast": 1.726,
+       "r2": 0.589,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.928,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 41,
+       "contrast": 1.779,
+       "r2": 0.552,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "silent",
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 4,
+    "d7Gain": 1.3,
+    "epgTonic": 3,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0.885,
+     "seeded": 0.223,
+     "total_rate": 4.667,
+     "width_wedges": 2
+    },
+    "kernel": {
+     "n_d7": 33,
+     "contrast": 1.798,
+     "r2": 0.529,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": 7.482,
+     "tracked": 2
+    },
+    "rotR": {
+     "drift": -1.905,
+     "tracked": 3
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0.933,
+       "seeded": 0.216,
+       "total_rate": 3,
+       "width_wedges": 1
+      },
+      "kernel": {
+       "n_d7": 39,
+       "contrast": 1.705,
+       "r2": 0.66,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 1
+      },
+      "rotR": {
+       "drift": 7.133,
+       "tracked": 2
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.157,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 32,
+       "contrast": 1.746,
+       "r2": 0.592,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": true
+    }
+   },
+   "hypothesis": "attractor_tonic",
+   "mechanism": "d7_essential"
+  },
+  {
+   "params": {
+    "epgRecur": 4,
+    "d7Gain": 1.3,
+    "epgTonic": 5,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.18,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 37,
+     "contrast": 1.759,
+     "r2": 0.565,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.176,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 35,
+       "contrast": 1.778,
+       "r2": 0.535,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": -3.325,
+       "tracked": 4
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 1,
+       "seeded": 0.171,
+       "total_rate": 0.2,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 40,
+       "contrast": 1.735,
+       "r2": 0.549,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "silent",
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 4,
+    "d7Gain": 1.3,
+    "epgTonic": 7,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0.235,
+     "seeded": 0.169,
+     "total_rate": 22.133,
+     "width_wedges": 6
+    },
+    "kernel": {
+     "n_d7": 35,
+     "contrast": 1.734,
+     "r2": 0.591,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": 1.407,
+     "tracked": 4
+    },
+    "rotR": {
+     "drift": -9.414,
+     "tracked": 4
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0.069,
+       "seeded": 0.147,
+       "total_rate": 72.6,
+       "width_wedges": 8
+      },
+      "kernel": {
+       "n_d7": 31,
+       "contrast": 1.722,
+       "r2": 0.63,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": -4.01,
+       "tracked": 4
+      },
+      "rotR": {
+       "drift": 4.878,
+       "tracked": 4
+      }
+     },
+     "kills": true
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0.877,
+       "seeded": 0.143,
+       "total_rate": 1.533,
+       "width_wedges": 2
+      },
+      "kernel": {
+       "n_d7": 38,
+       "contrast": 1.745,
+       "r2": 0.559,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": 0.585,
+       "tracked": 4
+      },
+      "rotR": {
+       "drift": 0.472,
+       "tracked": 4
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "filter",
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 6,
+    "d7Gain": 0.5,
+    "epgTonic": 0,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.14,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 37,
+     "contrast": 1.681,
+     "r2": 0.659,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.109,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 32,
+       "contrast": 1.701,
+       "r2": 0.598,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.159,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 35,
+       "contrast": 1.663,
+       "r2": 0.683,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "silent",
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 6,
+    "d7Gain": 0.5,
+    "epgTonic": 3,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 1,
+     "seeded": 0.112,
+     "total_rate": 0.2,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 32,
+     "contrast": 1.793,
+     "r2": 0.496,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.108,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 33,
+       "contrast": 1.766,
+       "r2": 0.587,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": true
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.132,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 34,
+       "contrast": 1.734,
+       "r2": 0.608,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": true
+    }
+   },
+   "hypothesis": "attractor_tonic",
+   "mechanism": "d7_essential"
+  },
+  {
+   "params": {
+    "epgRecur": 6,
+    "d7Gain": 0.5,
+    "epgTonic": 5,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.114,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 29,
+     "contrast": 1.656,
+     "r2": 0.644,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.105,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 37,
+       "contrast": 1.66,
+       "r2": 0.729,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": -8.551,
+       "tracked": 4
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0.171,
+       "seeded": 0.126,
+       "total_rate": 55.333,
+       "width_wedges": 6
+      },
+      "kernel": {
+       "n_d7": 31,
+       "contrast": 1.673,
+       "r2": 0.727,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": -9.252,
+       "tracked": 4
+      },
+      "rotR": {
+       "drift": -12.329,
+       "tracked": 3
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "silent",
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 6,
+    "d7Gain": 0.5,
+    "epgTonic": 7,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0.229,
+     "seeded": 0.101,
+     "total_rate": 26.433,
+     "width_wedges": 7
+    },
+    "kernel": {
+     "n_d7": 31,
+     "contrast": 1.658,
+     "r2": 0.619,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": -0.407,
+     "tracked": 4
+    },
+    "rotR": {
+     "drift": -6.291,
+     "tracked": 4
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0.398,
+       "seeded": 0.105,
+       "total_rate": 23.8,
+       "width_wedges": 5
+      },
+      "kernel": {
+       "n_d7": 32,
+       "contrast": 1.661,
+       "r2": 0.676,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": 9.887,
+       "tracked": 4
+      },
+      "rotR": {
+       "drift": 3.983,
+       "tracked": 4
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0.085,
+       "seeded": 0.116,
+       "total_rate": 101.1,
+       "width_wedges": 8
+      },
+      "kernel": {
+       "n_d7": 33,
+       "contrast": 1.716,
+       "r2": 0.658,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": -9.242,
+       "tracked": 4
+      },
+      "rotR": {
+       "drift": 4.351,
+       "tracked": 4
+      }
+     },
+     "kills": true
+    }
+   },
+   "hypothesis": "filter",
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 6,
+    "d7Gain": 1,
+    "epgTonic": 0,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.127,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 38,
+     "contrast": 1.727,
+     "r2": 0.643,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.125,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 35,
+       "contrast": 1.677,
+       "r2": 0.733,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.135,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 36,
+       "contrast": 1.702,
+       "r2": 0.612,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "silent",
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 6,
+    "d7Gain": 1,
+    "epgTonic": 3,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.103,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 37,
+     "contrast": 1.718,
+     "r2": 0.578,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.118,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 37,
+       "contrast": 1.724,
+       "r2": 0.616,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.118,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 36,
+       "contrast": 1.656,
+       "r2": 0.649,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "silent",
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 6,
+    "d7Gain": 1,
+    "epgTonic": 5,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.1,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 33,
+     "contrast": 1.747,
+     "r2": 0.559,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.121,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 35,
+       "contrast": 1.761,
+       "r2": 0.561,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0.073,
+       "seeded": 0.117,
+       "total_rate": 86.233,
+       "width_wedges": 8
+      },
+      "kernel": {
+       "n_d7": 38,
+       "contrast": 1.679,
+       "r2": 0.682,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": -9.894,
+       "tracked": 4
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "silent",
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 6,
+    "d7Gain": 1,
+    "epgTonic": 7,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0.117,
+     "seeded": 0.118,
+     "total_rate": 97.933,
+     "width_wedges": 8
+    },
+    "kernel": {
+     "n_d7": 35,
+     "contrast": 1.709,
+     "r2": 0.628,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": -1.272,
+     "tracked": 4
+    },
+    "rotR": {
+     "drift": 2.186,
+     "tracked": 4
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0.113,
+       "seeded": 0.114,
+       "total_rate": 94.533,
+       "width_wedges": 8
+      },
+      "kernel": {
+       "n_d7": 36,
+       "contrast": 1.655,
+       "r2": 0.695,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": 2.098,
+       "tracked": 4
+      },
+      "rotR": {
+       "drift": -5.992,
+       "tracked": 4
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0.347,
+       "seeded": 0.114,
+       "total_rate": 16.1,
+       "width_wedges": 5
+      },
+      "kernel": {
+       "n_d7": 37,
+       "contrast": 1.75,
+       "r2": 0.539,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": -6.775,
+       "tracked": 4
+      },
+      "rotR": {
+       "drift": -3.643,
+       "tracked": 4
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "filter",
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 6,
+    "d7Gain": 1.3,
+    "epgTonic": 0,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.118,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 35,
+     "contrast": 1.732,
+     "r2": 0.625,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.119,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 33,
+       "contrast": 1.726,
+       "r2": 0.655,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.116,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 36,
+       "contrast": 1.7,
+       "r2": 0.675,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "silent",
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 6,
+    "d7Gain": 1.3,
+    "epgTonic": 3,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.12,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 38,
+     "contrast": 1.737,
+     "r2": 0.581,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.093,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 31,
+       "contrast": 1.729,
+       "r2": 0.614,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.105,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 33,
+       "contrast": 1.731,
+       "r2": 0.635,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": null,
+       "tracked": 0
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "silent",
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 6,
+    "d7Gain": 1.3,
+    "epgTonic": 5,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.115,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 38,
+     "contrast": 1.73,
+     "r2": 0.658,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": -5.958,
+     "tracked": 4
+    },
+    "rotR": {
+     "drift": 2.376,
+     "tracked": 4
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0,
+       "seeded": 0.117,
+       "total_rate": 0,
+       "width_wedges": 0
+      },
+      "kernel": {
+       "n_d7": 36,
+       "contrast": 1.653,
+       "r2": 0.697,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": null,
+       "tracked": 0
+      },
+      "rotR": {
+       "drift": -3.369,
+       "tracked": 4
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0.058,
+       "seeded": 0.086,
+       "total_rate": 86.2,
+       "width_wedges": 8
+      },
+      "kernel": {
+       "n_d7": 31,
+       "contrast": 1.68,
+       "r2": 0.65,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": -9.763,
+       "tracked": 4
+      },
+      "rotR": {
+       "drift": -5.034,
+       "tracked": 3
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "silent",
+   "mechanism": null
+  },
+  {
+   "params": {
+    "epgRecur": 6,
+    "d7Gain": 1.3,
+    "epgTonic": 7,
+    "penGain": 1
+   },
+   "baseline": {
+    "persistence": {
+     "concentration": 0.108,
+     "seeded": 0.114,
+     "total_rate": 95.7,
+     "width_wedges": 8
+    },
+    "kernel": {
+     "n_d7": 37,
+     "contrast": 1.631,
+     "r2": 0.724,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": -1.005,
+     "tracked": 4
+    },
+    "rotR": {
+     "drift": -5.882,
+     "tracked": 4
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "values": {
+      "persistence": {
+       "concentration": 0.111,
+       "seeded": 0.125,
+       "total_rate": 98.767,
+       "width_wedges": 8
+      },
+      "kernel": {
+       "n_d7": 38,
+       "contrast": 1.689,
+       "r2": 0.659,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": -1.496,
+       "tracked": 4
+      },
+      "rotR": {
+       "drift": 5.724,
+       "tracked": 4
+      }
+     },
+     "kills": false
+    },
+    "peg_lesion": {
+     "values": {
+      "persistence": {
+       "concentration": 0.303,
+       "seeded": 0.116,
+       "total_rate": 27.3,
+       "width_wedges": 6
+      },
+      "kernel": {
+       "n_d7": 35,
+       "contrast": 1.681,
+       "r2": 0.628,
+       "min_at_bump": true
+      },
+      "rotL": {
+       "drift": -4.897,
+       "tracked": 4
+      },
+      "rotR": {
+       "drift": 1.95,
+       "tracked": 4
+      }
+     },
+     "kills": false
+    }
+   },
+   "hypothesis": "filter",
+   "mechanism": null
+  }
+ ],
+ "skipped": [],
+ "ranked": [
+  {
+   "experiment": "obs:kernel",
+   "separation": 1
+  },
+  {
+   "experiment": "obs:persistence",
+   "separation": 0.423
+  },
+  {
+   "experiment": "peg_lesion",
+   "separation": 0.337
+  },
+  {
+   "experiment": "obs:rotR",
+   "separation": 0.311
+  },
+  {
+   "experiment": "d7_silence",
+   "separation": 0.254
+  },
+  {
+   "experiment": "obs:rotL",
+   "separation": 0.191
+  }
+ ]
+}

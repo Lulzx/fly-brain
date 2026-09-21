@@ -1,0 +1,400 @@
+{
+ "spec": {
+  "id": "loom-vs-gait",
+  "question": "Does the escape gate suppress self-motion false alarms without blunting the real loom response?",
+  "operators": [
+   "gate.ruleVeto",
+   "s3.selfMotionCancel"
+  ],
+  "splitRule": "loomEscape < 0.5 * baseline.loomEscape && walk > 0.5 * baseline.walk",
+  "backend": "arena",
+  "status": "ready"
+ },
+ "ensemble": {
+  "n": 9,
+  "params": [
+   "scaffold.escapeGate.touchMs",
+   "scaffold.escapeGate.pivotMs"
+  ],
+  "seed": 5
+ },
+ "observables": [
+  {
+   "id": "loomEscape",
+   "where": "arena",
+   "measure": "loomEscape"
+  },
+  {
+   "id": "walk",
+   "where": "arena",
+   "measure": "walkDist"
+  },
+  {
+   "id": "forageJumps",
+   "where": "arena",
+   "measure": "forageJumps"
+  }
+ ],
+ "members": [
+  {
+   "params": {
+    "scaffold.escapeGate.touchMs": 200,
+    "scaffold.escapeGate.pivotMs": 100
+   },
+   "baseline": {
+    "loomEscape": 1,
+    "walk": 37.405913197636444,
+    "forageJumps": 1
+   },
+   "perturbations": {
+    "gate_off": {
+     "values": {
+      "loomEscape": 1,
+      "walk": 37.405913197636444,
+      "forageJumps": 1
+     },
+     "kills": false
+    },
+    "reafference_off": {
+     "values": {
+      "loomEscape": 0,
+      "walk": 36.4841495501919,
+      "forageJumps": 2
+     },
+     "kills": true
+    },
+    "jump_off": {
+     "values": {
+      "loomEscape": 0,
+      "walk": 28.202076255073003,
+      "forageJumps": 0
+     },
+     "kills": true
+    }
+   }
+  },
+  {
+   "params": {
+    "scaffold.escapeGate.touchMs": 200,
+    "scaffold.escapeGate.pivotMs": 300
+   },
+   "baseline": {
+    "loomEscape": 1,
+    "walk": 37.405913197636444,
+    "forageJumps": 1
+   },
+   "perturbations": {
+    "gate_off": {
+     "values": {
+      "loomEscape": 1,
+      "walk": 37.405913197636444,
+      "forageJumps": 1
+     },
+     "kills": false
+    },
+    "reafference_off": {
+     "values": {
+      "loomEscape": 0,
+      "walk": 36.4841495501919,
+      "forageJumps": 2
+     },
+     "kills": true
+    },
+    "jump_off": {
+     "values": {
+      "loomEscape": 0,
+      "walk": 28.202076255073003,
+      "forageJumps": 0
+     },
+     "kills": true
+    }
+   }
+  },
+  {
+   "params": {
+    "scaffold.escapeGate.touchMs": 200,
+    "scaffold.escapeGate.pivotMs": 600
+   },
+   "baseline": {
+    "loomEscape": 1,
+    "walk": 37.405913197636444,
+    "forageJumps": 1
+   },
+   "perturbations": {
+    "gate_off": {
+     "values": {
+      "loomEscape": 1,
+      "walk": 37.405913197636444,
+      "forageJumps": 1
+     },
+     "kills": false
+    },
+    "reafference_off": {
+     "values": {
+      "loomEscape": 0,
+      "walk": 36.4841495501919,
+      "forageJumps": 2
+     },
+     "kills": true
+    },
+    "jump_off": {
+     "values": {
+      "loomEscape": 0,
+      "walk": 28.202076255073003,
+      "forageJumps": 0
+     },
+     "kills": true
+    }
+   }
+  },
+  {
+   "params": {
+    "scaffold.escapeGate.touchMs": 500,
+    "scaffold.escapeGate.pivotMs": 100
+   },
+   "baseline": {
+    "loomEscape": 1,
+    "walk": 37.405913197636444,
+    "forageJumps": 1
+   },
+   "perturbations": {
+    "gate_off": {
+     "values": {
+      "loomEscape": 1,
+      "walk": 37.405913197636444,
+      "forageJumps": 1
+     },
+     "kills": false
+    },
+    "reafference_off": {
+     "values": {
+      "loomEscape": 0,
+      "walk": 36.4841495501919,
+      "forageJumps": 2
+     },
+     "kills": true
+    },
+    "jump_off": {
+     "values": {
+      "loomEscape": 0,
+      "walk": 28.202076255073003,
+      "forageJumps": 0
+     },
+     "kills": true
+    }
+   }
+  },
+  {
+   "params": {
+    "scaffold.escapeGate.touchMs": 500,
+    "scaffold.escapeGate.pivotMs": 300
+   },
+   "baseline": {
+    "loomEscape": 1,
+    "walk": 37.405913197636444,
+    "forageJumps": 1
+   },
+   "perturbations": {
+    "gate_off": {
+     "values": {
+      "loomEscape": 1,
+      "walk": 37.405913197636444,
+      "forageJumps": 1
+     },
+     "kills": false
+    },
+    "reafference_off": {
+     "values": {
+      "loomEscape": 0,
+      "walk": 36.4841495501919,
+      "forageJumps": 2
+     },
+     "kills": true
+    },
+    "jump_off": {
+     "values": {
+      "loomEscape": 0,
+      "walk": 28.202076255073003,
+      "forageJumps": 0
+     },
+     "kills": true
+    }
+   }
+  },
+  {
+   "params": {
+    "scaffold.escapeGate.touchMs": 500,
+    "scaffold.escapeGate.pivotMs": 600
+   },
+   "baseline": {
+    "loomEscape": 1,
+    "walk": 37.405913197636444,
+    "forageJumps": 1
+   },
+   "perturbations": {
+    "gate_off": {
+     "values": {
+      "loomEscape": 1,
+      "walk": 37.405913197636444,
+      "forageJumps": 1
+     },
+     "kills": false
+    },
+    "reafference_off": {
+     "values": {
+      "loomEscape": 0,
+      "walk": 36.4841495501919,
+      "forageJumps": 2
+     },
+     "kills": true
+    },
+    "jump_off": {
+     "values": {
+      "loomEscape": 0,
+      "walk": 28.202076255073003,
+      "forageJumps": 0
+     },
+     "kills": true
+    }
+   }
+  },
+  {
+   "params": {
+    "scaffold.escapeGate.touchMs": 1000,
+    "scaffold.escapeGate.pivotMs": 100
+   },
+   "baseline": {
+    "loomEscape": 1,
+    "walk": 37.405913197636444,
+    "forageJumps": 1
+   },
+   "perturbations": {
+    "gate_off": {
+     "values": {
+      "loomEscape": 1,
+      "walk": 37.405913197636444,
+      "forageJumps": 1
+     },
+     "kills": false
+    },
+    "reafference_off": {
+     "values": {
+      "loomEscape": 0,
+      "walk": 36.4841495501919,
+      "forageJumps": 2
+     },
+     "kills": true
+    },
+    "jump_off": {
+     "values": {
+      "loomEscape": 0,
+      "walk": 28.202076255073003,
+      "forageJumps": 0
+     },
+     "kills": true
+    }
+   }
+  },
+  {
+   "params": {
+    "scaffold.escapeGate.touchMs": 1000,
+    "scaffold.escapeGate.pivotMs": 300
+   },
+   "baseline": {
+    "loomEscape": 1,
+    "walk": 37.405913197636444,
+    "forageJumps": 1
+   },
+   "perturbations": {
+    "gate_off": {
+     "values": {
+      "loomEscape": 1,
+      "walk": 37.405913197636444,
+      "forageJumps": 1
+     },
+     "kills": false
+    },
+    "reafference_off": {
+     "values": {
+      "loomEscape": 0,
+      "walk": 36.4841495501919,
+      "forageJumps": 2
+     },
+     "kills": true
+    },
+    "jump_off": {
+     "values": {
+      "loomEscape": 0,
+      "walk": 28.202076255073003,
+      "forageJumps": 0
+     },
+     "kills": true
+    }
+   }
+  },
+  {
+   "params": {
+    "scaffold.escapeGate.touchMs": 1000,
+    "scaffold.escapeGate.pivotMs": 600
+   },
+   "baseline": {
+    "loomEscape": 1,
+    "walk": 37.405913197636444,
+    "forageJumps": 1
+   },
+   "perturbations": {
+    "gate_off": {
+     "values": {
+      "loomEscape": 1,
+      "walk": 37.405913197636444,
+      "forageJumps": 1
+     },
+     "kills": false
+    },
+    "reafference_off": {
+     "values": {
+      "loomEscape": 0,
+      "walk": 36.4841495501919,
+      "forageJumps": 2
+     },
+     "kills": true
+    },
+    "jump_off": {
+     "values": {
+      "loomEscape": 0,
+      "walk": 28.202076255073003,
+      "forageJumps": 0
+     },
+     "kills": true
+    }
+   }
+  }
+ ],
+ "skipped": [],
+ "ranked": [
+  {
+   "experiment": "gate_off",
+   "separation": 0
+  },
+  {
+   "experiment": "reafference_off",
+   "separation": 0
+  },
+  {
+   "experiment": "jump_off",
+   "separation": 0
+  },
+  {
+   "experiment": "obs:loomEscape",
+   "separation": 0
+  },
+  {
+   "experiment": "obs:walk",
+   "separation": 0
+  },
+  {
+   "experiment": "obs:forageJumps",
+   "separation": 0
+  }
+ ]
+}

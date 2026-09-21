@@ -46,7 +46,11 @@ const buildNet = makeBuilder(D, [
 ]);
 
 const wedgeRates = (net, b0) => wedges.map(ws => ws.reduce((a, i) => a + (net.spikeCount[i] - (b0 ? b0[i] : 0)), 0) / Math.max(ws.length, 1));
-const clean = (net, tonic) => { net.drive.fill(0); net.bias.fill(0); net.thr.fill(0); net.reset(); if (tonic) net.setBias(epg, tonic); };
+// thr.fill(0) would wipe a silencing offset — the silenced set is re-applied after reset, the
+// same idiom as run_ensemble.mjs (without it d7_silence/peg_lesion measured unperturbed nets)
+const clean = (net, tonic) => { net.drive.fill(0); net.bias.fill(0); net.thr.fill(0); net.reset();
+  if (net.__silenced) for (const i of net.__silenced) net.setThr(i, 1e6);
+  if (tonic) net.setBias(epg, tonic); };
 
 // ---- observable: bump persistence after a seeded bump is released ----
 // concentration = circular resultant length (0 uniform .. 1 point bump)
@@ -136,8 +140,8 @@ for (const p of grid) {
             : (p.epgTonic > 0 ? 'attractor_tonic' : 'attractor_free');
   // perturbations
   const pert = {};
-  { const n2 = buildNet(p); for (const i of d7) n2.setThr(i, 1e6); pert.d7_silence = persistence(n2, p.epgTonic); }
-  { const n2 = buildNet(p); for (const i of peg) n2.setThr(i, 1e6); pert.peg_lesion = persistence(n2, p.epgTonic); }
+  { const n2 = buildNet(p); silence(n2, d7); pert.d7_silence = persistence(n2, p.epgTonic); }
+  { const n2 = buildNet(p); silence(n2, peg); pert.peg_lesion = persistence(n2, p.epgTonic); }
   members.push({ params: p, hypothesis: hyp, baseline: { persistence: base, kernel: kern, rotL, rotR }, perturbations: pert });
   console.log(`  recur×${p.epgRecur} d7×${p.d7Gain} tonic${p.epgTonic} pen×${p.penGain}: ${hyp} | persist ${base.concentration} (rate ${base.total_rate}) kernel c=${kern.contrast} r2=${kern.r2} | rotL ${rotL.drift} rotR ${rotR.drift} | ${Date.now() - t0}ms`);
 }

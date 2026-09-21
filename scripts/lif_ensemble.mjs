@@ -32,7 +32,7 @@ export function makeBuilder(D, scaleRules, tonics = []) {
 }
 
 export const run = (net, ms) => { for (let s = 0; s < Math.round(ms / net.p.dt); s++) net.step(); };
-export const silence = (net, idx) => { for (const i of idx) net.setThr(i, 1e6); };
+export const silence = (net, idx) => { net.__silenced = idx; for (const i of idx) net.setThr(i, 1e6); };
 
 export const circRes = (r, k = 8) => { let x = 0, y = 0, n = 0; r.forEach((v, w) => { x += v * Math.cos(w * 2 * Math.PI / k); y += v * Math.sin(w * 2 * Math.PI / k); n += v; }); return n > 1e-9 ? Math.hypot(x, y) / n : 0; };
 export const circAngle = (r, k = 8) => { let x = 0, y = 0; r.forEach((v, w) => { x += v * Math.cos(w * 2 * Math.PI / k); y += v * Math.sin(w * 2 * Math.PI / k); }); return Math.atan2(y, x); };

@@ -48,8 +48,11 @@ export const HOST_MANAGED = [
     files: ['src/sim/flight.js'], hostManaged: true, switch: 'motor.launchT -> flight.start' },
 ];
 
-/** config: { [id]: boolean } — missing keys default to the plugin's defaultOn; unknown ids throw */
-export function createScaffoldSet(config = {}) {
+/** config: { [id]: boolean } — missing keys default to the plugin's defaultOn; unknown ids throw.
+ *  paramOverrides: { [id]: {key: value} } — merged into the plugin's own params (and, for
+ *  paramSource plugins, over a per-instance copy of the bound table) so ensembles can sweep a
+ *  mechanism's knobs without mutating the shared INTRINSIC/READOUT tables. */
+export function createScaffoldSet(config = {}, paramOverrides) {
   for (const id of Object.keys(config)) {
     const hm = HOST_MANAGED.find(m => m.id === id);
     if (hm) throw new Error(`scaffold '${id}' is host-managed; toggle it via ${hm.switch}, not the scaffolds map`);
@@ -58,6 +61,7 @@ export function createScaffoldSet(config = {}) {
   const set = {};
   for (const [id, create] of Object.entries(FACTORIES)) {
     const inst = create();
+    if (paramOverrides?.[id]) { inst.paramOverrides = { ...paramOverrides[id] }; if (inst.params) Object.assign(inst.params, inst.paramOverrides); }
     set[id] = (config[id] ?? inst.defaultOn) ? inst : null;
   }
   return set;
@@ -65,9 +69,10 @@ export function createScaffoldSet(config = {}) {
 
 /** give plugins whose parameters live in a host constant table a live reference to it
  *  (paramSource: 'INTRINSIC' | 'READOUT'). The table is bound, not copied, so scripts that mutate
- *  it (scripts/diag_walk.mjs) still reach the plugins. */
+ *  it (scripts/diag_walk.mjs) still reach the plugins — unless the plugin carries paramOverrides,
+ *  in which case it gets a per-instance merged copy. */
 export function bindScaffoldParams(set, source, table) {
-  for (const p of Object.values(set)) if (p && p.paramSource === source) p.P = table;
+  for (const p of Object.values(set)) if (p && p.paramSource === source) p.P = p.paramOverrides ? { ...table, ...p.paramOverrides } : table;
 }
 
 /** registry contents for the ledger: which modules exist, their claims, params and kill switches.
