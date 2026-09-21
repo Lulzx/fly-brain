@@ -10,6 +10,14 @@ replaces the machinery that produces walking, needs an objective this repository
 the only item whose failure would be a claim about the modelling abstraction rather than about the fly.
 It is listed here rather than there so that the roadmap stays a list of things that can be finished.
 
+> **Status (S2, first measurement).** The readout stage of this project has run and returned its first
+> negative: on the frozen 21,843-neuron leg-premotor subgraph with the whole premotor state replayed
+> at recorded spike times, fitted per-neuron readout gains learn real signal — but a degree-matched
+> edge scramble of the same graph fits 4× *better* on held-out seeds (0.073 vs 0.285 ctrl MSE). The
+> first stopping condition below has fired at the readout level: this objective cannot distinguish
+> the real wiring from a reservoir. The full result and what it does and does not rule out are in
+> [doc 39](39-vnc-readout.md).
+
 ## What is true now
 
 Walking is executed by a tripod generator whose parameters were optimised by CMA-ES against 100

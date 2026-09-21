@@ -204,7 +204,7 @@ export class LIFDiff {
    * Run `steps` steps, recording what the adjoint needs.
    * Returns { spikes, tape } where tape holds checkpoints and the per-step spike lists.
    */
-  forward(steps, { seed = 1, record = true, onEpoch = null } = {}) {
+  forward(steps, { seed = 1, record = true, onEpoch = null, spikeTrain = null } = {}) {
     const p = this.p, N = this.N;
     this._seed = (seed * 2654435761) >>> 0 || 1;
     this.reset();
@@ -226,6 +226,7 @@ export class LIFDiff {
       kMp = ex ? F(kM) : kM, dtSp = ex ? F(dtS) : dtS, cEp = ex ? F(cE) : cE, cIp = ex ? F(cI) : cI;
 
     const tape = record ? { spikes: [], arrivals: [], checkpoints: new Map(), steps, seed } : null;
+    if (record && spikeTrain) tape.spikeTrain = spikeTrain;
     if (record) tape.checkpoints.set(0, this._snapshot());
     // The drive is taped so the backward pass's segment replay is exact without re-running whatever
     // produced it. Only the coupled neurons are stored, and only once per epoch.
@@ -280,6 +281,16 @@ export class LIFDiff {
           spikeCount[i] += 1; adapt[i] += aI;
         }
       }
+      // spikeTrain: exact spike-time replay -- spikeTrain[t] is an index list of neurons that
+      // fired at this step in the recorded run. Forced like a driven spike (no membrane read, no
+      // RNG draw), so the pattern the graph receives carries the recorded synchrony, not just the
+      // recorded rate. The premotor fit's boundary uses this (scripts/stand_fit.mjs).
+      if (spikeTrain) { const fs_ = spikeTrain[t];
+        if (fs_) for (const i of fs_) {
+          if (refr[i] > 0) continue;
+          refr[i] = ex ? F(tRf + dT) : p.tRef + p.dt;
+          fIdx.push(i); fAmp.push(1); spikeCount[i] += 1; adapt[i] += aI;
+        } }
       // --- integrate and spike, in lif.c's order: the membrane update reads pre-decay
       // conductances, then gE/gI/adapt/res decay for every neuron, and only then is the threshold
       // checked -- against the *decayed* adapt, with the increment landing after the decay.
@@ -401,6 +412,14 @@ export class LIFDiff {
         if (refr[i] > 0) continue;
         if (this._rand() < drive[i] * dtS) { refr[i] = p.tRef + p.dt; adapt[i] += p.adaptInc; forced[i] = 1; }
       }
+      // the same forced-spike replay the forward pass applied: deterministic, no RNG draw, and the
+      // refractory check must match forward's so a skipped spike stays skipped.
+      const st = this.tape.spikeTrain;
+      if (st) { const fs_ = st[t];
+        if (fs_) for (const i of fs_) {
+          if (refr[i] > 0) continue;
+          refr[i] = p.tRef + p.dt; adapt[i] += p.adaptInc; forced[i] = 1;
+        } }
       for (let i = 0; i < N; i++) {
         let vi = v[i], sv = 0, md = 0;       // md: 0 integrated, 1 refractory, 2 exogenous spike
         vPre[off + i] = vi; sG[off + i] = gE[i]; sI[off + i] = gI[i];
@@ -456,7 +475,7 @@ export class LIFDiff {
    *          dLoss / d(drive rate in Hz) for each coupled neuron at each drive epoch. That is the
    *          quantity src/visdiff.js hands to the optic lobe's adjoint.
    */
-  backward(tape, dLdSpike, { truncate = 0, lossFrom = 0 } = {}) {
+  backward(tape, dLdSpike, { truncate = 0, lossFrom = 0, dLdSpikePerEpoch = null } = {}) {
     this.tape = tape;
     const p = this.p, N = this.N, steps = tape.steps;
     const dE = Math.exp(-p.dt / p.tauSyn), dA = Math.exp(-p.dt / p.adaptTau), kRec = p.dt / p.depTau;
@@ -479,6 +498,10 @@ export class LIFDiff {
     const g = Object.fromEntries(DIFF_PARAMS.map(k => [k, 0]));
     // the drive adjoint, accumulated per epoch rather than per step (see the constructor)
     const dSlot = this.driveSlot || null, dTape = tape.driveAt || null, ep = this.driveEpoch;
+    // Per-epoch spike weights: dLdSpikePerEpoch[(t/ep)*N + i] replaces the flat dLdSpike[i] for a
+    // step t in epoch t/ep -- a time-resolved rate loss (the premotor fit, scripts/stand_fit.mjs)
+    // instead of a window-mean one. Requires driveEpoch > 1 so the epoch index is meaningful.
+    const dPer = dLdSpikePerEpoch;
     // Constant drive on neurons outside driveIdx -- the background ORN rate, say -- is not taped,
     // because it never changes; it is read straight off the live array.
     const driveFix = this.drive;
@@ -526,7 +549,7 @@ export class LIFDiff {
             // what remains is the adaptation increment the spike applied, and -- because this spike
             // existed only because the drive was as large as it was -- the drive's own gradient.
             // ds/d(sd) is 1 here rather than 1 - st, because the step never integrated and has no st.
-            const lspike2 = ls[i] + (scored ? dLdSpike[i] : 0);
+            const lspike2 = ls[i] + (scored ? (dPer ? dPer[((t / ep) | 0) * N + i] : dLdSpike[i]) : 0);
             sAdaptInc += lA;
             if (dSlot && dSlot[i] >= 0) gDrive[dOff + dSlot[i]] += (lA * adaptIncP + lspike2) * dtS;
             lv[i] = 0; ls[i] = 0; continue;
@@ -549,7 +572,7 @@ export class LIFDiff {
           let sg;
           if (soft) sg = st * (1 - st) / beta;
           else { const t = 1 + Math.abs(d) / beta; sg = 1 / (beta * t * t); }
-          const lspike = ls[i] + (scored ? dLdSpike[i] : 0);        // downstream + direct loss term
+          const lspike = ls[i] + (scored ? (dPer ? dPer[((t / ep) | 0) * N + i] : dLdSpike[i]) : 0);   // downstream + direct loss term
           // v_new = s * vReset + (1-s) * u ; adapt_new = adapt + s * adaptInc
           const lvNew = lv[i];
           const lsTot = (vReset - u) * lvNew + lpA * adaptIncP + lspike;   // adjoint of the emitted s

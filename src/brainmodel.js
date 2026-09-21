@@ -61,7 +61,11 @@ export function typeGains(data, o = {}) {
   const spec = o.typeGain, cspec = o.classGain;
   const keys = spec ? Object.keys(spec).filter(k => spec[k] !== 1) : [];
   const ckeys = cspec ? Object.keys(cspec).filter(k => cspec[k] !== 1) : [];
-  if (!keys.length && !ckeys.length && !(o.neuronGain && o.neuronGain.sigma)) return null;
+  // `neuronGainTable` deploys a fitted per-neuron readout (the stand_fit's logGain list, keyed by
+  // connectome index) into the shipped kernel: outScale[i] *= exp(logGain_i). Named and killable --
+  // the ledger entry is the artifact path, and removing the table removes the mechanism.
+  const table = o.neuronGainTable;                    // { [origIdx]: logGain } or Float32Array
+  if (!keys.length && !ckeys.length && !(o.neuronGain && o.neuronGain.sigma) && !table) return null;
   const types = data.meta.types, g = new Float32Array(data.N).fill(1);
   for (const k of keys) {
     const re = /[\\^$*+?()[\]{}|]/.test(k) ? new RegExp(`^(?:${k})$`) : null;
@@ -84,6 +88,10 @@ export function typeGains(data, o = {}) {
   if (ckeys.length) {
     const cls = data.cls, classes = data.meta.classes;
     for (let i = 0; i < data.N; i++) { const v = cspec[classes[cls[i]]]; if (v !== undefined) g[i] *= v; }
+  }
+  if (table) {
+    if (ArrayBuffer.isView(table) || Array.isArray(table)) { for (let i = 0; i < data.N; i++) if (table[i]) g[i] *= Math.exp(table[i]); }
+    else for (const k of Object.keys(table)) g[+k] *= Math.exp(table[k]);
   }
   return g;
 }
