@@ -120,6 +120,13 @@ the reset cannot outlive it.
 **With both fixed, the negative reverses.** 9 of 18 members are `gain_controlled` and the Kenyon-cell
 code is under APL's control in exactly the way the sparse-memory hypothesis requires:
 
+(The same thr-wipe bug survived in `hypothesis_lab.mjs` itself — its `clean()` cleared `thr` after
+the caller had raised it, so the committed `d7_silence`/`peg_lesion` columns were unperturbed
+re-measurements. That is consistent with the floor finding below — the classes were sorting noise —
+and it is now fixed by the same `__silenced` idiom `run_ensemble.mjs` uses. The regenerated
+`hypothesis_lab.json` is the first version of this artifact whose perturbation columns actually
+perturb something.)
+
 | | before | after |
 |---|---|---|
 | hypotheses | 9 silent, 9 collapsed, **0 gain_controlled** | 9 gain_controlled, 4 collapsed, 3 silent, 2 linear_passthrough |
@@ -328,6 +335,88 @@ fitting a class to a single number. The benchmark numbers above already carry th
 correction (0.48 rad against 0.41 for the uncorrected version); a second correction should be made
 against the width *and* amplitude curves together, which is the experiment to ask for rather than
 the fix to guess.
+
+## The experiment compiler (`scripts/compile_experiment.mjs`)
+
+The labs above each grew their own script; a new experiment should be *data*, not a new notebook
+that can't be replayed. The compiler reads a declarative **experiment spec** — the
+pre-registration for one experiment — and runs it end to end:
+
+```sh
+node scripts/compile_experiment.mjs                 # every spec in src/exp/specs/
+node scripts/compile_experiment.mjs heading-lab     # one spec
+```
+
+Each run writes `public/data/experiments/<id>.json` and `<id>.md`: the sampled ensemble, the
+ranked perturbations (which manipulation separates the ensemble hardest), the per-member
+baseline and perturbation measurements, and the observables table.
+
+### The schema (`src/exp/spec.js`)
+
+```ts
+interface ExperimentSpec {
+  id: string;
+  backend: string;               // 'heading' | 'arena' | ... (src/exp/backends/)
+  question: string;              // what the experiment is for
+  operators: string[];           // the operator family under discrimination
+  ensemble: {
+    params: string[];            // the unmeasured gains
+    axes: Record<string, unknown[]>;
+    n: number;                   // members (full grid when axes are smaller)
+    seed: number;                // seeded sampling — member sets are reproducible
+  };
+  perturbations: Array<{ id; kind: 'ablateType'|'offPlugin'|'scaleGain'|'swapCompartment';
+                         target: string; args? }>;
+  observables: Array<{ id; where: 'circuit'|'arena'; measure: string }>;
+  splitRule: string;             // e.g. 'loomEscape < 0.5*baseline.loomEscape && walk > 0.5*baseline.walk'
+  seeds?: number[];              // assay seeds — part of the pre-registration, not a knob
+  status?: 'ready' | 'pending';  // pending = pre-registered, backend lands with its spec section
+}
+```
+
+`validateSpec` fails hard on malformed input — a typo must not silently produce an empty
+experiment. A perturbation a backend cannot express is recorded as `skipped` with a reason and
+excluded from the ranking, so a pending mechanism shows up in the report rather than vanishing.
+
+**The assay seed is part of the experiment.** The first loom-vs-gait run produced all-zero
+separations — not because the gate does nothing, but because `loom_disk` escapes are binary per
+seed and the chosen seed never jumped at all. A quiescent assay cannot split anything, and a
+split rule like `loomEscape < 0.5*baseline` can never fire when the baseline is zero. The spec
+now pins the seed the ledger recorded an escape on, with the conditional design documented in
+the spec itself — the same fix as pinning a baseline in any noisy assay. (This is also why the
+ledger's `loomEscape` required-list was inflated: with one escaping seed in four, every
+perturbation that perturbs that seed's trajectory reads as "required.")
+
+**Ctx objects are not shareable.** The second failure was worse: pinning the seed still produced
+a uniform no-escape run, and identical numbers across every member and perturbation. The arena
+backend spread the calibrated params into each ctx (`{...BASE}`), which left `cfg.scaffolds`
+pointing at BASE's *shared* object — so a perturbation's `scaffolds[target] = false` edited the
+table every baseline ctx referenced too. By dispatch time all 36 ctxs carried all three kills:
+`escapeJump` off means no jump, no escape, identical walk — and the "passive fly stands
+perfectly" stand-scramble run was the same bug, not a degenerate seed. `toCfg` now deep-clones
+the base per ctx, and the lesson generalizes: a condition's config must be a *value*, never a
+reference into anything another condition can mutate.
+
+### Two sites, shared measurements
+
+- **circuit** (`backends/heading.js`) — the ring-attractor machinery extracted verbatim from
+  `hypothesis_lab.mjs`: population geometry, edge-class gain scaling, bump persistence /
+  Delta7 kernel / PEN rotation observables, hypothesis and mechanism classification.
+- **arena** (`backends/arena.js`) — the embodied fly through `behavior_eval.mjs`, so an
+  experiment's arena site is the same animal and the same assays the
+  [scaffold ledger](37-scaffold-ledger.md) uses. Ensemble params are addressed by where they
+  land: `scaffold.<plugin>.<param>` sweeps a plugin knob (per-instance parameter overrides),
+  `scaffolds.<plugin>` is a member-level kill, anything else is a `brain_params` field.
+
+### The committed specs (`src/exp/specs/`)
+
+| spec | backend | status |
+|---|---|---|
+| `heading-lab` | heading | ready — the hypothesis lab as data |
+| `loom-vs-gait` | arena | ready — gate-window ensemble; kills the gate, reafference, jump |
+| `stand-scramble` | arena | ready — motor-gain ensemble; `premotor_scramble` recorded unimplemented until S2 |
+| `oa-split` | arena | pending — S5's OA operator family |
+| `engram-recover` | engram | pending — S6's engram harness |
 
 ## What's next
 

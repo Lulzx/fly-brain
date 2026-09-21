@@ -1,20 +1,20 @@
 {
- "seed": 42,
+ "seed": 20260704,
  "summary": {
   "ensemble_size": 48,
-  "attractor_compatible": 12,
+  "attractor_compatible": 8,
   "hypotheses": {
-   "silent": 30,
-   "attractor_tonic": 12,
-   "filter": 6
+   "silent": 33,
+   "attractor_tonic": 8,
+   "filter": 7
   },
   "mechanisms": {
+   "d7_sculpts_sharp": 4,
    "d7_essential": 3,
-   "d7_sculpts_sharp": 8,
    "d7_confines": 1
   },
-  "best_experiment": "tonic_sweep",
-  "best_experiment_separation": 0.414,
+  "best_experiment": "peg_lesion",
+  "best_experiment_separation": 0.423,
   "claim": "Wiring supports a low-dimensional heading bump in a narrow gain regime (EPG recurrence ~3-6x, tonic EPG bias ~3-7mV). Free-running bump without tonic drive was not observed at any grid point. Among bump-sustaining models, Delta7 silencing separates mechanisms that are indistinguishable at baseline."
  },
  "grid_axes": [
@@ -36,14 +36,14 @@
    "baseline": {
     "persistence": {
      "concentration": 0,
-     "seeded": 1,
+     "seeded": 0.99,
      "total_rate": 0,
      "width_wedges": 0
     },
     "kernel": {
-     "n_d7": 35,
-     "contrast": 1.756,
-     "r2": 0.565,
+     "n_d7": 30,
+     "contrast": 1.71,
+     "r2": 0.601,
      "min_at_bump": true
     },
     "rotL": {
@@ -59,190 +59,6 @@
     "d7_silence": {
      "concentration": 0,
      "seeded": 0.991,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.991,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   }
-  },
-  {
-   "params": {
-    "epgRecur": 1,
-    "d7Gain": 0.5,
-    "epgTonic": 3,
-    "penGain": 1
-   },
-   "hypothesis": "silent",
-   "mechanism": null,
-   "baseline": {
-    "persistence": {
-     "concentration": 0,
-     "seeded": 0.98,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "kernel": {
-     "n_d7": 36,
-     "contrast": 1.715,
-     "r2": 0.652,
-     "min_at_bump": true
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.974,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.977,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   }
-  },
-  {
-   "params": {
-    "epgRecur": 1,
-    "d7Gain": 0.5,
-    "epgTonic": 5,
-    "penGain": 1
-   },
-   "hypothesis": "silent",
-   "mechanism": null,
-   "baseline": {
-    "persistence": {
-     "concentration": 0,
-     "seeded": 0.973,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "kernel": {
-     "n_d7": 35,
-     "contrast": 1.747,
-     "r2": 0.618,
-     "min_at_bump": true
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.967,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.969,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   }
-  },
-  {
-   "params": {
-    "epgRecur": 1,
-    "d7Gain": 0.5,
-    "epgTonic": 7,
-    "penGain": 1
-   },
-   "hypothesis": "attractor_tonic",
-   "mechanism": "d7_essential",
-   "baseline": {
-    "persistence": {
-     "concentration": 0.68,
-     "seeded": 0.781,
-     "total_rate": 5.4,
-     "width_wedges": 2
-    },
-    "kernel": {
-     "n_d7": 32,
-     "contrast": 1.736,
-     "r2": 0.625,
-     "min_at_bump": true
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.781,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.601,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   }
-  },
-  {
-   "params": {
-    "epgRecur": 1,
-    "d7Gain": 1,
-    "epgTonic": 0,
-    "penGain": 1
-   },
-   "hypothesis": "silent",
-   "mechanism": null,
-   "baseline": {
-    "persistence": {
-     "concentration": 0,
-     "seeded": 0.991,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "kernel": {
-     "n_d7": 36,
-     "contrast": 1.673,
-     "r2": 0.677,
-     "min_at_bump": true
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.995,
      "total_rate": 0,
      "width_wedges": 0
     },
@@ -257,7 +73,7 @@
   {
    "params": {
     "epgRecur": 1,
-    "d7Gain": 1,
+    "d7Gain": 0.5,
     "epgTonic": 3,
     "penGain": 1
    },
@@ -266,14 +82,14 @@
    "baseline": {
     "persistence": {
      "concentration": 0,
-     "seeded": 0.97,
+     "seeded": 0.983,
      "total_rate": 0,
      "width_wedges": 0
     },
     "kernel": {
-     "n_d7": 32,
-     "contrast": 1.723,
-     "r2": 0.589,
+     "n_d7": 33,
+     "contrast": 1.694,
+     "r2": 0.626,
      "min_at_bump": true
     },
     "rotL": {
@@ -288,206 +104,22 @@
    "perturbations": {
     "d7_silence": {
      "concentration": 0,
-     "seeded": 0.981,
+     "seeded": 0.973,
      "total_rate": 0,
      "width_wedges": 0
     },
     "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.977,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   }
-  },
-  {
-   "params": {
-    "epgRecur": 1,
-    "d7Gain": 1,
-    "epgTonic": 5,
-    "penGain": 1
-   },
-   "hypothesis": "silent",
-   "mechanism": null,
-   "baseline": {
-    "persistence": {
-     "concentration": 0,
-     "seeded": 0.969,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "kernel": {
-     "n_d7": 37,
-     "contrast": 1.795,
-     "r2": 0.529,
-     "min_at_bump": true
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.968,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.975,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   }
-  },
-  {
-   "params": {
-    "epgRecur": 1,
-    "d7Gain": 1,
-    "epgTonic": 7,
-    "penGain": 1
-   },
-   "hypothesis": "silent",
-   "mechanism": null,
-   "baseline": {
-    "persistence": {
-     "concentration": 0,
-     "seeded": 0.609,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "kernel": {
-     "n_d7": 39,
-     "contrast": 1.734,
-     "r2": 0.643,
-     "min_at_bump": true
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.605,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.602,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   }
-  },
-  {
-   "params": {
-    "epgRecur": 1,
-    "d7Gain": 1.3,
-    "epgTonic": 0,
-    "penGain": 1
-   },
-   "hypothesis": "silent",
-   "mechanism": null,
-   "baseline": {
-    "persistence": {
-     "concentration": 0,
-     "seeded": 0.991,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "kernel": {
-     "n_d7": 37,
-     "contrast": 1.698,
-     "r2": 0.688,
-     "min_at_bump": true
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.991,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.995,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   }
-  },
-  {
-   "params": {
-    "epgRecur": 1,
-    "d7Gain": 1.3,
-    "epgTonic": 3,
-    "penGain": 1
-   },
-   "hypothesis": "silent",
-   "mechanism": null,
-   "baseline": {
-    "persistence": {
-     "concentration": 0,
-     "seeded": 0.969,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "kernel": {
-     "n_d7": 36,
-     "contrast": 1.648,
-     "r2": 0.671,
-     "min_at_bump": true
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
      "concentration": 0,
      "seeded": 0.979,
      "total_rate": 0,
      "width_wedges": 0
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.986,
-     "total_rate": 0,
-     "width_wedges": 0
     }
    }
   },
   {
    "params": {
     "epgRecur": 1,
-    "d7Gain": 1.3,
+    "d7Gain": 0.5,
     "epgTonic": 5,
     "penGain": 1
    },
@@ -496,14 +128,14 @@
    "baseline": {
     "persistence": {
      "concentration": 0,
-     "seeded": 0.974,
+     "seeded": 0.975,
      "total_rate": 0,
      "width_wedges": 0
     },
     "kernel": {
-     "n_d7": 37,
-     "contrast": 1.737,
-     "r2": 0.565,
+     "n_d7": 36,
+     "contrast": 1.731,
+     "r2": 0.638,
      "min_at_bump": true
     },
     "rotL": {
@@ -524,7 +156,7 @@
     },
     "peg_lesion": {
      "concentration": 0,
-     "seeded": 0.969,
+     "seeded": 0.959,
      "total_rate": 0,
      "width_wedges": 0
     }
@@ -533,7 +165,7 @@
   {
    "params": {
     "epgRecur": 1,
-    "d7Gain": 1.3,
+    "d7Gain": 0.5,
     "epgTonic": 7,
     "penGain": 1
    },
@@ -542,14 +174,14 @@
    "baseline": {
     "persistence": {
      "concentration": 0,
-     "seeded": 0.647,
+     "seeded": 0.651,
      "total_rate": 0,
      "width_wedges": 0
     },
     "kernel": {
-     "n_d7": 38,
-     "contrast": 1.679,
-     "r2": 0.678,
+     "n_d7": 33,
+     "contrast": 1.734,
+     "r2": 0.651,
      "min_at_bump": true
     },
     "rotL": {
@@ -564,22 +196,22 @@
    "perturbations": {
     "d7_silence": {
      "concentration": 0,
-     "seeded": 0.738,
+     "seeded": 0.759,
      "total_rate": 0,
      "width_wedges": 0
     },
     "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.639,
-     "total_rate": 0,
-     "width_wedges": 0
+     "concentration": 0.776,
+     "seeded": 0.577,
+     "total_rate": 3.733,
+     "width_wedges": 3
     }
    }
   },
   {
    "params": {
-    "epgRecur": 3,
-    "d7Gain": 0.5,
+    "epgRecur": 1,
+    "d7Gain": 1,
     "epgTonic": 0,
     "penGain": 1
    },
@@ -588,13 +220,105 @@
    "baseline": {
     "persistence": {
      "concentration": 0,
-     "seeded": 0.972,
+     "seeded": 0.99,
      "total_rate": 0,
      "width_wedges": 0
     },
     "kernel": {
      "n_d7": 36,
-     "contrast": 1.756,
+     "contrast": 1.656,
+     "r2": 0.682,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.991,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 1,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   }
+  },
+  {
+   "params": {
+    "epgRecur": 1,
+    "d7Gain": 1,
+    "epgTonic": 3,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "mechanism": null,
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.984,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 35,
+     "contrast": 1.718,
+     "r2": 0.559,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.978,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.973,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   }
+  },
+  {
+   "params": {
+    "epgRecur": 1,
+    "d7Gain": 1,
+    "epgTonic": 5,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "mechanism": null,
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.971,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 34,
+     "contrast": 1.754,
      "r2": 0.571,
      "min_at_bump": true
     },
@@ -610,13 +334,289 @@
    "perturbations": {
     "d7_silence": {
      "concentration": 0,
-     "seeded": 0.962,
+     "seeded": 0.971,
      "total_rate": 0,
      "width_wedges": 0
     },
     "peg_lesion": {
      "concentration": 0,
-     "seeded": 0.968,
+     "seeded": 0.966,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   }
+  },
+  {
+   "params": {
+    "epgRecur": 1,
+    "d7Gain": 1,
+    "epgTonic": 7,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "mechanism": null,
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.692,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 39,
+     "contrast": 1.687,
+     "r2": 0.711,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.575,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 1,
+     "seeded": 0.633,
+     "total_rate": 0.167,
+     "width_wedges": 0
+    }
+   }
+  },
+  {
+   "params": {
+    "epgRecur": 1,
+    "d7Gain": 1.3,
+    "epgTonic": 0,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "mechanism": null,
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.991,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 39,
+     "contrast": 1.729,
+     "r2": 0.598,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.991,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.995,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   }
+  },
+  {
+   "params": {
+    "epgRecur": 1,
+    "d7Gain": 1.3,
+    "epgTonic": 3,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "mechanism": null,
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.983,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 36,
+     "contrast": 1.678,
+     "r2": 0.598,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.978,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.974,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   }
+  },
+  {
+   "params": {
+    "epgRecur": 1,
+    "d7Gain": 1.3,
+    "epgTonic": 5,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "mechanism": null,
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.969,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 37,
+     "contrast": 1.746,
+     "r2": 0.581,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.974,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.969,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   }
+  },
+  {
+   "params": {
+    "epgRecur": 1,
+    "d7Gain": 1.3,
+    "epgTonic": 7,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "mechanism": null,
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.665,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 37,
+     "contrast": 1.688,
+     "r2": 0.632,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.65,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0.59,
+     "seeded": 0.539,
+     "total_rate": 1.333,
+     "width_wedges": 3
+    }
+   }
+  },
+  {
+   "params": {
+    "epgRecur": 3,
+    "d7Gain": 0.5,
+    "epgTonic": 0,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "mechanism": null,
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.967,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 33,
+     "contrast": 1.776,
+     "r2": 0.549,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.967,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.963,
      "total_rate": 0,
      "width_wedges": 0
     }
@@ -634,14 +634,14 @@
    "baseline": {
     "persistence": {
      "concentration": 0,
-     "seeded": 0.948,
+     "seeded": 0.934,
      "total_rate": 0,
      "width_wedges": 0
     },
     "kernel": {
-     "n_d7": 34,
-     "contrast": 1.783,
-     "r2": 0.566,
+     "n_d7": 33,
+     "contrast": 1.682,
+     "r2": 0.71,
      "min_at_bump": true
     },
     "rotL": {
@@ -656,13 +656,13 @@
    "perturbations": {
     "d7_silence": {
      "concentration": 0,
-     "seeded": 0.933,
+     "seeded": 0.929,
      "total_rate": 0,
      "width_wedges": 0
     },
     "peg_lesion": {
      "concentration": 0,
-     "seeded": 0.954,
+     "seeded": 0.931,
      "total_rate": 0,
      "width_wedges": 0
     }
@@ -679,15 +679,15 @@
    "mechanism": "d7_sculpts_sharp",
    "baseline": {
     "persistence": {
-     "concentration": 0.808,
-     "seeded": 0.227,
-     "total_rate": 7.367,
+     "concentration": 0.832,
+     "seeded": 0.221,
+     "total_rate": 7.6,
      "width_wedges": 2
     },
     "kernel": {
      "n_d7": 37,
-     "contrast": 1.672,
-     "r2": 0.708,
+     "contrast": 1.656,
+     "r2": 0.687,
      "min_at_bump": true
     },
     "rotL": {
@@ -695,22 +695,22 @@
      "tracked": 0
     },
     "rotR": {
-     "drift": 10.378,
-     "tracked": 4
+     "drift": null,
+     "tracked": 0
     }
    },
    "perturbations": {
     "d7_silence": {
-     "concentration": 0.762,
-     "seeded": 0.261,
-     "total_rate": 8.333,
-     "width_wedges": 3
+     "concentration": 0.821,
+     "seeded": 0.206,
+     "total_rate": 6.333,
+     "width_wedges": 2
     },
     "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.895,
-     "total_rate": 0,
-     "width_wedges": 0
+     "concentration": 0.815,
+     "seeded": 0.136,
+     "total_rate": 4.4,
+     "width_wedges": 2
     }
    }
   },
@@ -725,38 +725,38 @@
    "mechanism": "d7_sculpts_sharp",
    "baseline": {
     "persistence": {
-     "concentration": 0.932,
-     "seeded": 0.165,
-     "total_rate": 1.767,
+     "concentration": 0.854,
+     "seeded": 0.167,
+     "total_rate": 1.033,
      "width_wedges": 2
     },
     "kernel": {
      "n_d7": 35,
-     "contrast": 1.72,
-     "r2": 0.524,
+     "contrast": 1.715,
+     "r2": 0.632,
      "min_at_bump": true
     },
     "rotL": {
-     "drift": -2.132,
+     "drift": 6.705,
      "tracked": 4
     },
     "rotR": {
-     "drift": null,
-     "tracked": 0
+     "drift": -9.481,
+     "tracked": 4
     }
    },
    "perturbations": {
     "d7_silence": {
-     "concentration": 0.9,
-     "seeded": 0.178,
-     "total_rate": 1.533,
-     "width_wedges": 1
+     "concentration": 0.925,
+     "seeded": 0.147,
+     "total_rate": 1.8,
+     "width_wedges": 2
     },
     "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.157,
-     "total_rate": 0,
-     "width_wedges": 0
+     "concentration": 0.84,
+     "seeded": 0.205,
+     "total_rate": 2.3,
+     "width_wedges": 2
     }
    }
   },
@@ -777,9 +777,9 @@
      "width_wedges": 0
     },
     "kernel": {
-     "n_d7": 36,
-     "contrast": 1.794,
-     "r2": 0.517,
+     "n_d7": 38,
+     "contrast": 1.702,
+     "r2": 0.645,
      "min_at_bump": true
     },
     "rotL": {
@@ -794,13 +794,13 @@
    "perturbations": {
     "d7_silence": {
      "concentration": 0,
-     "seeded": 0.961,
+     "seeded": 0.969,
      "total_rate": 0,
      "width_wedges": 0
     },
     "peg_lesion": {
      "concentration": 0,
-     "seeded": 0.967,
+     "seeded": 0.966,
      "total_rate": 0,
      "width_wedges": 0
     }
@@ -818,14 +818,520 @@
    "baseline": {
     "persistence": {
      "concentration": 0,
-     "seeded": 0.933,
+     "seeded": 0.936,
      "total_rate": 0,
      "width_wedges": 0
     },
     "kernel": {
+     "n_d7": 36,
+     "contrast": 1.732,
+     "r2": 0.582,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.959,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.925,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   }
+  },
+  {
+   "params": {
+    "epgRecur": 3,
+    "d7Gain": 1,
+    "epgTonic": 5,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "mechanism": null,
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.91,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 36,
+     "contrast": 1.753,
+     "r2": 0.595,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": 9.863,
+     "tracked": 4
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0.824,
+     "seeded": 0.222,
+     "total_rate": 7.033,
+     "width_wedges": 2
+    },
+    "peg_lesion": {
+     "concentration": 0.927,
+     "seeded": 0.17,
+     "total_rate": 0.833,
+     "width_wedges": 2
+    }
+   }
+  },
+  {
+   "params": {
+    "epgRecur": 3,
+    "d7Gain": 1,
+    "epgTonic": 7,
+    "penGain": 1
+   },
+   "hypothesis": "filter",
+   "mechanism": null,
+   "baseline": {
+    "persistence": {
+     "concentration": 0.308,
+     "seeded": 0.211,
+     "total_rate": 4,
+     "width_wedges": 4
+    },
+    "kernel": {
      "n_d7": 37,
-     "contrast": 1.767,
-     "r2": 0.584,
+     "contrast": 1.705,
+     "r2": 0.634,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": 3.051,
+     "tracked": 4
+    },
+    "rotR": {
+     "drift": 2.132,
+     "tracked": 4
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0.277,
+     "seeded": 0.181,
+     "total_rate": 5.233,
+     "width_wedges": 5
+    },
+    "peg_lesion": {
+     "concentration": 0.947,
+     "seeded": 0.143,
+     "total_rate": 0.867,
+     "width_wedges": 1
+    }
+   }
+  },
+  {
+   "params": {
+    "epgRecur": 3,
+    "d7Gain": 1.3,
+    "epgTonic": 0,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "mechanism": null,
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.971,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 40,
+     "contrast": 1.754,
+     "r2": 0.579,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.97,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.964,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   }
+  },
+  {
+   "params": {
+    "epgRecur": 3,
+    "d7Gain": 1.3,
+    "epgTonic": 3,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "mechanism": null,
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.945,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 35,
+     "contrast": 1.756,
+     "r2": 0.563,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.933,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.927,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   }
+  },
+  {
+   "params": {
+    "epgRecur": 3,
+    "d7Gain": 1.3,
+    "epgTonic": 5,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "mechanism": null,
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.909,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 41,
+     "contrast": 1.707,
+     "r2": 0.642,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": -10.382,
+     "tracked": 4
+    },
+    "rotR": {
+     "drift": 6.08,
+     "tracked": 4
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0.839,
+     "seeded": 0.201,
+     "total_rate": 5.9,
+     "width_wedges": 2
+    },
+    "peg_lesion": {
+     "concentration": 0.941,
+     "seeded": 0.141,
+     "total_rate": 2.267,
+     "width_wedges": 1
+    }
+   }
+  },
+  {
+   "params": {
+    "epgRecur": 3,
+    "d7Gain": 1.3,
+    "epgTonic": 7,
+    "penGain": 1
+   },
+   "hypothesis": "attractor_tonic",
+   "mechanism": "d7_sculpts_sharp",
+   "baseline": {
+    "persistence": {
+     "concentration": 0.9,
+     "seeded": 0.19,
+     "total_rate": 1.533,
+     "width_wedges": 1
+    },
+    "kernel": {
+     "n_d7": 38,
+     "contrast": 1.75,
+     "r2": 0.6,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": 1.002,
+     "tracked": 4
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0.938,
+     "seeded": 0.17,
+     "total_rate": 0.7,
+     "width_wedges": 1
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.159,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   }
+  },
+  {
+   "params": {
+    "epgRecur": 4,
+    "d7Gain": 0.5,
+    "epgTonic": 0,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "mechanism": null,
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.951,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 35,
+     "contrast": 1.728,
+     "r2": 0.603,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.94,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.917,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   }
+  },
+  {
+   "params": {
+    "epgRecur": 4,
+    "d7Gain": 0.5,
+    "epgTonic": 3,
+    "penGain": 1
+   },
+   "hypothesis": "attractor_tonic",
+   "mechanism": "d7_sculpts_sharp",
+   "baseline": {
+    "persistence": {
+     "concentration": 0.924,
+     "seeded": 0.16,
+     "total_rate": 2.667,
+     "width_wedges": 2
+    },
+    "kernel": {
+     "n_d7": 35,
+     "contrast": 1.754,
+     "r2": 0.582,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": 19.039,
+     "tracked": 2
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 1
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0.928,
+     "seeded": 0.204,
+     "total_rate": 2.167,
+     "width_wedges": 2
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.166,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   }
+  },
+  {
+   "params": {
+    "epgRecur": 4,
+    "d7Gain": 0.5,
+    "epgTonic": 5,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "mechanism": null,
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.165,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 35,
+     "contrast": 1.748,
+     "r2": 0.556,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.149,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.158,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   }
+  },
+  {
+   "params": {
+    "epgRecur": 4,
+    "d7Gain": 0.5,
+    "epgTonic": 7,
+    "penGain": 1
+   },
+   "hypothesis": "filter",
+   "mechanism": null,
+   "baseline": {
+    "persistence": {
+     "concentration": 0.238,
+     "seeded": 0.18,
+     "total_rate": 24.8,
+     "width_wedges": 5
+    },
+    "kernel": {
+     "n_d7": 38,
+     "contrast": 1.706,
+     "r2": 0.646,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": 0.94,
+     "tracked": 4
+    },
+    "rotR": {
+     "drift": 5.32,
+     "tracked": 4
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.128,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0.376,
+     "seeded": 0.129,
+     "total_rate": 19.033,
+     "width_wedges": 4
+    }
+   }
+  },
+  {
+   "params": {
+    "epgRecur": 4,
+    "d7Gain": 1,
+    "epgTonic": 0,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "mechanism": null,
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.951,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 36,
+     "contrast": 1.705,
+     "r2": 0.675,
      "min_at_bump": true
     },
     "rotL": {
@@ -846,7 +1352,7 @@
     },
     "peg_lesion": {
      "concentration": 0,
-     "seeded": 0.959,
+     "seeded": 0.935,
      "total_rate": 0,
      "width_wedges": 0
     }
@@ -854,101 +1360,55 @@
   },
   {
    "params": {
-    "epgRecur": 3,
+    "epgRecur": 4,
     "d7Gain": 1,
-    "epgTonic": 5,
-    "penGain": 1
-   },
-   "hypothesis": "attractor_tonic",
-   "mechanism": "d7_sculpts_sharp",
-   "baseline": {
-    "persistence": {
-     "concentration": 0.892,
-     "seeded": 0.228,
-     "total_rate": 2.833,
-     "width_wedges": 2
-    },
-    "kernel": {
-     "n_d7": 37,
-     "contrast": 1.704,
-     "r2": 0.616,
-     "min_at_bump": true
-    },
-    "rotL": {
-     "drift": -9.402,
-     "tracked": 4
-    },
-    "rotR": {
-     "drift": -4.888,
-     "tracked": 3
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0.863,
-     "seeded": 0.183,
-     "total_rate": 7.567,
-     "width_wedges": 2
-    },
-    "peg_lesion": {
-     "concentration": 0.819,
-     "seeded": 0.149,
-     "total_rate": 7.367,
-     "width_wedges": 2
-    }
-   }
-  },
-  {
-   "params": {
-    "epgRecur": 3,
-    "d7Gain": 1,
-    "epgTonic": 7,
+    "epgTonic": 3,
     "penGain": 1
    },
    "hypothesis": "attractor_tonic",
    "mechanism": "d7_essential",
    "baseline": {
     "persistence": {
-     "concentration": 0.934,
-     "seeded": 0.179,
-     "total_rate": 1.233,
-     "width_wedges": 1
+     "concentration": 0.925,
+     "seeded": 0.182,
+     "total_rate": 2.333,
+     "width_wedges": 2
     },
     "kernel": {
-     "n_d7": 41,
-     "contrast": 1.722,
-     "r2": 0.644,
+     "n_d7": 35,
+     "contrast": 1.578,
+     "r2": 0.789,
      "min_at_bump": true
     },
     "rotL": {
-     "drift": -3.287,
-     "tracked": 4
+     "drift": null,
+     "tracked": 1
     },
     "rotR": {
-     "drift": -2.261,
-     "tracked": 4
+     "drift": null,
+     "tracked": 1
     }
    },
    "perturbations": {
     "d7_silence": {
      "concentration": 0,
-     "seeded": 0.158,
+     "seeded": 0.89,
      "total_rate": 0,
      "width_wedges": 0
     },
     "peg_lesion": {
-     "concentration": 0.888,
-     "seeded": 0.168,
-     "total_rate": 1.367,
-     "width_wedges": 1
+     "concentration": 0,
+     "seeded": 0.174,
+     "total_rate": 0,
+     "width_wedges": 0
     }
    }
   },
   {
    "params": {
-    "epgRecur": 3,
-    "d7Gain": 1.3,
-    "epgTonic": 0,
+    "epgRecur": 4,
+    "d7Gain": 1,
+    "epgTonic": 5,
     "penGain": 1
    },
    "hypothesis": "silent",
@@ -956,14 +1416,14 @@
    "baseline": {
     "persistence": {
      "concentration": 0,
-     "seeded": 0.962,
+     "seeded": 0.137,
      "total_rate": 0,
      "width_wedges": 0
     },
     "kernel": {
      "n_d7": 38,
-     "contrast": 1.761,
-     "r2": 0.602,
+     "contrast": 1.763,
+     "r2": 0.532,
      "min_at_bump": true
     },
     "rotL": {
@@ -978,197 +1438,13 @@
    "perturbations": {
     "d7_silence": {
      "concentration": 0,
-     "seeded": 0.973,
+     "seeded": 0.188,
      "total_rate": 0,
      "width_wedges": 0
     },
     "peg_lesion": {
      "concentration": 0,
-     "seeded": 0.967,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   }
-  },
-  {
-   "params": {
-    "epgRecur": 3,
-    "d7Gain": 1.3,
-    "epgTonic": 3,
-    "penGain": 1
-   },
-   "hypothesis": "silent",
-   "mechanism": null,
-   "baseline": {
-    "persistence": {
-     "concentration": 0,
-     "seeded": 0.921,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "kernel": {
-     "n_d7": 36,
-     "contrast": 1.739,
-     "r2": 0.567,
-     "min_at_bump": true
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.951,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.944,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   }
-  },
-  {
-   "params": {
-    "epgRecur": 3,
-    "d7Gain": 1.3,
-    "epgTonic": 5,
-    "penGain": 1
-   },
-   "hypothesis": "attractor_tonic",
-   "mechanism": "d7_sculpts_sharp",
-   "baseline": {
-    "persistence": {
-     "concentration": 0.825,
-     "seeded": 0.126,
-     "total_rate": 7.167,
-     "width_wedges": 2
-    },
-    "kernel": {
-     "n_d7": 36,
-     "contrast": 1.775,
-     "r2": 0.576,
-     "min_at_bump": true
-    },
-    "rotL": {
-     "drift": 8.721,
-     "tracked": 4
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0.822,
-     "seeded": 0.243,
-     "total_rate": 6.667,
-     "width_wedges": 2
-    },
-    "peg_lesion": {
-     "concentration": 0.832,
-     "seeded": 0.241,
-     "total_rate": 7.033,
-     "width_wedges": 2
-    }
-   }
-  },
-  {
-   "params": {
-    "epgRecur": 3,
-    "d7Gain": 1.3,
-    "epgTonic": 7,
-    "penGain": 1
-   },
-   "hypothesis": "attractor_tonic",
-   "mechanism": "d7_sculpts_sharp",
-   "baseline": {
-    "persistence": {
-     "concentration": 0.928,
-     "seeded": 0.154,
-     "total_rate": 1.3,
-     "width_wedges": 2
-    },
-    "kernel": {
-     "n_d7": 36,
-     "contrast": 1.746,
-     "r2": 0.57,
-     "min_at_bump": true
-    },
-    "rotL": {
-     "drift": -5.471,
-     "tracked": 4
-    },
-    "rotR": {
-     "drift": -2.228,
-     "tracked": 4
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0.958,
-     "seeded": 0.158,
-     "total_rate": 1.2,
-     "width_wedges": 1
-    },
-    "peg_lesion": {
-     "concentration": 0.934,
-     "seeded": 0.09,
-     "total_rate": 1.233,
-     "width_wedges": 1
-    }
-   }
-  },
-  {
-   "params": {
-    "epgRecur": 4,
-    "d7Gain": 0.5,
-    "epgTonic": 0,
-    "penGain": 1
-   },
-   "hypothesis": "silent",
-   "mechanism": null,
-   "baseline": {
-    "persistence": {
-     "concentration": 0,
-     "seeded": 0.955,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "kernel": {
-     "n_d7": 34,
-     "contrast": 1.708,
-     "r2": 0.608,
-     "min_at_bump": true
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.953,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.945,
+     "seeded": 0.146,
      "total_rate": 0,
      "width_wedges": 0
     }
@@ -1177,99 +1453,7 @@
   {
    "params": {
     "epgRecur": 4,
-    "d7Gain": 0.5,
-    "epgTonic": 3,
-    "penGain": 1
-   },
-   "hypothesis": "attractor_tonic",
-   "mechanism": "d7_sculpts_sharp",
-   "baseline": {
-    "persistence": {
-     "concentration": 0.925,
-     "seeded": 0.204,
-     "total_rate": 2.333,
-     "width_wedges": 2
-    },
-    "kernel": {
-     "n_d7": 28,
-     "contrast": 1.702,
-     "r2": 0.639,
-     "min_at_bump": true
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 1
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0.834,
-     "seeded": 0.273,
-     "total_rate": 8.7,
-     "width_wedges": 3
-    },
-    "peg_lesion": {
-     "concentration": 0.826,
-     "seeded": 0.219,
-     "total_rate": 6.933,
-     "width_wedges": 3
-    }
-   }
-  },
-  {
-   "params": {
-    "epgRecur": 4,
-    "d7Gain": 0.5,
-    "epgTonic": 5,
-    "penGain": 1
-   },
-   "hypothesis": "silent",
-   "mechanism": null,
-   "baseline": {
-    "persistence": {
-     "concentration": 0,
-     "seeded": 0.135,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "kernel": {
-     "n_d7": 29,
-     "contrast": 1.69,
-     "r2": 0.588,
-     "min_at_bump": true
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.126,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.162,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   }
-  },
-  {
-   "params": {
-    "epgRecur": 4,
-    "d7Gain": 0.5,
+    "d7Gain": 1,
     "epgTonic": 7,
     "penGain": 1
    },
@@ -1277,45 +1461,45 @@
    "mechanism": null,
    "baseline": {
     "persistence": {
-     "concentration": 0.379,
-     "seeded": 0.157,
-     "total_rate": 19.433,
-     "width_wedges": 4
+     "concentration": 0.171,
+     "seeded": 0.165,
+     "total_rate": 26.567,
+     "width_wedges": 6
     },
     "kernel": {
-     "n_d7": 36,
-     "contrast": 1.669,
-     "r2": 0.659,
+     "n_d7": 32,
+     "contrast": 1.705,
+     "r2": 0.658,
      "min_at_bump": true
     },
     "rotL": {
-     "drift": -0.331,
+     "drift": -2.851,
      "tracked": 4
     },
     "rotR": {
-     "drift": 1.997,
+     "drift": -2.405,
      "tracked": 4
     }
    },
    "perturbations": {
     "d7_silence": {
-     "concentration": 0.095,
-     "seeded": 0.15,
-     "total_rate": 71.767,
-     "width_wedges": 8
+     "concentration": 0.281,
+     "seeded": 0.162,
+     "total_rate": 21.4,
+     "width_wedges": 6
     },
     "peg_lesion": {
-     "concentration": 0.082,
-     "seeded": 0.138,
-     "total_rate": 67.267,
-     "width_wedges": 8
+     "concentration": 0.083,
+     "seeded": 0.144,
+     "total_rate": 10.533,
+     "width_wedges": 4
     }
    }
   },
   {
    "params": {
     "epgRecur": 4,
-    "d7Gain": 1,
+    "d7Gain": 1.3,
     "epgTonic": 0,
     "penGain": 1
    },
@@ -1324,14 +1508,14 @@
    "baseline": {
     "persistence": {
      "concentration": 0,
-     "seeded": 0.935,
+     "seeded": 0.931,
      "total_rate": 0,
      "width_wedges": 0
     },
     "kernel": {
-     "n_d7": 35,
-     "contrast": 1.781,
-     "r2": 0.548,
+     "n_d7": 40,
+     "contrast": 1.75,
+     "r2": 0.574,
      "min_at_bump": true
     },
     "rotL": {
@@ -1346,222 +1530,38 @@
    "perturbations": {
     "d7_silence": {
      "concentration": 0,
-     "seeded": 0.946,
+     "seeded": 0.955,
      "total_rate": 0,
      "width_wedges": 0
     },
     "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.951,
-     "total_rate": 0,
-     "width_wedges": 0
+     "concentration": 0.697,
+     "seeded": 0.529,
+     "total_rate": 17.2,
+     "width_wedges": 4
     }
    }
   },
   {
    "params": {
     "epgRecur": 4,
-    "d7Gain": 1,
+    "d7Gain": 1.3,
     "epgTonic": 3,
-    "penGain": 1
-   },
-   "hypothesis": "attractor_tonic",
-   "mechanism": "d7_sculpts_sharp",
-   "baseline": {
-    "persistence": {
-     "concentration": 0.929,
-     "seeded": 0.207,
-     "total_rate": 2.667,
-     "width_wedges": 2
-    },
-    "kernel": {
-     "n_d7": 35,
-     "contrast": 1.773,
-     "r2": 0.544,
-     "min_at_bump": true
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": 22.216,
-     "tracked": 2
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0.833,
-     "seeded": 0.259,
-     "total_rate": 8.1,
-     "width_wedges": 2
-    },
-    "peg_lesion": {
-     "concentration": 0.894,
-     "seeded": 0.229,
-     "total_rate": 5.067,
-     "width_wedges": 2
-    }
-   }
-  },
-  {
-   "params": {
-    "epgRecur": 4,
-    "d7Gain": 1,
-    "epgTonic": 5,
     "penGain": 1
    },
    "hypothesis": "attractor_tonic",
    "mechanism": "d7_essential",
    "baseline": {
     "persistence": {
-     "concentration": 1,
-     "seeded": 0.156,
-     "total_rate": 0.2,
-     "width_wedges": 0
-    },
-    "kernel": {
-     "n_d7": 35,
-     "contrast": 1.654,
-     "r2": 0.753,
-     "min_at_bump": true
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.181,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.163,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   }
-  },
-  {
-   "params": {
-    "epgRecur": 4,
-    "d7Gain": 1,
-    "epgTonic": 7,
-    "penGain": 1
-   },
-   "hypothesis": "filter",
-   "mechanism": null,
-   "baseline": {
-    "persistence": {
-     "concentration": 0.14,
-     "seeded": 0.157,
-     "total_rate": 25.067,
-     "width_wedges": 7
-    },
-    "kernel": {
-     "n_d7": 36,
-     "contrast": 1.662,
-     "r2": 0.628,
-     "min_at_bump": true
-    },
-    "rotL": {
-     "drift": 4.379,
-     "tracked": 4
-    },
-    "rotR": {
-     "drift": 6.032,
-     "tracked": 4
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0.297,
-     "seeded": 0.19,
-     "total_rate": 21.933,
-     "width_wedges": 6
-    },
-    "peg_lesion": {
-     "concentration": 0.141,
-     "seeded": 0.157,
-     "total_rate": 71.933,
-     "width_wedges": 7
-    }
-   }
-  },
-  {
-   "params": {
-    "epgRecur": 4,
-    "d7Gain": 1.3,
-    "epgTonic": 0,
-    "penGain": 1
-   },
-   "hypothesis": "silent",
-   "mechanism": null,
-   "baseline": {
-    "persistence": {
-     "concentration": 0,
-     "seeded": 0.954,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "kernel": {
-     "n_d7": 40,
-     "contrast": 1.764,
-     "r2": 0.565,
-     "min_at_bump": true
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.949,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.938,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   }
-  },
-  {
-   "params": {
-    "epgRecur": 4,
-    "d7Gain": 1.3,
-    "epgTonic": 3,
-    "penGain": 1
-   },
-   "hypothesis": "attractor_tonic",
-   "mechanism": "d7_sculpts_sharp",
-   "baseline": {
-    "persistence": {
-     "concentration": 0.928,
-     "seeded": 0.209,
-     "total_rate": 2.167,
+     "concentration": 0.925,
+     "seeded": 0.172,
+     "total_rate": 2.333,
      "width_wedges": 2
     },
     "kernel": {
-     "n_d7": 32,
-     "contrast": 1.773,
-     "r2": 0.596,
+     "n_d7": 33,
+     "contrast": 1.672,
+     "r2": 0.717,
      "min_at_bump": true
     },
     "rotL": {
@@ -1569,22 +1569,22 @@
      "tracked": 1
     },
     "rotR": {
-     "drift": 11.255,
+     "drift": 30.974,
      "tracked": 2
     }
    },
    "perturbations": {
     "d7_silence": {
-     "concentration": 0.897,
-     "seeded": 0.176,
-     "total_rate": 3,
-     "width_wedges": 2
+     "concentration": 0,
+     "seeded": 0.889,
+     "total_rate": 0,
+     "width_wedges": 0
     },
     "peg_lesion": {
-     "concentration": 0.908,
-     "seeded": 0.23,
-     "total_rate": 3.867,
-     "width_wedges": 2
+     "concentration": 0,
+     "seeded": 0.222,
+     "total_rate": 0,
+     "width_wedges": 0
     }
    }
   },
@@ -1600,14 +1600,14 @@
    "baseline": {
     "persistence": {
      "concentration": 0,
-     "seeded": 0.169,
+     "seeded": 0.16,
      "total_rate": 0,
      "width_wedges": 0
     },
     "kernel": {
-     "n_d7": 40,
-     "contrast": 1.695,
-     "r2": 0.64,
+     "n_d7": 38,
+     "contrast": 1.679,
+     "r2": 0.677,
      "min_at_bump": true
     },
     "rotL": {
@@ -1615,20 +1615,20 @@
      "tracked": 0
     },
     "rotR": {
-     "drift": 2.018,
-     "tracked": 4
+     "drift": null,
+     "tracked": 0
     }
    },
    "perturbations": {
     "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.135,
-     "total_rate": 0,
-     "width_wedges": 0
+     "concentration": 0.928,
+     "seeded": 0.171,
+     "total_rate": 1.3,
+     "width_wedges": 2
     },
     "peg_lesion": {
      "concentration": 1,
-     "seeded": 0.153,
+     "seeded": 0.144,
      "total_rate": 0.2,
      "width_wedges": 0
     }
@@ -1645,38 +1645,38 @@
    "mechanism": "d7_confines",
    "baseline": {
     "persistence": {
-     "concentration": 0.696,
-     "seeded": 0.169,
-     "total_rate": 11.867,
-     "width_wedges": 3
+     "concentration": 1,
+     "seeded": 0.156,
+     "total_rate": 0.667,
+     "width_wedges": 1
     },
     "kernel": {
-     "n_d7": 38,
-     "contrast": 1.741,
-     "r2": 0.501,
+     "n_d7": 39,
+     "contrast": 1.686,
+     "r2": 0.661,
      "min_at_bump": true
     },
     "rotL": {
-     "drift": -9.28,
+     "drift": -5.776,
      "tracked": 4
     },
     "rotR": {
-     "drift": -8.918,
-     "tracked": 4
+     "drift": null,
+     "tracked": 0
     }
    },
    "perturbations": {
     "d7_silence": {
-     "concentration": 0.114,
-     "seeded": 0.143,
-     "total_rate": 72.033,
-     "width_wedges": 8
+     "concentration": 0.106,
+     "seeded": 0.15,
+     "total_rate": 24.667,
+     "width_wedges": 7
     },
     "peg_lesion": {
-     "concentration": 0.324,
-     "seeded": 0.159,
-     "total_rate": 19.1,
-     "width_wedges": 5
+     "concentration": 0.491,
+     "seeded": 0.13,
+     "total_rate": 0.5,
+     "width_wedges": 0
     }
    }
   },
@@ -1684,6 +1684,374 @@
    "params": {
     "epgRecur": 6,
     "d7Gain": 0.5,
+    "epgTonic": 0,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "mechanism": null,
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.116,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 32,
+     "contrast": 1.734,
+     "r2": 0.573,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.129,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.123,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   }
+  },
+  {
+   "params": {
+    "epgRecur": 6,
+    "d7Gain": 0.5,
+    "epgTonic": 3,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "mechanism": null,
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.112,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 34,
+     "contrast": 1.714,
+     "r2": 0.631,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.143,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.086,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   }
+  },
+  {
+   "params": {
+    "epgRecur": 6,
+    "d7Gain": 0.5,
+    "epgTonic": 5,
+    "penGain": 1
+   },
+   "hypothesis": "filter",
+   "mechanism": null,
+   "baseline": {
+    "persistence": {
+     "concentration": 0.051,
+     "seeded": 0.126,
+     "total_rate": 89.533,
+     "width_wedges": 8
+    },
+    "kernel": {
+     "n_d7": 37,
+     "contrast": 1.682,
+     "r2": 0.659,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": 1.683,
+     "tracked": 4
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0.027,
+     "seeded": 0.127,
+     "total_rate": 85.433,
+     "width_wedges": 8
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.141,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   }
+  },
+  {
+   "params": {
+    "epgRecur": 6,
+    "d7Gain": 0.5,
+    "epgTonic": 7,
+    "penGain": 1
+   },
+   "hypothesis": "filter",
+   "mechanism": null,
+   "baseline": {
+    "persistence": {
+     "concentration": 0.115,
+     "seeded": 0.129,
+     "total_rate": 96.667,
+     "width_wedges": 8
+    },
+    "kernel": {
+     "n_d7": 32,
+     "contrast": 1.622,
+     "r2": 0.726,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": -2.279,
+     "tracked": 4
+    },
+    "rotR": {
+     "drift": 6.889,
+     "tracked": 4
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0.336,
+     "seeded": 0.125,
+     "total_rate": 25.3,
+     "width_wedges": 5
+    },
+    "peg_lesion": {
+     "concentration": 0.115,
+     "seeded": 0.146,
+     "total_rate": 96.267,
+     "width_wedges": 8
+    }
+   }
+  },
+  {
+   "params": {
+    "epgRecur": 6,
+    "d7Gain": 1,
+    "epgTonic": 0,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "mechanism": null,
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.149,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 41,
+     "contrast": 1.788,
+     "r2": 0.528,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.121,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.132,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   }
+  },
+  {
+   "params": {
+    "epgRecur": 6,
+    "d7Gain": 1,
+    "epgTonic": 3,
+    "penGain": 1
+   },
+   "hypothesis": "silent",
+   "mechanism": null,
+   "baseline": {
+    "persistence": {
+     "concentration": 0,
+     "seeded": 0.11,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "kernel": {
+     "n_d7": 36,
+     "contrast": 1.732,
+     "r2": 0.569,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": null,
+     "tracked": 0
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.13,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 1,
+     "seeded": 0.102,
+     "total_rate": 0.2,
+     "width_wedges": 0
+    }
+   }
+  },
+  {
+   "params": {
+    "epgRecur": 6,
+    "d7Gain": 1,
+    "epgTonic": 5,
+    "penGain": 1
+   },
+   "hypothesis": "attractor_tonic",
+   "mechanism": "d7_essential",
+   "baseline": {
+    "persistence": {
+     "concentration": 0.938,
+     "seeded": 0.112,
+     "total_rate": 0.7,
+     "width_wedges": 1
+    },
+    "kernel": {
+     "n_d7": 38,
+     "contrast": 1.732,
+     "r2": 0.588,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": null,
+     "tracked": 0
+    },
+    "rotR": {
+     "drift": -3.378,
+     "tracked": 4
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0,
+     "seeded": 0.127,
+     "total_rate": 0,
+     "width_wedges": 0
+    },
+    "peg_lesion": {
+     "concentration": 0,
+     "seeded": 0.101,
+     "total_rate": 0,
+     "width_wedges": 0
+    }
+   }
+  },
+  {
+   "params": {
+    "epgRecur": 6,
+    "d7Gain": 1,
+    "epgTonic": 7,
+    "penGain": 1
+   },
+   "hypothesis": "filter",
+   "mechanism": null,
+   "baseline": {
+    "persistence": {
+     "concentration": 0.094,
+     "seeded": 0.115,
+     "total_rate": 97.867,
+     "width_wedges": 8
+    },
+    "kernel": {
+     "n_d7": 32,
+     "contrast": 1.755,
+     "r2": 0.527,
+     "min_at_bump": true
+    },
+    "rotL": {
+     "drift": -8.178,
+     "tracked": 4
+    },
+    "rotR": {
+     "drift": -1.571,
+     "tracked": 4
+    }
+   },
+   "perturbations": {
+    "d7_silence": {
+     "concentration": 0.237,
+     "seeded": 0.105,
+     "total_rate": 21.5,
+     "width_wedges": 6
+    },
+    "peg_lesion": {
+     "concentration": 0.113,
+     "seeded": 0.114,
+     "total_rate": 99.467,
+     "width_wedges": 8
+    }
+   }
+  },
+  {
+   "params": {
+    "epgRecur": 6,
+    "d7Gain": 1.3,
     "epgTonic": 0,
     "penGain": 1
    },
@@ -1697,9 +2065,9 @@
      "width_wedges": 0
     },
     "kernel": {
-     "n_d7": 36,
-     "contrast": 1.821,
-     "r2": 0.492,
+     "n_d7": 40,
+     "contrast": 1.673,
+     "r2": 0.641,
      "min_at_bump": true
     },
     "rotL": {
@@ -1714,13 +2082,13 @@
    "perturbations": {
     "d7_silence": {
      "concentration": 0,
-     "seeded": 0.099,
+     "seeded": 0.133,
      "total_rate": 0,
      "width_wedges": 0
     },
     "peg_lesion": {
      "concentration": 0,
-     "seeded": 0.125,
+     "seeded": 0.163,
      "total_rate": 0,
      "width_wedges": 0
     }
@@ -1729,7 +2097,7 @@
   {
    "params": {
     "epgRecur": 6,
-    "d7Gain": 0.5,
+    "d7Gain": 1.3,
     "epgTonic": 3,
     "penGain": 1
    },
@@ -1738,152 +2106,14 @@
    "baseline": {
     "persistence": {
      "concentration": 0,
-     "seeded": 0.123,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "kernel": {
-     "n_d7": 31,
-     "contrast": 1.69,
-     "r2": 0.632,
-     "min_at_bump": true
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.129,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.148,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   }
-  },
-  {
-   "params": {
-    "epgRecur": 6,
-    "d7Gain": 0.5,
-    "epgTonic": 5,
-    "penGain": 1
-   },
-   "hypothesis": "silent",
-   "mechanism": null,
-   "baseline": {
-    "persistence": {
-     "concentration": 0,
-     "seeded": 0.097,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "kernel": {
-     "n_d7": 36,
-     "contrast": 1.714,
-     "r2": 0.648,
-     "min_at_bump": true
-    },
-    "rotL": {
-     "drift": -9.878,
-     "tracked": 4
-    },
-    "rotR": {
-     "drift": -7.999,
-     "tracked": 3
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0.071,
-     "seeded": 0.127,
-     "total_rate": 87.5,
-     "width_wedges": 8
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.113,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   }
-  },
-  {
-   "params": {
-    "epgRecur": 6,
-    "d7Gain": 0.5,
-    "epgTonic": 7,
-    "penGain": 1
-   },
-   "hypothesis": "filter",
-   "mechanism": null,
-   "baseline": {
-    "persistence": {
-     "concentration": 0.098,
-     "seeded": 0.136,
-     "total_rate": 101.2,
-     "width_wedges": 8
-    },
-    "kernel": {
-     "n_d7": 35,
-     "contrast": 1.681,
-     "r2": 0.627,
-     "min_at_bump": true
-    },
-    "rotL": {
-     "drift": -9.487,
-     "tracked": 4
-    },
-    "rotR": {
-     "drift": 3.691,
-     "tracked": 4
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0.286,
-     "seeded": 0.122,
-     "total_rate": 27.533,
-     "width_wedges": 6
-    },
-    "peg_lesion": {
-     "concentration": 0.53,
-     "seeded": 0.119,
-     "total_rate": 16.433,
-     "width_wedges": 4
-    }
-   }
-  },
-  {
-   "params": {
-    "epgRecur": 6,
-    "d7Gain": 1,
-    "epgTonic": 0,
-    "penGain": 1
-   },
-   "hypothesis": "silent",
-   "mechanism": null,
-   "baseline": {
-    "persistence": {
-     "concentration": 0,
-     "seeded": 0.146,
+     "seeded": 0.107,
      "total_rate": 0,
      "width_wedges": 0
     },
     "kernel": {
      "n_d7": 39,
-     "contrast": 1.758,
-     "r2": 0.6,
+     "contrast": 1.698,
+     "r2": 0.647,
      "min_at_bump": true
     },
     "rotL": {
@@ -1897,14 +2127,14 @@
    },
    "perturbations": {
     "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.093,
-     "total_rate": 0,
+     "concentration": 1,
+     "seeded": 0.136,
+     "total_rate": 0.2,
      "width_wedges": 0
     },
     "peg_lesion": {
      "concentration": 0,
-     "seeded": 0.139,
+     "seeded": 0.102,
      "total_rate": 0,
      "width_wedges": 0
     }
@@ -1913,168 +2143,30 @@
   {
    "params": {
     "epgRecur": 6,
-    "d7Gain": 1,
-    "epgTonic": 3,
+    "d7Gain": 1.3,
+    "epgTonic": 5,
     "penGain": 1
    },
    "hypothesis": "silent",
    "mechanism": null,
    "baseline": {
     "persistence": {
-     "concentration": 0,
-     "seeded": 0.111,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "kernel": {
-     "n_d7": 38,
-     "contrast": 1.723,
-     "r2": 0.589,
-     "min_at_bump": true
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.112,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "peg_lesion": {
      "concentration": 0,
      "seeded": 0.124,
      "total_rate": 0,
      "width_wedges": 0
-    }
-   }
-  },
-  {
-   "params": {
-    "epgRecur": 6,
-    "d7Gain": 1,
-    "epgTonic": 5,
-    "penGain": 1
-   },
-   "hypothesis": "filter",
-   "mechanism": null,
-   "baseline": {
-    "persistence": {
-     "concentration": 0.068,
-     "seeded": 0.097,
-     "total_rate": 87.167,
-     "width_wedges": 8
     },
     "kernel": {
-     "n_d7": 36,
-     "contrast": 1.713,
-     "r2": 0.603,
+     "n_d7": 35,
+     "contrast": 1.671,
+     "r2": 0.706,
      "min_at_bump": true
     },
     "rotL": {
-     "drift": -1.995,
-     "tracked": 3
-    },
-    "rotR": {
-     "drift": -5.285,
-     "tracked": 4
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0.052,
-     "seeded": 0.125,
-     "total_rate": 88.2,
-     "width_wedges": 8
-    },
-    "peg_lesion": {
-     "concentration": 1,
-     "seeded": 0.107,
-     "total_rate": 0.2,
-     "width_wedges": 0
-    }
-   }
-  },
-  {
-   "params": {
-    "epgRecur": 6,
-    "d7Gain": 1,
-    "epgTonic": 7,
-    "penGain": 1
-   },
-   "hypothesis": "filter",
-   "mechanism": null,
-   "baseline": {
-    "persistence": {
-     "concentration": 0.107,
-     "seeded": 0.121,
-     "total_rate": 96.733,
-     "width_wedges": 8
-    },
-    "kernel": {
-     "n_d7": 37,
-     "contrast": 1.705,
-     "r2": 0.637,
-     "min_at_bump": true
-    },
-    "rotL": {
-     "drift": 9.864,
+     "drift": -6.986,
      "tracked": 4
     },
     "rotR": {
-     "drift": 7.52,
-     "tracked": 4
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0.086,
-     "seeded": 0.113,
-     "total_rate": 99.733,
-     "width_wedges": 8
-    },
-    "peg_lesion": {
-     "concentration": 0.114,
-     "seeded": 0.109,
-     "total_rate": 92.3,
-     "width_wedges": 8
-    }
-   }
-  },
-  {
-   "params": {
-    "epgRecur": 6,
-    "d7Gain": 1.3,
-    "epgTonic": 0,
-    "penGain": 1
-   },
-   "hypothesis": "silent",
-   "mechanism": null,
-   "baseline": {
-    "persistence": {
-     "concentration": 0,
-     "seeded": 0.12,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "kernel": {
-     "n_d7": 37,
-     "contrast": 1.817,
-     "r2": 0.486,
-     "min_at_bump": true
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
      "drift": null,
      "tracked": 0
     }
@@ -2082,107 +2174,15 @@
    "perturbations": {
     "d7_silence": {
      "concentration": 0,
-     "seeded": 0.105,
+     "seeded": 0.096,
      "total_rate": 0,
      "width_wedges": 0
     },
     "peg_lesion": {
      "concentration": 0,
-     "seeded": 0.125,
+     "seeded": 0.087,
      "total_rate": 0,
      "width_wedges": 0
-    }
-   }
-  },
-  {
-   "params": {
-    "epgRecur": 6,
-    "d7Gain": 1.3,
-    "epgTonic": 3,
-    "penGain": 1
-   },
-   "hypothesis": "silent",
-   "mechanism": null,
-   "baseline": {
-    "persistence": {
-     "concentration": 0,
-     "seeded": 0.105,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "kernel": {
-     "n_d7": 36,
-     "contrast": 1.771,
-     "r2": 0.552,
-     "min_at_bump": true
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": null,
-     "tracked": 0
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0,
-     "seeded": 0.129,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "peg_lesion": {
-     "concentration": 0,
-     "seeded": 0.107,
-     "total_rate": 0,
-     "width_wedges": 0
-    }
-   }
-  },
-  {
-   "params": {
-    "epgRecur": 6,
-    "d7Gain": 1.3,
-    "epgTonic": 5,
-    "penGain": 1
-   },
-   "hypothesis": "silent",
-   "mechanism": null,
-   "baseline": {
-    "persistence": {
-     "concentration": 0,
-     "seeded": 0.091,
-     "total_rate": 0,
-     "width_wedges": 0
-    },
-    "kernel": {
-     "n_d7": 38,
-     "contrast": 1.704,
-     "r2": 0.661,
-     "min_at_bump": true
-    },
-    "rotL": {
-     "drift": null,
-     "tracked": 0
-    },
-    "rotR": {
-     "drift": -7.114,
-     "tracked": 4
-    }
-   },
-   "perturbations": {
-    "d7_silence": {
-     "concentration": 0.051,
-     "seeded": 0.12,
-     "total_rate": 88.1,
-     "width_wedges": 8
-    },
-    "peg_lesion": {
-     "concentration": 0.083,
-     "seeded": 0.083,
-     "total_rate": 85.7,
-     "width_wedges": 8
     }
    }
   },
@@ -2197,136 +2197,60 @@
    "mechanism": null,
    "baseline": {
     "persistence": {
-     "concentration": 0.076,
-     "seeded": 0.108,
-     "total_rate": 99.167,
-     "width_wedges": 8
+     "concentration": 0.228,
+     "seeded": 0.12,
+     "total_rate": 22.6,
+     "width_wedges": 6
     },
     "kernel": {
-     "n_d7": 34,
-     "contrast": 1.738,
-     "r2": 0.557,
+     "n_d7": 36,
+     "contrast": 1.779,
+     "r2": 0.527,
      "min_at_bump": true
     },
     "rotL": {
-     "drift": -5.374,
+     "drift": -1.856,
      "tracked": 4
     },
     "rotR": {
-     "drift": -10.431,
+     "drift": 6.667,
      "tracked": 4
     }
    },
    "perturbations": {
     "d7_silence": {
-     "concentration": 0.091,
-     "seeded": 0.131,
-     "total_rate": 95.3,
+     "concentration": 0.124,
+     "seeded": 0.125,
+     "total_rate": 93.5,
      "width_wedges": 8
     },
     "peg_lesion": {
-     "concentration": 0.085,
-     "seeded": 0.1,
-     "total_rate": 96.8,
+     "concentration": 0.095,
+     "seeded": 0.134,
+     "total_rate": 101.933,
      "width_wedges": 8
     }
    }
   }
  ],
  "hypothesis_counts": {
-  "silent": 30,
-  "attractor_tonic": 12,
-  "filter": 6
+  "silent": 33,
+  "attractor_tonic": 8,
+  "filter": 7
  },
  "mechanism_counts": {
+  "d7_sculpts_sharp": 4,
   "d7_essential": 3,
-  "d7_sculpts_sharp": 8,
   "d7_confines": 1
  },
  "ranked_experiments": [
   {
-   "experiment": "tonic_sweep",
-   "separation": 0.414,
-   "outcomes": [
-    "decays",
-    "decays",
-    "decays",
-    "sustains",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "sustains",
-    "sustains",
-    "decays",
-    "decays",
-    "sustains",
-    "sustains",
-    "decays",
-    "decays",
-    "sustains",
-    "sustains",
-    "decays",
-    "sustains",
-    "decays",
-    "partial",
-    "decays",
-    "sustains",
-    "sustains",
-    "decays",
-    "decays",
-    "sustains",
-    "decays",
-    "sustains",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "decays"
-   ]
-  },
-  {
    "experiment": "peg_lesion",
-   "separation": 0.37,
+   "separation": 0.423,
    "outcomes": [
     "decays",
     "decays",
     "decays",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "decays",
-    "sustains",
-    "sustains",
-    "decays",
-    "decays",
-    "sustains",
-    "sustains",
-    "decays",
     "sustains",
     "decays",
     "decays",
@@ -2336,15 +2260,37 @@
     "decays",
     "decays",
     "sustains",
+    "decays",
+    "decays",
+    "sustains",
+    "sustains",
+    "decays",
+    "decays",
+    "sustains",
+    "sustains",
+    "decays",
+    "decays",
+    "sustains",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "partial",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "sustains",
+    "decays",
     "sustains",
     "partial",
     "decays",
     "decays",
     "decays",
-    "sustains",
     "decays",
     "decays",
     "sustains",
+    "decays",
     "decays",
     "decays",
     "decays",
@@ -2354,7 +2300,7 @@
   },
   {
    "experiment": "d7_silence",
-   "separation": 0.351,
+   "separation": 0.411,
    "outcomes": [
     "decays",
     "decays",
@@ -2375,19 +2321,11 @@
     "decays",
     "decays",
     "sustains",
-    "decays",
-    "decays",
-    "decays",
-    "sustains",
-    "sustains",
-    "decays",
-    "sustains",
-    "decays",
-    "decays",
-    "decays",
-    "sustains",
-    "decays",
     "partial",
+    "decays",
+    "decays",
+    "sustains",
+    "sustains",
     "decays",
     "sustains",
     "decays",
@@ -2398,71 +2336,79 @@
     "partial",
     "decays",
     "decays",
+    "sustains",
     "decays",
     "decays",
     "decays",
     "decays",
+    "partial",
+    "decays",
+    "decays",
+    "decays",
+    "partial",
+    "decays",
+    "sustains",
     "decays",
     "decays"
    ]
   },
   {
-   "experiment": "unilateral_pen_R",
-   "separation": 0.284,
+   "experiment": "tonic_sweep",
+   "separation": 0.382,
    "outcomes": [
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "rotates",
-    "rotates",
-    "none",
-    "none",
-    "none",
-    "rotates",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "none",
-    "rotates",
-    "none",
-    "none",
-    "rotates",
-    "none",
-    "none",
-    "none",
-    "rotates",
-    "none",
-    "none",
-    "none",
-    "rotates",
-    "rotates"
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "sustains",
+    "sustains",
+    "decays",
+    "decays",
+    "decays",
+    "partial",
+    "decays",
+    "decays",
+    "decays",
+    "sustains",
+    "decays",
+    "sustains",
+    "decays",
+    "partial",
+    "decays",
+    "sustains",
+    "decays",
+    "decays",
+    "decays",
+    "sustains",
+    "decays",
+    "sustains",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "sustains",
+    "decays",
+    "decays",
+    "decays",
+    "decays",
+    "partial"
    ]
   },
   {
    "experiment": "unilateral_pen_L",
-   "separation": 0.12,
+   "separation": 0.254,
    "outcomes": [
     "none",
     "none",
@@ -2479,6 +2425,22 @@
     "none",
     "none",
     "none",
+    "rotates",
+    "none",
+    "none",
+    "rotates",
+    "rotates",
+    "none",
+    "none",
+    "none",
+    "rotates",
+    "none",
+    "rotates",
+    "none",
+    "rotates",
+    "none",
+    "none",
+    "none",
     "none",
     "none",
     "none",
@@ -2495,6 +2457,28 @@
     "none",
     "none",
     "none",
+    "none"
+   ]
+  },
+  {
+   "experiment": "unilateral_pen_R",
+   "separation": 0.156,
+   "outcomes": [
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
     "rotates",
     "none",
     "none",
@@ -2507,6 +2491,22 @@
     "none",
     "none",
     "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "rotates",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "none",
+    "rotates",
     "rotates",
     "none",
     "none",
@@ -2522,8 +2522,8 @@
    "baseline_width_deg": 90.5,
    "maps_to_lif_class": "d7_confines_width",
    "lif_class_counts": {
+    "d7_sculpts_sharp": 4,
     "d7_essential": 3,
-    "d7_sculpts_sharp": 8,
     "d7_confines": 1
    },
    "agrees_with_lif_majority": false,

@@ -1,0 +1,46 @@
+{
+ "spec": {
+  "id": "oa-split",
+  "question": "Which octopamine operator — threshold field, gain field, or typed targets — explains hunger-modulated locomotion?",
+  "operators": [
+   "oa.thrField",
+   "oa.gainField",
+   "oa.thrTyped"
+  ],
+  "splitRule": "starveDist < 0.5 * baseline.starveDist && walk > 0.5 * baseline.walk",
+  "status": "pending"
+ },
+ "ensemble": {
+  "n": 5,
+  "params": [
+   "oaLevel"
+  ],
+  "seed": 5
+ },
+ "observables": [
+  {
+   "id": "starveDist",
+   "where": "arena",
+   "measure": "starveDist",
+   "value": null
+  },
+  {
+   "id": "walk",
+   "where": "arena",
+   "measure": "walkDist",
+   "value": null
+  }
+ ],
+ "members": [],
+ "skipped": [
+  {
+   "perturbation": "oa_silence",
+   "reason": "pending: backend lands with its spec section"
+  },
+  {
+   "perturbation": "oa_gain_half",
+   "reason": "pending: backend lands with its spec section"
+  }
+ ],
+ "ranked": []
+}
