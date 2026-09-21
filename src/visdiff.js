@@ -49,6 +49,26 @@ export { DIFF_PARAMS };
 /** The coupling's own parameters, as shipped in src/sim/vision.js and scripts/calib_eval.mjs. */
 export const COUPLING = { gain: 250, dead: 0.02, cap: 200 };
 
+// S4.4: the shipped coupling is a rectifier under a cap, `rate = min(cap, gain * a)` for
+// a > dead else 0. Its deadband edge jumps 0 -> gain*dead = 5 Hz at a = 0.02, which is
+// discontinuous, so the adjoint through the join has no defined derivative there and finite
+// differences straddling it measure the jump, not the slope. `coupling: 'soft'` replaces both
+// kinks with smooth ones:
+//
+//   rate_soft(a) = inner(gain * a) * sigmoid(K * (a - dead))
+//   inner(x)     = cap - srelu(cap - x, E2)        -- a smooth min(x, cap), knee ~E2 Hz wide
+//   srelu(x, e)  = (x + sqrt(x^2 + e^2)) / 2       -- a smooth relu
+//
+// The gate sigmoid is centred on the deadband with K = 8000, so the 0 -> 5 Hz transition happens
+// inside |a - dead| < ~0.5e-3 rather than at a point. The bands around it comply with the spec:
+// rate < 0.5 Hz for a <= dead - 0.5e-3 and rate = gain*a within ~2% for a >= dead + 0.5e-3. No
+// smooth map can satisfy "0 below dead and 250a above" exactly at the edge -- the error there is
+// bounded by half the jump, which is what scripts/coupling_error.mjs plots. rate_soft(0) = 0 to
+// machine precision (gate underflows), so the soft map invents no drive at rest; the quiet-column
+// floor is measured in coupling_error.mjs, not assumed.
+export const COUPLING_SOFT = { gateK: 8000, capKnee: 0.05 };
+const srelu = (x, e) => 0.5 * (x + Math.sqrt(x * x + e * e));
+
 export class VisualChain {
   /**
    * @param data    CNS graph, as LIFDiff takes it
@@ -109,7 +129,35 @@ export class VisualChain {
   }
 
   /** rate in Hz from an optic-lobe deviation from rest, and whether the gradient survives it */
-  _rate(a) { const { gain, dead, cap } = this.c; if (a <= dead) return 0; return Math.min(cap, gain * a); }
+  _rate(a) {
+    const { gain, dead, cap } = this.c;
+    if (this.c.coupling !== 'soft') { if (a <= dead) return 0; return Math.min(cap, gain * a); }
+    const { gateK, capKnee } = COUPLING_SOFT;
+    const gate = 1 / (1 + Math.exp(-gateK * (a - dead)));
+    const inner = cap - srelu(cap - gain * a, capKnee);
+    return Math.max(0, inner * gate);
+  }
+  /** d(rate)/d(deviation) of the selected coupling. Hard: gain on the live band, 0 off it -- that is
+   *  a property of the coupling, not a numerical convenience. Soft: the product rule of the map above. */
+  _drate(a) {
+    const { gain, dead, cap } = this.c;
+    if (this.c.coupling !== 'soft') return (a <= dead || gain * a >= cap) ? 0 : gain;
+    const { gateK, capKnee } = COUPLING_SOFT;
+    const u = cap - gain * a;
+    const inner = cap - srelu(u, capKnee), dInner = 0.5 * (1 + u / Math.sqrt(u * u + capKnee * capKnee));
+    const gate = 1 / (1 + Math.exp(-gateK * (a - dead)));
+    return gain * dInner * gate + inner * gate * (1 - gate) * gateK;
+  }
+  /** d(rate)/d(gain) -- for the coupling-gain parameter's own gradient */
+  _drateGain(a) {
+    const { gain, dead, cap } = this.c;
+    if (this.c.coupling !== 'soft') return (a <= dead || gain * a >= cap) ? 0 : a;
+    const { gateK, capKnee } = COUPLING_SOFT;
+    const u = cap - gain * a;
+    const dInner = 0.5 * (1 + u / Math.sqrt(u * u + capKnee * capKnee));
+    const gate = 1 / (1 + Math.exp(-gateK * (a - dead)));
+    return a * dInner * gate;
+  }
 
   /**
    * Run the chain. `lum(eye, tSec)` returns luminance per hex column for that eye at that time; it is
@@ -171,14 +219,16 @@ export class VisualChain {
         for (let k = 0; k < P.neuron.length; k++) {
           const a = aAt[off + sl[k]];
           dcount++;
-          // rate = clamp(gain * a): below the deadband and above the cap the derivative is zero, and
-          // that is a real property of the coupling rather than a numerical convenience.
-          if (a <= dead || gain * a >= cap) continue;
-          live++;
+          // the coupling's own derivative decides which pair-steps transmit gradient: under 'hard'
+          // that is the live band only (a property of the coupling, not a numerical convenience);
+          // under 'soft' the map is C1 and every pair-step contributes its analytic slope.
+          const dr = this._drate(a);
+          if (dr === 0) continue;
+          if (a > dead && gain * a < cap) live++;
           const dR = gDrive[off + sl[k]];
           if (dR === 0) continue;
-          gGain += dR * a;
-          dLdV[s][vo + P.node[k]] += dR * gain;
+          gGain += dR * this._drateGain(a);
+          dLdV[s][vo + P.node[k]] += dR * dr;
         }
       }
     }

@@ -403,3 +403,8 @@ armed: any future regression is a test failure, not a tolerance judgement call.
 ```
 node --max-old-space-size=14000 scripts/twin_audit.mjs   # the gate; writes public/data/twin_audit.json
 ```
+
+With the twin honest, the remaining blockers were the coupling's deadband (no gradient below it) and
+the reverse kernel's stability at full scale. [Doc 41](41-visual-adjoint.md) covers what fixing those
+took — a C¹ coupling shipped next to the hard one, adjoint clipping, a falsified typed-surrogate
+hypothesis — and what the first permitted fit then produced.

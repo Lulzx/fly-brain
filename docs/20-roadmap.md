@@ -541,6 +541,13 @@ cannot reach, but it is now a method in search of a target rather than a fix for
 belongs with [B1](20-roadmap.md) and [C1](20-roadmap.md) where there is an objective with enough
 dimensions to need it.
 
+The gradient route has since been tried on the escape chain itself and returned a null:
+[doc 41](41-visual-adjoint.md) fits the six `logGain`s of the GF/takeoff-DN output stage in the
+differentiable twin, watches it converge, and then measures the fitted table in the shipped kernel —
+where it moves nothing beyond seed noise, because a neuron's outgoing gain cannot change its own
+spike count except through recurrence. The lever that could move the loom metrics sits on the input
+side of those neurons.
+
 **What the repair did not fix** is the subject of A7 below.
 
 ### A4. Uncertainty inside the objective, not beside it
@@ -577,6 +584,11 @@ and two of them do not survive:
   rather than by how active the network is. Measured on the whole CNS, the adjoint state is nonzero at
   3.5% of neurons per step with a 25-step window and 13.3% with the full window — bounded at ~7× the
   neuron loops, and nothing at all on the CSR traversal, which is not neuron-indexed.
+- **Stability at full scale needed two more mechanisms** ([doc 41](41-visual-adjoint.md)): the optic
+  lobe tape is checkpointed every 4 steps against the CNS's 16, the carried adjoint is clipped in
+  log-space (`adjClip`), and the surrogate width that passes the 150-vs-600-step cosine gate is a
+  *global* β = 10 — the typed-split hypothesis (wide on visual projection neurons, narrow elsewhere)
+  fails the gate in every tested configuration.
 - **WebGPU for the adjoint** ([doc 27](27-webgpu.md)) is what is left, and it is still the right target:
   the remaining cost is one pass over eleven 165,122-element arrays per step plus a scatter over 10.5 M
   edges, both of which are exactly the shape a GPU wants.

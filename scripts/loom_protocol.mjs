@@ -137,7 +137,7 @@ const arg = k => { const a = process.argv.find(x => x.startsWith(`--${k}=`)); re
 const flag = k => process.argv.includes(`--${k}`);
 const WORKER = !!process.env.LOOM_WORKER;
 let MJ_WASM = null;
-async function ensureLoaded() { if (!MJ_WASM) MJ_WASM = { mj: await loadMujoco(), wasm: fs.readFileSync('public/lif.wasm') }; }
+export async function ensureLoaded() { if (!MJ_WASM) MJ_WASM = { mj: await loadMujoco(), wasm: fs.readFileSync('public/lif.wasm') }; }
 
 if (WORKER) {
   await ensureLoaded();

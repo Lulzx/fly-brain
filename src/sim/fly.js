@@ -47,7 +47,7 @@ export class FlyAgent {
     this.lc10 = { left: [], right: [] };
     for (let i = 0; i < typeOf.length; i++) if (/^LC10[ad]$/.test(typeOf[i])) this.lc10[sideOf[i] === 2 ? 'right' : 'left'].push(i);
     // vision: flyvis optic-lobe model driving the male-CNS optic lobe (if provided), else the simple photoreceptor eye
-    this.fv = vision && flyvis ? new FlyVisionFV(mj, M, this.mjd, bodymap, flyvis.map, flyvis.eyes, this.bid.head, this.bid.thorax, flyvis.gain ?? 150, flyvis.vRest || null) : null;
+    this.fv = vision && flyvis ? new FlyVisionFV(mj, M, this.mjd, bodymap, flyvis.map, flyvis.eyes, this.bid.head, this.bid.thorax, flyvis.gain ?? 150, flyvis.vRest || null, flyvis.coupling || 'hard') : null;
     this.eye = vision && !this.fv ? new CompoundEye(mj, M, this.mjd, bodymap, this.bid.head, this.bid.thorax) : null;
     this.motor = new Motor(mj, M, this.mjd, bodymap, typeOf, sideOf, gait, mode, brainOpts);
     this.intrinsic = intrinsic ? new Intrinsic(typeOf, sideOf, id + 1 + (seed || 0), bodymap.feeding) : null;
