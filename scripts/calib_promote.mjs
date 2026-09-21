@@ -52,6 +52,8 @@ const out = {
   _benchmarks: bench,
   _terms: terms,
   _source: `scripts/calib_search.mjs: CEM, 20 gens x 24, neuromodulation on (fed OA tone); promoted by scripts/calib_promote.mjs${note ? '; ' + note : ''}`,
+  // the scaffold switches are not a searched parameter; keep whatever the previous file had
+  scaffolds: cfg.scaffolds ?? prev?.scaffolds ?? {},
 };
 fs.writeFileSync('public/data/brain_params.json', JSON.stringify(out, null, 1) + '\n');
 console.log(`\nselected ${out._score}  honest ${out._rescore.mean} +- ${out._rescore.sem}  (n=${N})`);

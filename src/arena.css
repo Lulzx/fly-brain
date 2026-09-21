@@ -46,3 +46,5 @@ a { color: var(--acc); }
 #groups .v .l, #groups .v .r { background: none; display: block; }
 #groups .info { grid-column: 1 / -1; color: var(--dim); font-size: 11.5px; padding: 2px 0 4px 14px; }
 #brain { flex: none; width: 100%; height: 220px; border-top: 1px solid var(--line); background: rgba(5,7,12,.6); }
+#scaffolds { display: grid; grid-template-columns: 1fr 1fr; gap: 1px 10px; font-size: 12px; }
+#scaffolds .scf { display: flex; align-items: center; gap: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

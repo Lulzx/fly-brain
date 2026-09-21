@@ -34,6 +34,7 @@ onmessage = async (e) => {
   else if (m.type === 'env') { Object.assign(env, m.env); fly.env = env; if (fly.foodEaten.length !== env.food.length) fly.foodEaten = env.food.map(() => 0); }
   else if (m.type === 'others') { others = m.others; fly.others = others; setProxies(); }
   else if (m.type === 'mode') fly.motor.mode = m.mode;
+  else if (m.type === 'scaffolds') fly.setScaffolds(m.scaffolds);
   else if (m.type === 'stimulate') fly.brain.setDrive(m.indices, m.rate);
   else if (m.type === 'takeoff') { fly.requestTakeoff(); postPose(); }
   else if (m.type === 'activity') {

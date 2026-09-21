@@ -10,6 +10,7 @@
  "adaptInc": 0.072,
  "tRef": 3.682,
  "laminaBias": 2.86,
+ "scaffolds": {},
  "_score": 0.78,
  "_rescore": {
   "mean": 0.7944,

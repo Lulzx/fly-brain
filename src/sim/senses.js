@@ -1,6 +1,7 @@
 // Sensory transduction: physical state of the body and world -> firing rates of identified sensory neurons.
 // Every channel drives real connectome neurons (bodymap.json); transduction curves are simple, documented
 // physiology approximations (saturating concentration responses, contrast-adapting photoreceptors).
+import { createScaffoldSet } from './scaffold/index.js';
 export const ODORANTS = {
   // odor -> activated glomeruli (receptor neurons) with relative sensitivity
   vinegar: { DM1: 1.0, DM4: 0.8, VA2: 0.7, DP1m: 0.9, DM2: 0.5, VM2: 0.4, DL1: 0.3 },   // Or42b, Or59b, Or92a, Ir64a...
@@ -10,7 +11,8 @@ export const ODORANTS = {
   pheromone: { DA1: 1.0, VA1v: 0.7, VA1d: 0.5 },                                        // cVA (Or67d), fly odours
 };
 export const ORN_SPONTANEOUS = 6;   // Hz, ORN baseline firing
-export const REAFFERENCE = 0.85;    // fraction of footfall touch signal cancelled while stepping
+// The footfall reafference gain (0.85) is now the `reafference` scaffold plugin's parameter
+// (src/sim/scaffold/plugins/reafference.js); it is applied below where the tactile burst is written.
 export const AL_NORM = 600;         // GABA_B presynaptic gain control: total evoked ORN drive per antenna (Hz)
                                     // divisively normalises every ORN's output (Olsen & Wilson 2008, Curr Opin
                                     // Neurobiol 18:83). The glomerular pattern is preserved; the total is bounded,
@@ -20,6 +22,9 @@ export const FLY_ODOR = { strength: 0.9, sigma: 0.28 };   // another fly is a sh
 export class Senses {
   constructor(bodymap, mj, model) {
     this.bm = bodymap; this.mj = mj; this.model = model;
+    // the reafference gain is a scaffold plugin; FlyAgent replaces this default all-on set with the
+    // one shared by the whole animal
+    this.scaffolds = createScaffoldSet();
     const S = {}; for (const s of bodymap.sensors) S[s.name] = s.idx; this.S = S;
     const T = (re) => bodymap.sensors.filter(s => re.test(s.name));
     // taste channels by tastant (Cell 2026 gustatory connectome identities)
@@ -91,8 +96,10 @@ export class Senses {
       if (on !== this.touchPrev[key]) this.touchBurst[key] = 1; this.touchPrev[key] = on;
       this.touchBurst[key] *= Math.exp(-dtMs / 15);
       // reafference: the stepping generator's efference copy presynaptically inhibits tarsal afferents during
-      // self-generated steps, so footfalls are not mistaken for external touch (st.stepping: 0 still .. 1 walking)
-      if (this.touchBurst[key] > 0.05) this.set(this.tarsal[key] || [], 180 * this.touchBurst[key] * (1 - REAFFERENCE * (st.stepping || 0)));
+      // self-generated steps, so footfalls are not mistaken for external touch (st.stepping: 0 still .. 1 walking).
+      // The cancellation is the `reafference` scaffold plugin; off, footfalls arrive at full strength.
+      const burst = this.touchBurst[key];
+      if (burst > 0.05) this.set(this.tarsal[key] || [], 180 * (this.scaffolds?.reafference ? this.scaffolds.reafference.cancel(burst, st.stepping || 0) : burst));
       if (touch > 0) {
         const p = st.claw[key], f = onPatch(p, env.food), b = onPatch(p, env.bitterPatches);
         if (f && f.amount > 0) st.sugar = Math.max(st.sugar, f.sugar);

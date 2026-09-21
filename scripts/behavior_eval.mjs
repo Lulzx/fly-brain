@@ -62,6 +62,22 @@ const SCENARIOS = {
   heat: { secs: 4, setup: env => [[env.hazards[0].x, env.hazards[0].y], 0] },
   bitter: { secs: 4, setup: env => [[env.bitterPatches[0].x - 0.05, env.bitterPatches[0].y], 0] },
 };
+// Isolated assays for the scaffold ledger (docs/37-scaffold-ledger.md): not part of the default
+// five, so the behaviour benchmark is unchanged. A condition opts in with cfg.scenarios, e.g.
+// scenarios: ['forage', 'starveWalk'].
+const ASSAYS = {
+  // connectome motor mode with no stepping generator: can the VNC alone hold posture for 2 s?
+  stand_2s: { secs: 2, setup: env => [[0, 0], 0], mode: 'connectome' },
+  // an expanding disk in open space: the escape assay without obstacles or competing stimuli, so
+  // the loom is the only drive and the wall the escape gate exists for is far away
+  loom_disk: { secs: 4, setup: env => { env.obstacles = []; env.hazards = []; env.food = []; env.odors = []; env.bitterPatches = []; return [[0, 0], 0]; }, threatAt: 2000, loomMs: 700 },
+  // a starved fly in the forage arena: distance covered is the hunger-locomotion discriminator
+  starveWalk: { secs: 20, setup: env => [[-0.2, 0.6], 0], energy: 0.15 },
+  // a male 1.2 mm behind a female decoy: detection -> chase -> song (courtship plugin + LC10 channel)
+  court: { secs: 6, setup: env => [[0, 0], 0], others: [{ x: 0.7, y: 0, yaw: Math.PI, sex: 'f' }] },
+  // a female agent with a male decoy at close range behind her: decamp runs and kicks
+  reject: { secs: 6, setup: env => [[0, 0], 0], sex: 'f', others: [{ x: -0.2, y: 0, yaw: 0, sex: 'm', singing: true }] },
+};
 
 const clamp = x => Math.max(0, Math.min(1, x));
 const mean = a => a.length ? a.reduce((x, y) => x + y, 0) / a.length : 0;
@@ -72,10 +88,15 @@ async function runSeed(cfg, seed) {
   const data = (o.wBinary || o.wShuffle || o.wEB) ? { ...DATA, weights: weightsFor({ ...o, seed }) } : DATA;
   const mem = allocBrainMemory(data, SIZE, o.signFree ? ALL_EXC : SIGN, o, 1, VISION);
   const brain = await attachBrain(WASM, mem, 0, data, (seed * 2654435761) >>> 0); brain.reset();
-  const obs = { flipMs: 0, totalMs: 0, alive: 1, foodDist: 1e9, feedLatency: null, escapes: 0, walkBouts: [], schedBouts: [] };
+  const obs = { flipMs: 0, totalMs: 0, alive: 1, foodDist: 1e9, feedLatency: null, escapes: 0, walkBouts: [], schedBouts: [], byScenario: {} };
   const mnSpikes = Object.fromEntries(Object.keys(POOLS).map(k => [k, 0]));   // spikes per pool, summed over scenarios
   let mnMs = 0;
-  for (const [name, sc] of Object.entries(SCENARIOS)) {
+  const scenarioSet = o.scenarios ? Object.fromEntries(o.scenarios.map(n => {
+    const sc = SCENARIOS[n] || ASSAYS[n];
+    if (!sc) throw new Error(`unknown scenario '${n}' (known: ${Object.keys(SCENARIOS).concat(Object.keys(ASSAYS)).join(', ')})`);
+    return [n, sc];
+  })) : SCENARIOS;
+  for (const [name, sc] of Object.entries(scenarioSet)) {
     // Each scenario starts from a clean brain and fresh eyes, as scripts/behavior_report.mjs does by
     // building a new fly per scenario: a stale membrane potential or a stale eye state would make the
     // scenarios order-dependent, and the order is an implementation detail.
@@ -85,9 +106,12 @@ async function runSeed(cfg, seed) {
     const [pos, yaw] = sc.setup(env);
     const fly = new FlyAgent({ mj: MJ, flyXML: FLYXML, env, data, size: SIZE, sign: SIGN, bodymap: D.bodymap, gait: GAIT,
       brain, brainOpts: o, neuromod: o.neuromod === false ? null : NEUROMOD, pos, yaw, vision: true, intrinsic: true, seed, id: 1,
+      mode: sc.mode || 'descending', sex: sc.sex || 'm',
       flyvis: { eyes: attachEyes(brain.instance, mem, 0), map: VISION.map, gain: 150 } });
-    fly.others = [];
+    fly.others = sc.others || [];
+    if (sc.energy !== undefined) fly.energy = sc.energy;
     let H = null, fed = false, escaped = false, running = 0, lastMoving = false, schedRun = 0, lastSchedWalk = false;
+    let scFlipMs = 0, scGroomMs = 0, scTurnMs = 0, scCourtMs = 0, scFoodMin = 1e9;
     for (let s = 1; s <= sc.secs * 1000; s++) {
       if (sc.threatAt) {
         if (s === sc.threatAt) { const st = fly.state(); H = { p: st.pos, a: Math.atan2(fly.mjd.xmat[fly.bid.thorax * 9 + 3], fly.mjd.xmat[fly.bid.thorax * 9]) + 0.6 }; }
@@ -98,9 +122,14 @@ async function runSeed(cfg, seed) {
       if (s % 20 === 0) {
         const st = fly.state(), b = fly.behavior(st);
         obs.totalMs += 20;
-        if (b === 'righting') obs.flipMs += 20;
+        if (b === 'righting') { obs.flipMs += 20; scFlipMs += 20; }
+        if (b === 'grooming') scGroomMs += 20;
+        if (/^turning/.test(b)) scTurnMs += 20;
+        if (fly.intrinsic?.state === 'court') scCourtMs += 20;
         if (b === 'feeding' && !fed) { fed = true; if (name === 'onfood') obs.feedLatency = s; }
-        if (name === 'forage') obs.foodDist = Math.min(obs.foodDist, Math.hypot(st.pos[0] - env.food[0].x, st.pos[1] - env.food[0].y));
+        const fDist = env.food.length ? Math.hypot(st.pos[0] - env.food[0].x, st.pos[1] - env.food[0].y) : 1e9;
+        if (name === 'forage') obs.foodDist = Math.min(obs.foodDist, fDist);
+        scFoodMin = Math.min(scFoodMin, fDist);
         // Two bout measurements, and the gap between them is the point. `sched` is the supplied
         // scheduler's own walk state, which is the quantity docs/23-behaviour.md calibrates to a 2.2 s
         // median. `body` is what the animal actually did, read off the motor command, which is also
@@ -119,7 +148,7 @@ async function runSeed(cfg, seed) {
         if (sw) schedRun += 20;
         else if (lastSchedWalk && schedRun > 0) { obs.schedBouts.push(schedRun); schedRun = 0; }
         lastSchedWalk = sw;
-        if (name === 'threat' && !escaped && (fly.jumps > 0 || fly.flight.active)) escaped = true;
+        if ((name === 'threat' || name === 'loom_disk') && !escaped && (fly.jumps > 0 || fly.flight.active)) escaped = true;
       }
     }
     for (const [k, p] of Object.entries(POOLS)) { let n = 0; for (const i of p.idx) n += brain.spikeCount[i] - mnPrev[i]; mnSpikes[k] += n; }
@@ -127,7 +156,12 @@ async function runSeed(cfg, seed) {
     if (running > 0) obs.walkBouts.push(running);
     if (schedRun > 0) obs.schedBouts.push(schedRun);
     if (!fly.alive) obs.alive = 0;
-    if (name === 'threat') obs.escapes = escaped ? 1 : 0;
+    if (name === 'threat' || name === 'loom_disk') obs.escapes = Math.max(obs.escapes, escaped ? 1 : 0);
+    // per-scenario observables for the scaffold ledger: each behaviour reads its own assay, so the
+    // kill matrix can attribute a collapse to a mechanism rather than to a shared score
+    obs.byScenario[name] = { ms: sc.secs * 1000, flipMs: scFlipMs, groomMs: scGroomMs, turnMs: scTurnMs, courtMs: scCourtMs,
+      dist: fly.dist, foodMin: scFoodMin > 1e8 ? null : scFoodMin, fed, feedLatency: name === 'onfood' && fed ? obs.feedLatency : null,
+      escapes: escaped ? 1 : 0, rejections: fly.intrinsic?.rejections || 0, kicks: fly.intrinsic?.kicks || 0, alive: fly.alive ? 1 : 0 };
     // The agent owns ~28 MB of emscripten heap that the collector never sees; five scenarios per
     // evaluation and dozens of evaluations per worker reach the 2 GB heap limit without this.
     fly.dispose();
@@ -166,6 +200,20 @@ export function scoreObs(obs) {
   return { score, terms: t, obs };
 }
 
+// byScenario is a nested map; merge it by averaging each field across seeds rather than feeding it
+// to mean() (numbers only; nulls are skipped, booleans become fractions of seeds)
+const mergeByScenario = runs => {
+  const out = {};
+  for (const r of runs) for (const [n, so] of Object.entries(r.obs.byScenario || {})) {
+    const acc = out[n] ||= {};
+    for (const [k, v] of Object.entries(so)) {
+      if (v == null) continue;
+      acc[k] = (acc[k] || 0) + (typeof v === 'boolean' ? +v : v) / runs.length;
+    }
+  }
+  return out;
+};
+
 export async function evaluate(cfg, seeds = [cfg.seed ?? 1000]) {
   const runs = [];
   for (const s of seeds) runs.push(scoreObs(await runSeed(cfg, s)));
@@ -173,7 +221,8 @@ export async function evaluate(cfg, seeds = [cfg.seed ?? 1000]) {
   return {
     score: pick(r => r.score),
     terms: Object.fromEntries(Object.keys(runs[0].terms).map(k => [k, pick(r => r.terms[k])])),
-    obs: Object.fromEntries(Object.keys(runs[0].obs).map(k => [k, pick(r => r.obs[k])])),
+    obs: Object.fromEntries(Object.keys(runs[0].obs).map(k => [k,
+      k === 'byScenario' ? mergeByScenario(runs) : pick(r => r.obs[k])])),
   };
 }
 
