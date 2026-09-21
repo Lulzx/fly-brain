@@ -1,63 +1,3919 @@
 {
  "_source": "scripts/wing_mn.mjs",
- "seconds": 6,
+ "descendingTypes": [
+  {
+   "type": "DNg100",
+   "cells": 2,
+   "ground": 1.91,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNpe013",
+   "cells": 2,
+   "ground": 0.27,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNp30",
+   "cells": 2,
+   "ground": 0.14,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNpe042",
+   "cells": 2,
+   "ground": 0.82,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNg74_a",
+   "cells": 2,
+   "ground": 0.27,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNg15",
+   "cells": 2,
+   "ground": 1.37,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNge036",
+   "cells": 2,
+   "ground": 0.14,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNge037",
+   "cells": 2,
+   "ground": 4.1,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNp55",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0.12,
+   "contrast": 1,
+   "r_turn": 0.082
+  },
+  {
+   "type": "DNp103",
+   "cells": 2,
+   "ground": 0.55,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNge050",
+   "cells": 2,
+   "ground": 0.55,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNg40",
+   "cells": 2,
+   "ground": 0.27,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNde002",
+   "cells": 2,
+   "ground": 0.41,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNge035",
+   "cells": 2,
+   "ground": 0.14,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNp08",
+   "cells": 2,
+   "ground": 0.82,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNg88",
+   "cells": 2,
+   "ground": 0.14,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNp70",
+   "cells": 2,
+   "ground": 0.68,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNge040",
+   "cells": 2,
+   "ground": 6.28,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNp43",
+   "cells": 2,
+   "ground": 0.68,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNpe052",
+   "cells": 2,
+   "ground": 0.14,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNge059",
+   "cells": 2,
+   "ground": 5.6,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNp38",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0.12,
+   "contrast": 1,
+   "r_turn": -0.082
+  },
+  {
+   "type": "DNp48",
+   "cells": 2,
+   "ground": 0.41,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNge132",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0.12,
+   "contrast": 1,
+   "r_turn": -0.061
+  },
+  {
+   "type": "DNp23",
+   "cells": 2,
+   "ground": 0.27,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNge062",
+   "cells": 2,
+   "ground": 2.87,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNge049",
+   "cells": 2,
+   "ground": 0.96,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNg39",
+   "cells": 2,
+   "ground": 0.14,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNpe045",
+   "cells": 2,
+   "ground": 0.41,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNa11",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0.12,
+   "contrast": 1,
+   "r_turn": 0.082
+  },
+  {
+   "type": "DNge032",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0.12,
+   "contrast": 1,
+   "r_turn": -0.082
+  },
+  {
+   "type": "DNge067",
+   "cells": 2,
+   "ground": 0.27,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNge026",
+   "cells": 2,
+   "ground": 1.37,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNp71",
+   "cells": 2,
+   "ground": 0.68,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNg32",
+   "cells": 2,
+   "ground": 0,
+   "flight": 1.38,
+   "contrast": 1,
+   "r_turn": -0.071
+  },
+  {
+   "type": "DNge051",
+   "cells": 2,
+   "ground": 6.83,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNpe007",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0.12,
+   "contrast": 1,
+   "r_turn": -0.021
+  },
+  {
+   "type": "DNpe043",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0.81,
+   "contrast": 1,
+   "r_turn": -0.166
+  },
+  {
+   "type": "DNd05",
+   "cells": 2,
+   "ground": 0.14,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNp54",
+   "cells": 2,
+   "ground": 0.96,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNge042",
+   "cells": 2,
+   "ground": 4.51,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNge048",
+   "cells": 2,
+   "ground": 0.27,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNg60",
+   "cells": 2,
+   "ground": 1.09,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNge043",
+   "cells": 2,
+   "ground": 1.91,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNg27",
+   "cells": 2,
+   "ground": 0.14,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNge065",
+   "cells": 2,
+   "ground": 0.96,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNd03",
+   "cells": 2,
+   "ground": 0.14,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNpe021",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0.23,
+   "contrast": 1,
+   "r_turn": -0.117
+  },
+  {
+   "type": "DNpe005",
+   "cells": 2,
+   "ground": 0.27,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNp24",
+   "cells": 2,
+   "ground": 0.14,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNp64",
+   "cells": 2,
+   "ground": 0.27,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNde007",
+   "cells": 2,
+   "ground": 0.41,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNpe050",
+   "cells": 2,
+   "ground": 0.14,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNge023",
+   "cells": 2,
+   "ground": 5.46,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNg38",
+   "cells": 2,
+   "ground": 5.05,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNg91",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0.58,
+   "contrast": 1,
+   "r_turn": -0.186
+  },
+  {
+   "type": "DNge135",
+   "cells": 2,
+   "ground": 0.14,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNge136",
+   "cells": 4,
+   "ground": 0.61,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNg84",
+   "cells": 2,
+   "ground": 0,
+   "flight": 1.27,
+   "contrast": 1,
+   "r_turn": 0.125
+  },
+  {
+   "type": "DNg109",
+   "cells": 2,
+   "ground": 2.32,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNg43",
+   "cells": 2,
+   "ground": 0.14,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNp67",
+   "cells": 2,
+   "ground": 1.64,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNge080",
+   "cells": 2,
+   "ground": 5.05,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNge140",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0.58,
+   "contrast": 1,
+   "r_turn": 0.009
+  },
+  {
+   "type": "DNge007",
+   "cells": 2,
+   "ground": 0.14,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNge148",
+   "cells": 2,
+   "ground": 0.27,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNge100",
+   "cells": 2,
+   "ground": 0.82,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNge124",
+   "cells": 2,
+   "ground": 0.55,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNge128",
+   "cells": 2,
+   "ground": 0.82,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNge069",
+   "cells": 2,
+   "ground": 9.02,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNpe003",
+   "cells": 4,
+   "ground": 0.34,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNg44",
+   "cells": 2,
+   "ground": 8.33,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNge070",
+   "cells": 2,
+   "ground": 3.28,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNge098",
+   "cells": 2,
+   "ground": 5.05,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNpe020",
+   "cells": 2,
+   "ground": 0.27,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNge137",
+   "cells": 3,
+   "ground": 12.66,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNge076",
+   "cells": 2,
+   "ground": 0.14,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNge133",
+   "cells": 2,
+   "ground": 11.89,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNg81",
+   "cells": 2,
+   "ground": 0.27,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNge038",
+   "cells": 2,
+   "ground": 0.41,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNge008",
+   "cells": 2,
+   "ground": 0.55,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNg63",
+   "cells": 2,
+   "ground": 1.91,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNg76",
+   "cells": 2,
+   "ground": 0.27,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNge173",
+   "cells": 2,
+   "ground": 3.83,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNge077",
+   "cells": 2,
+   "ground": 0.82,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNpe040",
+   "cells": 2,
+   "ground": 0.27,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNpe028",
+   "cells": 2,
+   "ground": 0.14,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNg72",
+   "cells": 4,
+   "ground": 0.07,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNg47",
+   "cells": 2,
+   "ground": 1.78,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNg46",
+   "cells": 2,
+   "ground": 0.14,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNge081",
+   "cells": 2,
+   "ground": 1.37,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNg107",
+   "cells": 2,
+   "ground": 3.01,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNa07",
+   "cells": 2,
+   "ground": 0,
+   "flight": 1.04,
+   "contrast": 1,
+   "r_turn": 0.251
+  },
+  {
+   "type": "DNge174",
+   "cells": 2,
+   "ground": 3.42,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNxl114",
+   "cells": 2,
+   "ground": 0.41,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNge105",
+   "cells": 2,
+   "ground": 3.01,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNg03",
+   "cells": 12,
+   "ground": 0.05,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNge144",
+   "cells": 2,
+   "ground": 0.14,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNpe009",
+   "cells": 6,
+   "ground": 0.5,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNpe012_b",
+   "cells": 4,
+   "ground": 0.07,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNg67",
+   "cells": 2,
+   "ground": 4.64,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNge114",
+   "cells": 6,
+   "ground": 0,
+   "flight": 0.04,
+   "contrast": 1,
+   "r_turn": -0.082
+  },
+  {
+   "type": "DNge092",
+   "cells": 4,
+   "ground": 0,
+   "flight": 0.58,
+   "contrast": 1,
+   "r_turn": -0.014
+  },
+  {
+   "type": "DNge116",
+   "cells": 4,
+   "ground": 0,
+   "flight": 0.23,
+   "contrast": 1,
+   "r_turn": -0.022
+  },
+  {
+   "type": "DNg18_b",
+   "cells": 6,
+   "ground": 0,
+   "flight": 0.69,
+   "contrast": 1,
+   "r_turn": 0.07
+  },
+  {
+   "type": "DNpe024",
+   "cells": 2,
+   "ground": 0.27,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNp56",
+   "cells": 2,
+   "ground": 1.91,
+   "flight": 0,
+   "contrast": -1,
+   "r_turn": null
+  },
+  {
+   "type": "DNg97",
+   "cells": 2,
+   "ground": 30.87,
+   "flight": 0.23,
+   "contrast": -0.985,
+   "r_turn": -0.012
+  },
+  {
+   "type": "DNge153",
+   "cells": 2,
+   "ground": 14.21,
+   "flight": 0.12,
+   "contrast": -0.984,
+   "r_turn": -0.06
+  },
+  {
+   "type": "DNb08",
+   "cells": 4,
+   "ground": 3.55,
+   "flight": 0.06,
+   "contrast": -0.968,
+   "r_turn": -0.082
+  },
+  {
+   "type": "DNge106",
+   "cells": 2,
+   "ground": 5.74,
+   "flight": 0.12,
+   "contrast": -0.961,
+   "r_turn": 0.031
+  },
+  {
+   "type": "DNge034",
+   "cells": 2,
+   "ground": 5.19,
+   "flight": 0.12,
+   "contrast": -0.957,
+   "r_turn": 0.015
+  },
+  {
+   "type": "aSP22",
+   "cells": 2,
+   "ground": 4.23,
+   "flight": 0.12,
+   "contrast": -0.947,
+   "r_turn": -0.061
+  },
+  {
+   "type": "DNpe029",
+   "cells": 4,
+   "ground": 5.33,
+   "flight": 0.17,
+   "contrast": -0.937,
+   "r_turn": 0.06
+  },
+  {
+   "type": "DNg92_b",
+   "cells": 4,
+   "ground": 0.07,
+   "flight": 1.79,
+   "contrast": 0.926,
+   "r_turn": 0.224
+  },
+  {
+   "type": "DNg09_a",
+   "cells": 6,
+   "ground": 0.14,
+   "flight": 2.76,
+   "contrast": 0.906,
+   "r_turn": -0.125
+  },
+  {
+   "type": "DNge181",
+   "cells": 4,
+   "ground": 0.41,
+   "flight": 8.24,
+   "contrast": 0.905,
+   "r_turn": -0.156
+  },
+  {
+   "type": "DNg103",
+   "cells": 2,
+   "ground": 8.74,
+   "flight": 0.46,
+   "contrast": -0.9,
+   "r_turn": -0.022
+  },
+  {
+   "type": "DNp66",
+   "cells": 2,
+   "ground": 0.14,
+   "flight": 2.53,
+   "contrast": 0.898,
+   "r_turn": 0.014
+  },
+  {
+   "type": "DNge107",
+   "cells": 2,
+   "ground": 1.37,
+   "flight": 21.08,
+   "contrast": 0.878,
+   "r_turn": 0.332
+  },
+  {
+   "type": "DNp03",
+   "cells": 2,
+   "ground": 1.64,
+   "flight": 0.12,
+   "contrast": -0.869,
+   "r_turn": -0.021
+  },
+  {
+   "type": "DNg05_a",
+   "cells": 2,
+   "ground": 2.19,
+   "flight": 27.65,
+   "contrast": 0.853,
+   "r_turn": 0.007
+  },
+  {
+   "type": "DNpe031",
+   "cells": 4,
+   "ground": 0.68,
+   "flight": 0.06,
+   "contrast": -0.844,
+   "r_turn": -0.082
+  },
+  {
+   "type": "DNge030",
+   "cells": 2,
+   "ground": 3.01,
+   "flight": 34.68,
+   "contrast": 0.84,
+   "r_turn": -0.131
+  },
+  {
+   "type": "DNge010",
+   "cells": 2,
+   "ground": 10.25,
+   "flight": 0.92,
+   "contrast": -0.835,
+   "r_turn": 0.022
+  },
+  {
+   "type": "DNg50",
+   "cells": 2,
+   "ground": 1.91,
+   "flight": 20.74,
+   "contrast": 0.831,
+   "r_turn": -0.222
+  },
+  {
+   "type": "DNp72",
+   "cells": 2,
+   "ground": 1.91,
+   "flight": 16.71,
+   "contrast": 0.795,
+   "r_turn": -0.207
+  },
+  {
+   "type": "DNg08",
+   "cells": 23,
+   "ground": 0.71,
+   "flight": 6.01,
+   "contrast": 0.788,
+   "r_turn": -0.136
+  },
+  {
+   "type": "DNp58",
+   "cells": 2,
+   "ground": 1.78,
+   "flight": 0.23,
+   "contrast": -0.77,
+   "r_turn": 0.087
+  },
+  {
+   "type": "DNp60",
+   "cells": 2,
+   "ground": 2.6,
+   "flight": 0.35,
+   "contrast": -0.765,
+   "r_turn": 0.143
+  },
+  {
+   "type": "DNge013",
+   "cells": 2,
+   "ground": 2.6,
+   "flight": 0.35,
+   "contrast": -0.765,
+   "r_turn": -0.061
+  },
+  {
+   "type": "DNde003",
+   "cells": 4,
+   "ground": 2.53,
+   "flight": 0.35,
+   "contrast": -0.759,
+   "r_turn": 0.068
+  },
+  {
+   "type": "DNge184",
+   "cells": 2,
+   "ground": 6.56,
+   "flight": 0.92,
+   "contrast": -0.754,
+   "r_turn": -0.179
+  },
+  {
+   "type": "DNp07",
+   "cells": 2,
+   "ground": 3.14,
+   "flight": 0.46,
+   "contrast": -0.744,
+   "r_turn": -0.166
+  },
+  {
+   "type": "DNp41",
+   "cells": 4,
+   "ground": 2.8,
+   "flight": 18.72,
+   "contrast": 0.74,
+   "r_turn": 0.29
+  },
+  {
+   "type": "DNge102",
+   "cells": 2,
+   "ground": 3.01,
+   "flight": 0.46,
+   "contrast": -0.734,
+   "r_turn": 0
+  },
+  {
+   "type": "DNg19",
+   "cells": 2,
+   "ground": 18.58,
+   "flight": 2.88,
+   "contrast": -0.732,
+   "r_turn": -0.053
+  },
+  {
+   "type": "DNp42",
+   "cells": 2,
+   "ground": 0.68,
+   "flight": 0.12,
+   "contrast": -0.711,
+   "r_turn": -0.082
+  },
+  {
+   "type": "DNge111",
+   "cells": 6,
+   "ground": 4.46,
+   "flight": 26.19,
+   "contrast": 0.709,
+   "r_turn": -0.269
+  },
+  {
+   "type": "DNb04",
+   "cells": 2,
+   "ground": 3.83,
+   "flight": 20.97,
+   "contrast": 0.691,
+   "r_turn": -0.122
+  },
+  {
+   "type": "DNa01",
+   "cells": 2,
+   "ground": 7.51,
+   "flight": 39.29,
+   "contrast": 0.679,
+   "r_turn": 0.766
+  },
+  {
+   "type": "DNge091",
+   "cells": 14,
+   "ground": 4.78,
+   "flight": 24.28,
+   "contrast": 0.671,
+   "r_turn": -0.317
+  },
+  {
+   "type": "DNg23",
+   "cells": 2,
+   "ground": 0.14,
+   "flight": 0.69,
+   "contrast": 0.67,
+   "r_turn": 0.075
+  },
+  {
+   "type": "pMP2",
+   "cells": 2,
+   "ground": 4.64,
+   "flight": 0.92,
+   "contrast": -0.669,
+   "r_turn": 0.085
+  },
+  {
+   "type": "DNg29",
+   "cells": 2,
+   "ground": 13.39,
+   "flight": 66.59,
+   "contrast": 0.665,
+   "r_turn": -0.197
+  },
+  {
+   "type": "DNge131",
+   "cells": 2,
+   "ground": 2.05,
+   "flight": 0.46,
+   "contrast": -0.633,
+   "r_turn": 0.067
+  },
+  {
+   "type": "DNb06",
+   "cells": 2,
+   "ground": 11.89,
+   "flight": 2.76,
+   "contrast": -0.623,
+   "r_turn": 0.091
+  },
+  {
+   "type": "DNg42",
+   "cells": 2,
+   "ground": 0.27,
+   "flight": 1.15,
+   "contrast": 0.617,
+   "r_turn": -0.242
+  },
+  {
+   "type": "DNg111",
+   "cells": 2,
+   "ground": 49.45,
+   "flight": 11.87,
+   "contrast": -0.613,
+   "r_turn": -0.013
+  },
+  {
+   "type": "DNge182",
+   "cells": 2,
+   "ground": 0.96,
+   "flight": 0.23,
+   "contrast": -0.612,
+   "r_turn": -0.012
+  },
+  {
+   "type": "DNae010",
+   "cells": 2,
+   "ground": 2.32,
+   "flight": 9.56,
+   "contrast": 0.609,
+   "r_turn": 0.168
+  },
+  {
+   "type": "DNp01",
+   "cells": 2,
+   "ground": 1.37,
+   "flight": 0.35,
+   "contrast": -0.596,
+   "r_turn": -0.07
+  },
+  {
+   "type": "DNg07",
+   "cells": 16,
+   "ground": 3.74,
+   "flight": 14.56,
+   "contrast": 0.591,
+   "r_turn": -0.235
+  },
+  {
+   "type": "DNg30",
+   "cells": 2,
+   "ground": 32.51,
+   "flight": 8.41,
+   "contrast": -0.589,
+   "r_turn": -0.105
+  },
+  {
+   "type": "DNg05_c",
+   "cells": 2,
+   "ground": 3.55,
+   "flight": 0.92,
+   "contrast": -0.588,
+   "r_turn": 0.185
+  },
+  {
+   "type": "DNg45",
+   "cells": 2,
+   "ground": 3.96,
+   "flight": 1.04,
+   "contrast": -0.585,
+   "r_turn": 0.053
+  },
+  {
+   "type": "DNp05",
+   "cells": 2,
+   "ground": 5.05,
+   "flight": 1.38,
+   "contrast": -0.57,
+   "r_turn": -0.028
+  },
+  {
+   "type": "DNge145",
+   "cells": 4,
+   "ground": 4.17,
+   "flight": 1.15,
+   "contrast": -0.567,
+   "r_turn": -0.018
+  },
+  {
+   "type": "DNpe006",
+   "cells": 2,
+   "ground": 0.41,
+   "flight": 0.12,
+   "contrast": -0.561,
+   "r_turn": 0.082
+  },
+  {
+   "type": "DNae005",
+   "cells": 2,
+   "ground": 0.82,
+   "flight": 0.23,
+   "contrast": -0.561,
+   "r_turn": -0.117
+  },
+  {
+   "type": "DNg86",
+   "cells": 2,
+   "ground": 0.41,
+   "flight": 0.12,
+   "contrast": -0.561,
+   "r_turn": -0.082
+  },
+  {
+   "type": "DNg106",
+   "cells": 16,
+   "ground": 0.15,
+   "flight": 0.55,
+   "contrast": 0.561,
+   "r_turn": -0.159
+  },
+  {
+   "type": "DNge119",
+   "cells": 2,
+   "ground": 0.82,
+   "flight": 0.23,
+   "contrast": -0.561,
+   "r_turn": 0.06
+  },
+  {
+   "type": "DNge099",
+   "cells": 2,
+   "ground": 16.53,
+   "flight": 56.57,
+   "contrast": 0.548,
+   "r_turn": 0.03
+  },
+  {
+   "type": "DNg13",
+   "cells": 2,
+   "ground": 27.46,
+   "flight": 8.06,
+   "contrast": -0.546,
+   "r_turn": -0.023
+  },
+  {
+   "type": "DNp36",
+   "cells": 2,
+   "ground": 30.46,
+   "flight": 8.99,
+   "contrast": -0.544,
+   "r_turn": 0.08
+  },
+  {
+   "type": "DNge172",
+   "cells": 4,
+   "ground": 0.14,
+   "flight": 0.46,
+   "contrast": 0.543,
+   "r_turn": 0.017
+  },
+  {
+   "type": "DNpe035",
+   "cells": 2,
+   "ground": 1.91,
+   "flight": 0.58,
+   "contrast": -0.537,
+   "r_turn": 0.004
+  },
+  {
+   "type": "DNae002",
+   "cells": 2,
+   "ground": 7.24,
+   "flight": 23.85,
+   "contrast": 0.534,
+   "r_turn": 0.11
+  },
+  {
+   "type": "DNae001",
+   "cells": 2,
+   "ground": 1.5,
+   "flight": 0.46,
+   "contrast": -0.531,
+   "r_turn": -0.01
+  },
+  {
+   "type": "DNp25",
+   "cells": 2,
+   "ground": 1.5,
+   "flight": 0.46,
+   "contrast": -0.531,
+   "r_turn": 0.01
+  },
+  {
+   "type": "DNge058",
+   "cells": 2,
+   "ground": 4.51,
+   "flight": 1.38,
+   "contrast": -0.531,
+   "r_turn": -0.01
+  },
+  {
+   "type": "DNge176",
+   "cells": 2,
+   "ground": 6.69,
+   "flight": 21.31,
+   "contrast": 0.522,
+   "r_turn": -0.127
+  },
+  {
+   "type": "DNge103",
+   "cells": 2,
+   "ground": 17.21,
+   "flight": 5.41,
+   "contrast": -0.521,
+   "r_turn": -0.141
+  },
+  {
+   "type": "DNge071",
+   "cells": 10,
+   "ground": 6.04,
+   "flight": 1.96,
+   "contrast": -0.51,
+   "r_turn": 0.203
+  },
+  {
+   "type": "DNg05_b",
+   "cells": 4,
+   "ground": 16.94,
+   "flight": 51.79,
+   "contrast": 0.507,
+   "r_turn": 0.171
+  },
+  {
+   "type": "DNpe056",
+   "cells": 2,
+   "ground": 0.68,
+   "flight": 0.23,
+   "contrast": -0.496,
+   "r_turn": -0.087
+  },
+  {
+   "type": "DNg36_b",
+   "cells": 7,
+   "ground": 1.91,
+   "flight": 5.53,
+   "contrast": 0.486,
+   "r_turn": -0.255
+  },
+  {
+   "type": "DNge142",
+   "cells": 2,
+   "ground": 0.55,
+   "flight": 1.5,
+   "contrast": 0.465,
+   "r_turn": 0.039
+  },
+  {
+   "type": "DNp51,DNpe019",
+   "cells": 4,
+   "ground": 3.01,
+   "flight": 7.89,
+   "contrast": 0.448,
+   "r_turn": 0.346
+  },
+  {
+   "type": "DNp06",
+   "cells": 2,
+   "ground": 1.5,
+   "flight": 0.58,
+   "contrast": -0.446,
+   "r_turn": -0.102
+  },
+  {
+   "type": "DNp02",
+   "cells": 2,
+   "ground": 7.92,
+   "flight": 3.11,
+   "contrast": -0.436,
+   "r_turn": -0.29
+  },
+  {
+   "type": "DNg01_a",
+   "cells": 2,
+   "ground": 9.15,
+   "flight": 22.7,
+   "contrast": 0.425,
+   "r_turn": -0.102
+  },
+  {
+   "type": "DNp04",
+   "cells": 2,
+   "ground": 11.61,
+   "flight": 4.72,
+   "contrast": -0.422,
+   "r_turn": -0.306
+  },
+  {
+   "type": "DNg06",
+   "cells": 12,
+   "ground": 3.55,
+   "flight": 8.7,
+   "contrast": 0.42,
+   "r_turn": -0.155
+  },
+  {
+   "type": "DNp13",
+   "cells": 2,
+   "ground": 48.63,
+   "flight": 19.93,
+   "contrast": -0.419,
+   "r_turn": 0.04
+  },
+  {
+   "type": "DNg11",
+   "cells": 6,
+   "ground": 11.79,
+   "flight": 28.69,
+   "contrast": 0.417,
+   "r_turn": 0.272
+  },
+  {
+   "type": "DNge084",
+   "cells": 2,
+   "ground": 34.7,
+   "flight": 82.95,
+   "contrast": 0.41,
+   "r_turn": 0.097
+  },
+  {
+   "type": "DNge085",
+   "cells": 8,
+   "ground": 0.41,
+   "flight": 0.98,
+   "contrast": 0.41,
+   "r_turn": -0.227
+  },
+  {
+   "type": "DNpe030",
+   "cells": 2,
+   "ground": 3.69,
+   "flight": 1.61,
+   "contrast": -0.392,
+   "r_turn": -0.073
+  },
+  {
+   "type": "DNge096",
+   "cells": 2,
+   "ground": 1.78,
+   "flight": 4.03,
+   "contrast": 0.388,
+   "r_turn": 0.026
+  },
+  {
+   "type": "DNg110",
+   "cells": 6,
+   "ground": 13.71,
+   "flight": 6.14,
+   "contrast": -0.381,
+   "r_turn": -0.016
+  },
+  {
+   "type": "DNa02",
+   "cells": 2,
+   "ground": 28.42,
+   "flight": 62.67,
+   "contrast": 0.376,
+   "r_turn": 0.743
+  },
+  {
+   "type": "DNp101",
+   "cells": 2,
+   "ground": 3.69,
+   "flight": 8.06,
+   "contrast": 0.372,
+   "r_turn": -0.092
+  },
+  {
+   "type": "DNp73",
+   "cells": 2,
+   "ground": 26.23,
+   "flight": 56.91,
+   "contrast": 0.369,
+   "r_turn": -0.318
+  },
+  {
+   "type": "pIP10",
+   "cells": 2,
+   "ground": 11.89,
+   "flight": 5.53,
+   "contrast": -0.365,
+   "r_turn": 0.072
+  },
+  {
+   "type": "DNde005",
+   "cells": 2,
+   "ground": 1.23,
+   "flight": 0.58,
+   "contrast": -0.362,
+   "r_turn": -0.008
+  },
+  {
+   "type": "DNp21",
+   "cells": 2,
+   "ground": 23.77,
+   "flight": 50.12,
+   "contrast": 0.357,
+   "r_turn": 0.163
+  },
+  {
+   "type": "DNge180",
+   "cells": 2,
+   "ground": 0.27,
+   "flight": 0.58,
+   "contrast": 0.357,
+   "r_turn": -0.074
+  },
+  {
+   "type": "DNg01_d",
+   "cells": 2,
+   "ground": 3.14,
+   "flight": 1.5,
+   "contrast": -0.354,
+   "r_turn": 0.08
+  },
+  {
+   "type": "DNpe014",
+   "cells": 4,
+   "ground": 19.88,
+   "flight": 41.3,
+   "contrast": 0.35,
+   "r_turn": 0.296
+  },
+  {
+   "type": "DNg36_a",
+   "cells": 4,
+   "ground": 16.94,
+   "flight": 34.91,
+   "contrast": 0.347,
+   "r_turn": 0.354
+  },
+  {
+   "type": "DNpe026",
+   "cells": 2,
+   "ground": 2.6,
+   "flight": 5.3,
+   "contrast": 0.342,
+   "r_turn": -0.166
+  },
+  {
+   "type": "DNbe001",
+   "cells": 2,
+   "ground": 51.37,
+   "flight": 104.49,
+   "contrast": 0.341,
+   "r_turn": -0.127
+  },
+  {
+   "type": "DNpe015",
+   "cells": 11,
+   "ground": 24.76,
+   "flight": 49.87,
+   "contrast": 0.336,
+   "r_turn": 0.325
+  },
+  {
+   "type": "DNpe002",
+   "cells": 2,
+   "ground": 17.49,
+   "flight": 8.76,
+   "contrast": -0.333,
+   "r_turn": -0.263
+  },
+  {
+   "type": "DNa10",
+   "cells": 2,
+   "ground": 12.16,
+   "flight": 6.11,
+   "contrast": -0.331,
+   "r_turn": -0.287
+  },
+  {
+   "type": "DNge001",
+   "cells": 3,
+   "ground": 9.11,
+   "flight": 18.13,
+   "contrast": 0.331,
+   "r_turn": -0.004
+  },
+  {
+   "type": "DNge009",
+   "cells": 7,
+   "ground": 6.36,
+   "flight": 12.61,
+   "contrast": 0.329,
+   "r_turn": -0.025
+  },
+  {
+   "type": "DNp27",
+   "cells": 2,
+   "ground": 4.78,
+   "flight": 9.45,
+   "contrast": 0.328,
+   "r_turn": 0.087
+  },
+  {
+   "type": "DNp44",
+   "cells": 2,
+   "ground": 0.68,
+   "flight": 0.35,
+   "contrast": -0.328,
+   "r_turn": -0.1
+  },
+  {
+   "type": "DNg77",
+   "cells": 2,
+   "ground": 17.76,
+   "flight": 34.91,
+   "contrast": 0.326,
+   "r_turn": -0.022
+  },
+  {
+   "type": "DNg58",
+   "cells": 2,
+   "ground": 11.75,
+   "flight": 23.04,
+   "contrast": 0.325,
+   "r_turn": -0.126
+  },
+  {
+   "type": "DNpe017",
+   "cells": 2,
+   "ground": 24.04,
+   "flight": 46.43,
+   "contrast": 0.318,
+   "r_turn": -0.074
+  },
+  {
+   "type": "DNge016",
+   "cells": 2,
+   "ground": 59.84,
+   "flight": 114.98,
+   "contrast": 0.315,
+   "r_turn": 0.009
+  },
+  {
+   "type": "DNge086",
+   "cells": 2,
+   "ground": 4.37,
+   "flight": 2.3,
+   "contrast": -0.31,
+   "r_turn": 0.15
+  },
+  {
+   "type": "DNp33",
+   "cells": 2,
+   "ground": 12.84,
+   "flight": 24.31,
+   "contrast": 0.309,
+   "r_turn": 0.118
+  },
+  {
+   "type": "DNg31",
+   "cells": 2,
+   "ground": 16.67,
+   "flight": 8.87,
+   "contrast": -0.305,
+   "r_turn": -0.142
+  },
+  {
+   "type": "DNge104",
+   "cells": 2,
+   "ground": 3.42,
+   "flight": 1.84,
+   "contrast": -0.299,
+   "r_turn": 0.148
+  },
+  {
+   "type": "DNp10",
+   "cells": 2,
+   "ground": 46.17,
+   "flight": 84.45,
+   "contrast": 0.293,
+   "r_turn": -0.167
+  },
+  {
+   "type": "DNge087",
+   "cells": 4,
+   "ground": 20.22,
+   "flight": 11.18,
+   "contrast": -0.288,
+   "r_turn": -0.065
+  },
+  {
+   "type": "DNae007",
+   "cells": 2,
+   "ground": 18.72,
+   "flight": 10.37,
+   "contrast": -0.287,
+   "r_turn": -0.13
+  },
+  {
+   "type": "DNge115",
+   "cells": 8,
+   "ground": 12.64,
+   "flight": 22.72,
+   "contrast": 0.285,
+   "r_turn": -0.199
+  },
+  {
+   "type": "DNg71",
+   "cells": 2,
+   "ground": 46.99,
+   "flight": 84.33,
+   "contrast": 0.284,
+   "r_turn": 0.278
+  },
+  {
+   "type": "DNge021",
+   "cells": 2,
+   "ground": 9.84,
+   "flight": 17.63,
+   "contrast": 0.284,
+   "r_turn": 0.002
+  },
+  {
+   "type": "DNp49",
+   "cells": 2,
+   "ground": 2.73,
+   "flight": 4.84,
+   "contrast": 0.278,
+   "r_turn": -0.02
+  },
+  {
+   "type": "DNbe006",
+   "cells": 2,
+   "ground": 6.01,
+   "flight": 3.46,
+   "contrast": -0.27,
+   "r_turn": 0.009
+  },
+  {
+   "type": "DNg94",
+   "cells": 2,
+   "ground": 17.9,
+   "flight": 31.11,
+   "contrast": 0.27,
+   "r_turn": -0.018
+  },
+  {
+   "type": "DNge054",
+   "cells": 2,
+   "ground": 32.1,
+   "flight": 18.55,
+   "contrast": -0.268,
+   "r_turn": -0.141
+  },
+  {
+   "type": "DNge075",
+   "cells": 2,
+   "ground": 31.42,
+   "flight": 18.2,
+   "contrast": -0.266,
+   "r_turn": 0.052
+  },
+  {
+   "type": "DNge154",
+   "cells": 2,
+   "ground": 10.25,
+   "flight": 17.4,
+   "contrast": 0.259,
+   "r_turn": -0.062
+  },
+  {
+   "type": "DNge045",
+   "cells": 2,
+   "ground": 38.52,
+   "flight": 65.32,
+   "contrast": 0.258,
+   "r_turn": -0.029
+  },
+  {
+   "type": "DNp34",
+   "cells": 2,
+   "ground": 0.14,
+   "flight": 0.23,
+   "contrast": 0.256,
+   "r_turn": 0.087
+  },
+  {
+   "type": "DNp39",
+   "cells": 2,
+   "ground": 0.14,
+   "flight": 0.23,
+   "contrast": 0.256,
+   "r_turn": 0.117
+  },
+  {
+   "type": "DNpe010",
+   "cells": 2,
+   "ground": 0.14,
+   "flight": 0.23,
+   "contrast": 0.256,
+   "r_turn": 0.117
+  },
+  {
+   "type": "DNg87",
+   "cells": 2,
+   "ground": 96.86,
+   "flight": 162.56,
+   "contrast": 0.253,
+   "r_turn": -0.008
+  },
+  {
+   "type": "DNge025",
+   "cells": 3,
+   "ground": 45.08,
+   "flight": 75.58,
+   "contrast": 0.253,
+   "r_turn": -0.032
+  },
+  {
+   "type": "DNge024",
+   "cells": 4,
+   "ground": 62.36,
+   "flight": 104.55,
+   "contrast": 0.253,
+   "r_turn": -0.015
+  },
+  {
+   "type": "DNge011",
+   "cells": 2,
+   "ground": 90.44,
+   "flight": 150.81,
+   "contrast": 0.25,
+   "r_turn": -0.011
+  },
+  {
+   "type": "DNg21",
+   "cells": 2,
+   "ground": 81.97,
+   "flight": 135.94,
+   "contrast": 0.248,
+   "r_turn": -0.007
+  },
+  {
+   "type": "DNge123",
+   "cells": 2,
+   "ground": 39.07,
+   "flight": 23.62,
+   "contrast": -0.247,
+   "r_turn": -0.078
+  },
+  {
+   "type": "DNge078",
+   "cells": 2,
+   "ground": 100.96,
+   "flight": 166.94,
+   "contrast": 0.246,
+   "r_turn": 0.053
+  },
+  {
+   "type": "DNg62",
+   "cells": 2,
+   "ground": 118.99,
+   "flight": 196.08,
+   "contrast": 0.245,
+   "r_turn": -0.034
+  },
+  {
+   "type": "DNge012",
+   "cells": 2,
+   "ground": 105.05,
+   "flight": 172.81,
+   "contrast": 0.244,
+   "r_turn": -0.048
+  },
+  {
+   "type": "DNg12_b",
+   "cells": 10,
+   "ground": 72.95,
+   "flight": 120.07,
+   "contrast": 0.244,
+   "r_turn": -0.01
+  },
+  {
+   "type": "DNge020",
+   "cells": 6,
+   "ground": 83.65,
+   "flight": 137.25,
+   "contrast": 0.243,
+   "r_turn": 0.009
+  },
+  {
+   "type": "DNge068",
+   "cells": 2,
+   "ground": 85.66,
+   "flight": 140.32,
+   "contrast": 0.242,
+   "r_turn": -0.019
+  },
+  {
+   "type": "DNg12_h",
+   "cells": 2,
+   "ground": 96.86,
+   "flight": 158.64,
+   "contrast": 0.242,
+   "r_turn": 0.037
+  },
+  {
+   "type": "DNge178",
+   "cells": 2,
+   "ground": 99.59,
+   "flight": 163.13,
+   "contrast": 0.242,
+   "r_turn": -0.06
+  },
+  {
+   "type": "DNg53",
+   "cells": 2,
+   "ground": 57.1,
+   "flight": 93.55,
+   "contrast": 0.242,
+   "r_turn": 0.053
+  },
+  {
+   "type": "DNge044",
+   "cells": 2,
+   "ground": 117.21,
+   "flight": 191.82,
+   "contrast": 0.241,
+   "r_turn": 0.015
+  },
+  {
+   "type": "DNge022",
+   "cells": 2,
+   "ground": 117.76,
+   "flight": 192.17,
+   "contrast": 0.24,
+   "r_turn": 0.053
+  },
+  {
+   "type": "DNge019",
+   "cells": 11,
+   "ground": 105.41,
+   "flight": 172.08,
+   "contrast": 0.24,
+   "r_turn": 0.01
+  },
+  {
+   "type": "DNg12_e",
+   "cells": 6,
+   "ground": 106.56,
+   "flight": 173.85,
+   "contrast": 0.24,
+   "r_turn": -0.024
+  },
+  {
+   "type": "DNge039",
+   "cells": 2,
+   "ground": 120.36,
+   "flight": 195.85,
+   "contrast": 0.239,
+   "r_turn": 0.024
+  },
+  {
+   "type": "DNg73",
+   "cells": 2,
+   "ground": 118.85,
+   "flight": 193.55,
+   "contrast": 0.239,
+   "r_turn": -0.006
+  },
+  {
+   "type": "DNg12_c",
+   "cells": 8,
+   "ground": 111.37,
+   "flight": 181.31,
+   "contrast": 0.239,
+   "r_turn": 0.028
+  },
+  {
+   "type": "DNge027",
+   "cells": 2,
+   "ground": 122.68,
+   "flight": 199.31,
+   "contrast": 0.238,
+   "r_turn": 0.024
+  },
+  {
+   "type": "DNg59",
+   "cells": 2,
+   "ground": 70.36,
+   "flight": 113.94,
+   "contrast": 0.236,
+   "r_turn": 0.005
+  },
+  {
+   "type": "DNg12_d",
+   "cells": 2,
+   "ground": 112.43,
+   "flight": 181.34,
+   "contrast": 0.235,
+   "r_turn": -0.035
+  },
+  {
+   "type": "DNg12_g",
+   "cells": 2,
+   "ground": 109.97,
+   "flight": 177.65,
+   "contrast": 0.235,
+   "r_turn": -0.015
+  },
+  {
+   "type": "DNg12_f",
+   "cells": 4,
+   "ground": 110.86,
+   "flight": 178.86,
+   "contrast": 0.235,
+   "r_turn": -0.012
+  },
+  {
+   "type": "DNb01",
+   "cells": 2,
+   "ground": 17.08,
+   "flight": 27.53,
+   "contrast": 0.234,
+   "r_turn": 0.157
+  },
+  {
+   "type": "DNg12_a",
+   "cells": 8,
+   "ground": 94.98,
+   "flight": 153.05,
+   "contrast": 0.234,
+   "r_turn": -0.003
+  },
+  {
+   "type": "DNde006",
+   "cells": 2,
+   "ground": 34.84,
+   "flight": 55.99,
+   "contrast": 0.233,
+   "r_turn": -0.011
+  },
+  {
+   "type": "DNge122",
+   "cells": 2,
+   "ground": 34.97,
+   "flight": 56.11,
+   "contrast": 0.232,
+   "r_turn": 0.01
+  },
+  {
+   "type": "DNg69",
+   "cells": 2,
+   "ground": 22.95,
+   "flight": 36.75,
+   "contrast": 0.231,
+   "r_turn": -0.001
+  },
+  {
+   "type": "DNge143",
+   "cells": 2,
+   "ground": 116.94,
+   "flight": 186.64,
+   "contrast": 0.23,
+   "r_turn": -0.007
+  },
+  {
+   "type": "DNge029",
+   "cells": 2,
+   "ground": 108.2,
+   "flight": 171.31,
+   "contrast": 0.226,
+   "r_turn": 0.043
+  },
+  {
+   "type": "CB0429",
+   "cells": 2,
+   "ground": 1.64,
+   "flight": 1.04,
+   "contrast": -0.225,
+   "r_turn": 0.157
+  },
+  {
+   "type": "DNge014",
+   "cells": 2,
+   "ground": 6.28,
+   "flight": 9.91,
+   "contrast": 0.224,
+   "r_turn": 0.078
+  },
+  {
+   "type": "DNge060",
+   "cells": 2,
+   "ground": 111.75,
+   "flight": 174.88,
+   "contrast": 0.22,
+   "r_turn": -0.043
+  },
+  {
+   "type": "DNpe008",
+   "cells": 19,
+   "ground": 3.26,
+   "flight": 5.11,
+   "contrast": 0.22,
+   "r_turn": -0.111
+  },
+  {
+   "type": "DNpe054",
+   "cells": 7,
+   "ground": 17.64,
+   "flight": 27.45,
+   "contrast": 0.218,
+   "r_turn": 0.209
+  },
+  {
+   "type": "DNg22",
+   "cells": 2,
+   "ground": 93.17,
+   "flight": 144.24,
+   "contrast": 0.215,
+   "r_turn": -0.05
+  },
+  {
+   "type": "DNp18",
+   "cells": 2,
+   "ground": 60.25,
+   "flight": 92.05,
+   "contrast": 0.209,
+   "r_turn": -0.129
+  },
+  {
+   "type": "DNa16",
+   "cells": 2,
+   "ground": 8.74,
+   "flight": 5.76,
+   "contrast": -0.206,
+   "r_turn": 0.204
+  },
+  {
+   "type": "DNbe005",
+   "cells": 2,
+   "ground": 18.17,
+   "flight": 12.1,
+   "contrast": -0.201,
+   "r_turn": 0.115
+  },
+  {
+   "type": "DNge015",
+   "cells": 3,
+   "ground": 61.2,
+   "flight": 91.4,
+   "contrast": 0.198,
+   "r_turn": 0.013
+  },
+  {
+   "type": "DNge175",
+   "cells": 2,
+   "ground": 72.81,
+   "flight": 108.64,
+   "contrast": 0.197,
+   "r_turn": 0
+  },
+  {
+   "type": "DNge141",
+   "cells": 2,
+   "ground": 48.63,
+   "flight": 72.35,
+   "contrast": 0.196,
+   "r_turn": 0.096
+  },
+  {
+   "type": "DNbe007",
+   "cells": 2,
+   "ground": 54.23,
+   "flight": 37.33,
+   "contrast": -0.185,
+   "r_turn": -0.132
+  },
+  {
+   "type": "DNg89",
+   "cells": 2,
+   "ground": 114.07,
+   "flight": 164.52,
+   "contrast": 0.181,
+   "r_turn": 0.078
+  },
+  {
+   "type": "DNae009",
+   "cells": 2,
+   "ground": 12.84,
+   "flight": 18.43,
+   "contrast": 0.179,
+   "r_turn": 0.071
+  },
+  {
+   "type": "DNge041",
+   "cells": 2,
+   "ground": 40.57,
+   "flight": 28.34,
+   "contrast": -0.178,
+   "r_turn": -0.073
+  },
+  {
+   "type": "DNa05",
+   "cells": 2,
+   "ground": 4.37,
+   "flight": 6.22,
+   "contrast": 0.175,
+   "r_turn": 0.156
+  },
+  {
+   "type": "DNp15",
+   "cells": 2,
+   "ground": 60.79,
+   "flight": 42.86,
+   "contrast": -0.173,
+   "r_turn": -0.268
+  },
+  {
+   "type": "DNge129",
+   "cells": 2,
+   "ground": 36.34,
+   "flight": 25.81,
+   "contrast": -0.169,
+   "r_turn": 0.031
+  },
+  {
+   "type": "DNge179",
+   "cells": 6,
+   "ground": 13.48,
+   "flight": 18.97,
+   "contrast": 0.169,
+   "r_turn": -0.165
+  },
+  {
+   "type": "DNa06",
+   "cells": 2,
+   "ground": 0.82,
+   "flight": 1.15,
+   "contrast": 0.169,
+   "r_turn": 0.165
+  },
+  {
+   "type": "DNg90",
+   "cells": 2,
+   "ground": 2.32,
+   "flight": 3.23,
+   "contrast": 0.163,
+   "r_turn": 0.143
+  },
+  {
+   "type": "DNge033",
+   "cells": 2,
+   "ground": 114.62,
+   "flight": 159.33,
+   "contrast": 0.163,
+   "r_turn": 0.17
+  },
+  {
+   "type": "DNg49",
+   "cells": 2,
+   "ground": 11.89,
+   "flight": 16.47,
+   "contrast": 0.162,
+   "r_turn": 0.317
+  },
+  {
+   "type": "DNb02",
+   "cells": 4,
+   "ground": 21.31,
+   "flight": 29.49,
+   "contrast": 0.161,
+   "r_turn": 0.268
+  },
+  {
+   "type": "DNg95",
+   "cells": 2,
+   "ground": 5.6,
+   "flight": 7.6,
+   "contrast": 0.152,
+   "r_turn": 0.062
+  },
+  {
+   "type": "DNge089",
+   "cells": 6,
+   "ground": 2.5,
+   "flight": 1.84,
+   "contrast": -0.152,
+   "r_turn": 0.1
+  },
+  {
+   "type": "DNge053",
+   "cells": 2,
+   "ground": 12.84,
+   "flight": 17.4,
+   "contrast": 0.151,
+   "r_turn": 0.088
+  },
+  {
+   "type": "DNg35",
+   "cells": 2,
+   "ground": 13.93,
+   "flight": 18.66,
+   "contrast": 0.145,
+   "r_turn": 0.027
+  },
+  {
+   "type": "pIP1",
+   "cells": 2,
+   "ground": 74.18,
+   "flight": 98.5,
+   "contrast": 0.141,
+   "r_turn": -0.187
+  },
+  {
+   "type": "DNp45",
+   "cells": 2,
+   "ground": 1.37,
+   "flight": 1.04,
+   "contrast": -0.137,
+   "r_turn": 0.126
+  },
+  {
+   "type": "DNb09",
+   "cells": 2,
+   "ground": 36.61,
+   "flight": 47.93,
+   "contrast": 0.134,
+   "r_turn": -0.063
+  },
+  {
+   "type": "DNge127",
+   "cells": 2,
+   "ground": 23.5,
+   "flight": 30.53,
+   "contrast": 0.13,
+   "r_turn": -0.035
+  },
+  {
+   "type": "DNp12",
+   "cells": 2,
+   "ground": 110.11,
+   "flight": 142.86,
+   "contrast": 0.129,
+   "r_turn": -0.099
+  },
+  {
+   "type": "DNb03",
+   "cells": 4,
+   "ground": 14.14,
+   "flight": 11.06,
+   "contrast": -0.122,
+   "r_turn": 0.255
+  },
+  {
+   "type": "DNd04",
+   "cells": 2,
+   "ground": 28.69,
+   "flight": 36.52,
+   "contrast": 0.12,
+   "r_turn": 0
+  },
+  {
+   "type": "DNg102",
+   "cells": 4,
+   "ground": 0.55,
+   "flight": 0.69,
+   "contrast": 0.117,
+   "r_turn": 0.079
+  },
+  {
+   "type": "DNg57",
+   "cells": 2,
+   "ground": 50,
+   "flight": 39.52,
+   "contrast": -0.117,
+   "r_turn": -0.072
+  },
+  {
+   "type": "DNg01_c",
+   "cells": 2,
+   "ground": 0.27,
+   "flight": 0.35,
+   "contrast": 0.117,
+   "r_turn": 0.143
+  },
+  {
+   "type": "DNge017",
+   "cells": 2,
+   "ground": 15.16,
+   "flight": 19.12,
+   "contrast": 0.116,
+   "r_turn": 0.18
+  },
+  {
+   "type": "DNp68",
+   "cells": 2,
+   "ground": 19.13,
+   "flight": 15.44,
+   "contrast": -0.107,
+   "r_turn": 0.02
+  },
+  {
+   "type": "DNg52",
+   "cells": 4,
+   "ground": 30.26,
+   "flight": 24.48,
+   "contrast": -0.106,
+   "r_turn": 0
+  },
+  {
+   "type": "DNg92_a",
+   "cells": 2,
+   "ground": 54.92,
+   "flight": 67.74,
+   "contrast": 0.105,
+   "r_turn": 0.019
+  },
+  {
+   "type": "DNp20",
+   "cells": 2,
+   "ground": 43.03,
+   "flight": 52.76,
+   "contrast": 0.102,
+   "r_turn": -0.488
+  },
+  {
+   "type": "DNg66",
+   "cells": 1,
+   "ground": 50,
+   "flight": 41.01,
+   "contrast": -0.099,
+   "r_turn": null
+  },
+  {
+   "type": "DNge006",
+   "cells": 2,
+   "ground": 5.74,
+   "flight": 4.72,
+   "contrast": -0.097,
+   "r_turn": 0.197
+  },
+  {
+   "type": "DNpe025",
+   "cells": 2,
+   "ground": 29.23,
+   "flight": 24.31,
+   "contrast": -0.092,
+   "r_turn": 0.076
+  },
+  {
+   "type": "DNa03",
+   "cells": 2,
+   "ground": 0.14,
+   "flight": 0.12,
+   "contrast": -0.085,
+   "r_turn": 0.061
+  },
+  {
+   "type": "DNp57",
+   "cells": 2,
+   "ground": 0.27,
+   "flight": 0.23,
+   "contrast": -0.085,
+   "r_turn": -0.015
+  },
+  {
+   "type": "DNge113",
+   "cells": 4,
+   "ground": 0.2,
+   "flight": 0.17,
+   "contrast": -0.085,
+   "r_turn": -0.023
+  },
+  {
+   "type": "DNg51",
+   "cells": 4,
+   "ground": 0.07,
+   "flight": 0.06,
+   "contrast": -0.085,
+   "r_turn": 0.082
+  },
+  {
+   "type": "DNge072",
+   "cells": 2,
+   "ground": 4.37,
+   "flight": 5.18,
+   "contrast": 0.085,
+   "r_turn": 0.265
+  },
+  {
+   "type": "DNge064",
+   "cells": 2,
+   "ground": 1.91,
+   "flight": 1.61,
+   "contrast": -0.085,
+   "r_turn": 0.103
+  },
+  {
+   "type": "DNpe012_a",
+   "cells": 4,
+   "ground": 0.07,
+   "flight": 0.06,
+   "contrast": -0.085,
+   "r_turn": 0.021
+  },
+  {
+   "type": "DNp16_a",
+   "cells": 2,
+   "ground": 0.14,
+   "flight": 0.12,
+   "contrast": -0.085,
+   "r_turn": 0.014
+  },
+  {
+   "type": "DNg02_a",
+   "cells": 10,
+   "ground": 6.26,
+   "flight": 5.28,
+   "contrast": -0.085,
+   "r_turn": 0.124
+  },
+  {
+   "type": "DNge126",
+   "cells": 2,
+   "ground": 0.41,
+   "flight": 0.35,
+   "contrast": -0.085,
+   "r_turn": 0.107
+  },
+  {
+   "type": "DNg02_c",
+   "cells": 4,
+   "ground": 0.07,
+   "flight": 0.06,
+   "contrast": -0.085,
+   "r_turn": 0.082
+  },
+  {
+   "type": "DNge149",
+   "cells": 1,
+   "ground": 60.11,
+   "flight": 70.97,
+   "contrast": 0.083,
+   "r_turn": null
+  },
+  {
+   "type": "DNp104",
+   "cells": 2,
+   "ground": 10.93,
+   "flight": 12.67,
+   "contrast": 0.074,
+   "r_turn": 0.12
+  },
+  {
+   "type": "DNbe004",
+   "cells": 2,
+   "ground": 46.45,
+   "flight": 53.34,
+   "contrast": 0.069,
+   "r_turn": 0.02
+  },
+  {
+   "type": "DNge101",
+   "cells": 2,
+   "ground": 38.8,
+   "flight": 34.1,
+   "contrast": -0.064,
+   "r_turn": 0.119
+  },
+  {
+   "type": "DNge046",
+   "cells": 4,
+   "ground": 91.19,
+   "flight": 103.63,
+   "contrast": 0.064,
+   "r_turn": 0.019
+  },
+  {
+   "type": "DNae006",
+   "cells": 2,
+   "ground": 55.6,
+   "flight": 62.79,
+   "contrast": 0.061,
+   "r_turn": -0.067
+  },
+  {
+   "type": "DNg70",
+   "cells": 2,
+   "ground": 93.17,
+   "flight": 104.84,
+   "contrast": 0.059,
+   "r_turn": -0.033
+  },
+  {
+   "type": "DNge074",
+   "cells": 2,
+   "ground": 53.83,
+   "flight": 60.6,
+   "contrast": 0.059,
+   "r_turn": 0.072
+  },
+  {
+   "type": "DNge125",
+   "cells": 2,
+   "ground": 63.66,
+   "flight": 57.14,
+   "contrast": -0.054,
+   "r_turn": -0.068
+  },
+  {
+   "type": "DNg20",
+   "cells": 2,
+   "ground": 29.23,
+   "flight": 32.6,
+   "contrast": 0.054,
+   "r_turn": -0.025
+  },
+  {
+   "type": "DNp11",
+   "cells": 2,
+   "ground": 1.91,
+   "flight": 1.73,
+   "contrast": -0.051,
+   "r_turn": -0.202
+  },
+  {
+   "type": "DNge047",
+   "cells": 2,
+   "ground": 5.74,
+   "flight": 5.18,
+   "contrast": -0.051,
+   "r_turn": -0.026
+  },
+  {
+   "type": "DNg104",
+   "cells": 2,
+   "ground": 68.58,
+   "flight": 62.21,
+   "contrast": -0.049,
+   "r_turn": 0.004
+  },
+  {
+   "type": "DNpe023",
+   "cells": 2,
+   "ground": 1.78,
+   "flight": 1.96,
+   "contrast": 0.049,
+   "r_turn": 0.146
+  },
+  {
+   "type": "DNg01_b",
+   "cells": 2,
+   "ground": 1.5,
+   "flight": 1.38,
+   "contrast": -0.042,
+   "r_turn": 0.27
+  },
+  {
+   "type": "DNa09",
+   "cells": 2,
+   "ground": 13.39,
+   "flight": 12.33,
+   "contrast": -0.041,
+   "r_turn": 0.05
+  },
+  {
+   "type": "DNge031",
+   "cells": 2,
+   "ground": 119.54,
+   "flight": 129.61,
+   "contrast": 0.04,
+   "r_turn": -0.204
+  },
+  {
+   "type": "DNd02",
+   "cells": 2,
+   "ground": 20.08,
+   "flight": 21.77,
+   "contrast": 0.04,
+   "r_turn": 0.028
+  },
+  {
+   "type": "DNpe027",
+   "cells": 2,
+   "ground": 27.19,
+   "flight": 29.26,
+   "contrast": 0.037,
+   "r_turn": 0.346
+  },
+  {
+   "type": "DNp65",
+   "cells": 2,
+   "ground": 63.39,
+   "flight": 68.32,
+   "contrast": 0.037,
+   "r_turn": 0.004
+  },
+  {
+   "type": "DNg56",
+   "cells": 2,
+   "ground": 143.58,
+   "flight": 154.03,
+   "contrast": 0.035,
+   "r_turn": -0.026
+  },
+  {
+   "type": "DNbe002",
+   "cells": 4,
+   "ground": 0.61,
+   "flight": 0.58,
+   "contrast": -0.033,
+   "r_turn": 0.024
+  },
+  {
+   "type": "DNpe053",
+   "cells": 2,
+   "ground": 87.7,
+   "flight": 93.43,
+   "contrast": 0.032,
+   "r_turn": 0.119
+  },
+  {
+   "type": "DNp19",
+   "cells": 2,
+   "ground": 13.39,
+   "flight": 14.29,
+   "contrast": 0.032,
+   "r_turn": -0.001
+  },
+  {
+   "type": "DNp102",
+   "cells": 2,
+   "ground": 77.05,
+   "flight": 81.91,
+   "contrast": 0.031,
+   "r_turn": 0.293
+  },
+  {
+   "type": "DNp31",
+   "cells": 2,
+   "ground": 92.9,
+   "flight": 98.5,
+   "contrast": 0.029,
+   "r_turn": -0.154
+  },
+  {
+   "type": "DNge152",
+   "cells": 1,
+   "ground": 57.38,
+   "flight": 60.83,
+   "contrast": 0.029,
+   "r_turn": null
+  },
+  {
+   "type": "DNg34",
+   "cells": 2,
+   "ground": 16.53,
+   "flight": 15.67,
+   "contrast": -0.027,
+   "r_turn": -0.021
+  },
+  {
+   "type": "DNg10",
+   "cells": 12,
+   "ground": 11.93,
+   "flight": 11.31,
+   "contrast": -0.027,
+   "r_turn": 0.336
+  },
+  {
+   "type": "DNp26",
+   "cells": 2,
+   "ground": 15.03,
+   "flight": 15.78,
+   "contrast": 0.025,
+   "r_turn": -0.412
+  },
+  {
+   "type": "DNg98",
+   "cells": 2,
+   "ground": 71.17,
+   "flight": 68.2,
+   "contrast": -0.021,
+   "r_turn": -0.015
+  },
+  {
+   "type": "DNae004",
+   "cells": 2,
+   "ground": 47.81,
+   "flight": 45.85,
+   "contrast": -0.021,
+   "r_turn": 0.197
+  },
+  {
+   "type": "DNg41",
+   "cells": 2,
+   "ground": 47.81,
+   "flight": 49.54,
+   "contrast": 0.018,
+   "r_turn": 0.312
+  },
+  {
+   "type": "DNpe016",
+   "cells": 2,
+   "ground": 12.3,
+   "flight": 11.87,
+   "contrast": -0.018,
+   "r_turn": 0.031
+  },
+  {
+   "type": "DNge151",
+   "cells": 1,
+   "ground": 93.72,
+   "flight": 90.78,
+   "contrast": -0.016,
+   "r_turn": null
+  },
+  {
+   "type": "DNge138",
+   "cells": 2,
+   "ground": 126.09,
+   "flight": 129.95,
+   "contrast": 0.015,
+   "r_turn": null
+  },
+  {
+   "type": "DNg55",
+   "cells": 1,
+   "ground": 54.37,
+   "flight": 55.99,
+   "contrast": 0.015,
+   "r_turn": null
+  },
+  {
+   "type": "DNp32",
+   "cells": 2,
+   "ground": 92.49,
+   "flight": 90.21,
+   "contrast": -0.012,
+   "r_turn": -0.008
+  },
+  {
+   "type": "DNc01",
+   "cells": 2,
+   "ground": 3.42,
+   "flight": 3.34,
+   "contrast": -0.011,
+   "r_turn": -0.019
+  },
+  {
+   "type": "DNge139",
+   "cells": 2,
+   "ground": 39.89,
+   "flight": 40.67,
+   "contrast": 0.01,
+   "r_turn": -0.08
+  },
+  {
+   "type": "DNg33",
+   "cells": 2,
+   "ground": 197.4,
+   "flight": 200,
+   "contrast": 0.007,
+   "r_turn": null
+  },
+  {
+   "type": "DNp29",
+   "cells": 2,
+   "ground": 0.68,
+   "flight": 0.69,
+   "contrast": 0.006,
+   "r_turn": -0.15
+  },
+  {
+   "type": "DNpe037",
+   "cells": 2,
+   "ground": 14.34,
+   "flight": 14.52,
+   "contrast": 0.006,
+   "r_turn": -0.142
+  },
+  {
+   "type": "DNp17",
+   "cells": 12,
+   "ground": 7.08,
+   "flight": 7.16,
+   "contrast": 0.006,
+   "r_turn": -0.188
+  },
+  {
+   "type": "DNb05",
+   "cells": 2,
+   "ground": 190.44,
+   "flight": 188.59,
+   "contrast": -0.005,
+   "r_turn": -0.044
+  },
+  {
+   "type": "DNg99",
+   "cells": 2,
+   "ground": 48.22,
+   "flight": 48.5,
+   "contrast": 0.003,
+   "r_turn": 0.064
+  },
+  {
+   "type": "DNge150",
+   "cells": 1,
+   "ground": 72.13,
+   "flight": 71.66,
+   "contrast": -0.003,
+   "r_turn": null
+  },
+  {
+   "type": "DNg105",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNg16",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNg75",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNge083",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNp35",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNg108",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNp47",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNc02",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNp59",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNp63",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNp62",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNg37",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNg74_b",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNg80",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNg96",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNpe034",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNge003",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNpe001",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNb07",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNg93",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNg24",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "MDN",
+   "cells": 4,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNp09",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNa15",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNa04",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNp69",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNge146",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNp14",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNa13",
+   "cells": 4,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNg78",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNbe003",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNp52",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNg79",
+   "cells": 4,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNae003",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNa08",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNg101",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNpe022",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNpe032",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNg26",
+   "cells": 4,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNge073",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNp22",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNge018",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNg68",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNg48",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNg14",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNge056",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNpe055",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNge028",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNge004",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNge002",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNg54",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNpe049",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNde001",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNge088",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNg85",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNp53",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNp46",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNa14",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNg17",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNae008",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNge063",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNge082",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNg61",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNpe041",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNg64",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNp28",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNg04",
+   "cells": 4,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNge121",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNge052",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNg09_b",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNpe004",
+   "cells": 4,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNge147",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNge057",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNge097",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNpe033",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNge134",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNg82",
+   "cells": 4,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNpe036",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNg02_d",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNg02_f",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNge110",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNg02_g",
+   "cells": 4,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNge183",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNp16_b",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNg02_b",
+   "cells": 5,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNg83",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNge095",
+   "cells": 3,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNge093",
+   "cells": 4,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNge120",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNge090",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNge117",
+   "cells": 4,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNge108",
+   "cells": 5,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNge094",
+   "cells": 13,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNpe057",
+   "cells": 4,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNg18_a",
+   "cells": 3,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNpe011",
+   "cells": 4,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNpe018",
+   "cells": 3,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNg65",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNg02_e",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNge130",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNge061",
+   "cells": 4,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNg01_unclear",
+   "cells": 1,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNpe048",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNge055",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNpe039",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  },
+  {
+   "type": "DNge079",
+   "cells": 2,
+   "ground": 0,
+   "flight": 0,
+   "contrast": 0,
+   "r_turn": null
+  }
+ ],
+ "seconds": 8,
  "seed": 7,
- "samples_flying": 117,
+ "samples_flying": 217,
  "samples_ground": 183,
+ "flightDN": {
+  "types": [
+   "DNa08",
+   "DNg02_a",
+   "DNg02_b",
+   "DNg02_c",
+   "DNg02_e",
+   "DNg02_g"
+  ],
+  "cells": 27,
+  "rate_ground": 2.35,
+  "rate_flight": 1.98,
+  "asym_vs_commanded_turn_r": 0.123
+ },
  "pools": {
   "power": {
    "cells": 24,
    "left": 12,
    "right": 12,
    "rate_ground": 101.74,
-   "rate_flight": 109.22,
-   "asym_flight_mean": -6.59,
-   "asym_vs_commanded_turn_r": 0.08
+   "rate_flight": 107.27,
+   "asym_flight_mean": -6.53,
+   "asym_vs_commanded_turn_r": 0.016
   },
   "basalar": {
    "cells": 6,
    "left": 3,
    "right": 3,
    "rate_ground": 47.63,
-   "rate_flight": 39.89,
-   "asym_flight_mean": -8.26,
-   "asym_vs_commanded_turn_r": 0.079
+   "rate_flight": 43.78,
+   "asym_flight_mean": -10.45,
+   "asym_vs_commanded_turn_r": 0.072
   },
   "first": {
    "cells": 10,
    "left": 5,
    "right": 5,
    "rate_ground": 69.48,
-   "rate_flight": 71.37,
-   "asym_flight_mean": -10.77,
-   "asym_vs_commanded_turn_r": 0.062
+   "rate_flight": 78.13,
+   "asym_flight_mean": -11.29,
+   "asym_vs_commanded_turn_r": 0.065
   },
   "third": {
    "cells": 6,
    "left": 3,
    "right": 3,
    "rate_ground": 33.42,
-   "rate_flight": 40.46,
-   "asym_flight_mean": 26.49,
-   "asym_vs_commanded_turn_r": 0.061
+   "rate_flight": 42.24,
+   "asym_flight_mean": 25.5,
+   "asym_vs_commanded_turn_r": 0.088
   },
   "hg": {
    "cells": 8,
    "left": 4,
    "right": 4,
    "rate_ground": 51.63,
-   "rate_flight": 44.37,
-   "asym_flight_mean": -14.74,
-   "asym_vs_commanded_turn_r": 0.038
+   "rate_flight": 45.01,
+   "asym_flight_mean": -17.97,
+   "asym_vs_commanded_turn_r": 0.139
   },
   "pitch": {
    "cells": 10,
    "left": 5,
    "right": 5,
    "rate_ground": 61.5,
-   "rate_flight": 69.36,
-   "asym_flight_mean": 14.27,
-   "asym_vs_commanded_turn_r": -0.059
+   "rate_flight": 71.38,
+   "asym_flight_mean": 14.84,
+   "asym_vs_commanded_turn_r": -0.092
   }
  },
  "samples": [
@@ -77,7 +3933,9 @@
    "hg": 0,
    "hg_LR": 0,
    "pitch": 20,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 40,
@@ -95,7 +3953,9 @@
    "hg": 31.3,
    "hg_LR": 12.5,
    "pitch": 40,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 60,
@@ -113,7 +3973,9 @@
    "hg": 18.8,
    "hg_LR": 12.5,
    "pitch": 20,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 80,
@@ -131,7 +3993,9 @@
    "hg": 50,
    "hg_LR": 0,
    "pitch": 15,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 7.4,
+   "flightDN_LR": -0.5
   },
   {
    "t": 100,
@@ -149,7 +4013,9 @@
    "hg": 100,
    "hg_LR": -25,
    "pitch": 60,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 1.9,
+   "flightDN_LR": -3.8
   },
   {
    "t": 120,
@@ -167,7 +4033,9 @@
    "hg": 56.3,
    "hg_LR": -12.5,
    "pitch": 45,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 140,
@@ -185,7 +4053,9 @@
    "hg": 56.3,
    "hg_LR": -37.5,
    "pitch": 25,
-   "pitch_LR": -10
+   "pitch_LR": -10,
+   "flightDN": 3.7,
+   "flightDN_LR": -0.3
   },
   {
    "t": 160,
@@ -203,7 +4073,9 @@
    "hg": 106.3,
    "hg_LR": -37.5,
    "pitch": 65,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 3.7,
+   "flightDN_LR": -0.3
   },
   {
    "t": 180,
@@ -221,7 +4093,9 @@
    "hg": 81.3,
    "hg_LR": -37.5,
    "pitch": 65,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 200,
@@ -239,7 +4113,9 @@
    "hg": 100,
    "hg_LR": -50,
    "pitch": 65,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 220,
@@ -257,7 +4133,9 @@
    "hg": 75,
    "hg_LR": -25,
    "pitch": 70,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 3.7,
+   "flightDN_LR": -0.3
   },
   {
    "t": 240,
@@ -275,7 +4153,9 @@
    "hg": 68.8,
    "hg_LR": -37.5,
    "pitch": 30,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 5.6,
+   "flightDN_LR": 3.3
   },
   {
    "t": 260,
@@ -293,7 +4173,9 @@
    "hg": 81.3,
    "hg_LR": -37.5,
    "pitch": 45,
-   "pitch_LR": -10
+   "pitch_LR": -10,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 280,
@@ -311,7 +4193,9 @@
    "hg": 81.3,
    "hg_LR": -62.5,
    "pitch": 85,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 300,
@@ -329,7 +4213,9 @@
    "hg": 87.5,
    "hg_LR": -50,
    "pitch": 60,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 3.7,
+   "flightDN_LR": -0.3
   },
   {
    "t": 320,
@@ -347,7 +4233,9 @@
    "hg": 118.8,
    "hg_LR": -12.5,
    "pitch": 70,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 5.6,
+   "flightDN_LR": 3.3
   },
   {
    "t": 340,
@@ -365,7 +4253,9 @@
    "hg": 87.5,
    "hg_LR": -50,
    "pitch": 75,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 360,
@@ -383,7 +4273,9 @@
    "hg": 62.5,
    "hg_LR": -50,
    "pitch": 45,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 3.7,
+   "flightDN_LR": -0.3
   },
   {
    "t": 380,
@@ -401,7 +4293,9 @@
    "hg": 93.8,
    "hg_LR": 12.5,
    "pitch": 25,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 400,
@@ -419,7 +4313,9 @@
    "hg": 131.3,
    "hg_LR": 12.5,
    "pitch": 75,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 420,
@@ -437,7 +4333,9 @@
    "hg": 106.3,
    "hg_LR": 12.5,
    "pitch": 70,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 3.7,
+   "flightDN_LR": -0.3
   },
   {
    "t": 440,
@@ -455,7 +4353,9 @@
    "hg": 87.5,
    "hg_LR": 25,
    "pitch": 55,
-   "pitch_LR": -10
+   "pitch_LR": -10,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 460,
@@ -473,7 +4373,9 @@
    "hg": 37.5,
    "hg_LR": -25,
    "pitch": 30,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 480,
@@ -491,7 +4393,9 @@
    "hg": 50,
    "hg_LR": 0,
    "pitch": 30,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 7.4,
+   "flightDN_LR": 6.9
   },
   {
    "t": 500,
@@ -509,7 +4413,9 @@
    "hg": 118.8,
    "hg_LR": 12.5,
    "pitch": 105,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 3.7,
+   "flightDN_LR": -0.3
   },
   {
    "t": 520,
@@ -527,7 +4433,9 @@
    "hg": 68.8,
    "hg_LR": -62.5,
    "pitch": 95,
-   "pitch_LR": -10
+   "pitch_LR": -10,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 540,
@@ -545,7 +4453,9 @@
    "hg": 68.8,
    "hg_LR": -12.5,
    "pitch": 45,
-   "pitch_LR": -10
+   "pitch_LR": -10,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 560,
@@ -563,7 +4473,9 @@
    "hg": 87.5,
    "hg_LR": -50,
    "pitch": 60,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 580,
@@ -581,7 +4493,9 @@
    "hg": 62.5,
    "hg_LR": -50,
    "pitch": 85,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 600,
@@ -599,7 +4513,9 @@
    "hg": 37.5,
    "hg_LR": -25,
    "pitch": 35,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 620,
@@ -617,7 +4533,9 @@
    "hg": 68.8,
    "hg_LR": 12.5,
    "pitch": 40,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 9.3,
+   "flightDN_LR": 3
   },
   {
    "t": 640,
@@ -635,7 +4553,9 @@
    "hg": 106.3,
    "hg_LR": -12.5,
    "pitch": 65,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 660,
@@ -653,7 +4573,9 @@
    "hg": 43.8,
    "hg_LR": 12.5,
    "pitch": 60,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 680,
@@ -671,7 +4593,9 @@
    "hg": 50,
    "hg_LR": -25,
    "pitch": 20,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 700,
@@ -689,7 +4613,9 @@
    "hg": 87.5,
    "hg_LR": 0,
    "pitch": 65,
-   "pitch_LR": -10
+   "pitch_LR": -10,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 720,
@@ -707,7 +4633,9 @@
    "hg": 93.8,
    "hg_LR": -37.5,
    "pitch": 85,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 740,
@@ -725,7 +4653,9 @@
    "hg": 62.5,
    "hg_LR": -25,
    "pitch": 40,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 760,
@@ -743,7 +4673,9 @@
    "hg": 118.8,
    "hg_LR": 12.5,
    "pitch": 80,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 780,
@@ -761,7 +4693,9 @@
    "hg": 68.8,
    "hg_LR": -12.5,
    "pitch": 40,
-   "pitch_LR": -20
+   "pitch_LR": -20,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 800,
@@ -779,7 +4713,9 @@
    "hg": 43.8,
    "hg_LR": 12.5,
    "pitch": 50,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 820,
@@ -797,7 +4733,9 @@
    "hg": 75,
    "hg_LR": 0,
    "pitch": 20,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 840,
@@ -815,7 +4753,9 @@
    "hg": 100,
    "hg_LR": 0,
    "pitch": 60,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 860,
@@ -833,7 +4773,9 @@
    "hg": 56.3,
    "hg_LR": 12.5,
    "pitch": 45,
-   "pitch_LR": -10
+   "pitch_LR": -10,
+   "flightDN": 3.7,
+   "flightDN_LR": -0.3
   },
   {
    "t": 880,
@@ -851,7 +4793,9 @@
    "hg": 12.5,
    "hg_LR": 0,
    "pitch": 20,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 900,
@@ -869,7 +4813,9 @@
    "hg": 81.3,
    "hg_LR": -37.5,
    "pitch": 30,
-   "pitch_LR": -20
+   "pitch_LR": -20,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 920,
@@ -887,7 +4833,9 @@
    "hg": 81.3,
    "hg_LR": 12.5,
    "pitch": 90,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 940,
@@ -905,7 +4853,9 @@
    "hg": 50,
    "hg_LR": 0,
    "pitch": 55,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 960,
@@ -923,7 +4873,9 @@
    "hg": 68.8,
    "hg_LR": -12.5,
    "pitch": 55,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 7.4,
+   "flightDN_LR": 6.9
   },
   {
    "t": 980,
@@ -941,7 +4893,9 @@
    "hg": 81.3,
    "hg_LR": -62.5,
    "pitch": 80,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 1000,
@@ -959,7 +4913,9 @@
    "hg": 75,
    "hg_LR": -25,
    "pitch": 60,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 11.1,
+   "flightDN_LR": 6.6
   },
   {
    "t": 1020,
@@ -977,7 +4933,9 @@
    "hg": 6.3,
    "hg_LR": 12.5,
    "pitch": 40,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 1040,
@@ -995,7 +4953,9 @@
    "hg": 81.3,
    "hg_LR": -12.5,
    "pitch": 40,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 5.6,
+   "flightDN_LR": 10.7
   },
   {
    "t": 1060,
@@ -1013,7 +4973,9 @@
    "hg": 118.8,
    "hg_LR": -12.5,
    "pitch": 100,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 3.7,
+   "flightDN_LR": -0.3
   },
   {
    "t": 1080,
@@ -1031,7 +4993,9 @@
    "hg": 43.8,
    "hg_LR": -12.5,
    "pitch": 45,
-   "pitch_LR": -10
+   "pitch_LR": -10,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 1100,
@@ -1049,7 +5013,9 @@
    "hg": 6.3,
    "hg_LR": -12.5,
    "pitch": 40,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 1120,
@@ -1067,7 +5033,9 @@
    "hg": 75,
    "hg_LR": 0,
    "pitch": 50,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 1140,
@@ -1085,7 +5053,9 @@
    "hg": 112.5,
    "hg_LR": -25,
    "pitch": 75,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 5.6,
+   "flightDN_LR": 10.7
   },
   {
    "t": 1160,
@@ -1103,7 +5073,9 @@
    "hg": 50,
    "hg_LR": -50,
    "pitch": 65,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 1180,
@@ -1121,7 +5093,9 @@
    "hg": 12.5,
    "hg_LR": 0,
    "pitch": 25,
-   "pitch_LR": -10
+   "pitch_LR": -10,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 1200,
@@ -1139,7 +5113,9 @@
    "hg": 87.5,
    "hg_LR": 0,
    "pitch": 35,
-   "pitch_LR": -10
+   "pitch_LR": -10,
+   "flightDN": 3.7,
+   "flightDN_LR": -0.3
   },
   {
    "t": 1220,
@@ -1157,7 +5133,9 @@
    "hg": 87.5,
    "hg_LR": -25,
    "pitch": 60,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 5.6,
+   "flightDN_LR": 3.3
   },
   {
    "t": 1240,
@@ -1175,7 +5153,9 @@
    "hg": 56.3,
    "hg_LR": -62.5,
    "pitch": 65,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 1260,
@@ -1193,7 +5173,9 @@
    "hg": 75,
    "hg_LR": -25,
    "pitch": 25,
-   "pitch_LR": -10
+   "pitch_LR": -10,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 1280,
@@ -1211,7 +5193,9 @@
    "hg": 87.5,
    "hg_LR": 0,
    "pitch": 50,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 1300,
@@ -1229,7 +5213,9 @@
    "hg": 56.3,
    "hg_LR": -12.5,
    "pitch": 55,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 5.6,
+   "flightDN_LR": 3.3
   },
   {
    "t": 1320,
@@ -1247,7 +5233,9 @@
    "hg": 68.8,
    "hg_LR": -12.5,
    "pitch": 30,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 1340,
@@ -1265,7 +5253,9 @@
    "hg": 125,
    "hg_LR": 0,
    "pitch": 70,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 1360,
@@ -1283,7 +5273,9 @@
    "hg": 100,
    "hg_LR": 0,
    "pitch": 70,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 5.6,
+   "flightDN_LR": 3.3
   },
   {
    "t": 1380,
@@ -1301,7 +5293,9 @@
    "hg": 75,
    "hg_LR": -50,
    "pitch": 50,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 1400,
@@ -1319,7 +5313,9 @@
    "hg": 100,
    "hg_LR": -25,
    "pitch": 90,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 1420,
@@ -1337,7 +5333,9 @@
    "hg": 68.8,
    "hg_LR": -37.5,
    "pitch": 70,
-   "pitch_LR": -20
+   "pitch_LR": -20,
+   "flightDN": 7.4,
+   "flightDN_LR": 14.3
   },
   {
    "t": 1440,
@@ -1355,7 +5353,9 @@
    "hg": 68.8,
    "hg_LR": -37.5,
    "pitch": 50,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 7.4,
+   "flightDN_LR": -0.5
   },
   {
    "t": 1460,
@@ -1373,7 +5373,9 @@
    "hg": 87.5,
    "hg_LR": 25,
    "pitch": 70,
-   "pitch_LR": -20
+   "pitch_LR": -20,
+   "flightDN": 5.6,
+   "flightDN_LR": 3.3
   },
   {
    "t": 1480,
@@ -1391,7 +5393,9 @@
    "hg": 31.3,
    "hg_LR": -12.5,
    "pitch": 85,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 1500,
@@ -1409,7 +5413,9 @@
    "hg": 25,
    "hg_LR": 0,
    "pitch": 70,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 1520,
@@ -1427,7 +5433,9 @@
    "hg": 18.8,
    "hg_LR": 12.5,
    "pitch": 65,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 1540,
@@ -1445,7 +5453,9 @@
    "hg": 18.8,
    "hg_LR": -12.5,
    "pitch": 70,
-   "pitch_LR": 40
+   "pitch_LR": 40,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 1560,
@@ -1463,7 +5473,9 @@
    "hg": 31.3,
    "hg_LR": -12.5,
    "pitch": 85,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 1580,
@@ -1481,7 +5493,9 @@
    "hg": 18.8,
    "hg_LR": -12.5,
    "pitch": 55,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 1600,
@@ -1499,7 +5513,9 @@
    "hg": 25,
    "hg_LR": 0,
    "pitch": 50,
-   "pitch_LR": 40
+   "pitch_LR": 40,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 1620,
@@ -1517,7 +5533,9 @@
    "hg": 62.5,
    "hg_LR": -50,
    "pitch": 75,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 1640,
@@ -1535,7 +5553,9 @@
    "hg": 50,
    "hg_LR": -25,
    "pitch": 90,
-   "pitch_LR": 40
+   "pitch_LR": 40,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 1660,
@@ -1553,7 +5573,9 @@
    "hg": 31.3,
    "hg_LR": 12.5,
    "pitch": 70,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 1680,
@@ -1571,7 +5593,9 @@
    "hg": 12.5,
    "hg_LR": -25,
    "pitch": 25,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 1700,
@@ -1589,7 +5613,9 @@
    "hg": 31.3,
    "hg_LR": 12.5,
    "pitch": 60,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 1720,
@@ -1607,7 +5633,9 @@
    "hg": 31.3,
    "hg_LR": -12.5,
    "pitch": 70,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 1740,
@@ -1625,7 +5653,9 @@
    "hg": 31.3,
    "hg_LR": 12.5,
    "pitch": 65,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 5.6,
+   "flightDN_LR": 10.7
   },
   {
    "t": 1760,
@@ -1643,7 +5673,9 @@
    "hg": 25,
    "hg_LR": 0,
    "pitch": 70,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 7.4,
+   "flightDN_LR": -0.5
   },
   {
    "t": 1780,
@@ -1661,7 +5693,9 @@
    "hg": 31.3,
    "hg_LR": 12.5,
    "pitch": 65,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 1800,
@@ -1679,7 +5713,9 @@
    "hg": 37.5,
    "hg_LR": -25,
    "pitch": 95,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 1820,
@@ -1697,7 +5733,9 @@
    "hg": 43.8,
    "hg_LR": -12.5,
    "pitch": 75,
-   "pitch_LR": -10
+   "pitch_LR": -10,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 1840,
@@ -1715,7 +5753,9 @@
    "hg": 37.5,
    "hg_LR": -25,
    "pitch": 70,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 7.4,
+   "flightDN_LR": 6.9
   },
   {
    "t": 1860,
@@ -1733,7 +5773,9 @@
    "hg": 50,
    "hg_LR": 25,
    "pitch": 70,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 1880,
@@ -1751,7 +5793,9 @@
    "hg": 68.8,
    "hg_LR": -62.5,
    "pitch": 70,
-   "pitch_LR": 40
+   "pitch_LR": 40,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 1900,
@@ -1769,7 +5813,9 @@
    "hg": 68.8,
    "hg_LR": -62.5,
    "pitch": 65,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 1920,
@@ -1787,7 +5833,9 @@
    "hg": 93.8,
    "hg_LR": -37.5,
    "pitch": 90,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 1940,
@@ -1805,7 +5853,9 @@
    "hg": 56.3,
    "hg_LR": -37.5,
    "pitch": 100,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 1960,
@@ -1823,7 +5873,9 @@
    "hg": 62.5,
    "hg_LR": -50,
    "pitch": 65,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 1980,
@@ -1841,7 +5893,9 @@
    "hg": 50,
    "hg_LR": -50,
    "pitch": 50,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 2000,
@@ -1859,7 +5913,9 @@
    "hg": 75,
    "hg_LR": -50,
    "pitch": 85,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 5.6,
+   "flightDN_LR": -4.1
   },
   {
    "t": 2020,
@@ -1877,7 +5933,9 @@
    "hg": 43.8,
    "hg_LR": -12.5,
    "pitch": 105,
-   "pitch_LR": -10
+   "pitch_LR": -10,
+   "flightDN": 11.1,
+   "flightDN_LR": 6.6
   },
   {
    "t": 2040,
@@ -1895,7 +5953,9 @@
    "hg": 31.3,
    "hg_LR": 12.5,
    "pitch": 80,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 7.4,
+   "flightDN_LR": 14.3
   },
   {
    "t": 2060,
@@ -1913,7 +5973,9 @@
    "hg": 18.8,
    "hg_LR": -12.5,
    "pitch": 65,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 2080,
@@ -1931,7 +5993,9 @@
    "hg": 25,
    "hg_LR": 25,
    "pitch": 75,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 2100,
@@ -1949,7 +6013,9 @@
    "hg": 31.3,
    "hg_LR": -12.5,
    "pitch": 65,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 2120,
@@ -1967,7 +6033,9 @@
    "hg": 37.5,
    "hg_LR": 25,
    "pitch": 75,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 2140,
@@ -1985,7 +6053,9 @@
    "hg": 31.3,
    "hg_LR": 37.5,
    "pitch": 65,
-   "pitch_LR": -10
+   "pitch_LR": -10,
+   "flightDN": 7.4,
+   "flightDN_LR": -0.5
   },
   {
    "t": 2160,
@@ -2003,7 +6073,9 @@
    "hg": 50,
    "hg_LR": 50,
    "pitch": 75,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 7.4,
+   "flightDN_LR": -0.5
   },
   {
    "t": 2180,
@@ -2021,7 +6093,9 @@
    "hg": 25,
    "hg_LR": 0,
    "pitch": 70,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 2200,
@@ -2039,7 +6113,9 @@
    "hg": 37.5,
    "hg_LR": 0,
    "pitch": 65,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 7.4,
+   "flightDN_LR": -0.5
   },
   {
    "t": 2220,
@@ -2057,7 +6133,9 @@
    "hg": 37.5,
    "hg_LR": 25,
    "pitch": 60,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 5.6,
+   "flightDN_LR": -11.5
   },
   {
    "t": 2240,
@@ -2075,7 +6153,9 @@
    "hg": 43.8,
    "hg_LR": 37.5,
    "pitch": 40,
-   "pitch_LR": 40
+   "pitch_LR": 40,
+   "flightDN": 5.6,
+   "flightDN_LR": 10.7
   },
   {
    "t": 2260,
@@ -2093,7 +6173,9 @@
    "hg": 37.5,
    "hg_LR": 0,
    "pitch": 70,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 2280,
@@ -2111,7 +6193,9 @@
    "hg": 25,
    "hg_LR": 0,
    "pitch": 65,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 5.6,
+   "flightDN_LR": 10.7
   },
   {
    "t": 2300,
@@ -2129,7 +6213,9 @@
    "hg": 31.3,
    "hg_LR": -12.5,
    "pitch": 90,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 2320,
@@ -2147,7 +6233,9 @@
    "hg": 25,
    "hg_LR": 25,
    "pitch": 55,
-   "pitch_LR": -10
+   "pitch_LR": -10,
+   "flightDN": 5.6,
+   "flightDN_LR": 10.7
   },
   {
    "t": 2340,
@@ -2165,7 +6253,9 @@
    "hg": 43.8,
    "hg_LR": -37.5,
    "pitch": 75,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 2360,
@@ -2183,7 +6273,9 @@
    "hg": 43.8,
    "hg_LR": 12.5,
    "pitch": 80,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 7.4,
+   "flightDN_LR": 6.9
   },
   {
    "t": 2380,
@@ -2201,7 +6293,9 @@
    "hg": 31.3,
    "hg_LR": -12.5,
    "pitch": 80,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 2400,
@@ -2219,7 +6313,9 @@
    "hg": 31.3,
    "hg_LR": -12.5,
    "pitch": 65,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 2420,
@@ -2237,7 +6333,9 @@
    "hg": 31.3,
    "hg_LR": -12.5,
    "pitch": 60,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 1.9,
+   "flightDN_LR": -3.8
   },
   {
    "t": 2440,
@@ -2255,7 +6353,9 @@
    "hg": 31.3,
    "hg_LR": -12.5,
    "pitch": 80,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 2460,
@@ -2273,7 +6373,9 @@
    "hg": 31.3,
    "hg_LR": -12.5,
    "pitch": 70,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 2480,
@@ -2291,7 +6393,9 @@
    "hg": 50,
    "hg_LR": 0,
    "pitch": 75,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 5.6,
+   "flightDN_LR": 10.7
   },
   {
    "t": 2500,
@@ -2309,7 +6413,9 @@
    "hg": 68.8,
    "hg_LR": 37.5,
    "pitch": 85,
-   "pitch_LR": -10
+   "pitch_LR": -10,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 2520,
@@ -2327,7 +6433,9 @@
    "hg": 56.3,
    "hg_LR": -37.5,
    "pitch": 100,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 2540,
@@ -2345,7 +6453,9 @@
    "hg": 50,
    "hg_LR": -50,
    "pitch": 70,
-   "pitch_LR": 40
+   "pitch_LR": 40,
+   "flightDN": 9.3,
+   "flightDN_LR": 10.4
   },
   {
    "t": 2560,
@@ -2363,7 +6473,9 @@
    "hg": 100,
    "hg_LR": -50,
    "pitch": 70,
-   "pitch_LR": -20
+   "pitch_LR": -20,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 2580,
@@ -2381,7 +6493,9 @@
    "hg": 68.8,
    "hg_LR": -62.5,
    "pitch": 100,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 2600,
@@ -2399,7 +6513,9 @@
    "hg": 62.5,
    "hg_LR": -75,
    "pitch": 75,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 2620,
@@ -2417,7 +6533,9 @@
    "hg": 37.5,
    "hg_LR": 0,
    "pitch": 60,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 2640,
@@ -2435,7 +6553,9 @@
    "hg": 56.3,
    "hg_LR": -37.5,
    "pitch": 65,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 2660,
@@ -2453,7 +6573,9 @@
    "hg": 31.3,
    "hg_LR": -12.5,
    "pitch": 70,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 2680,
@@ -2471,7 +6593,9 @@
    "hg": 43.8,
    "hg_LR": -12.5,
    "pitch": 55,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 9.3,
+   "flightDN_LR": 3
   },
   {
    "t": 2700,
@@ -2489,7 +6613,9 @@
    "hg": 37.5,
    "hg_LR": 0,
    "pitch": 80,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 7.4,
+   "flightDN_LR": -0.5
   },
   {
    "t": 2720,
@@ -2507,7 +6633,9 @@
    "hg": 37.5,
    "hg_LR": -25,
    "pitch": 80,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 11.1,
+   "flightDN_LR": 6.6
   },
   {
    "t": 2740,
@@ -2525,7 +6653,9 @@
    "hg": 50,
    "hg_LR": -50,
    "pitch": 65,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 2760,
@@ -2543,7 +6673,9 @@
    "hg": 100,
    "hg_LR": -50,
    "pitch": 90,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 2780,
@@ -2561,7 +6693,9 @@
    "hg": 68.8,
    "hg_LR": -12.5,
    "pitch": 90,
-   "pitch_LR": -20
+   "pitch_LR": -20,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 2800,
@@ -2579,7 +6713,9 @@
    "hg": 43.8,
    "hg_LR": -12.5,
    "pitch": 85,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 5.6,
+   "flightDN_LR": 3.3
   },
   {
    "t": 2820,
@@ -2597,7 +6733,9 @@
    "hg": 62.5,
    "hg_LR": 25,
    "pitch": 60,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 9.3,
+   "flightDN_LR": -4.4
   },
   {
    "t": 2840,
@@ -2615,7 +6753,9 @@
    "hg": 43.8,
    "hg_LR": 37.5,
    "pitch": 70,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 2860,
@@ -2633,7 +6773,9 @@
    "hg": 31.3,
    "hg_LR": 12.5,
    "pitch": 85,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 2880,
@@ -2651,7 +6793,9 @@
    "hg": 25,
    "hg_LR": 25,
    "pitch": 70,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 9.3,
+   "flightDN_LR": 3
   },
   {
    "t": 2900,
@@ -2669,7 +6813,9 @@
    "hg": 31.3,
    "hg_LR": 12.5,
    "pitch": 65,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 2920,
@@ -2687,7 +6833,9 @@
    "hg": 31.3,
    "hg_LR": -12.5,
    "pitch": 80,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 5.6,
+   "flightDN_LR": 3.3
   },
   {
    "t": 2940,
@@ -2705,7 +6853,9 @@
    "hg": 37.5,
    "hg_LR": -25,
    "pitch": 70,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 2960,
@@ -2723,7 +6873,9 @@
    "hg": 31.3,
    "hg_LR": -12.5,
    "pitch": 85,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 2980,
@@ -2741,7 +6893,9 @@
    "hg": 43.8,
    "hg_LR": -37.5,
    "pitch": 65,
-   "pitch_LR": -10
+   "pitch_LR": -10,
+   "flightDN": 3.7,
+   "flightDN_LR": -0.3
   },
   {
    "t": 3000,
@@ -2759,7 +6913,9 @@
    "hg": 56.3,
    "hg_LR": -37.5,
    "pitch": 105,
-   "pitch_LR": 50
+   "pitch_LR": 50,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 3020,
@@ -2777,7 +6933,9 @@
    "hg": 87.5,
    "hg_LR": -25,
    "pitch": 75,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 3040,
@@ -2795,7 +6953,9 @@
    "hg": 81.3,
    "hg_LR": -37.5,
    "pitch": 100,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 3060,
@@ -2813,7 +6973,9 @@
    "hg": 37.5,
    "hg_LR": -25,
    "pitch": 80,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 3080,
@@ -2831,7 +6993,9 @@
    "hg": 62.5,
    "hg_LR": -50,
    "pitch": 75,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 3100,
@@ -2849,7 +7013,9 @@
    "hg": 50,
    "hg_LR": -50,
    "pitch": 90,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 3120,
@@ -2867,7 +7033,9 @@
    "hg": 81.3,
    "hg_LR": -37.5,
    "pitch": 80,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 3140,
@@ -2885,7 +7053,9 @@
    "hg": 68.8,
    "hg_LR": -62.5,
    "pitch": 105,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 3160,
@@ -2903,7 +7073,9 @@
    "hg": 62.5,
    "hg_LR": -50,
    "pitch": 75,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 3180,
@@ -2921,7 +7093,9 @@
    "hg": 43.8,
    "hg_LR": -12.5,
    "pitch": 50,
-   "pitch_LR": -20
+   "pitch_LR": -20,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 3200,
@@ -2939,7 +7113,9 @@
    "hg": 50,
    "hg_LR": 0,
    "pitch": 70,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 3220,
@@ -2957,7 +7133,9 @@
    "hg": 37.5,
    "hg_LR": 0,
    "pitch": 50,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 3240,
@@ -2975,7 +7153,9 @@
    "hg": 31.3,
    "hg_LR": -12.5,
    "pitch": 60,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 3260,
@@ -2993,7 +7173,9 @@
    "hg": 18.8,
    "hg_LR": 12.5,
    "pitch": 65,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 3280,
@@ -3011,7 +7193,9 @@
    "hg": 12.5,
    "hg_LR": 25,
    "pitch": 55,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 3300,
@@ -3029,7 +7213,9 @@
    "hg": 18.8,
    "hg_LR": 12.5,
    "pitch": 55,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 3320,
@@ -3047,7 +7233,9 @@
    "hg": 37.5,
    "hg_LR": 0,
    "pitch": 50,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 3340,
@@ -3065,7 +7253,9 @@
    "hg": 56.3,
    "hg_LR": -12.5,
    "pitch": 80,
-   "pitch_LR": -20
+   "pitch_LR": -20,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 3360,
@@ -3083,7 +7273,9 @@
    "hg": 43.8,
    "hg_LR": -37.5,
    "pitch": 80,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 3380,
@@ -3101,7 +7293,9 @@
    "hg": 31.3,
    "hg_LR": -12.5,
    "pitch": 50,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 3400,
@@ -3119,7 +7313,9 @@
    "hg": 68.8,
    "hg_LR": -37.5,
    "pitch": 55,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 3420,
@@ -3137,7 +7333,9 @@
    "hg": 68.8,
    "hg_LR": -37.5,
    "pitch": 80,
-   "pitch_LR": 40
+   "pitch_LR": 40,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 3440,
@@ -3155,7 +7353,9 @@
    "hg": 31.3,
    "hg_LR": -12.5,
    "pitch": 60,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 3460,
@@ -3173,7 +7373,9 @@
    "hg": 50,
    "hg_LR": -75,
    "pitch": 55,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 3480,
@@ -3191,7 +7393,9 @@
    "hg": 87.5,
    "hg_LR": -50,
    "pitch": 75,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 3500,
@@ -3209,7 +7413,9 @@
    "hg": 81.3,
    "hg_LR": -87.5,
    "pitch": 60,
-   "pitch_LR": 40
+   "pitch_LR": 40,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 3520,
@@ -3227,7 +7433,9 @@
    "hg": 37.5,
    "hg_LR": -25,
    "pitch": 20,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 3540,
@@ -3245,7 +7453,9 @@
    "hg": 106.3,
    "hg_LR": -37.5,
    "pitch": 35,
-   "pitch_LR": -10
+   "pitch_LR": -10,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 3560,
@@ -3263,7 +7473,9 @@
    "hg": 87.5,
    "hg_LR": -25,
    "pitch": 75,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 3580,
@@ -3281,7 +7493,9 @@
    "hg": 37.5,
    "hg_LR": -50,
    "pitch": 30,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 3600,
@@ -3299,7 +7513,9 @@
    "hg": 18.8,
    "hg_LR": -12.5,
    "pitch": 20,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 3620,
@@ -3317,7 +7533,9 @@
    "hg": 18.8,
    "hg_LR": 12.5,
    "pitch": 40,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 3640,
@@ -3335,7 +7553,9 @@
    "hg": 6.3,
    "hg_LR": 12.5,
    "pitch": 30,
-   "pitch_LR": 40
+   "pitch_LR": 40,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 3660,
@@ -3353,7 +7573,9 @@
    "hg": 18.8,
    "hg_LR": 12.5,
    "pitch": 55,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 3680,
@@ -3371,7 +7593,9 @@
    "hg": 37.5,
    "hg_LR": 0,
    "pitch": 65,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 3700,
@@ -3389,7 +7613,9 @@
    "hg": 25,
    "hg_LR": 0,
    "pitch": 65,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 3720,
@@ -3407,7 +7633,9 @@
    "hg": 6.3,
    "hg_LR": 12.5,
    "pitch": 50,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 3740,
@@ -3425,7 +7653,9 @@
    "hg": 6.3,
    "hg_LR": 12.5,
    "pitch": 65,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 3760,
@@ -3443,7 +7673,9 @@
    "hg": 6.3,
    "hg_LR": 12.5,
    "pitch": 50,
-   "pitch_LR": 40
+   "pitch_LR": 40,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 3780,
@@ -3461,7 +7693,9 @@
    "hg": 6.3,
    "hg_LR": 12.5,
    "pitch": 60,
-   "pitch_LR": 40
+   "pitch_LR": 40,
+   "flightDN": 5.6,
+   "flightDN_LR": 10.7
   },
   {
    "t": 3800,
@@ -3479,7 +7713,9 @@
    "hg": 6.3,
    "hg_LR": 12.5,
    "pitch": 45,
-   "pitch_LR": 50
+   "pitch_LR": 50,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 3820,
@@ -3497,7 +7733,9 @@
    "hg": 6.3,
    "hg_LR": 12.5,
    "pitch": 70,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 3840,
@@ -3515,7 +7753,9 @@
    "hg": 6.3,
    "hg_LR": 12.5,
    "pitch": 45,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 5.6,
+   "flightDN_LR": 3.3
   },
   {
    "t": 3860,
@@ -3533,7 +7773,9 @@
    "hg": 50,
    "hg_LR": -25,
    "pitch": 75,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 3880,
@@ -3551,7 +7793,9 @@
    "hg": 25,
    "hg_LR": 0,
    "pitch": 70,
-   "pitch_LR": 40
+   "pitch_LR": 40,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 3900,
@@ -3569,7 +7813,9 @@
    "hg": 6.3,
    "hg_LR": 12.5,
    "pitch": 60,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 3920,
@@ -3587,7 +7833,9 @@
    "hg": 50,
    "hg_LR": -25,
    "pitch": 50,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 3940,
@@ -3605,7 +7853,9 @@
    "hg": 68.8,
    "hg_LR": -62.5,
    "pitch": 80,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 3960,
@@ -3623,7 +7873,9 @@
    "hg": 62.5,
    "hg_LR": -50,
    "pitch": 45,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 3980,
@@ -3641,7 +7893,9 @@
    "hg": 12.5,
    "hg_LR": -25,
    "pitch": 0,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 4000,
@@ -3659,7 +7913,9 @@
    "hg": 56.3,
    "hg_LR": -12.5,
    "pitch": 40,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 4020,
@@ -3677,7 +7933,9 @@
    "hg": 31.3,
    "hg_LR": 12.5,
    "pitch": 70,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 4040,
@@ -3695,7 +7953,9 @@
    "hg": 18.8,
    "hg_LR": 12.5,
    "pitch": 45,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 4060,
@@ -3713,7 +7973,9 @@
    "hg": 50,
    "hg_LR": -25,
    "pitch": 40,
-   "pitch_LR": 40
+   "pitch_LR": 40,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 4080,
@@ -3731,7 +7993,9 @@
    "hg": 68.8,
    "hg_LR": -37.5,
    "pitch": 80,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 4100,
@@ -3749,7 +8013,9 @@
    "hg": 31.3,
    "hg_LR": -12.5,
    "pitch": 70,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 4120,
@@ -3767,7 +8033,9 @@
    "hg": 18.8,
    "hg_LR": 12.5,
    "pitch": 60,
-   "pitch_LR": 40
+   "pitch_LR": 40,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 4140,
@@ -3785,7 +8053,9 @@
    "hg": 56.3,
    "hg_LR": -12.5,
    "pitch": 50,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 4160,
@@ -3803,7 +8073,9 @@
    "hg": 50,
    "hg_LR": -25,
    "pitch": 90,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 4180,
@@ -3821,7 +8093,9 @@
    "hg": 25,
    "hg_LR": 0,
    "pitch": 55,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 4200,
@@ -3839,7 +8113,9 @@
    "hg": 25,
    "hg_LR": 0,
    "pitch": 65,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 3.7,
+   "flightDN_LR": -0.3
   },
   {
    "t": 4220,
@@ -3857,7 +8133,9 @@
    "hg": 43.8,
    "hg_LR": -12.5,
    "pitch": 75,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 4240,
@@ -3875,7 +8153,9 @@
    "hg": 37.5,
    "hg_LR": -25,
    "pitch": 80,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 4260,
@@ -3893,7 +8173,9 @@
    "hg": 12.5,
    "hg_LR": 0,
    "pitch": 40,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 7.4,
+   "flightDN_LR": 6.9
   },
   {
    "t": 4280,
@@ -3911,7 +8193,9 @@
    "hg": 6.3,
    "hg_LR": 12.5,
    "pitch": 35,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 4300,
@@ -3929,7 +8213,9 @@
    "hg": 18.8,
    "hg_LR": 12.5,
    "pitch": 65,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 5.6,
+   "flightDN_LR": 10.7
   },
   {
    "t": 4320,
@@ -3947,7 +8233,9 @@
    "hg": 31.3,
    "hg_LR": -12.5,
    "pitch": 80,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 4340,
@@ -3965,7 +8253,9 @@
    "hg": 37.5,
    "hg_LR": 0,
    "pitch": 70,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 5.6,
+   "flightDN_LR": 10.7
   },
   {
    "t": 4360,
@@ -3983,7 +8273,9 @@
    "hg": 12.5,
    "hg_LR": 0,
    "pitch": 55,
-   "pitch_LR": -10
+   "pitch_LR": -10,
+   "flightDN": 9.3,
+   "flightDN_LR": -4.4
   },
   {
    "t": 4380,
@@ -4001,7 +8293,9 @@
    "hg": 6.3,
    "hg_LR": 12.5,
    "pitch": 30,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 7.4,
+   "flightDN_LR": 14.3
   },
   {
    "t": 4400,
@@ -4019,7 +8313,9 @@
    "hg": 25,
    "hg_LR": 0,
    "pitch": 50,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 5.6,
+   "flightDN_LR": -4.1
   },
   {
    "t": 4420,
@@ -4037,7 +8333,9 @@
    "hg": 43.8,
    "hg_LR": -12.5,
    "pitch": 70,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 5.6,
+   "flightDN_LR": 3.3
   },
   {
    "t": 4440,
@@ -4055,7 +8353,9 @@
    "hg": 37.5,
    "hg_LR": 0,
    "pitch": 85,
-   "pitch_LR": -10
+   "pitch_LR": -10,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 4460,
@@ -4073,7 +8373,9 @@
    "hg": 6.3,
    "hg_LR": 12.5,
    "pitch": 60,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 4480,
@@ -4091,7 +8393,9 @@
    "hg": 12.5,
    "hg_LR": 25,
    "pitch": 45,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 4500,
@@ -4109,7 +8413,9 @@
    "hg": 12.5,
    "hg_LR": 0,
    "pitch": 55,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 4520,
@@ -4127,7 +8433,9 @@
    "hg": 12.5,
    "hg_LR": 25,
    "pitch": 60,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 4540,
@@ -4145,7 +8453,9 @@
    "hg": 31.3,
    "hg_LR": -12.5,
    "pitch": 60,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 4560,
@@ -4163,7 +8473,9 @@
    "hg": 37.5,
    "hg_LR": 0,
    "pitch": 100,
-   "pitch_LR": 40
+   "pitch_LR": 40,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 4580,
@@ -4181,7 +8493,9 @@
    "hg": 31.3,
    "hg_LR": -12.5,
    "pitch": 70,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 4600,
@@ -4199,7 +8513,9 @@
    "hg": 31.3,
    "hg_LR": -37.5,
    "pitch": 45,
-   "pitch_LR": -10
+   "pitch_LR": -10,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 4620,
@@ -4217,7 +8533,9 @@
    "hg": 50,
    "hg_LR": 25,
    "pitch": 85,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 4640,
@@ -4235,7 +8553,9 @@
    "hg": 50,
    "hg_LR": 0,
    "pitch": 75,
-   "pitch_LR": -10
+   "pitch_LR": -10,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 4660,
@@ -4253,7 +8573,9 @@
    "hg": 12.5,
    "hg_LR": 0,
    "pitch": 40,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 4680,
@@ -4271,7 +8593,9 @@
    "hg": 18.8,
    "hg_LR": 12.5,
    "pitch": 55,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 4700,
@@ -4289,7 +8613,9 @@
    "hg": 12.5,
    "hg_LR": 0,
    "pitch": 55,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 4720,
@@ -4307,7 +8633,9 @@
    "hg": 18.8,
    "hg_LR": 12.5,
    "pitch": 80,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 4740,
@@ -4325,7 +8653,9 @@
    "hg": 31.3,
    "hg_LR": -12.5,
    "pitch": 70,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 4760,
@@ -4343,7 +8673,9 @@
    "hg": 93.8,
    "hg_LR": -87.5,
    "pitch": 85,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 4780,
@@ -4361,7 +8693,9 @@
    "hg": 56.3,
    "hg_LR": -12.5,
    "pitch": 85,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 4800,
@@ -4379,7 +8713,9 @@
    "hg": 43.8,
    "hg_LR": -37.5,
    "pitch": 75,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 4820,
@@ -4397,7 +8733,9 @@
    "hg": 31.3,
    "hg_LR": -37.5,
    "pitch": 55,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 4840,
@@ -4415,7 +8753,9 @@
    "hg": 100,
    "hg_LR": -25,
    "pitch": 70,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 4860,
@@ -4433,7 +8773,9 @@
    "hg": 62.5,
    "hg_LR": -50,
    "pitch": 85,
-   "pitch_LR": -10
+   "pitch_LR": -10,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 4880,
@@ -4451,7 +8793,9 @@
    "hg": 37.5,
    "hg_LR": -25,
    "pitch": 60,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 4900,
@@ -4469,7 +8813,9 @@
    "hg": 81.3,
    "hg_LR": -37.5,
    "pitch": 35,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 4920,
@@ -4487,7 +8833,9 @@
    "hg": 112.5,
    "hg_LR": 25,
    "pitch": 95,
-   "pitch_LR": -10
+   "pitch_LR": -10,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 4940,
@@ -4505,7 +8853,9 @@
    "hg": 68.8,
    "hg_LR": -62.5,
    "pitch": 80,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 4960,
@@ -4523,7 +8873,9 @@
    "hg": 25,
    "hg_LR": -25,
    "pitch": 80,
-   "pitch_LR": 40
+   "pitch_LR": 40,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 4980,
@@ -4541,7 +8893,9 @@
    "hg": 31.3,
    "hg_LR": -12.5,
    "pitch": 50,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 5000,
@@ -4559,7 +8913,9 @@
    "hg": 50,
    "hg_LR": -50,
    "pitch": 45,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 5020,
@@ -4577,7 +8933,9 @@
    "hg": 25,
    "hg_LR": -25,
    "pitch": 75,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 5040,
@@ -4595,7 +8953,9 @@
    "hg": 25,
    "hg_LR": 0,
    "pitch": 70,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 5060,
@@ -4613,7 +8973,9 @@
    "hg": 56.3,
    "hg_LR": -62.5,
    "pitch": 75,
-   "pitch_LR": 50
+   "pitch_LR": 50,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 5080,
@@ -4631,7 +8993,9 @@
    "hg": 31.3,
    "hg_LR": -37.5,
    "pitch": 70,
-   "pitch_LR": 40
+   "pitch_LR": 40,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 5100,
@@ -4649,7 +9013,9 @@
    "hg": 43.8,
    "hg_LR": -37.5,
    "pitch": 75,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 5120,
@@ -4667,7 +9033,9 @@
    "hg": 87.5,
    "hg_LR": -25,
    "pitch": 95,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 5140,
@@ -4685,7 +9053,9 @@
    "hg": 62.5,
    "hg_LR": -25,
    "pitch": 85,
-   "pitch_LR": -10
+   "pitch_LR": -10,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 5160,
@@ -4703,7 +9073,9 @@
    "hg": 31.3,
    "hg_LR": -12.5,
    "pitch": 55,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 11.1,
+   "flightDN_LR": 14
   },
   {
    "t": 5180,
@@ -4721,7 +9093,9 @@
    "hg": 37.5,
    "hg_LR": -25,
    "pitch": 70,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 5200,
@@ -4739,7 +9113,9 @@
    "hg": 56.3,
    "hg_LR": -62.5,
    "pitch": 75,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 5220,
@@ -4757,7 +9133,9 @@
    "hg": 37.5,
    "hg_LR": -25,
    "pitch": 60,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 5240,
@@ -4775,7 +9153,9 @@
    "hg": 43.8,
    "hg_LR": -12.5,
    "pitch": 80,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 5260,
@@ -4793,7 +9173,9 @@
    "hg": 43.8,
    "hg_LR": -12.5,
    "pitch": 70,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 5280,
@@ -4811,7 +9193,9 @@
    "hg": 87.5,
    "hg_LR": -50,
    "pitch": 105,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 5.6,
+   "flightDN_LR": 3.3
   },
   {
    "t": 5300,
@@ -4829,7 +9213,9 @@
    "hg": 43.8,
    "hg_LR": -37.5,
    "pitch": 90,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 5320,
@@ -4847,7 +9233,9 @@
    "hg": 31.3,
    "hg_LR": -37.5,
    "pitch": 70,
-   "pitch_LR": 40
+   "pitch_LR": 40,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 5340,
@@ -4865,7 +9253,9 @@
    "hg": 75,
    "hg_LR": -50,
    "pitch": 55,
-   "pitch_LR": 30
+   "pitch_LR": 30,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 5360,
@@ -4883,7 +9273,9 @@
    "hg": 37.5,
    "hg_LR": -25,
    "pitch": 90,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 5380,
@@ -4901,7 +9293,9 @@
    "hg": 31.3,
    "hg_LR": 12.5,
    "pitch": 75,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 5400,
@@ -4919,7 +9313,9 @@
    "hg": 18.8,
    "hg_LR": -12.5,
    "pitch": 55,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 5420,
@@ -4937,7 +9333,9 @@
    "hg": 31.3,
    "hg_LR": 12.5,
    "pitch": 70,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 5440,
@@ -4955,7 +9353,9 @@
    "hg": 18.8,
    "hg_LR": 12.5,
    "pitch": 75,
-   "pitch_LR": -10
+   "pitch_LR": -10,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 5460,
@@ -4973,7 +9373,9 @@
    "hg": 37.5,
    "hg_LR": -25,
    "pitch": 60,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 5480,
@@ -4991,7 +9393,9 @@
    "hg": 50,
    "hg_LR": -25,
    "pitch": 80,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 5.6,
+   "flightDN_LR": 3.3
   },
   {
    "t": 5500,
@@ -5009,7 +9413,9 @@
    "hg": 18.8,
    "hg_LR": -12.5,
    "pitch": 70,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 5520,
@@ -5027,7 +9433,9 @@
    "hg": 68.8,
    "hg_LR": -62.5,
    "pitch": 70,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 3.7,
+   "flightDN_LR": -0.3
   },
   {
    "t": 5540,
@@ -5045,7 +9453,9 @@
    "hg": 56.3,
    "hg_LR": -62.5,
    "pitch": 110,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 5560,
@@ -5063,7 +9473,9 @@
    "hg": 50,
    "hg_LR": -50,
    "pitch": 85,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 5580,
@@ -5081,7 +9493,9 @@
    "hg": 43.8,
    "hg_LR": 12.5,
    "pitch": 45,
-   "pitch_LR": -10
+   "pitch_LR": -10,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 5600,
@@ -5099,7 +9513,9 @@
    "hg": 50,
    "hg_LR": -25,
    "pitch": 75,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 5620,
@@ -5117,7 +9533,9 @@
    "hg": 31.3,
    "hg_LR": -37.5,
    "pitch": 55,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 5.6,
+   "flightDN_LR": 3.3
   },
   {
    "t": 5640,
@@ -5135,7 +9553,9 @@
    "hg": 37.5,
    "hg_LR": -25,
    "pitch": 65,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 5660,
@@ -5153,7 +9573,9 @@
    "hg": 43.8,
    "hg_LR": -37.5,
    "pitch": 90,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 5680,
@@ -5171,7 +9593,9 @@
    "hg": 106.3,
    "hg_LR": 37.5,
    "pitch": 70,
-   "pitch_LR": 40
+   "pitch_LR": 40,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 5700,
@@ -5189,7 +9613,9 @@
    "hg": 50,
    "hg_LR": -25,
    "pitch": 90,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 5720,
@@ -5207,7 +9633,9 @@
    "hg": 18.8,
    "hg_LR": 12.5,
    "pitch": 60,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 5740,
@@ -5225,7 +9653,9 @@
    "hg": 18.8,
    "hg_LR": -12.5,
    "pitch": 45,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 5760,
@@ -5243,7 +9673,9 @@
    "hg": 25,
    "hg_LR": 0,
    "pitch": 65,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 5780,
@@ -5261,7 +9693,9 @@
    "hg": 31.3,
    "hg_LR": -12.5,
    "pitch": 65,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 5800,
@@ -5279,7 +9713,9 @@
    "hg": 50,
    "hg_LR": 0,
    "pitch": 80,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 5820,
@@ -5297,7 +9733,9 @@
    "hg": 12.5,
    "hg_LR": 0,
    "pitch": 80,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 5840,
@@ -5315,7 +9753,9 @@
    "hg": 31.3,
    "hg_LR": 12.5,
    "pitch": 60,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 5860,
@@ -5333,7 +9773,9 @@
    "hg": 62.5,
    "hg_LR": -25,
    "pitch": 60,
-   "pitch_LR": 0
+   "pitch_LR": 0,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
   },
   {
    "t": 5880,
@@ -5351,7 +9793,9 @@
    "hg": 31.3,
    "hg_LR": 12.5,
    "pitch": 75,
-   "pitch_LR": -10
+   "pitch_LR": -10,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 5900,
@@ -5369,7 +9813,9 @@
    "hg": 12.5,
    "hg_LR": -25,
    "pitch": 80,
-   "pitch_LR": 60
+   "pitch_LR": 60,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 5920,
@@ -5387,7 +9833,9 @@
    "hg": 37.5,
    "hg_LR": 0,
    "pitch": 55,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 5940,
@@ -5405,7 +9853,9 @@
    "hg": 62.5,
    "hg_LR": -50,
    "pitch": 90,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 5960,
@@ -5423,7 +9873,9 @@
    "hg": 68.8,
    "hg_LR": -37.5,
    "pitch": 70,
-   "pitch_LR": 20
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
   },
   {
    "t": 5980,
@@ -5441,7 +9893,9 @@
    "hg": 43.8,
    "hg_LR": 12.5,
    "pitch": 65,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
   },
   {
    "t": 6000,
@@ -5459,7 +9913,2009 @@
    "hg": 68.8,
    "hg_LR": -37.5,
    "pitch": 85,
-   "pitch_LR": 10
+   "pitch_LR": 10,
+   "flightDN": 3.7,
+   "flightDN_LR": -0.3
+  },
+  {
+   "t": 6020,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.474,
+   "power": 120.8,
+   "power_LR": 0,
+   "basalar": 33.3,
+   "basalar_LR": 33.3,
+   "first": 65,
+   "first_LR": 10,
+   "third": 8.3,
+   "third_LR": 16.7,
+   "hg": 56.3,
+   "hg_LR": -37.5,
+   "pitch": 85,
+   "pitch_LR": -10,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 6040,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.502,
+   "power": 133.3,
+   "power_LR": 16.7,
+   "basalar": 16.7,
+   "basalar_LR": 0,
+   "first": 75,
+   "first_LR": -10,
+   "third": 16.7,
+   "third_LR": 0,
+   "hg": 56.3,
+   "hg_LR": -37.5,
+   "pitch": 80,
+   "pitch_LR": 20,
+   "flightDN": 7.4,
+   "flightDN_LR": -0.5
+  },
+  {
+   "t": 6060,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.528,
+   "power": 129.2,
+   "power_LR": -16.7,
+   "basalar": 75,
+   "basalar_LR": 50,
+   "first": 80,
+   "first_LR": -20,
+   "third": 16.7,
+   "third_LR": 0,
+   "hg": 56.3,
+   "hg_LR": -37.5,
+   "pitch": 60,
+   "pitch_LR": 20,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
+  },
+  {
+   "t": 6080,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.551,
+   "power": 85.4,
+   "power_LR": -4.2,
+   "basalar": 66.7,
+   "basalar_LR": 0,
+   "first": 105,
+   "first_LR": -10,
+   "third": 41.7,
+   "third_LR": 16.7,
+   "hg": 50,
+   "hg_LR": -50,
+   "pitch": 75,
+   "pitch_LR": 10,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 6100,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.573,
+   "power": 79.2,
+   "power_LR": 16.7,
+   "basalar": 50,
+   "basalar_LR": 0,
+   "first": 100,
+   "first_LR": 20,
+   "third": 58.3,
+   "third_LR": 50,
+   "hg": 56.3,
+   "hg_LR": -12.5,
+   "pitch": 75,
+   "pitch_LR": 30,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
+  },
+  {
+   "t": 6120,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.592,
+   "power": 116.7,
+   "power_LR": -8.3,
+   "basalar": 58.3,
+   "basalar_LR": -50,
+   "first": 95,
+   "first_LR": -30,
+   "third": 50,
+   "third_LR": 33.3,
+   "hg": 56.3,
+   "hg_LR": -37.5,
+   "pitch": 70,
+   "pitch_LR": 0,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 6140,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.61,
+   "power": 108.3,
+   "power_LR": 8.3,
+   "basalar": 41.7,
+   "basalar_LR": -16.7,
+   "first": 100,
+   "first_LR": -20,
+   "third": 58.3,
+   "third_LR": 50,
+   "hg": 62.5,
+   "hg_LR": -75,
+   "pitch": 65,
+   "pitch_LR": 30,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 6160,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.625,
+   "power": 104.2,
+   "power_LR": -16.7,
+   "basalar": 66.7,
+   "basalar_LR": 0,
+   "first": 110,
+   "first_LR": 0,
+   "third": 58.3,
+   "third_LR": 16.7,
+   "hg": 50,
+   "hg_LR": -25,
+   "pitch": 70,
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 6180,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.64,
+   "power": 122.9,
+   "power_LR": -12.5,
+   "basalar": 83.3,
+   "basalar_LR": -33.3,
+   "first": 85,
+   "first_LR": -30,
+   "third": 33.3,
+   "third_LR": 0,
+   "hg": 81.3,
+   "hg_LR": -12.5,
+   "pitch": 75,
+   "pitch_LR": 30,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 6200,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.652,
+   "power": 114.6,
+   "power_LR": 12.5,
+   "basalar": 66.7,
+   "basalar_LR": 0,
+   "first": 100,
+   "first_LR": -20,
+   "third": 33.3,
+   "third_LR": 0,
+   "hg": 106.3,
+   "hg_LR": 37.5,
+   "pitch": 90,
+   "pitch_LR": 0,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 6220,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.663,
+   "power": 112.5,
+   "power_LR": -8.3,
+   "basalar": 41.7,
+   "basalar_LR": 16.7,
+   "first": 70,
+   "first_LR": 0,
+   "third": 16.7,
+   "third_LR": 0,
+   "hg": 43.8,
+   "hg_LR": -37.5,
+   "pitch": 80,
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 6240,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.673,
+   "power": 106.3,
+   "power_LR": -20.8,
+   "basalar": 50,
+   "basalar_LR": 0,
+   "first": 80,
+   "first_LR": -20,
+   "third": 33.3,
+   "third_LR": 33.3,
+   "hg": 25,
+   "hg_LR": 0,
+   "pitch": 80,
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 6260,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.682,
+   "power": 85.4,
+   "power_LR": -4.2,
+   "basalar": 33.3,
+   "basalar_LR": 0,
+   "first": 90,
+   "first_LR": 0,
+   "third": 58.3,
+   "third_LR": 16.7,
+   "hg": 31.3,
+   "hg_LR": -12.5,
+   "pitch": 85,
+   "pitch_LR": 10,
+   "flightDN": 7.4,
+   "flightDN_LR": -0.5
+  },
+  {
+   "t": 6280,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.69,
+   "power": 95.8,
+   "power_LR": -8.3,
+   "basalar": 33.3,
+   "basalar_LR": 0,
+   "first": 100,
+   "first_LR": -20,
+   "third": 50,
+   "third_LR": 33.3,
+   "hg": 18.8,
+   "hg_LR": 12.5,
+   "pitch": 75,
+   "pitch_LR": -10,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 6300,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.697,
+   "power": 102.1,
+   "power_LR": -20.8,
+   "basalar": 25,
+   "basalar_LR": -16.7,
+   "first": 90,
+   "first_LR": -20,
+   "third": 66.7,
+   "third_LR": 33.3,
+   "hg": 18.8,
+   "hg_LR": 12.5,
+   "pitch": 70,
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 6320,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.703,
+   "power": 116.7,
+   "power_LR": 0,
+   "basalar": 58.3,
+   "basalar_LR": -50,
+   "first": 85,
+   "first_LR": -10,
+   "third": 50,
+   "third_LR": 33.3,
+   "hg": 68.8,
+   "hg_LR": -62.5,
+   "pitch": 80,
+   "pitch_LR": 0,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 6340,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.709,
+   "power": 95.8,
+   "power_LR": -25,
+   "basalar": 41.7,
+   "basalar_LR": -16.7,
+   "first": 60,
+   "first_LR": 0,
+   "third": 41.7,
+   "third_LR": 50,
+   "hg": 56.3,
+   "hg_LR": -37.5,
+   "pitch": 90,
+   "pitch_LR": 0,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 6360,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.713,
+   "power": 118.8,
+   "power_LR": -4.2,
+   "basalar": 50,
+   "basalar_LR": -33.3,
+   "first": 75,
+   "first_LR": 10,
+   "third": 50,
+   "third_LR": 33.3,
+   "hg": 37.5,
+   "hg_LR": 0,
+   "pitch": 85,
+   "pitch_LR": 10,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 6380,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.718,
+   "power": 118.8,
+   "power_LR": -4.2,
+   "basalar": 58.3,
+   "basalar_LR": -50,
+   "first": 90,
+   "first_LR": 0,
+   "third": 41.7,
+   "third_LR": 50,
+   "hg": 50,
+   "hg_LR": -25,
+   "pitch": 65,
+   "pitch_LR": 10,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
+  },
+  {
+   "t": 6400,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.721,
+   "power": 108.3,
+   "power_LR": 0,
+   "basalar": 66.7,
+   "basalar_LR": -33.3,
+   "first": 105,
+   "first_LR": 10,
+   "third": 33.3,
+   "third_LR": 0,
+   "hg": 68.8,
+   "hg_LR": -62.5,
+   "pitch": 65,
+   "pitch_LR": 10,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 6420,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.725,
+   "power": 139.6,
+   "power_LR": -4.2,
+   "basalar": 58.3,
+   "basalar_LR": 16.7,
+   "first": 65,
+   "first_LR": -50,
+   "third": 58.3,
+   "third_LR": 16.7,
+   "hg": 43.8,
+   "hg_LR": 12.5,
+   "pitch": 90,
+   "pitch_LR": 0,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
+  },
+  {
+   "t": 6440,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.727,
+   "power": 108.3,
+   "power_LR": -8.3,
+   "basalar": 50,
+   "basalar_LR": -33.3,
+   "first": 50,
+   "first_LR": -20,
+   "third": 41.7,
+   "third_LR": 16.7,
+   "hg": 37.5,
+   "hg_LR": 0,
+   "pitch": 75,
+   "pitch_LR": 10,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 6460,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.73,
+   "power": 100,
+   "power_LR": -8.3,
+   "basalar": 33.3,
+   "basalar_LR": 0,
+   "first": 115,
+   "first_LR": -30,
+   "third": 75,
+   "third_LR": 50,
+   "hg": 37.5,
+   "hg_LR": 0,
+   "pitch": 80,
+   "pitch_LR": 20,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
+  },
+  {
+   "t": 6480,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.732,
+   "power": 108.3,
+   "power_LR": -16.7,
+   "basalar": 25,
+   "basalar_LR": 16.7,
+   "first": 105,
+   "first_LR": -10,
+   "third": 33.3,
+   "third_LR": 33.3,
+   "hg": 18.8,
+   "hg_LR": -12.5,
+   "pitch": 65,
+   "pitch_LR": 30,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
+  },
+  {
+   "t": 6500,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.734,
+   "power": 102.1,
+   "power_LR": -20.8,
+   "basalar": 41.7,
+   "basalar_LR": -16.7,
+   "first": 90,
+   "first_LR": 0,
+   "third": 50,
+   "third_LR": 33.3,
+   "hg": 56.3,
+   "hg_LR": -37.5,
+   "pitch": 60,
+   "pitch_LR": 20,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
+  },
+  {
+   "t": 6520,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.736,
+   "power": 108.3,
+   "power_LR": 25,
+   "basalar": 66.7,
+   "basalar_LR": 0,
+   "first": 85,
+   "first_LR": -30,
+   "third": 50,
+   "third_LR": 33.3,
+   "hg": 43.8,
+   "hg_LR": -62.5,
+   "pitch": 55,
+   "pitch_LR": 30,
+   "flightDN": 1.9,
+   "flightDN_LR": -3.8
+  },
+  {
+   "t": 6540,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.737,
+   "power": 127.1,
+   "power_LR": 12.5,
+   "basalar": 75,
+   "basalar_LR": -16.7,
+   "first": 105,
+   "first_LR": 10,
+   "third": 50,
+   "third_LR": 0,
+   "hg": 93.8,
+   "hg_LR": -12.5,
+   "pitch": 95,
+   "pitch_LR": -10,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
+  },
+  {
+   "t": 6560,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.739,
+   "power": 135.4,
+   "power_LR": -20.8,
+   "basalar": 33.3,
+   "basalar_LR": 0,
+   "first": 70,
+   "first_LR": -40,
+   "third": 41.7,
+   "third_LR": -16.7,
+   "hg": 68.8,
+   "hg_LR": -62.5,
+   "pitch": 80,
+   "pitch_LR": 20,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
+  },
+  {
+   "t": 6580,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.74,
+   "power": 112.5,
+   "power_LR": 8.3,
+   "basalar": 8.3,
+   "basalar_LR": 16.7,
+   "first": 95,
+   "first_LR": -30,
+   "third": 25,
+   "third_LR": 16.7,
+   "hg": 56.3,
+   "hg_LR": -37.5,
+   "pitch": 70,
+   "pitch_LR": 0,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
+  },
+  {
+   "t": 6600,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.741,
+   "power": 108.3,
+   "power_LR": -8.3,
+   "basalar": 50,
+   "basalar_LR": -33.3,
+   "first": 110,
+   "first_LR": -20,
+   "third": 58.3,
+   "third_LR": 16.7,
+   "hg": 43.8,
+   "hg_LR": -12.5,
+   "pitch": 80,
+   "pitch_LR": 40,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 6620,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.742,
+   "power": 120.8,
+   "power_LR": 0,
+   "basalar": 33.3,
+   "basalar_LR": 0,
+   "first": 95,
+   "first_LR": -10,
+   "third": 8.3,
+   "third_LR": 16.7,
+   "hg": 43.8,
+   "hg_LR": -62.5,
+   "pitch": 30,
+   "pitch_LR": 0,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 6640,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.742,
+   "power": 116.7,
+   "power_LR": 0,
+   "basalar": 75,
+   "basalar_LR": 16.7,
+   "first": 90,
+   "first_LR": -20,
+   "third": 33.3,
+   "third_LR": 0,
+   "hg": 50,
+   "hg_LR": -25,
+   "pitch": 25,
+   "pitch_LR": -10,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 6660,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.743,
+   "power": 129.2,
+   "power_LR": 8.3,
+   "basalar": 100,
+   "basalar_LR": 0,
+   "first": 80,
+   "first_LR": 20,
+   "third": 16.7,
+   "third_LR": 33.3,
+   "hg": 56.3,
+   "hg_LR": -12.5,
+   "pitch": 65,
+   "pitch_LR": 30,
+   "flightDN": 1.9,
+   "flightDN_LR": -3.8
+  },
+  {
+   "t": 6680,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.744,
+   "power": 116.7,
+   "power_LR": -8.3,
+   "basalar": 66.7,
+   "basalar_LR": 0,
+   "first": 85,
+   "first_LR": -10,
+   "third": 33.3,
+   "third_LR": 0,
+   "hg": 50,
+   "hg_LR": -25,
+   "pitch": 65,
+   "pitch_LR": 10,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
+  },
+  {
+   "t": 6700,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.744,
+   "power": 95.8,
+   "power_LR": -8.3,
+   "basalar": 50,
+   "basalar_LR": 0,
+   "first": 90,
+   "first_LR": 0,
+   "third": 33.3,
+   "third_LR": 0,
+   "hg": 37.5,
+   "hg_LR": 25,
+   "pitch": 75,
+   "pitch_LR": 10,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
+  },
+  {
+   "t": 6720,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.744,
+   "power": 93.8,
+   "power_LR": -20.8,
+   "basalar": 33.3,
+   "basalar_LR": -66.7,
+   "first": 100,
+   "first_LR": -20,
+   "third": 66.7,
+   "third_LR": 33.3,
+   "hg": 25,
+   "hg_LR": 0,
+   "pitch": 75,
+   "pitch_LR": -10,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 6740,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.745,
+   "power": 108.3,
+   "power_LR": 16.7,
+   "basalar": 50,
+   "basalar_LR": -33.3,
+   "first": 75,
+   "first_LR": -10,
+   "third": 50,
+   "third_LR": 33.3,
+   "hg": 37.5,
+   "hg_LR": -25,
+   "pitch": 80,
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 6760,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.745,
+   "power": 95.8,
+   "power_LR": -8.3,
+   "basalar": 50,
+   "basalar_LR": -33.3,
+   "first": 105,
+   "first_LR": 10,
+   "third": 66.7,
+   "third_LR": 0,
+   "hg": 56.3,
+   "hg_LR": -37.5,
+   "pitch": 75,
+   "pitch_LR": 30,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 6780,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.745,
+   "power": 112.5,
+   "power_LR": -16.7,
+   "basalar": 41.7,
+   "basalar_LR": -16.7,
+   "first": 100,
+   "first_LR": -20,
+   "third": 50,
+   "third_LR": 33.3,
+   "hg": 43.8,
+   "hg_LR": -37.5,
+   "pitch": 85,
+   "pitch_LR": 10,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 6800,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.746,
+   "power": 79.2,
+   "power_LR": -16.7,
+   "basalar": 58.3,
+   "basalar_LR": 16.7,
+   "first": 90,
+   "first_LR": -20,
+   "third": 66.7,
+   "third_LR": 33.3,
+   "hg": 31.3,
+   "hg_LR": -12.5,
+   "pitch": 75,
+   "pitch_LR": 30,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 6820,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.746,
+   "power": 110.4,
+   "power_LR": 4.2,
+   "basalar": 41.7,
+   "basalar_LR": 16.7,
+   "first": 80,
+   "first_LR": 0,
+   "third": 41.7,
+   "third_LR": 16.7,
+   "hg": 50,
+   "hg_LR": 25,
+   "pitch": 75,
+   "pitch_LR": 10,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 6840,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.746,
+   "power": 104.2,
+   "power_LR": 0,
+   "basalar": 75,
+   "basalar_LR": -16.7,
+   "first": 85,
+   "first_LR": -30,
+   "third": 66.7,
+   "third_LR": 0,
+   "hg": 37.5,
+   "hg_LR": 25,
+   "pitch": 75,
+   "pitch_LR": 30,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 6860,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.746,
+   "power": 97.9,
+   "power_LR": -12.5,
+   "basalar": 25,
+   "basalar_LR": 16.7,
+   "first": 70,
+   "first_LR": -40,
+   "third": 50,
+   "third_LR": 0,
+   "hg": 37.5,
+   "hg_LR": 25,
+   "pitch": 90,
+   "pitch_LR": 20,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
+  },
+  {
+   "t": 6880,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.746,
+   "power": 87.5,
+   "power_LR": -8.3,
+   "basalar": 33.3,
+   "basalar_LR": -33.3,
+   "first": 90,
+   "first_LR": -40,
+   "third": 25,
+   "third_LR": 16.7,
+   "hg": 25,
+   "hg_LR": 0,
+   "pitch": 70,
+   "pitch_LR": 20,
+   "flightDN": 5.6,
+   "flightDN_LR": 10.7
+  },
+  {
+   "t": 6900,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 102.1,
+   "power_LR": 20.8,
+   "basalar": 25,
+   "basalar_LR": -16.7,
+   "first": 80,
+   "first_LR": 0,
+   "third": 41.7,
+   "third_LR": 50,
+   "hg": 25,
+   "hg_LR": 0,
+   "pitch": 80,
+   "pitch_LR": 40,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 6920,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 97.9,
+   "power_LR": -20.8,
+   "basalar": 25,
+   "basalar_LR": -16.7,
+   "first": 95,
+   "first_LR": -30,
+   "third": 66.7,
+   "third_LR": 33.3,
+   "hg": 31.3,
+   "hg_LR": -12.5,
+   "pitch": 75,
+   "pitch_LR": 30,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 6940,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 120.8,
+   "power_LR": -8.3,
+   "basalar": 58.3,
+   "basalar_LR": -16.7,
+   "first": 75,
+   "first_LR": 10,
+   "third": 50,
+   "third_LR": 33.3,
+   "hg": 56.3,
+   "hg_LR": -37.5,
+   "pitch": 80,
+   "pitch_LR": 20,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
+  },
+  {
+   "t": 6960,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 102.1,
+   "power_LR": -20.8,
+   "basalar": 33.3,
+   "basalar_LR": -33.3,
+   "first": 75,
+   "first_LR": -10,
+   "third": 33.3,
+   "third_LR": 33.3,
+   "hg": 50,
+   "hg_LR": -50,
+   "pitch": 80,
+   "pitch_LR": 0,
+   "flightDN": 3.7,
+   "flightDN_LR": -0.3
+  },
+  {
+   "t": 6980,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 104.2,
+   "power_LR": -8.3,
+   "basalar": 41.7,
+   "basalar_LR": -16.7,
+   "first": 95,
+   "first_LR": 10,
+   "third": 50,
+   "third_LR": 33.3,
+   "hg": 50,
+   "hg_LR": -50,
+   "pitch": 80,
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 7000,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 89.6,
+   "power_LR": -4.2,
+   "basalar": 50,
+   "basalar_LR": -66.7,
+   "first": 100,
+   "first_LR": -20,
+   "third": 50,
+   "third_LR": 66.7,
+   "hg": 37.5,
+   "hg_LR": -25,
+   "pitch": 70,
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 7020,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 116.7,
+   "power_LR": -16.7,
+   "basalar": 91.7,
+   "basalar_LR": -16.7,
+   "first": 100,
+   "first_LR": -20,
+   "third": 58.3,
+   "third_LR": 16.7,
+   "hg": 100,
+   "hg_LR": -50,
+   "pitch": 75,
+   "pitch_LR": 30,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 7040,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 135.4,
+   "power_LR": -4.2,
+   "basalar": 50,
+   "basalar_LR": 0,
+   "first": 70,
+   "first_LR": -20,
+   "third": 58.3,
+   "third_LR": 50,
+   "hg": 62.5,
+   "hg_LR": -50,
+   "pitch": 95,
+   "pitch_LR": 30,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
+  },
+  {
+   "t": 7060,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 125,
+   "power_LR": 0,
+   "basalar": 33.3,
+   "basalar_LR": 0,
+   "first": 75,
+   "first_LR": -30,
+   "third": 50,
+   "third_LR": 33.3,
+   "hg": 50,
+   "hg_LR": -50,
+   "pitch": 90,
+   "pitch_LR": 40,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
+  },
+  {
+   "t": 7080,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 66.7,
+   "power_LR": -16.7,
+   "basalar": 33.3,
+   "basalar_LR": 0,
+   "first": 90,
+   "first_LR": -40,
+   "third": 41.7,
+   "third_LR": 16.7,
+   "hg": 37.5,
+   "hg_LR": -25,
+   "pitch": 60,
+   "pitch_LR": 0,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
+  },
+  {
+   "t": 7100,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 116.7,
+   "power_LR": -16.7,
+   "basalar": 50,
+   "basalar_LR": 0,
+   "first": 100,
+   "first_LR": -20,
+   "third": 33.3,
+   "third_LR": 0,
+   "hg": 56.3,
+   "hg_LR": -12.5,
+   "pitch": 65,
+   "pitch_LR": 10,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
+  },
+  {
+   "t": 7120,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 112.5,
+   "power_LR": 8.3,
+   "basalar": 58.3,
+   "basalar_LR": -16.7,
+   "first": 90,
+   "first_LR": -20,
+   "third": 41.7,
+   "third_LR": 16.7,
+   "hg": 75,
+   "hg_LR": -50,
+   "pitch": 80,
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 7140,
+   "flying": true,
+   "turn": -0.517,
+   "z": 0.747,
+   "power": 127.1,
+   "power_LR": -4.2,
+   "basalar": 41.7,
+   "basalar_LR": 16.7,
+   "first": 70,
+   "first_LR": -40,
+   "third": 33.3,
+   "third_LR": 0,
+   "hg": 56.3,
+   "hg_LR": -37.5,
+   "pitch": 90,
+   "pitch_LR": 20,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
+  },
+  {
+   "t": 7160,
+   "flying": true,
+   "turn": -0.52,
+   "z": 0.747,
+   "power": 118.8,
+   "power_LR": -4.2,
+   "basalar": 33.3,
+   "basalar_LR": -33.3,
+   "first": 70,
+   "first_LR": 0,
+   "third": 58.3,
+   "third_LR": 16.7,
+   "hg": 50,
+   "hg_LR": -50,
+   "pitch": 75,
+   "pitch_LR": 10,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
+  },
+  {
+   "t": 7180,
+   "flying": true,
+   "turn": -0.516,
+   "z": 0.747,
+   "power": 102.1,
+   "power_LR": 12.5,
+   "basalar": 25,
+   "basalar_LR": -16.7,
+   "first": 90,
+   "first_LR": -20,
+   "third": 41.7,
+   "third_LR": 50,
+   "hg": 43.8,
+   "hg_LR": -37.5,
+   "pitch": 60,
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 7200,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 102.1,
+   "power_LR": -29.2,
+   "basalar": 50,
+   "basalar_LR": -33.3,
+   "first": 105,
+   "first_LR": 10,
+   "third": 41.7,
+   "third_LR": 16.7,
+   "hg": 37.5,
+   "hg_LR": 0,
+   "pitch": 65,
+   "pitch_LR": 30,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 7220,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 114.6,
+   "power_LR": -4.2,
+   "basalar": 75,
+   "basalar_LR": 16.7,
+   "first": 80,
+   "first_LR": -20,
+   "third": 41.7,
+   "third_LR": 50,
+   "hg": 43.8,
+   "hg_LR": -37.5,
+   "pitch": 75,
+   "pitch_LR": 10,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 7240,
+   "flying": true,
+   "turn": -0.513,
+   "z": 0.747,
+   "power": 91.7,
+   "power_LR": -16.7,
+   "basalar": 50,
+   "basalar_LR": 0,
+   "first": 65,
+   "first_LR": -30,
+   "third": 50,
+   "third_LR": 33.3,
+   "hg": 37.5,
+   "hg_LR": 0,
+   "pitch": 80,
+   "pitch_LR": 20,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
+  },
+  {
+   "t": 7260,
+   "flying": true,
+   "turn": -0.244,
+   "z": 0.747,
+   "power": 116.7,
+   "power_LR": -8.3,
+   "basalar": 50,
+   "basalar_LR": 0,
+   "first": 90,
+   "first_LR": 0,
+   "third": 58.3,
+   "third_LR": 16.7,
+   "hg": 31.3,
+   "hg_LR": -12.5,
+   "pitch": 70,
+   "pitch_LR": 0,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 7280,
+   "flying": true,
+   "turn": 0.012,
+   "z": 0.747,
+   "power": 106.3,
+   "power_LR": 4.2,
+   "basalar": 25,
+   "basalar_LR": -16.7,
+   "first": 70,
+   "first_LR": 0,
+   "third": 41.7,
+   "third_LR": 50,
+   "hg": 25,
+   "hg_LR": 0,
+   "pitch": 65,
+   "pitch_LR": 10,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 7300,
+   "flying": true,
+   "turn": 0.018,
+   "z": 0.747,
+   "power": 85.4,
+   "power_LR": -20.8,
+   "basalar": 8.3,
+   "basalar_LR": -16.7,
+   "first": 60,
+   "first_LR": -20,
+   "third": 41.7,
+   "third_LR": 50,
+   "hg": 25,
+   "hg_LR": 0,
+   "pitch": 50,
+   "pitch_LR": 0,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
+  },
+  {
+   "t": 7320,
+   "flying": true,
+   "turn": -0.227,
+   "z": 0.747,
+   "power": 112.5,
+   "power_LR": 0,
+   "basalar": 16.7,
+   "basalar_LR": -33.3,
+   "first": 45,
+   "first_LR": -10,
+   "third": 41.7,
+   "third_LR": 16.7,
+   "hg": 18.8,
+   "hg_LR": -12.5,
+   "pitch": 70,
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 7340,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 116.7,
+   "power_LR": 0,
+   "basalar": 8.3,
+   "basalar_LR": -16.7,
+   "first": 40,
+   "first_LR": 0,
+   "third": 33.3,
+   "third_LR": 33.3,
+   "hg": 31.3,
+   "hg_LR": 12.5,
+   "pitch": 55,
+   "pitch_LR": 30,
+   "flightDN": 5.6,
+   "flightDN_LR": 10.7
+  },
+  {
+   "t": 7360,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 52.1,
+   "power_LR": -20.8,
+   "basalar": 25,
+   "basalar_LR": -16.7,
+   "first": 75,
+   "first_LR": -30,
+   "third": 50,
+   "third_LR": 0,
+   "hg": 31.3,
+   "hg_LR": -12.5,
+   "pitch": 85,
+   "pitch_LR": 10,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 7380,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 70.8,
+   "power_LR": 0,
+   "basalar": 41.7,
+   "basalar_LR": -16.7,
+   "first": 115,
+   "first_LR": -10,
+   "third": 41.7,
+   "third_LR": 16.7,
+   "hg": 31.3,
+   "hg_LR": -12.5,
+   "pitch": 70,
+   "pitch_LR": 0,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 7400,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 104.2,
+   "power_LR": -8.3,
+   "basalar": 75,
+   "basalar_LR": -16.7,
+   "first": 60,
+   "first_LR": 0,
+   "third": 50,
+   "third_LR": 33.3,
+   "hg": 50,
+   "hg_LR": -25,
+   "pitch": 60,
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 7420,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 102.1,
+   "power_LR": -20.8,
+   "basalar": 58.3,
+   "basalar_LR": -16.7,
+   "first": 90,
+   "first_LR": -20,
+   "third": 41.7,
+   "third_LR": 50,
+   "hg": 25,
+   "hg_LR": 0,
+   "pitch": 85,
+   "pitch_LR": 10,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 7440,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 122.9,
+   "power_LR": -4.2,
+   "basalar": 58.3,
+   "basalar_LR": 16.7,
+   "first": 70,
+   "first_LR": -20,
+   "third": 41.7,
+   "third_LR": 50,
+   "hg": 25,
+   "hg_LR": 0,
+   "pitch": 75,
+   "pitch_LR": 30,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 7460,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 110.4,
+   "power_LR": 12.5,
+   "basalar": 50,
+   "basalar_LR": -33.3,
+   "first": 70,
+   "first_LR": 0,
+   "third": 41.7,
+   "third_LR": 16.7,
+   "hg": 25,
+   "hg_LR": 0,
+   "pitch": 80,
+   "pitch_LR": 0,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
+  },
+  {
+   "t": 7480,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 104.2,
+   "power_LR": -25,
+   "basalar": 25,
+   "basalar_LR": 16.7,
+   "first": 95,
+   "first_LR": 10,
+   "third": 66.7,
+   "third_LR": 33.3,
+   "hg": 18.8,
+   "hg_LR": 37.5,
+   "pitch": 70,
+   "pitch_LR": 20,
+   "flightDN": 7.4,
+   "flightDN_LR": 6.9
+  },
+  {
+   "t": 7500,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 110.4,
+   "power_LR": -4.2,
+   "basalar": 16.7,
+   "basalar_LR": 0,
+   "first": 90,
+   "first_LR": -40,
+   "third": 50,
+   "third_LR": 0,
+   "hg": 25,
+   "hg_LR": 0,
+   "pitch": 65,
+   "pitch_LR": 10,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 7520,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 120.8,
+   "power_LR": -16.7,
+   "basalar": 58.3,
+   "basalar_LR": -50,
+   "first": 85,
+   "first_LR": 10,
+   "third": 50,
+   "third_LR": 33.3,
+   "hg": 62.5,
+   "hg_LR": -50,
+   "pitch": 110,
+   "pitch_LR": 40,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
+  },
+  {
+   "t": 7540,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 145.8,
+   "power_LR": 8.3,
+   "basalar": 25,
+   "basalar_LR": -50,
+   "first": 65,
+   "first_LR": -10,
+   "third": 50,
+   "third_LR": 66.7,
+   "hg": 75,
+   "hg_LR": -75,
+   "pitch": 95,
+   "pitch_LR": 30,
+   "flightDN": 5.6,
+   "flightDN_LR": 3.3
+  },
+  {
+   "t": 7560,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 45.8,
+   "power_LR": 0,
+   "basalar": 41.7,
+   "basalar_LR": -16.7,
+   "first": 100,
+   "first_LR": 0,
+   "third": 16.7,
+   "third_LR": 0,
+   "hg": 43.8,
+   "hg_LR": -37.5,
+   "pitch": 55,
+   "pitch_LR": 10,
+   "flightDN": 3.7,
+   "flightDN_LR": -0.3
+  },
+  {
+   "t": 7580,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 20.8,
+   "power_LR": -16.7,
+   "basalar": 41.7,
+   "basalar_LR": 16.7,
+   "first": 90,
+   "first_LR": -20,
+   "third": 8.3,
+   "third_LR": 16.7,
+   "hg": 37.5,
+   "hg_LR": -25,
+   "pitch": 35,
+   "pitch_LR": 10,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
+  },
+  {
+   "t": 7600,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 106.3,
+   "power_LR": 4.2,
+   "basalar": 75,
+   "basalar_LR": 16.7,
+   "first": 85,
+   "first_LR": 10,
+   "third": 8.3,
+   "third_LR": 16.7,
+   "hg": 43.8,
+   "hg_LR": -12.5,
+   "pitch": 70,
+   "pitch_LR": 40,
+   "flightDN": 7.4,
+   "flightDN_LR": -0.5
+  },
+  {
+   "t": 7620,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 93.8,
+   "power_LR": -12.5,
+   "basalar": 41.7,
+   "basalar_LR": -16.7,
+   "first": 85,
+   "first_LR": 30,
+   "third": 33.3,
+   "third_LR": 33.3,
+   "hg": 43.8,
+   "hg_LR": -37.5,
+   "pitch": 70,
+   "pitch_LR": 20,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
+  },
+  {
+   "t": 7640,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 100,
+   "power_LR": -8.3,
+   "basalar": 83.3,
+   "basalar_LR": -33.3,
+   "first": 85,
+   "first_LR": 10,
+   "third": 25,
+   "third_LR": 16.7,
+   "hg": 50,
+   "hg_LR": -50,
+   "pitch": 80,
+   "pitch_LR": 0,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 7660,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 116.7,
+   "power_LR": -8.3,
+   "basalar": 83.3,
+   "basalar_LR": 0,
+   "first": 75,
+   "first_LR": -10,
+   "third": 41.7,
+   "third_LR": 16.7,
+   "hg": 56.3,
+   "hg_LR": -37.5,
+   "pitch": 70,
+   "pitch_LR": 20,
+   "flightDN": 3.7,
+   "flightDN_LR": 7.1
+  },
+  {
+   "t": 7680,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 114.6,
+   "power_LR": 4.2,
+   "basalar": 41.7,
+   "basalar_LR": -16.7,
+   "first": 105,
+   "first_LR": -10,
+   "third": 50,
+   "third_LR": 33.3,
+   "hg": 43.8,
+   "hg_LR": -37.5,
+   "pitch": 80,
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 7700,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 135.4,
+   "power_LR": 4.2,
+   "basalar": 75,
+   "basalar_LR": 16.7,
+   "first": 85,
+   "first_LR": 10,
+   "third": 41.7,
+   "third_LR": 16.7,
+   "hg": 87.5,
+   "hg_LR": -75,
+   "pitch": 75,
+   "pitch_LR": 10,
+   "flightDN": 5.6,
+   "flightDN_LR": 3.3
+  },
+  {
+   "t": 7720,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 120.8,
+   "power_LR": 0,
+   "basalar": 50,
+   "basalar_LR": -66.7,
+   "first": 80,
+   "first_LR": -40,
+   "third": 58.3,
+   "third_LR": 50,
+   "hg": 75,
+   "hg_LR": -50,
+   "pitch": 100,
+   "pitch_LR": 0,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
+  },
+  {
+   "t": 7740,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 120.8,
+   "power_LR": -8.3,
+   "basalar": 16.7,
+   "basalar_LR": -33.3,
+   "first": 70,
+   "first_LR": -20,
+   "third": 50,
+   "third_LR": 0,
+   "hg": 62.5,
+   "hg_LR": -75,
+   "pitch": 90,
+   "pitch_LR": 0,
+   "flightDN": 1.9,
+   "flightDN_LR": -3.8
+  },
+  {
+   "t": 7760,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 29.2,
+   "power_LR": -16.7,
+   "basalar": 75,
+   "basalar_LR": -16.7,
+   "first": 95,
+   "first_LR": 10,
+   "third": 50,
+   "third_LR": 33.3,
+   "hg": 62.5,
+   "hg_LR": -75,
+   "pitch": 75,
+   "pitch_LR": 50,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 7780,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 95.8,
+   "power_LR": -16.7,
+   "basalar": 75,
+   "basalar_LR": -16.7,
+   "first": 95,
+   "first_LR": -10,
+   "third": 41.7,
+   "third_LR": 50,
+   "hg": 50,
+   "hg_LR": -50,
+   "pitch": 75,
+   "pitch_LR": 30,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 7800,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 93.8,
+   "power_LR": -12.5,
+   "basalar": 50,
+   "basalar_LR": 33.3,
+   "first": 100,
+   "first_LR": -60,
+   "third": 50,
+   "third_LR": 33.3,
+   "hg": 50,
+   "hg_LR": -25,
+   "pitch": 75,
+   "pitch_LR": 30,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 7820,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 110.4,
+   "power_LR": -20.8,
+   "basalar": 58.3,
+   "basalar_LR": -16.7,
+   "first": 95,
+   "first_LR": 10,
+   "third": 25,
+   "third_LR": 16.7,
+   "hg": 43.8,
+   "hg_LR": -12.5,
+   "pitch": 55,
+   "pitch_LR": 30,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 7840,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 81.3,
+   "power_LR": -4.2,
+   "basalar": 75,
+   "basalar_LR": -50,
+   "first": 90,
+   "first_LR": 0,
+   "third": 41.7,
+   "third_LR": 16.7,
+   "hg": 31.3,
+   "hg_LR": 12.5,
+   "pitch": 80,
+   "pitch_LR": 0,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 7860,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 97.9,
+   "power_LR": -20.8,
+   "basalar": 33.3,
+   "basalar_LR": -33.3,
+   "first": 85,
+   "first_LR": -30,
+   "third": 66.7,
+   "third_LR": 33.3,
+   "hg": 25,
+   "hg_LR": 0,
+   "pitch": 80,
+   "pitch_LR": 0,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
+  },
+  {
+   "t": 7880,
+   "flying": true,
+   "turn": -0.6,
+   "z": 0.747,
+   "power": 95.8,
+   "power_LR": -8.3,
+   "basalar": 50,
+   "basalar_LR": -33.3,
+   "first": 110,
+   "first_LR": 0,
+   "third": 58.3,
+   "third_LR": 16.7,
+   "hg": 37.5,
+   "hg_LR": 0,
+   "pitch": 60,
+   "pitch_LR": 20,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 7900,
+   "flying": true,
+   "turn": -0.576,
+   "z": 0.747,
+   "power": 112.5,
+   "power_LR": 8.3,
+   "basalar": 91.7,
+   "basalar_LR": 16.7,
+   "first": 110,
+   "first_LR": -40,
+   "third": 66.7,
+   "third_LR": 0,
+   "hg": 31.3,
+   "hg_LR": 12.5,
+   "pitch": 75,
+   "pitch_LR": 30,
+   "flightDN": 7.4,
+   "flightDN_LR": 6.9
+  },
+  {
+   "t": 7920,
+   "flying": true,
+   "turn": 0.022,
+   "z": 0.747,
+   "power": 85.4,
+   "power_LR": -29.2,
+   "basalar": 25,
+   "basalar_LR": -50,
+   "first": 85,
+   "first_LR": 10,
+   "third": 58.3,
+   "third_LR": 16.7,
+   "hg": 31.3,
+   "hg_LR": 37.5,
+   "pitch": 75,
+   "pitch_LR": -10,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 7940,
+   "flying": true,
+   "turn": 0.485,
+   "z": 0.747,
+   "power": 77.1,
+   "power_LR": -4.2,
+   "basalar": 25,
+   "basalar_LR": -16.7,
+   "first": 90,
+   "first_LR": -20,
+   "third": 50,
+   "third_LR": 33.3,
+   "hg": 25,
+   "hg_LR": 0,
+   "pitch": 75,
+   "pitch_LR": 30,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 7960,
+   "flying": true,
+   "turn": 0.6,
+   "z": 0.747,
+   "power": 110.4,
+   "power_LR": -4.2,
+   "basalar": 66.7,
+   "basalar_LR": -33.3,
+   "first": 65,
+   "first_LR": -10,
+   "third": 41.7,
+   "third_LR": 16.7,
+   "hg": 37.5,
+   "hg_LR": -25,
+   "pitch": 80,
+   "pitch_LR": 0,
+   "flightDN": 0,
+   "flightDN_LR": 0
+  },
+  {
+   "t": 7980,
+   "flying": true,
+   "turn": 0.6,
+   "z": 0.747,
+   "power": 116.7,
+   "power_LR": -8.3,
+   "basalar": 58.3,
+   "basalar_LR": -16.7,
+   "first": 85,
+   "first_LR": -30,
+   "third": 58.3,
+   "third_LR": 16.7,
+   "hg": 37.5,
+   "hg_LR": 0,
+   "pitch": 70,
+   "pitch_LR": 0,
+   "flightDN": 1.9,
+   "flightDN_LR": 3.6
+  },
+  {
+   "t": 8000,
+   "flying": true,
+   "turn": 0.6,
+   "z": 0.747,
+   "power": 95.8,
+   "power_LR": -16.7,
+   "basalar": 41.7,
+   "basalar_LR": -50,
+   "first": 110,
+   "first_LR": 20,
+   "third": 41.7,
+   "third_LR": 50,
+   "hg": 37.5,
+   "hg_LR": -25,
+   "pitch": 65,
+   "pitch_LR": 10,
+   "flightDN": 0,
+   "flightDN_LR": 0
   }
  ]
 }

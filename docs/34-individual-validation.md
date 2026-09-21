@@ -9,7 +9,9 @@ committed while the experiment is still several items away on the [roadmap](20-r
 ```sh
 node scripts/identify_test.mjs grid 12 6 4000          # what the design can detect
 node scripts/identify_test.mjs grid 12 6 4000 kappa    # and what it silently cannot
-node scripts/identify_test.mjs sim 12 0 6 4000 1 1 1   # the null, which must come out at 1/M
+node scripts/identify_test.mjs sim 12 0 6 4000 1 1     # the null, which must come out at 1/M
+                                                      # (M rho K trials kappa beta: the last two used
+                                                      #  to be one argument, and beta reached kappa's slot)
 node scripts/identify_test.mjs run data/identify.json  # once there is a dataset
 ```
 
@@ -67,7 +69,7 @@ interpolation.
 | 1 | escape rate and latency to a looming stimulus | the phenotype [A3](20-roadmap.md) is already fitting toward, with a published between-animal distribution |
 | 2 | tarsal PER threshold | the classic individual-difference measure in this animal; a threshold, not a rate, so it is not a gain in disguise |
 | 3 | heading precision while tracking an odour plume | circular variance of heading, so it separates tracking quality from walking speed |
-| 4 | walk-bout length distribution | mean and tail index; the observable [A2](20-roadmap.md) names as currently supplied by a scheduler |
+| 4 | walk-bout length distribution | mean and tail index, measured off the animal's motor command and **not** off the scheduler's own state — [M6](20-roadmap.md) finds those two give ρ = 0.74 and ρ = 0.00; the observable [A2](20-roadmap.md) names as currently supplied by a scheduler |
 | 5 | optomotor response gain | a reflexive visual loop with no obvious learning component |
 | 6 | feeding latency after first tarsal contact | the interval to the first sustained bout, which is a timing rather than a rate |
 
@@ -198,3 +200,42 @@ One thing that would invalidate the document rather than change it: if the anima
 individually different in these observables — if ρ comes out near zero — then the experiment as
 specified has no effect to find, and C1 has to be redesigned around an observable where they do differ.
 That is a measurement on twelve flies, and it can be made before any of the modelling work starts.
+
+## What [M6](20-roadmap.md) found, and what it does to this document
+
+That last paragraph has now half happened, in simulation rather than in flies.
+`scripts/motor_identify.mjs` builds twelve simulated individuals by drawing a lognormal per-neuron gain,
+runs each twice through the arena, and scores this document's statistic on two read-outs of the *same*
+runs: the behavioural observables and the motor pools.
+
+| read-out | identified | mean ρ | largest β with power ≥ 0.9 |
+|---|---|---|---|
+| the behavioural observables below | **1 / 12** (p = 0.65) | 0.129 | none — fails at β = 0 |
+| motor-pool rates | **12 / 12** | 0.836 | 1.0 |
+
+Five of the six behavioural observables come back at **ρ ≤ 0.03**, against this document's own gate of
+ρ ≥ 0.4. The permutation null lands at 0.085, so the threshold is right and the result is a real null
+rather than a broken statistic.
+
+**This does not unfreeze the statistic, the threshold, M, the split, the controls or the outcome table.**
+It bears on the one thing this document already named as legitimately decidable later — which observable
+to record — and on the one thing it named as invalidating, which is ρ. Concretely:
+
+- **The motor neurons are the observable C1 should record**, if the recording can reach them. A neural
+  observable has κ ≈ 1 by construction, which this document already said; what M6 adds is that the gap is
+  not a matter of degree, it runs to the null.
+- **Two of the six are not observables at all as the arena implements them.** Feeding latency is exactly
+  20 ms in all twenty-four runs because the assay starts the fly touching food, and flip fraction is zero
+  in every run but one. A quantity that does not vary cannot individuate, and that is an assay defect to
+  fix rather than a finding.
+- **Walk-bout length is two different observables and this document did not distinguish them.** The
+  supplied scheduler's own bout state returns ρ = 0.00 — its durations are a lognormal draw reseeded per
+  run, and the brain is not in the draw — while the same bout measured off the motor command returns
+  ρ = 0.74. Observable 4 below must specify the second, and it did not.
+- **The κ warning in this document was right and is now quantitative.** "A negative result on an
+  observable with low κ is uninterpretable as evidence about individuation" was written as a caution;
+  M6 shows four of these six observables sitting exactly there.
+
+The measurement is of one model in one arena over assays that are seconds long, with individuals made by
+a gain draw rather than born. A better behavioural assay could raise ρ. It could not put the brain into
+the scheduler's random number generator, which is the part that generalises.

@@ -1,6 +1,6 @@
 {
  "_source": "scripts/behavior_ladder.mjs (arm one, sensitivity at the fitted point)",
- "generated": "2026-09-18",
+ "generated": "2026-09-21",
  "baseParams": {
   "coba": true,
   "neuromod": true,
@@ -50,21 +50,33 @@
    "frozen": [],
    "note": "the fitted model of docs/07-calibration.md",
    "n": 12,
-   "score": 0.8598,
-   "scoreSem": 0.0297,
+   "score": 0.7576,
+   "scoreSem": 0.021,
    "obs": {
-    "flipMs": 5,
+    "flipMs": 0,
     "totalMs": 36000,
-    "alive": 1,
-    "foodDist": 0.3106,
+    "alive": 0.9167,
+    "foodDist": 0.2754,
     "feedLatency": 20,
-    "escapes": 0.5833,
-    "flipFrac": 0.0001,
-    "boutMedian": 2370,
-    "boutMean": 2765.2308,
-    "boutN": 8.5,
-    "bodyBoutMedian": 240,
-    "bodyBoutN": 34.9167
+    "escapes": 0.0833,
+    "flipFrac": 0,
+    "boutMedian": 2826.6667,
+    "boutMean": 3342.9881,
+    "boutN": 7.9167,
+    "bodyBoutMedian": 311.6667,
+    "bodyBoutN": 36.0833,
+    "mn_wing_power": 99.5694,
+    "mn_wing_basalar": 39.1458,
+    "mn_wing_first": 70.4516,
+    "mn_wing_third": 36.6497,
+    "mn_wing_hg": 43.3371,
+    "mn_wing_pitch": 62.0634,
+    "mn_leg_T1": 16.3996,
+    "mn_leg_T2": 12.1943,
+    "mn_leg_T3": 12.0675,
+    "mn_proboscis": 14.3184,
+    "mn_jump": 0.2847,
+    "mn_unmapped": 25.8134
    }
   },
   {
@@ -1232,6 +1244,84 @@
    "broke": [
     "bout"
    ],
+   "improved": []
+  },
+  {
+   "key": "muscle_single",
+   "level": "body",
+   "dir": "drop",
+   "patch": {
+    "perClassMuscles": false
+   },
+   "frozen": [],
+   "note": "per-class force-frequency curves replaced by the single 17 Hz saturation constant",
+   "n": 12,
+   "score": 0.8598,
+   "scoreSem": 0.0297,
+   "obs": {
+    "flipMs": 5,
+    "totalMs": 36000,
+    "alive": 1,
+    "foodDist": 0.3106,
+    "feedLatency": 20,
+    "escapes": 0.5833,
+    "flipFrac": 0.0001,
+    "boutMedian": 2370,
+    "boutMean": 2765.2308,
+    "boutN": 8.5,
+    "bodyBoutMedian": 240,
+    "bodyBoutN": 34.9167,
+    "mn_wing_power": 100.7532,
+    "mn_wing_basalar": 38.733,
+    "mn_wing_first": 69.0694,
+    "mn_wing_third": 39.5262,
+    "mn_wing_hg": 42.0101,
+    "mn_wing_pitch": 63.5197,
+    "mn_leg_T1": 16.3156,
+    "mn_leg_T2": 12.3442,
+    "mn_leg_T3": 12.1977,
+    "mn_proboscis": 12.302,
+    "mn_jump": 0.2141,
+    "mn_unmapped": 26.2164
+   },
+   "dScore": {
+    "d": 0.1022,
+    "se": 0.0422,
+    "n": 12
+   },
+   "terms": {
+    "alive": {
+     "d": 0.0833,
+     "se": 0.0833,
+     "n": 12
+    },
+    "flips": {
+     "d": -0.0028,
+     "se": 0.0028,
+     "n": 12
+    },
+    "food": {
+     "d": -0.0294,
+     "se": 0.0768,
+     "n": 12
+    },
+    "feed": {
+     "d": 0,
+     "se": 0,
+     "n": 12
+    },
+    "bout": {
+     "d": -0.0008,
+     "se": 0.0364,
+     "n": 12
+    },
+    "escape": {
+     "d": 0.5,
+     "se": 0.1946,
+     "n": 12
+    }
+   },
+   "broke": [],
    "improved": []
   },
   {

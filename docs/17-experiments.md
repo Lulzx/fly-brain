@@ -22,6 +22,11 @@
 | `node scripts/behavior_ladder.mjs [seeds]` | The same substitutions as `ablation_ladder`, scored in the arena instead of on the benchmark |
 | `node scripts/behavior_refit.mjs [gens] [pop] [rung]` | Arm two of the behavioural ladder: the rungs arm one resolved, each refitted |
 | `node scripts/identify_test.mjs curve\|sim\|run` | The frozen identification statistic for the individual-validation design ([doc 34](34-individual-validation.md)) |
+| `node scripts/motor_identify.mjs run [M] [sigma] [workers]` | [M6](20-roadmap.md): does motor-neuron activity individuate a model better than the behaviour it produces? Runs `identify_test`'s statistic on simulated individuals, scored once on motor pools and once on behaviour |
+| `node scripts/motor_bound.mjs [s] [seed]` | [M5](20-roadmap.md): what fraction of motor-neuron output has no route to the body. Answer: 42.4% of spikes |
+| `node scripts/muscle_check.mjs [s] [seed]` | [M4](20-roadmap.md): whether the per-class force-frequency model changes anything in `'descending'` mode. It does not, exactly |
+| `node scripts/dn_flight.mjs screen\|detail` | [M1](20-roadmap.md): every descending type driven in turn, ranked by what reaches the wing pools rather than the legs |
+| `node scripts/mn9_quiet.mjs dose\|sources\|silence\|chain\|fix\|combo\|refine\|paired` | [M3](20-roadmap.md): where the proboscis motor neuron's 26.6 Hz idle comes from, and what it costs to remove |
 | `node scripts/check_courtship.mjs` | Song pulse structure and female rejection, measured rather than assumed ([Courtship](26-courtship.md)) |
 | `python3 scripts/algo_operators.py fly worm` | Annotation-free operator detectors: expansion, normalization, ring ([Compiler](29-connectome-compiler.md)) |
 | `node scripts/check_flyvisgpu.mjs` | WebGPU flyvis kernel against the reference model, real adapter ([WebGPU](27-webgpu.md)) |

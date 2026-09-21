@@ -9,6 +9,7 @@ export const DEFAULTS = {
   adaptInc: 2.0, adaptTau: 100,   // spike-frequency adaptation: threshold rises adaptInc mV per spike, decays with adaptTau ms
   depU: 0.2, depTau: 200,          // short-term synaptic depression (per presynaptic neuron): resource x -= depU*x per spike, recovers with depTau
   inScale: null, outScale: null, minSyn: 1, sensoryMask: null, ntSign: null, preSign: null,
+  preInh: 0,   // presynaptic gain control on driven (sensory) neurons: release scaled by 1/(1 + preInh*|gI|). See src/wasm/lif.c and docs/20-roadmap.md M3.
   coba: false, eExc: 0, eInh: -70, inhGain: 1,   // conductance-based synapses: reversal potentials (mV); weights calibrated to wSyn PSP at rest
   // preSign: per-neuron graded sign (overrides nt table)
 };
@@ -20,9 +21,12 @@ export class LIFNetwork {
     // per-synapse PSP = wSyn * count / s_post  (s = neuron volume relative to its region's median; bigger neuron, lower input resistance)
     const inS = this.p.inScale, outS = this.p.outScale;
     const w = new Float32Array(weights.length);
-    for (let j = 0; j < N; j++) { const og = outS ? outS[j] : 1;
+    // Input onto sensory neurons is dropped -- they are Poisson-forced, so it could have no effect --
+    // except that presynaptic gain control needs the inhibitory edges onto them kept (see below).
+    const PSG = this.p.preSign, SGN0 = this.p.ntSign || EXC_SIGN;
+    for (let j = 0; j < N; j++) { const og = outS ? outS[j] : 1, keepSensory = this.p.preInh > 0 && (PSG ? PSG[j] : SGN0[nt[j]]) < 0;
       for (let k = indptr[j]; k < indptr[j + 1]; k++) { const q = indices[k]; const c = weights[k];
-        w[k] = (c >= this.p.minSyn && !this.sensory[q]) ? c * (inS ? inS[q] : 1) * og : 0; } }
+        w[k] = (c >= this.p.minSyn && (!this.sensory[q] || keepSensory)) ? c * (inS ? inS[q] : 1) * og : 0; } }
     if (this.p.inhGain !== 1) { const PS = this.p.preSign, SG = this.p.ntSign || EXC_SIGN;
       for (let j = 0; j < N; j++) { const sg = PS ? PS[j] : SG[nt[j]]; if (sg < 0) for (let k = indptr[j]; k < indptr[j + 1]; k++) w[k] *= this.p.inhGain; } }
     this.weights = w;
@@ -58,11 +62,16 @@ export class LIFNetwork {
     const { N, v, gE, gI, refr, trace, spikeCount, drive, indptr, indices, weights, nt, adapt, res, bias, thr } = this;
     const dA = Math.exp(-dt / adaptTau), kRec = dt / depTau;
     const coba = this.p.coba, eExc = this.p.eExc, eInh = this.p.eInh, cE = 1 / (eExc - vRest), cI = 1 / (vRest - eInh); const SIGN = this.p.ntSign || EXC_SIGN, PS = this.p.preSign;
+    const preInh = this.p.preInh || 0;
     const dE = Math.exp(-dt / tauSyn), dTr = Math.exp(-dt / traceTau), dtS = dt / 1000, nA = noise * Math.sqrt(dt), kM = dt / tauM;
     const arriving = this.ring[this.head];
     const awake = this.awake, list = this.awakeList; let nA0 = this.nAwake;
     for (let k = 0; k < arriving.length; k++) {
-      const pre = arriving[k], sign = (PS ? PS[pre] : SIGN[nt[pre]]) * wSyn * res[pre], a = indptr[pre], b = indptr[pre + 1];
+      const pre = arriving[k];
+      // Presynaptic inhibition: a driven neuron's terminals are divided by the inhibition they receive,
+      // which is what GABAergic local neurons do to receptor-neuron terminals (Olsen & Wilson 2008).
+      const pre_g = preInh > 0 && drive[pre] > 0 ? 1 / (1 + preInh * Math.max(0, -gI[pre])) : 1;
+      const sign = (PS ? PS[pre] : SIGN[nt[pre]]) * wSyn * res[pre] * pre_g, a = indptr[pre], b = indptr[pre + 1];
       if (sign === 0) continue;
       res[pre] -= depU * res[pre];
       if (sign > 0) { for (let j = a; j < b; j++) { const q = indices[j], w = weights[j]; if (w === 0) continue; gE[q] += w * sign; if (!awake[q]) { awake[q] = 1; list[nA0++] = q; } } }

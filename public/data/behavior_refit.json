@@ -1,0 +1,759 @@
+{
+ "_source": "scripts/behavior_refit.mjs",
+ "generated": "2026-09-18",
+ "search": {
+  "gens": 5,
+  "pop": 12,
+  "fitSeed": 1000,
+  "space": {
+   "wSyn": [
+    0.2,
+    1.2,
+    "log"
+   ],
+   "sizeAlpha": [
+    0,
+    1,
+    "lin"
+   ],
+   "kcThreshold": [
+    0,
+    30,
+    "lin"
+   ],
+   "inhGain": [
+    0.5,
+    5,
+    "log"
+   ],
+   "eInh": [
+    -85,
+    -55,
+    "lin"
+   ],
+   "minSyn": [
+    3,
+    10,
+    "int"
+   ],
+   "adaptInc": [
+    0,
+    3,
+    "lin"
+   ],
+   "tRef": [
+    2,
+    6,
+    "lin"
+   ],
+   "laminaBias": [
+    0,
+    25,
+    "lin"
+   ]
+  },
+  "note": "reduced from 12x20: an embodied evaluation is ~335 s"
+ },
+ "seeds": [
+  1000,
+  8919,
+  16838,
+  24757,
+  32676,
+  40595,
+  48514,
+  56433,
+  64352,
+  72271,
+  80190,
+  88109
+ ],
+ "baseParams": {
+  "coba": true,
+  "neuromod": true,
+  "wSyn": 0.562,
+  "sizeAlpha": 0.572,
+  "kcThreshold": 7.319,
+  "inhGain": 0.577,
+  "eInh": -69.079,
+  "minSyn": 6,
+  "adaptInc": 0.072,
+  "tRef": 3.682,
+  "laminaBias": 2.86
+ },
+ "refitBaseline": 0.8121,
+ "rungs": [
+  {
+   "key": "baseline",
+   "frozen": [],
+   "cfg": {
+    "coba": true,
+    "neuromod": true,
+    "wSyn": 1.11,
+    "sizeAlpha": 0.725,
+    "kcThreshold": 7.907,
+    "inhGain": 0.67,
+    "eInh": -75.008,
+    "minSyn": 8,
+    "adaptInc": 0.318,
+    "tRef": 4.007,
+    "laminaBias": 2.839
+   },
+   "search": {
+    "gens": 5,
+    "pop": 12,
+    "fitSeed": 1000
+   },
+   "refit": 0.8121,
+   "refitSem": 0.0322,
+   "fitSeedScore": 0.9814,
+   "noRefit": 0.8598,
+   "dScoreArm1": null,
+   "recovered": null,
+   "gapToBaseline": 0,
+   "terms": {
+    "alive": 0.917,
+    "flips": 1,
+    "food": 0.655,
+    "feed": 0.99,
+    "bout": 0.852,
+    "escape": 0.5
+   },
+   "obs": {
+    "flipMs": 0,
+    "totalMs": 36000,
+    "alive": 0.9167,
+    "foodDist": 0.4139,
+    "feedLatency": 20,
+    "escapes": 0.5,
+    "flipFrac": 0,
+    "boutMedian": 2670,
+    "boutMean": 2677.4968,
+    "boutN": 8.9167,
+    "bodyBoutMedian": 108.3333,
+    "bodyBoutN": 100.5833
+   }
+  },
+  {
+   "key": "w_binary",
+   "frozen": [],
+   "cfg": {
+    "coba": true,
+    "neuromod": true,
+    "wSyn": 0.557,
+    "sizeAlpha": 0.667,
+    "kcThreshold": 6.289,
+    "inhGain": 0.802,
+    "eInh": -71.662,
+    "minSyn": 9,
+    "adaptInc": 0.088,
+    "tRef": 3.758,
+    "laminaBias": 7.28,
+    "wBinary": true
+   },
+   "search": {
+    "gens": 5,
+    "pop": 12,
+    "fitSeed": 1000
+   },
+   "refit": 0.8214,
+   "refitSem": 0.0286,
+   "fitSeedScore": 0.9865,
+   "noRefit": 0.8789,
+   "dScoreArm1": {
+    "d": 0.0191,
+    "se": 0.0358,
+    "n": 12
+   },
+   "recovered": 0.513,
+   "gapToBaseline": 0.0093,
+   "terms": {
+    "alive": 1,
+    "flips": 1,
+    "food": 0.862,
+    "feed": 0.99,
+    "bout": 0.828,
+    "escape": 0.25
+   },
+   "obs": {
+    "flipMs": 0,
+    "totalMs": 36000,
+    "alive": 1,
+    "foodDist": 0.1651,
+    "feedLatency": 20,
+    "escapes": 0.25,
+    "flipFrac": 0,
+    "boutMedian": 2403.3333,
+    "boutMean": 2787.4175,
+    "boutN": 8.5833,
+    "bodyBoutMedian": 930,
+    "bodyBoutN": 19.6667
+   }
+  },
+  {
+   "key": "minsyn_1",
+   "frozen": [
+    "minSyn"
+   ],
+   "cfg": {
+    "coba": true,
+    "neuromod": true,
+    "wSyn": 0.398,
+    "sizeAlpha": 0.674,
+    "kcThreshold": 8.73,
+    "inhGain": 0.675,
+    "eInh": -66.869,
+    "minSyn": 1,
+    "adaptInc": 0.377,
+    "tRef": 3.05,
+    "laminaBias": 2.782
+   },
+   "search": {
+    "gens": 5,
+    "pop": 12,
+    "fitSeed": 1000
+   },
+   "refit": 0.8585,
+   "refitSem": 0.0248,
+   "fitSeedScore": 0.9683,
+   "noRefit": 0.7057,
+   "dScoreArm1": {
+    "d": -0.1541,
+    "se": 0.0512,
+    "n": 12
+   },
+   "recovered": 1.301,
+   "gapToBaseline": 0.0464,
+   "terms": {
+    "alive": 1,
+    "flips": 1,
+    "food": 0.862,
+    "feed": 0.99,
+    "bout": 0.77,
+    "escape": 0.5
+   },
+   "obs": {
+    "flipMs": 0,
+    "totalMs": 36000,
+    "alive": 1,
+    "foodDist": 0.1661,
+    "feedLatency": 20,
+    "escapes": 0.5,
+    "flipFrac": 0,
+    "boutMedian": 1666.6667,
+    "boutMean": 1555.8413,
+    "boutN": 8.9167,
+    "bodyBoutMedian": 735,
+    "bodyBoutN": 13.9167
+   }
+  },
+  {
+   "key": "minsyn_12",
+   "frozen": [
+    "minSyn"
+   ],
+   "cfg": {
+    "coba": true,
+    "neuromod": true,
+    "wSyn": 0.774,
+    "sizeAlpha": 1,
+    "kcThreshold": 0,
+    "inhGain": 0.5,
+    "eInh": -73.784,
+    "minSyn": 12,
+    "adaptInc": 0.271,
+    "tRef": 2.941,
+    "laminaBias": 1.395
+   },
+   "search": {
+    "gens": 5,
+    "pop": 12,
+    "fitSeed": 1000
+   },
+   "refit": 0.8637,
+   "refitSem": 0.0267,
+   "fitSeedScore": 0.9789,
+   "noRefit": 0.6457,
+   "dScoreArm1": {
+    "d": -0.2142,
+    "se": 0.0612,
+    "n": 12
+   },
+   "recovered": 1.241,
+   "gapToBaseline": 0.0516,
+   "terms": {
+    "alive": 1,
+    "flips": 1,
+    "food": 0.773,
+    "feed": 0.99,
+    "bout": 0.823,
+    "escape": 0.583
+   },
+   "obs": {
+    "flipMs": 0,
+    "totalMs": 36000,
+    "alive": 1,
+    "foodDist": 0.273,
+    "feedLatency": 20,
+    "escapes": 0.5833,
+    "flipFrac": 0,
+    "boutMedian": 2393.3333,
+    "boutMean": 2888.6806,
+    "boutN": 7.75,
+    "bodyBoutMedian": 638.3333,
+    "bodyBoutN": 25.25
+   }
+  },
+  {
+   "key": "no_size_scaling",
+   "frozen": [
+    "sizeAlpha"
+   ],
+   "cfg": {
+    "coba": true,
+    "neuromod": true,
+    "wSyn": 0.502,
+    "sizeAlpha": 0,
+    "kcThreshold": 14.423,
+    "inhGain": 0.577,
+    "eInh": -55,
+    "minSyn": 8,
+    "adaptInc": 0.134,
+    "tRef": 3.718,
+    "laminaBias": 0.457
+   },
+   "search": {
+    "gens": 5,
+    "pop": 12,
+    "fitSeed": 1000
+   },
+   "refit": 0.8416,
+   "refitSem": 0.0355,
+   "fitSeedScore": 0.9386,
+   "noRefit": 0.7418,
+   "dScoreArm1": {
+    "d": -0.118,
+    "se": 0.0357,
+    "n": 12
+   },
+   "recovered": 1.25,
+   "gapToBaseline": 0.0295,
+   "terms": {
+    "alive": 0.833,
+    "flips": 0.664,
+    "food": 0.856,
+    "feed": 0.817,
+    "bout": 0.815,
+    "escape": 1
+   },
+   "obs": {
+    "flipMs": 4923.3333,
+    "totalMs": 36000,
+    "alive": 0.8333,
+    "foodDist": 0.1733,
+    "feedLatency": 33.3333,
+    "escapes": 1,
+    "flipFrac": 0.1368,
+    "boutMedian": 1995,
+    "boutMean": 2660.3578,
+    "boutN": 6.9167,
+    "bodyBoutMedian": 1221.6667,
+    "bodyBoutN": 11.4167
+   }
+  },
+  {
+   "key": "cuba",
+   "frozen": [],
+   "cfg": {
+    "coba": false,
+    "neuromod": true,
+    "wSyn": 0.457,
+    "sizeAlpha": 0.656,
+    "kcThreshold": 10.355,
+    "inhGain": 0.701,
+    "eInh": -72.441,
+    "minSyn": 7,
+    "adaptInc": 0.245,
+    "tRef": 5.072,
+    "laminaBias": 12.997
+   },
+   "search": {
+    "gens": 5,
+    "pop": 12,
+    "fitSeed": 1000
+   },
+   "refit": 0.8372,
+   "refitSem": 0.0251,
+   "fitSeedScore": 0.9728,
+   "noRefit": 0.7525,
+   "dScoreArm1": {
+    "d": -0.1073,
+    "se": 0.0472,
+    "n": 12
+   },
+   "recovered": 1.234,
+   "gapToBaseline": 0.0251,
+   "terms": {
+    "alive": 1,
+    "flips": 1,
+    "food": 0.887,
+    "feed": 0.99,
+    "bout": 0.8,
+    "escape": 0.333
+   },
+   "obs": {
+    "flipMs": 0,
+    "totalMs": 36000,
+    "alive": 1,
+    "foodDist": 0.1352,
+    "feedLatency": 20,
+    "escapes": 0.3333,
+    "flipFrac": 0,
+    "boutMedian": 2576.6667,
+    "boutMean": 2832.4696,
+    "boutN": 7.8333,
+    "bodyBoutMedian": 728.3333,
+    "bodyBoutN": 21.4167
+   }
+  },
+  {
+   "key": "no_inh_gain",
+   "frozen": [
+    "inhGain"
+   ],
+   "cfg": {
+    "coba": true,
+    "neuromod": true,
+    "wSyn": 0.806,
+    "sizeAlpha": 0.779,
+    "kcThreshold": 3.291,
+    "inhGain": 1,
+    "eInh": -65.723,
+    "minSyn": 6,
+    "adaptInc": 1.246,
+    "tRef": 2.703,
+    "laminaBias": 8.036
+   },
+   "search": {
+    "gens": 5,
+    "pop": 12,
+    "fitSeed": 1000
+   },
+   "refit": 0.8154,
+   "refitSem": 0.0385,
+   "fitSeedScore": 0.9694,
+   "noRefit": 0.5324,
+   "dScoreArm1": {
+    "d": -0.3275,
+    "se": 0.0454,
+    "n": 12
+   },
+   "recovered": 1.01,
+   "gapToBaseline": 0.0033,
+   "terms": {
+    "alive": 0.917,
+    "flips": 1,
+    "food": 0.834,
+    "feed": 0.99,
+    "bout": 0.736,
+    "escape": 0.417
+   },
+   "obs": {
+    "flipMs": 0,
+    "totalMs": 36000,
+    "alive": 0.9167,
+    "foodDist": 0.1986,
+    "feedLatency": 20,
+    "escapes": 0.4167,
+    "flipFrac": 0,
+    "boutMedian": 1418.3333,
+    "boutMean": 1498.7499,
+    "boutN": 8.5833,
+    "bodyBoutMedian": 521.6667,
+    "bodyBoutN": 17.6667
+   }
+  },
+  {
+   "key": "no_refractory",
+   "frozen": [
+    "tRef"
+   ],
+   "cfg": {
+    "coba": true,
+    "neuromod": true,
+    "wSyn": 0.48,
+    "sizeAlpha": 0.656,
+    "kcThreshold": 12.067,
+    "inhGain": 0.791,
+    "eInh": -60.749,
+    "minSyn": 5,
+    "adaptInc": 0.263,
+    "tRef": 0.5,
+    "laminaBias": 0
+   },
+   "search": {
+    "gens": 5,
+    "pop": 12,
+    "fitSeed": 1000
+   },
+   "refit": 0.8316,
+   "refitSem": 0.0254,
+   "fitSeedScore": 0.9699,
+   "noRefit": 0.742,
+   "dScoreArm1": {
+    "d": -0.1178,
+    "se": 0.0304,
+    "n": 12
+   },
+   "recovered": 1.166,
+   "gapToBaseline": 0.0195,
+   "terms": {
+    "alive": 1,
+    "flips": 1,
+    "food": 0.826,
+    "feed": 0.99,
+    "bout": 0.844,
+    "escape": 0.333
+   },
+   "obs": {
+    "flipMs": 0,
+    "totalMs": 36000,
+    "alive": 1,
+    "foodDist": 0.2082,
+    "feedLatency": 20,
+    "escapes": 0.3333,
+    "flipFrac": 0,
+    "boutMedian": 1953.3333,
+    "boutMean": 2336.0952,
+    "boutN": 9.0833,
+    "bodyBoutMedian": 180,
+    "bodyBoutN": 58.8333
+   }
+  },
+  {
+   "key": "add_depression",
+   "frozen": [],
+   "cfg": {
+    "coba": true,
+    "neuromod": true,
+    "wSyn": 0.385,
+    "sizeAlpha": 0.187,
+    "kcThreshold": 9.609,
+    "inhGain": 0.554,
+    "eInh": -65.055,
+    "minSyn": 8,
+    "adaptInc": 0.118,
+    "tRef": 3.199,
+    "laminaBias": 7.448,
+    "depU": 0.2
+   },
+   "search": {
+    "gens": 5,
+    "pop": 12,
+    "fitSeed": 1000
+   },
+   "refit": 0.9083,
+   "refitSem": 0.0193,
+   "fitSeedScore": 0.9618,
+   "noRefit": 0.9161,
+   "dScoreArm1": {
+    "d": 0.0563,
+    "se": 0.0317,
+    "n": 12
+   },
+   "recovered": -0.709,
+   "gapToBaseline": 0.0962,
+   "terms": {
+    "alive": 1,
+    "flips": 1,
+    "food": 0.824,
+    "feed": 0.99,
+    "bout": 0.625,
+    "escape": 0.917
+   },
+   "obs": {
+    "flipMs": 0,
+    "totalMs": 36000,
+    "alive": 1,
+    "foodDist": 0.2117,
+    "feedLatency": 20,
+    "escapes": 0.9167,
+    "flipFrac": 0,
+    "boutMedian": 1075,
+    "boutMean": 1240.6574,
+    "boutN": 9.5833,
+    "bodyBoutMedian": 196.6667,
+    "bodyBoutN": 38.75
+   }
+  },
+  {
+   "key": "no_delay",
+   "frozen": [],
+   "cfg": {
+    "coba": true,
+    "neuromod": true,
+    "wSyn": 0.533,
+    "sizeAlpha": 0.773,
+    "kcThreshold": 17.192,
+    "inhGain": 0.615,
+    "eInh": -73.917,
+    "minSyn": 9,
+    "adaptInc": 1.481,
+    "tRef": 3.053,
+    "laminaBias": 1.346,
+    "delay": 0.5
+   },
+   "search": {
+    "gens": 5,
+    "pop": 12,
+    "fitSeed": 1000
+   },
+   "refit": 0.8503,
+   "refitSem": 0.0277,
+   "fitSeedScore": 0.9763,
+   "noRefit": 0.77,
+   "dScoreArm1": {
+    "d": -0.0898,
+    "se": 0.0297,
+    "n": 12
+   },
+   "recovered": 1.425,
+   "gapToBaseline": 0.0382,
+   "terms": {
+    "alive": 1,
+    "flips": 1,
+    "food": 0.871,
+    "feed": 0.99,
+    "bout": 0.812,
+    "escape": 0.417
+   },
+   "obs": {
+    "flipMs": 0,
+    "totalMs": 36000,
+    "alive": 1,
+    "foodDist": 0.1553,
+    "feedLatency": 20,
+    "escapes": 0.4167,
+    "flipFrac": 0,
+    "boutMedian": 2401.6667,
+    "boutMean": 2339.9821,
+    "boutN": 7.5,
+    "bodyBoutMedian": 1171.6667,
+    "bodyBoutN": 12.5
+   }
+  },
+  {
+   "key": "add_adaptation",
+   "frozen": [
+    "adaptInc"
+   ],
+   "cfg": {
+    "coba": true,
+    "neuromod": true,
+    "wSyn": 0.682,
+    "sizeAlpha": 0.473,
+    "kcThreshold": 7.178,
+    "inhGain": 0.638,
+    "eInh": -69.066,
+    "minSyn": 5,
+    "adaptInc": 2,
+    "tRef": 3.62,
+    "laminaBias": 2.472
+   },
+   "search": {
+    "gens": 5,
+    "pop": 12,
+    "fitSeed": 1000
+   },
+   "refit": 0.911,
+   "refitSem": 0.0201,
+   "fitSeedScore": 0.9571,
+   "noRefit": 0.9066,
+   "dScoreArm1": {
+    "d": 0.0468,
+    "se": 0.0316,
+    "n": 12
+   },
+   "recovered": -1.113,
+   "gapToBaseline": 0.0989,
+   "terms": {
+    "alive": 0.917,
+    "flips": 1,
+    "food": 0.838,
+    "feed": 0.99,
+    "bout": 0.669,
+    "escape": 1
+   },
+   "obs": {
+    "flipMs": 0,
+    "totalMs": 36000,
+    "alive": 0.9167,
+    "foodDist": 0.1944,
+    "feedLatency": 20,
+    "escapes": 1,
+    "flipFrac": 0,
+    "boutMedian": 1156.6667,
+    "boutMean": 1408.5913,
+    "boutN": 7.25,
+    "bodyBoutMedian": 98.3333,
+    "bodyBoutN": 49.9167
+   }
+  },
+  {
+   "key": "sign_free",
+   "frozen": [],
+   "cfg": {
+    "coba": true,
+    "neuromod": true,
+    "wSyn": 0.233,
+    "sizeAlpha": 0.609,
+    "kcThreshold": 6.992,
+    "inhGain": 0.958,
+    "eInh": -66.37,
+    "minSyn": 7,
+    "adaptInc": 0.087,
+    "tRef": 3.095,
+    "laminaBias": 0.648,
+    "signFree": true
+   },
+   "search": {
+    "gens": 5,
+    "pop": 12,
+    "fitSeed": 1000
+   },
+   "refit": 0.8507,
+   "refitSem": 0.0141,
+   "fitSeedScore": 0.9501,
+   "noRefit": 0.6875,
+   "dScoreArm1": {
+    "d": -0.1724,
+    "se": 0.0516,
+    "n": 12
+   },
+   "recovered": 1.224,
+   "gapToBaseline": 0.0386,
+   "terms": {
+    "alive": 1,
+    "flips": 0.394,
+    "food": 0.789,
+    "feed": 0.99,
+    "bout": 0.67,
+    "escape": 1
+   },
+   "obs": {
+    "flipMs": 1378.3333,
+    "totalMs": 36000,
+    "alive": 1,
+    "foodDist": 0.2535,
+    "feedLatency": 20,
+    "escapes": 1,
+    "flipFrac": 0.0383,
+    "boutMedian": 1150,
+    "boutMean": 1632.1349,
+    "boutN": 5.5,
+    "bodyBoutMedian": 416.6667,
+    "bodyBoutN": 13.3333
+   }
+  }
+ ]
+}

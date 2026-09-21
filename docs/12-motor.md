@@ -14,6 +14,7 @@ Firing rates are low-pass filtered with a 40 ms time constant.
 | Escape | DNp01 giant fibre | von Reyn 2014 |
 | Takeoff | DNp02, DNp04 | Namiki 2018 |
 | Courtship circuit | pIP10, DNp13 | Deutsch et al. 2020 |
+| Flight (read out, not acted on) | DNa08, DNg02_a/b/c/e/g | `scripts/dn_flight.mjs` ranks these first and second of 480 by what they do to the wing power pool; Namiki 2018 for DNg02. Nothing is gated on them, because they fire at 2 Hz and fall at takeoff ([M1](20-roadmap.md)) |
 
 ## Readout constants
 
@@ -26,7 +27,7 @@ Firing rates are low-pass filtered with a 40 ms time constant.
 | turnTau, flightTurnTau | 150 ms, 50 ms | Steering smoothing when walking and in flight |
 | turnAdaptTau | 4 s | Slow adaptation that removes standing left/right imbalance |
 | groomScale | 40 Hz | Grooming activation |
-| muscleHalf | 17 Hz | Motor neuron rate for half muscle activation |
+| muscleHalf | 17 Hz | Motor neuron rate for half muscle activation, when `perClassMuscles` is off; otherwise per class, see Muscles below |
 | gfSpikes, gfWindow | 4 spikes in 50 ms | Giant-fibre escape criterion |
 | takeoffThreshold, takeoffRatio | 70 Hz and 3 × baseline | Takeoff escape criterion |
 | startupMs | 1500 ms | No escapes while vision settles |
@@ -44,7 +45,27 @@ A standing fly with a steering command above 0.25 pivots: the stepping generator
 the inner legs step backwards.
 
 ## Muscles
-Activation = 1 − exp(−rate × ln 2 ÷ 17 Hz). Insect force-frequency curves saturate at low rates.
+Activation = 1 − exp(−ln 2 × (rate / f₅₀)ⁿ), with f₅₀ and n per muscle class (`MUSCLE_FF`). Insect
+force–frequency curves saturate at low rates, and they do not all saturate at the same one:
+
+| class | groups | f₅₀ | n |
+|---|---|---|---|
+| accessory (slow) leg units | 12 | 60 Hz | 1 |
+| main (fast) leg units | 78 | 25 Hz | 1 |
+| long tendon muscle, claw adhesion | 36 | 12 Hz | 1 |
+| proboscis | 32 | 17 Hz | 1 |
+| unclassified | 12 | 17 Hz | 1 |
+
+`perClassMuscles: false` restores the single 17 Hz constant that used to apply to every muscle in the
+animal, which is the ladder rung `muscle_single` ([M4](20-roadmap.md)). The numbers are estimates from
+the insect muscle literature rather than Drosophila measurements of these particular muscles; what they
+encode is the ordering.
+
+**In `'descending'` mode the curve changes nothing**, because the legs are driven by the stepping
+generator and only the proboscis, antennae and labrum go through `muscleCtrl` — and those keep f₅₀ at
+17 Hz. Two identical 3 s runs with it on and off agree to six decimals (`scripts/muscle_check.mjs`).
+It matters in `'connectome'` mode, which is where [M2](36-vnc-stepping.md) is.
+
 Antagonist groups move each position-servo target within its range.
 
 ## Courtship song

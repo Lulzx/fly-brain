@@ -4,7 +4,9 @@ import { createBrain, brainScales, applyClassPhysiology, BRAIN_DEFAULTS } from '
 import { createWasmBrain } from '../src/lifwasm.js';
 const D = loadAll(); const data = { ...D, superclass: D.sc };
 const size = new Float32Array(fs.readFileSync('public/data/neuron_size.bin').buffer.slice(0)); const sign = new Float32Array(fs.readFileSync('public/data/ntsign.bin').buffer.slice(0));
-const cfg = { ...BRAIN_DEFAULTS, coba: true, wSyn: 0.7, sizeAlpha: 0.77, kcThreshold: 1.5, inhGain: 3.9, eInh: -66.6, minSyn: 4 };
+// argv[2] is a JSON override, so a new kernel option can be checked for JS/wasm agreement without
+// editing this file -- `node scripts/wasm_vs_js.mjs '{"preInh":2}'`.
+const cfg = { ...BRAIN_DEFAULTS, coba: true, wSyn: 0.7, sizeAlpha: 0.77, kcThreshold: 1.5, inhGain: 3.9, eInh: -66.6, minSyn: 4, ...JSON.parse(process.argv[2] || '{}') };
 const stim = ['LB3b', 'LB3c'].flatMap(t => D.byType(t)); const orn = D.bodymap.sensors.filter(s => s.kind === 'odor').flatMap(s => s.idx);
 const js = createBrain(data, size, cfg, sign);
 const { inScale, sensoryMask } = brainScales(data, size, cfg);

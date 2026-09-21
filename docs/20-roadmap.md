@@ -29,110 +29,451 @@ measured rather than suspected:
 |---|---|---|
 | leg motor neurons mapped to muscles | 439 cells, 170 muscle groups | [doc 9](09-bodymap.md) |
 | motor neurons with no annotated muscle | **422 cells across 285 types** (abdominal, neck, haltere) | [doc 9](09-bodymap.md) |
+| motor-neuron spikes that cannot reach the body | **42.4%** | [M5](20-roadmap.md) |
 | full-connectome motor mode | **cannot hold posture** | [Limitations](19-limitations.md) |
-| wing motor pools, ground vs flight | 33–109 Hz either way; power pool changes **7%** at takeoff | [Flight](24-flight.md) |
-| wing steering asymmetry vs commanded turn | **\|r\| ≤ 0.08** in all six pools (64 cells) | `scripts/wing_mn.mjs` |
+| wing motor pools, ground vs flight | 33–109 Hz either way; power pool changes **5%** at takeoff | [Flight](24-flight.md) |
+| wing steering asymmetry vs commanded turn | **\|r\| ≤ 0.14** in all six pools (64 cells) | `scripts/wing_mn.mjs` |
+| wing power pool's drive that is descending | **8.6%**; the other 90.4% is VNC intrinsic | [M1](20-roadmap.md) |
 | proboscis MN9 with no tastant | **26.6 Hz** against a 10 Hz target — the one benchmark term stuck at zero | [A7](20-roadmap.md) |
-| motor-neuron rate to muscle force | half-maximal at 17 Hz, saturating | [Motor](12-motor.md) |
+| tarsal sugar's contribution to MN9 | **−0.16 ± 1.57 Hz** — the `tarsalPER` term was scoring the idle above it | [M3](20-roadmap.md) |
+| motor-neuron rate to muscle force | per class now; a single 17 Hz constant before | [Motor](12-motor.md) |
 
 Read together these say something specific: the motor neurons are wired and active, and nothing that
 reaches them carries the behaviour. That is a *locatable* gap rather than a general shortfall, which
 is what makes it the right thing to work on next.
 
-### M1. A descending command the wing system can follow
+**Where the part stands.** M1, M3, M4, M5 and M6 have been run;
+M2 has been scoped out into [doc 36](36-vnc-stepping.md) as a project of its own. Three of them
+converge on one place, which is not where the part expected to end up:
+
+| item | what it found |
+|---|---|
+| [M1](20-roadmap.md) | the wing pools take **90.4%** of their drive from VNC intrinsic interneurons and 8.6% from every descending neuron together; the best descending candidate fires at 2 Hz and falls at takeoff |
+| [M3](20-roadmap.md) | MN9's idle is 100% olfactory, the antennal lobe runs at **77 Hz per projection neuron**, and `tarsalPER` was scoring 0.85 on the idle `quietMN9` was punishing |
+| [M4](20-roadmap.md) | the 17 Hz constant does not reach the legs in `'descending'` mode at all: there is no path from a leg motor neuron's rate to a leg joint |
+| [M5](20-roadmap.md) | **42.4%** of motor-neuron spikes cannot reach the body |
+| [M6](20-roadmap.md) | motor pools identify **12 of 12** simulated individuals; doc 34's behavioural observables identify **1 of 12**, at the null, with five of the six at ρ = 0 |
+
+Two common findings, and they are the same one twice. The model's motor stage is driven by its own
+intrinsic activity rather than by anything descending, and the benchmark was reading intrinsic or
+supplied activity as behaviour — MN9's olfactory idle scored as a taste response in M3, the stepping
+scheduler's own random draw scored as a walk-bout statistic in M6. Both point at
+[M2](36-vnc-stepping.md), which is the item that replaces the supplied machinery with the graph.
+
+### M1. A descending command the wing system can follow — the negative, and it is locatable
 `scripts/wing_mn.mjs` measured the wing pools through a flight and found no flight-versus-ground
-contrast and no steering asymmetry ([doc 24](24-flight.md)). The cause is upstream: flight is started
-and maintained by the endogenous module, so no descending signal ever tells the wing motor neurons
-that the animal is airborne. Find the descending population that should carry it — the candidates are
-in the graph and unscored — and drive flight initiation and maintenance from it rather than from the
-rule.
+contrast and no steering asymmetry ([doc 24](24-flight.md)). The diagnosis was that the cause is
+upstream: flight is started and maintained by the endogenous module, so no descending signal ever tells
+the wing motor neurons that the animal is airborne. The item was to find the descending population that
+should carry it and drive flight from it instead.
 
-**Success:** the power pool separates flight from walking by more than the 7% it manages now, and at
-least one steering pool's left–right asymmetry correlates with the commanded turn at |r| ≥ 0.5. Both
-numbers come out of `wing_mn.mjs` as it stands, so the criterion is already implemented.
-**The interesting negative:** if no descending population in the graph separates flight from walking,
-then either the release's descending annotation is insufficient for flight or the model's excitability
-is wrong in a way that erases a real signal — and the two are distinguishable, because the first
-predicts that the *recorded* DN populations (B1) do separate them while the model's do not.
+**The screen finds candidates, and it finds the right ones.** `scripts/dn_flight.mjs` drives each of the
+480 descending types in turn at 150 Hz and measures what reaches the motor pools, scoring how much of
+the change lands on the wings rather than the legs. **DNa08** ranks first (+30.7 Hz on the power pool,
+85% of the change on the wings) and **DNg02_a** second (+30.4 Hz, 79%). DNg02 is independently the
+population Namiki et al. 2018 assign to wing-amplitude control in flight, which the screen was not told
+— so the graph does connect a plausible flight command to the wing motor neurons.
 
-### M2. Stepping from the nerve cord
+**Embodied, that command is silent and has no flight signal in it.** Recording the same population
+through a flight (`wing_mn.mjs`, 8 s, takeoff at 1.5 s):
+
+| | ground | flight |
+|---|---|---|
+| DNa08 + DNg02 family, 27 cells | 2.35 Hz | 1.98 Hz |
+| wing power pool, 24 cells | 101.7 Hz | 107.3 Hz |
+
+A threshold on a 2 Hz signal that *falls* by 0.4 Hz at takeoff is a threshold on noise, so the flight
+readout is computed and reported (`cmd.flightDrive`, `cmd.flightAsym` in `src/sim/motor.js`) and
+nothing is gated on it. The steering half fails too: no wing pool's left–right asymmetry correlates
+with the commanded turn above |r| = 0.14, against the |r| ≥ 0.5 the item asked for.
+
+**Why it cannot work, measured rather than inferred.** Decomposing the drive onto the power pool at the
+calibrated operating point gives the reason in one number:
+
+| source of drive onto the wing power pool | share |
+|---|---|
+| VNC intrinsic interneurons (IN19B043, IN19B067, IN19B040 at 45–122 Hz) | **90.4%** |
+| descending neurons (63 cells, 25 active) | 8.6% |
+| ascending, motor, efferent, sensory | 1.0% |
+
+The wing motor neurons are held at ~100 Hz by a self-sustaining nerve-cord interneuron network, and
+every descending neuron in the graph together contributes under a tenth of their input. That is why no
+descending population separates flight from walking here, and it is a different failure from the one the
+item anticipated: the annotation is not missing and the candidate is not absent — the command is
+drowned.
+
+**Two descending signals do separate the two states, and neither is a command.** Fifteen gnathal types
+(DNge037, DNge040, DNge059, DNge069, DNge137 and others) fire at 2–13 Hz on the ground and at exactly
+zero in flight — a contrast of −1, and the largest in the table. They are feeding and proboscis
+descending neurons, and they fall silent because the fly leaves the ground, not to make it leave. And
+the strongest steering correlation of any descending type, DNa01 at r = 0.766, is circular: DNa01 is one
+of the three types the commanded turn is *computed from* (`DN_ROLES.turn`), so the correlation measures
+the readout against itself.
+
+**What this means for the roadmap.** The item's stated negative was that if no descending population
+separates flight from walking, either the release's descending annotation is insufficient or the model's
+excitability is wrong in a way that erases a real signal. The measurement picks the second and says where:
+the excitability is wrong *in the nerve cord*, not in the descending neurons, and the quantity to fix is
+the 90% of wing-pool drive that is intrinsic. That is the same quantity [M2](36-vnc-stepping.md) is
+about, one body-part over, which makes M1 a dependent of M2 rather than a peer of it — and it moves the
+flight question from "which descending neuron" to "why does the nerve cord run at 100 Hz with nothing
+telling it to".
+
+The B1 discriminator in the original statement still holds and is now sharper: if *recorded* descending
+populations separate flight from walking while the model's do not, and the model's nerve cord is a
+hundred hertz too busy, then the descending signal is real and this model is burying it.
+
+### M2. Stepping from the nerve cord — scoped out as a project of its own: [doc 36](36-vnc-stepping.md)
 Moved here from [A2](20-roadmap.md), because it is the same problem as M1 one body-part over. The
 full-connectome motor mode does not hold posture ([Gait](13-gait.md)), so walking is executed by a
-CMA-ES-optimised tripod generator and the connectome supplies only the decision to walk. Fit the leg
-premotor circuits against the FlySuite walking data using the adjoint from
+CMA-ES-optimised tripod generator and the connectome supplies only the decision to walk. The item is to
+fit the leg premotor circuits against the FlySuite walking data using the adjoint from
 [doc 33](33-differentiable-brain.md), rather than fitting a generator to trajectories.
 
+It is now the only entry on this roadmap that is not finishable in a sitting, and it has been separated
+rather than left to sit here looking like the others. [Doc 36](36-vnc-stepping.md) is the scoping: the
+four things that have to be built before the first informative measurement (a stepping objective that
+does not presume the phase; proprioceptive feedback at the timescale it operates on; a gradient that
+reaches the body; and [M4](20-roadmap.md)'s muscle model), the two conditions that would count as
+finishing it, and — the part worth writing down in advance — **the two points at which it should be
+stopped instead.**
+
+[M1](20-roadmap.md) has since made it more central rather than less. The wing motor neurons turn out to
+take 90.4% of their drive from VNC intrinsic interneurons and 8.6% from every descending neuron in the
+graph put together, which is the same finding as M2's, in the segment above: the nerve cord in this
+model runs at its own hundred hertz and the brain barely reaches it. Fixing that is M2, and M1 is
+downstream of it.
+
 **Success:** posture held in `'connectome'` mode for a full 20 s foraging scenario, and a stepping
-rhythm that is measured rather than imposed — the FlySuite comparison in [doc 13](13-gait.md) is the
-scoring function.
+rhythm that is measured rather than imposed.
 **The interesting negative:** if a fitted VNC still cannot hold posture, the missing quantity is not
-in the graph. The candidates are proprioceptive feedback delay, the muscle force–frequency model
-(M4), and the absence of the leg's own reflex loops at the timescale they operate on — and a failure
-here would be the strongest evidence this project can produce that a connectome plus a fitted gain
-per neuron is not sufficient for motor control, which is a claim about the abstraction level rather
-than about the fly.
+in the graph — and a failure here would be the strongest evidence this project can produce that a
+connectome plus a fitted gain per neuron is not sufficient for motor control, which is a claim about
+the abstraction level rather than about the fly. [Doc 36](36-vnc-stepping.md) argues that this is the
+outcome worth buying, and that it is cheap by the standards of the question.
 
-### M3. The proboscis motor neuron that cannot be quieted
-`quietMN9` is the only scored term that sits at exactly zero in every seed and every rung of the
-ladder: MN9 idles at 26.6 Hz with no tastant against a target of 10. [A7](20-roadmap.md) notes that
-it is also the one term in the objective that punishes a busy baseline, and that the two facts are
-probably the same fact. [Limitations](19-limitations.md) names the mechanism — MN9 is partly driven
-by olfactory channels downstream of the antennal-lobe spread, so a fly in odour extends its
-proboscis while walking.
+### M3. The proboscis motor neuron that cannot be quieted — done, and the error was in two places
+`quietMN9` was the only scored term sitting at exactly zero in every seed and every rung of the
+ladder: MN9 idles at 26.6 Hz with no tastant against a target of 10. [A7](20-roadmap.md) noted that it
+is also the one term that punishes a busy baseline and guessed the two facts were the same fact.
+[Limitations](19-limitations.md) named a mechanism — MN9 is partly driven by olfactory channels
+downstream of the antennal-lobe spread, so a fly in odour extends its proboscis while walking.
 
-**Success:** MN9 below 15 Hz with no tastant, *without* losing the sugar-evoked extension (the
-`sugar` and `tarsalPER` terms hold).
-**The interesting negative:** if no parameter set does both, the olfactory bleed into MN9 is
-structural, and fixing it means the antennal-lobe lateral inhibition that
-[Limitations](19-limitations.md) records as unmodelled — which makes this item a test of the AL gap
-rather than of the feeding circuit, and locates a whole-brain error at one measurable motor neuron.
+The stated success was MN9 below 15 Hz with no tastant while the `sugar` and `tarsalPER` terms hold,
+and the stated interesting negative was that the bleed is structural. `scripts/mn9_quiet.mjs` measures
+both, and the answer is neither: the term could not be satisfied because a heavier term in the same
+objective was being *paid* by the activity this one wanted removed.
 
-### M4. The force–frequency model between motor neuron and muscle
-Muscle activation is `1 − exp(−rate · ln 2 / 17 Hz)` for every muscle in the animal
-([Motor](12-motor.md)). One saturation constant stands in for the whole neuromuscular junction: no
+**The olfactory story is right, and it is the whole story.** MN9's idle tracks the benchmark's 6 Hz
+spontaneous drive on the olfactory receptor neurons all the way down — 0.0 Hz at no drive, 17.5 Hz at
+1 Hz, 26.3 Hz at 6 Hz — and cutting one population out of the network settles which one:
+
+| cut from the network | cells | MN9 with no tastant |
+|---|---|---|
+| nothing | — | 26.3 Hz |
+| antennal-lobe projection neurons | 686 | **0.0 Hz** |
+| olfactory receptor neurons | 2,639 | **0.0 Hz** |
+| antennal-lobe local neurons | 420 | 28.8 Hz |
+| gustatory / Kenyon cells / MBON / CX / mechanosensory | 1,428–5,745 | 26–30 Hz |
+
+The route is short and it is one cell wide. Of the 28,624 units of excitatory drive onto MN9 at rest,
+**24,233 — 85% — come from a single GNG120 neuron** firing at 67.5 Hz, and every stage between the
+antennal lobe and it goes to exactly zero when the lobe's output is cut: ALPN 77.0 → 3.8 Hz, GNG494
+63.8 → 0, GNG120 41.3 → 0, MN9 26.3 → 0.
+
+**The upstream number is the real one: the antennal lobe idles at 77 Hz per projection neuron.** The
+imaging literature puts spontaneous ALPN rates at a few to twenty. 72% of the layer is above threshold
+with no odour present, which [A7](20-roadmap.md) had already recorded from the other side without
+naming the cause.
+
+**The gain control the model has does not apply here, and the one the connectome has is deleted.** Two
+separate facts, and both matter.
+
+The model already carries a divisive antennal-lobe normalisation, `AL_NORM` in `src/sim/senses.js`
+([Senses](10-senses.md)), standing in for GABA_B presynaptic inhibition. It divides the *evoked* part of
+each receptor neuron's drive by the total evoked drive on that antenna and leaves `ORN_SPONTANEOUS`
+alone — so the 6 Hz spontaneous rate, which is the entire input in the benchmark's resting condition,
+passes through it untouched. The physiological benchmark does not even reach it: `calib_eval.mjs` sets
+the receptor drive directly, so the one gain-control mechanism the model owns is bypassed by the
+measurement that scores `quietMN9`.
+
+The connectome's own version is present and zeroed. `writeGraph` in `src/lifwasm.js` drops every synapse
+whose postsynaptic neuron is sensory, because sensory neurons are Poisson-forced and an input onto one
+could have no effect. That clause removes **51,958 connections onto the olfactory receptor neurons**,
+301,608 synapses; of the 121,683 inhibitory synapses among them, 118,990 — **97.8%** — are ALLN→ORN: the GABAergic
+presynaptic gain control of Olsen & Wilson 2008, which is what bounds the real lobe's spontaneous
+throughput. Across all sensory neurons the clause deletes 1.5 M synapses, 1.44% of the graph.
+
+So it was restored. `preInh` (in `src/wasm/lif.c`, `src/lif.js` and the graph build, JS and wasm checked
+against each other) keeps the inhibitory edges onto driven neurons and divides their transmitter
+release by `1 + preInh · |gI|` — presynaptic inhibition proper, which scales release without changing
+the receptor neuron's spike rate. **It does not fix it.** ALPN's resting rate falls from 77.0 Hz to
+68.0 at `preInh` 1, 67.4 at 8, and only 53.0 in the limit, and MN9 does not move. Two reasons, both
+measurable: 605 of the 2,639 receptor neurons receive no local-neuron inhibition at all in v1.0, and
+the lobe sustains itself once ignited — which is also why cutting the receptor neurons from the start
+silences it completely and throttling them after it has started does not.
+
+**And then the objective turned out to contain the same class of error A7 found twice.** `tarsalPER`
+rewards MN9 at 30 Hz with sugar on the front tarsi; `quietMN9` punishes it above 10 Hz with nothing
+applied. Both read the same cell over the same 400 ms window. Paired over eight seeds at the fitted
+point, the tarsal-evoked component of MN9 is:
+
+**−0.16 ± 1.57 Hz.**
+
+There is no tarsal pathway to MN9 in this model. `tarsalPER` — weight 1.5, the joint-third-heaviest
+term in the objective — was scoring 0.854 on the olfactory idle that `quietMN9`, weight 0.5, was trying
+to remove. The two terms were one number read with opposite signs, and the heavier one won every fit.
+That is why no parameter set ever satisfied `quietMN9`: satisfying it cost three times as much
+elsewhere, and the fit was correct to refuse.
+
+**The repair.** The feeding block now shares one seed across its runs and scores the *evoked increase*
+for the response terms, leaving the quiescence terms (`bitter`, `quietMN9`) absolute, because "is it
+quiet" is a question about a rate and not about a change in one. Re-scored at the unchanged calibrated
+parameters over twelve seeds:
+
+| | before | after |
+|---|---|---|
+| `tarsalPER` | 0.854 | **0.049** (evoked 1.5 Hz against a 30 Hz target) |
+| `sugar` | 0.716 | **0.452** (evoked 26.1 Hz against 60; raw was 52.7) |
+| every other term | — | unchanged to three decimals |
+| composite | 0.794 ± 0.005 | **0.697 ± 0.009** |
+
+As in A7, the repair is not a regression; it is a change in what is being counted. Of the model's
+quoted 0.794, about **0.098 was MN9's olfactory idle being counted as a taste response.**
+
+**What M3 located.** A whole-brain error read out at one motor neuron, exactly as the item hoped —
+except that it is two errors at one cell. The antennal lobe runs an order of magnitude too hot because
+its gain-control circuit is deleted by the sensory-input clause, and the benchmark was crediting the
+overflow to the feeding circuit. The second is now fixed. The first can be made to go away by a gain,
+and the next section is what that costs.
+
+**Fitted against the repaired objective, the criterion is met outright and the composite does not move.**
+Five parameter sets, twelve seeds each, all scored on the repaired objective so the column is comparable:
+
+| parameters | composite | `quietMN9` | `tarsalPER` | `sugar` | MN9 idle |
+|---|---|---|---|---|---|
+| calibrated (fitted on the old objective) | 0.697 ± 0.009 | 0.000 | 0.049 | 0.452 | 26.6 Hz |
+| nine globals refitted on the repaired objective | 0.681 ± 0.007 | 0.000 | 0.049 | 0.455 | 21.2 Hz |
+| + AL gains, calibrated globals | 0.682 ± 0.019 | 0.625 | 0.441 | 0.921 | 3.8 Hz |
+| + AL gains, globals refitted on the *old* objective | 0.707 ± 0.013 | 0.531 | 0.243 | 0.912 | 14.3 Hz |
+| **+ AL gains, globals refitted on the repaired objective** | 0.686 ± 0.013 | **0.948** | 0.371 | 0.930 | **0.52 Hz** |
+
+The "AL gains" are `classGain {ALLN: 8}` with `typeGain {GNG232: 3, DNge080: 3, LgLG3: 2, LgLG4: 2,
+LgAG2: 2}` — the antennal lobe's lateral inhibition raised eightfold and the shared gustatory relay
+re-gained. The two fitted points are in `data/calib_best_repaired_plain.json` and
+`data/calib_best_repaired_algains.json`; neither is promoted.
+
+**The last row is the answer to the item as it was written.** MN9 idles at **0.52 Hz** against a 10 Hz
+target — and stably, at 0 Hz in nine of twelve seeds and never above 2.5, where the same gains on
+unfitted globals were bistable. The tarsal response is real for the first time, 22.0 Hz evoked against
+1.5 for the calibrated model, and the sugar response is 159 Hz evoked. Every one of M3's stated
+conditions holds at once.
+
+**And the composite does not care.** All five rows sit inside about two standard errors of each other.
+What the antennal-lobe fix wins on the feeding terms it pays back on the odour ones: `sugarStop` falls
+0.823 → 0.061, `pnSpecific` 0.932 → 0.335, `dm1PN` 0.804 → 0.405, `kcSpecific` 0.727 → 0.151. The lobe
+that was overflowing into the proboscis was also carrying the odour code, and turning it down does both
+things at once. That is the item's interesting negative arriving after its success criterion was met
+rather than instead of it, and it is a statement about the objective as much as the model: **seventeen
+weighted terms cannot distinguish a fly whose proboscis is quiet and whose odour code is weak from one
+whose odour code is strong and whose proboscis hangs out.**
+
+One methodological note, because it repeats A7's: the nine-global refit *without* the gains selected at
+0.756 on its search seed and re-scored at 0.681 across twelve — below the 0.697 it started from. Ten
+generations of twelve is a small search and this is its selection noise, not evidence that the repaired
+objective is unfittable. Any conclusion from the table above about which row is *best* would need a
+search the size of the ones in [doc 7](07-calibration.md); what it does support is that the criterion is
+reachable and that reaching it is free in composite terms.
+
+### M4. The force–frequency model between motor neuron and muscle — built; the ladder run measured the ladder
+Muscle activation was `1 − exp(−rate · ln 2 / 17 Hz)` for every muscle in the animal
+([Motor](12-motor.md)). One saturation constant stood in for the whole neuromuscular junction: no
 per-muscle force–frequency curve, no fibre-type difference between the fast tergotrochanteral muscle
-and a slow postural one, no calcium dynamics, and no history dependence. It is the smallest piece of
-supplied machinery on the motor side and the one that M1 and M2 will both run into.
+and a slow postural one, no calcium dynamics, and no history dependence.
 
-**Success:** per-class force–frequency curves from the insect muscle literature, with the ladder
-re-run to say what the single constant was costing.
-**The interesting negative:** if the behavioural ladder cannot tell a per-class muscle model from the
-single constant, then motor-neuron *rate* is not the quantity the body reads at this level of
-description, and the modelling effort belongs upstream — which would be a useful thing to know before
-anyone fits 165,122 gains against motor output.
+**What is built.** `MUSCLE_FF` in `src/sim/motor.js` gives each muscle class its own curve,
+`1 − exp(−ln 2 · (rate/f₅₀)ⁿ)`, with the classifier reading the bodymap's annotated muscle names:
 
-### M5. The 422 motor neurons with nowhere to go
+| class | groups | f₅₀ | n | what it is |
+|---|---|---|---|---|
+| `legSlow` | 12 | 60 Hz | 1 | accessory (slow) leg units: tonic, fuse late, hold posture |
+| `legFast` | 78 | 25 Hz | 1 | the main extensor/flexor pools |
+| `ltm` | 36 | 12 Hz | 1 | long tendon muscle and claw adhesion: a grip, near-maximal once recruited |
+| `feed` | 32 | 17 Hz | 1 | proboscis — the original constant, kept because nothing better is sourced |
+| `other` | 12 | 17 Hz | 1 | unclassified: unchanged |
+| `flight` / `steer` / `jump` | — | 5 / 20 / 8 Hz | 1 / 1 / 2 | defined and *currently unreachable*, because the wing muscles are not driven by their motor neurons at all — see [M1](20-roadmap.md) |
+
+These are estimates from the insect muscle literature rather than Drosophila measurements of these
+particular muscles; there is no per-muscle force–frequency dataset for this animal. What the classes
+encode is an ordering that is not in doubt, and the ladder answers the item's question whatever the
+numbers are. `perClassMuscles` switches the whole thing back to the single constant, which is the rung
+`muscle_single` in `scripts/rungs.mjs`.
+
+**What the ladder will find, checked directly rather than waited for.** In `'descending'` mode — the
+mode the behavioural ladder runs in — the force–frequency curve reaches only the proboscis, antennae
+and labrum, because the legs are driven by the stepping generator and `muscleCtrl` is called for the leg
+joints only under `'connectome'`. Both of those classes keep f₅₀ at 17 Hz. Two otherwise identical 3 s
+embodied runs, `perClassMuscles` on and off, agree **exactly**: position and rostrum control identical
+to six decimals at every sample, maximum difference 0 (`scripts/muscle_check.mjs`). The rung is a **null in the behavioural ladder by
+construction**, and the physiological benchmark never reaches a muscle at all.
+
+That is not a wasted rung; it is the item's interesting negative arriving early and with a reason
+attached. The stated negative was that if the ladder cannot tell a per-class muscle model from a single
+constant, then motor-neuron *rate* is not the quantity the body reads at this level of description.
+The sharper version the code says is: **in the mode this model actually walks in, motor-neuron rate is
+not read by the legs at all** — there is no path from a leg motor neuron's firing rate to a leg joint.
+The muscle model matters exactly where [M2](36-vnc-stepping.md) is, which is why doc 36 lists it as one
+of the four things that have to be right before a fitted nerve cord means anything.
+
+**Run, and the null rung scored +0.102 ± 0.042.** `muscle_single` went through
+`scripts/behavior_ladder.mjs` on the same 12 seeds as the rest of the table. The result is not zero,
+and the reason it is not zero is pinned exactly: the per-class path evaluates
+`1 − exp(−ln2·(rate/17)¹)` where the single-constant path evaluates `1 − exp(−rate·(ln2/17))`, and
+the two orderings differ by at most one ulp — 2.2e-16, for 4.4% of rate values. Over 36 s of embodied
+simulation the body–brain loop amplifies a last-ulp difference in six driven actuators into an O(0.1)
+score difference. The rung is a null by construction and the ladder measured +0.102, so **±0.1 in
+score is the behavioural ladder's numerical noise floor, not a biological signal**.
+
+The proof that the whole difference lives in that ulp is in the table itself: `muscle_single` —
+`perClassMuscles` off, which is the old formula bit-for-bit — reproduced the previous baseline row
+*exactly* (score 0.8598, escapes 0.583, every observable identical), while the new baseline running the
+reordered formula scored 0.7576. Two rows separated by one floating-point associativity differ by more
+than most real substitutions move. The biggest single term is `escape` at +0.5 ± 0.19, a six-of-twelve
+seeds flip in a binary outcome, which is what ulp noise looks like at a threshold.
+
+What the rung therefore says is not the null result it was queued for — it is that the nineteen of
+twenty rungs sitting within two standard errors of the baseline cannot be read as robustness: the
+eval itself moves by that much under a provably-zero change. Effects worth claiming from this table
+have to clear ±0.1, or be re-measured with the paired-seed difference between two runs of *identical*
+math as the comparator. `scripts/muscle_check.mjs` missed this because it sampled to six decimals over
+3 s; the divergence is real but still below 1e-6 at that horizon.
+
+### M5. The 422 motor neurons with nowhere to go — the bound is measured
 285 motor-neuron types — 422 cells — carry no muscle assignment in v1.0: abdominal (115 types), neck
 (42), haltere and some wing. They are simulated, they spike, and nothing they do can reach the body.
-The neck motor neurons matter most, because head stabilisation is a visual-feedback loop that the
-model currently cannot close at all.
 
-**Success:** an assignment for the neck and haltere pools from the morphology and nerve, with the
-rest stated as a bound: what fraction of motor output this model structurally cannot express.
-**The interesting negative:** if the unmapped pools turn out to carry substantial descending drive,
-then every behavioural score in this repository is being produced by a motor system missing a known
-fraction of its output, and that fraction belongs in [Limitations](19-limitations.md) as a number.
+The item asked for an assignment for the neck and haltere pools *and* for the rest as a bound. **The
+bound is done and it is larger than the cell count suggests.** `scripts/motor_bound.mjs` censuses every
+motor neuron over 20 s of ordinary foraging and asks which of their spikes can reach an actuator:
 
-### M6. Motor output as the identifiability observable
-[Doc 34](34-individual-validation.md) freezes six observables for the individual-identifiability
-experiment, and [C1](20-roadmap.md) is the experiment the rest of this roadmap exists to make
-possible. The observables are behavioural because behaviour is what a body makes measurable — and the
-motor neurons are where the model's behaviour is generated, which makes them the natural place to
-read an individual difference out.
+| | |
+|---|---|
+| motor neurons | 815 |
+| the body can read | 465 |
+| stranded | **350** (42.9% of cells) |
+| mean rate, reachable | 21.89 Hz |
+| mean rate, stranded | 21.42 Hz |
+| **spikes that cannot reach the body** | **42.4%** |
 
-The question this item asks is narrow and answerable in simulation now: **does motor-neuron activity
-carry more individuating information than the behaviour it produces?** The body is a low-pass filter
-with 17 Hz saturation, six legs and a stepping generator in between; if two models differ at their
-motor neurons but not in what the fly does, the observable to record in C1 is the motor neurons, not
-the trajectory.
+The two rate rows are the point. A stranded pool that never fired would strand nothing; these fire
+at the same rate as the pools that drive the animal, so the cell fraction and the output fraction agree
+to half a percent and the bound is not softened by the stranded cells being quiet.
 
-**Success:** run `scripts/identify_test.mjs`'s statistic on simulated pairs, scoring once on motor
-pool rates and once on doc 34's behavioural observables, and report which separates the models at a
-smaller fit error.
-**The interesting negative:** if the behaviour separates individuals and the motor rates do not, the
-low-pass story is backwards and the body is *adding* individuating structure rather than removing it
-— which would matter to anyone proposing to validate an upload against recorded neural activity
-rather than against what the animal does.
+Reconciling the bodymap's own list against reachability also corrects a count this repository has been
+quoting: of the 422 cells listed as unmapped, **82 are reachable after all** through `bodymap.wing`, and
+ten stranded motor neurons are not on the list. The bound is computed from reachability, which is the
+property that decides whether a spike can move anything, and the subclass table holds the 340 cells that
+are on the list and stranded:
+
+| subclass | cells | rate | share of stranded output |
+|---|---|---|---|
+| abdominal | 214 | 20.9 Hz | 59.7% |
+| **neck** | 44 | 29.0 Hz | **17.0%** |
+| haltere (hm) | 16 | 47.2 Hz | 10.1% |
+| rm | 7 | 56.7 Hz | 5.3% |
+| wing (remainder) | 8 | 31.8 Hz | 3.4% |
+| xm / haltere (hl) / mesothoracic | 51 | 0.9–20.7 Hz | 3.5% |
+
+**What this changes.** The stated interesting negative was that *if* the unmapped pools carry
+substantial descending drive, then every behavioural score in this repository is being produced by a
+motor system missing a known fraction of its output, and that fraction belongs in
+[Limitations](19-limitations.md) as a number. They do, and it now is: **42.4%**.
+
+The neck pool is the consequential one for the same reason the item gave: 44 cells firing at 29 Hz,
+17% of the stranded output, and head stabilisation is a visual-feedback loop the model cannot close at
+all without them. The haltere pools are the second: 37 cells whose whole function is to report body
+rotation to the wing system, in a model whose flight controller supplies a haltere-*like* loop by hand
+([Flight](24-flight.md)).
+
+**What is not done.** The assignment. Giving the neck and haltere pools muscles needs three things this
+item does not have yet: neck and haltere muscle geometry in `public/body/fly_physics.xml` (the head is
+currently a rigid child of the thorax with no actuated neck joint), a mapping from motor-neuron type to
+muscle taken from the morphology and the nerve rather than from the release's annotation — which is what
+is missing in the first place — and a decision about what the halteres should drive, since the flight
+controller's attitude loop already occupies that role. The first of those is a body-model change and is
+the natural unit of work; the bound above is what says how much it is worth.
+
+### M6. Motor output as the identifiability observable — answered: the motor neurons, and it is not close
+[Doc 34](34-individual-validation.md) freezes six *behavioural* observables for the individual-identifiability
+experiment, on the argument that behaviour is what a body makes measurable. Between the motor neurons and
+the trajectory sit a saturating force–frequency curve, six legs and a supplied stepping generator, which
+is a low-pass filter. The item asked whether motor-neuron activity carries more individuating information
+than the behaviour it produces — answerable in simulation now, and now answered.
+
+`scripts/motor_identify.mjs` makes twelve simulated individuals by drawing a lognormal gain (σ = 0.25) on
+every neuron — the same quantity [doc 33](33-differentiable-brain.md)'s adjoint fits and the one C1 varies
+between animals — and runs each twice through the full five-scenario arena battery with different noise
+seeds. The first run is the "animal", the second is its model's prediction of it. Both observable vectors
+come off the *same* runs, so the only thing that differs between them is the read-out. Doc 34's statistic,
+threshold and permutation null are imported from `scripts/identify_test.mjs` rather than re-implemented.
+
+| read-out | K | identified | exact p | mean ρ | largest β with power ≥ 0.9 |
+|---|---|---|---|---|---|
+| doc 34's behavioural observables | 6 | **1 / 12** | 0.648 | 0.129 | **none — it fails at β = 0** |
+| motor pools | 12 | **12 / 12** | < 0.0001 | 0.836 | **1.0** |
+| motor pools, cut to six for a matched K | 6 | 11 / 12 | < 0.0001 | 0.826 | 0.5 |
+
+The permutation null lands at 0.083–0.085 per animal against the 1/12 the binomial predicts, so the
+threshold is the right one. **Behaviour is at chance and the motor neurons are perfect.** Cutting the
+motor read-out to six pools, so that it gets exactly the K the behavioural one gets, costs one animal.
+
+**ρ is where the answer actually lives, and it is per-observable:**
+
+| behavioural observable | ρ | | motor pool | ρ |
+|---|---|---|---|---|
+| escape rate | **0.00** | | wing power | 0.96 |
+| feeding latency | **0.00** | | wing pitch | 0.95 |
+| flip fraction | **0.00** | | leg T2 | 0.97 |
+| distance to food | **0.03** | | leg T3 | 0.96 |
+| walk-bout median (*scheduler*) | **0.00** | | unmapped pool | 0.96 |
+| walk-bout median (*body*) | 0.74 | | proboscis | 0.51 |
+
+Doc 34 gates C1 at ρ ≥ 0.4. **Five of the six behavioural observables are at or within rounding of zero**, which means that on
+this model, run against these assays, C1 would return "inconclusive by design" — its own fourth outcome
+row — no matter how good the per-animal fits were.
+
+**The two bout rows are the finding in miniature.** They are the same quantity read in two places.
+`boutMedian` is the supplied scheduler's own walk state, which is what [doc 35](35-behaviour-ladder.md)'s
+`bout` term is scored on; `bodyBoutMedian` is what the animal actually did, read off the motor command.
+The scheduler's version carries **no** individual information, because its durations are a lognormal draw
+reseeded every run and the brain is not in that draw. The body's version carries ρ = 0.74. One read-out
+of one behaviour, and the choice of which side of the supplied machinery to read it from is the
+difference between a usable observable and the null.
+
+Two of the others are assay artefacts rather than deep facts, and saying so is part of the result:
+`feedLatency` is **exactly 20 ms in all twenty-four runs** because the `onfood` scenario starts the fly
+touching food, and `flipFrac` is zero in every run but one. Neither can individuate anything because
+neither varies. `escapes` and `foodDist` do vary — by 0.46 and 0.26 — and still return ρ of 0.00 and 0.03, which is
+worse: their variance is entirely within-animal. The same individual escapes on one run and not the
+other.
+
+**What this decides.** The observable C1 should record is the motor neurons. It is the read-out that
+survives a fit error as large as the whole between-animal spread (β = 1.0 at power 0.97) where the
+behavioural one fails with no fit error at all.
+
+**What it does not decide, stated so the result is not over-read.** Doc 34 already says a neural
+observable has κ ≈ 1 by construction, so *some* gap was expected; what is new is that the gap runs all
+the way to the null rather than merely being large. And the measurement is of this model in this arena:
+the individuals are a lognormal gain draw rather than real animals, three of doc 34's six observables
+(optomotor gain, plume heading precision, tarsal PER threshold) have no arena assay and are replaced by
+whole-animal measures that `behavior_eval.mjs` does produce, and the assays are seconds long. A longer
+or better-designed behavioural assay could raise ρ. What it could not do is make the supplied scheduler's
+own random draw individuate an animal, and that is the part of the result that is about the model rather
+than the experiment.
+
+**The interesting negative, for the record, did not happen.** It would have been the behaviour separating
+individuals while the motor rates did not, which would have meant the body *adds* individuating structure
+rather than removing it. The measurement is emphatically the other way, and the low-pass story is right.
 
 ---
 
@@ -208,7 +549,8 @@ uncertainty it just measured. Two steps:
   weight to be the most load-bearing quantity in the model, and doc 32 finds it to be the one the
   reconstruction measures worst. [Doc 35](35-behaviour-ladder.md) complicates the first half — the same
   weights are free in the arena — so the item's justification is now the *threshold*, which both ladders
-  agree is expensive and neither can refit away, rather than the weight values.
+  agree is expensive and which a refit of the other eight parameters cannot absorb when it is tightened,
+  rather than the weight values.
 - Extend the calibration set to the optic lobe. The one-cell-per-side trick covers 6.4% of the CNS and
   excludes every columnar type by construction, so the optic lobe currently inherits a noise model
   fitted elsewhere. Columnar types have a different replicate available: the columns themselves, which

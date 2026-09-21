@@ -26,6 +26,14 @@ File: `public/data/bodymap.json`, built by `scripts/prep_bodymap.py`.
 Wing power, steering, and pharyngeal pump neurons are grouped separately. Abdominal, neck, and haltere
 motor neurons are unmapped because v1.0 does not annotate their muscles.
 
+**How much output that strands, measured.** `scripts/motor_bound.mjs` censuses every motor neuron during
+20 s of foraging and asks which of their spikes can reach an actuator. 350 of the model's 815 motor
+neurons have no route to one, and they fire at 21.4 Hz against 21.9 Hz for the ones the body can read:
+**42.4% of all motor-neuron spikes are emitted into nothing.** That is the bound
+[M5](20-roadmap.md) asks for, and it is a property of this release's annotation rather than of the
+model — every behavioural number in this repository is produced by a motor system missing that fraction
+of its output. `public/data/motor_bound.json` carries the per-subclass breakdown.
+
 ## Sensory neurons
 7,745 neurons in 151 channels, by modality, receptor, nerve, and side.
 

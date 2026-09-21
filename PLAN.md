@@ -20,7 +20,9 @@ proxies (collide, are seen, carry pheromone). The connectome lives once in share
 ## Neuron ↔ body map (scripts/prep_bodymap.py → public/data/bodymap.json)
 - Motor: 439 leg/proboscis/antenna motor neurons by annotated muscle (e.g. "Ti flexor MN", "Tr extensor MN",
   "Sternal anterior rotator MN", MN9 rostrum protractor). Abdominal, neck and haltere MNs are unmapped
-  (their muscle targets are not annotated in v1.0).
+  (their muscle targets are not annotated in v1.0). 350 of the model's 815 motor neurons have no route
+  to an actuator, and they fire at the same rate as the ones that do: 42.4% of motor-neuron spikes
+  cannot reach the body (scripts/motor_bound.mjs, [M5](docs/20-roadmap.md)).
 - Sensory: 7,745 neurons in 151 channels: ORNs by glomerulus and antenna, labellar/leg/taste-peg GRNs by
   tastant (identities from the 2026 gustatory connectome: LB3b-c sugar, LB1a-d bitter, LB3a water,
   LB3d high salt; LgLG3/4 & LgAG2 sugar, LgAG1 bitter, LgLG1/2/5-8 pheromone), tactile bristles,
@@ -69,7 +71,11 @@ DM1 PN responses, bounded baseline activity, return to baseline after stimulus, 
 - Stepping pattern generator: tripod (confirmed by FlySuite real-fly data: L1/R2/L3 vs R1/L2/R3, 9.5 Hz),
   optimised for straight walking, ±turning, slow and backward walking; jump program chosen to land upright
   from any stride phase (scripts/jump_test2.py).
-- Muscle activation from MN rate saturates (half-maximal ~17 Hz).
+- Muscle activation from MN rate saturates, per muscle class: 1 - exp(-ln2 (rate/f50)^n), with f50 at
+  60 Hz for accessory (slow) leg units, 25 Hz for the fast ones, 12 Hz for the long tendon muscle and
+  17 Hz for the proboscis ([M4](docs/20-roadmap.md)). `perClassMuscles: false` restores the single
+  17 Hz constant, which is the ladder rung `muscle_single`. In 'descending' mode the curve reaches only
+  the proboscis and antennae, because the legs are driven by the stepping generator.
 
 ## Physiology
 Energy (hunger) decays; ingestion when the extended labellum touches food and pharyngeal pump MNs fire.
