@@ -38,8 +38,8 @@ The plugins, grouped by host:
 | Motor | `groomPattern` | 7 Hz antiphase front-leg head sweep while grooming DNs fire |
 | Motor | `escapeJump` | GF-burst and loom-takeoff detection + the TTM jump program |
 | Motor | `rightingReflex` | inverted >150 ms -> wing push + tripod flail |
-| Senses | `reafference` | efference-copy cancellation of self-generated footfall touch (0.85) |
-| FlyAgent | `escapeGate` | touch/pivot/grooming veto on the escape trigger (the future self-motion cancel, S3) |
+| Senses + FlyAgent | `reafference` | efference-copy cancellation of self-generated footfall touch (0.85), plus the fitted self-motion visual cancel on the loom pathway's membrane drive (S3, docs/38) |
+| FlyAgent | `escapeGate` | touch/pivot/grooming veto on the escape trigger (the measured negative of docs/38 keeps it required) |
 | FlyAgent | `gfGap` | GF->TTMn electrical synapse, not in the chemical connectome |
 | FlyAgent | `lc10Channel` | direct LC10 small-object drive from a nearby fly |
 | Intrinsic | `boutScheduler` | stop/walk/groom/feed action selection + spontaneous saccades + voluntary takeoff draw + the active brake |
@@ -142,6 +142,8 @@ readout math in `Motor.apply`, and MuJoCo physics are the substrate the plugins 
 - **S2** (premotor standing fitter) attacks the biggest row: `cpg` off currently means frozen, not
   "the VNC walks badly", because the connectome cannot drive legs at all. The fitter's job is to
   shrink that row.
-- **S3** replaces `escapeGate`'s rule veto with a real self-motion cancel ahead of the loom
-  pathway; the plugin is the seam it plugs into.
+- **S3** shipped as a recorded negative (docs/38-reafference.md): the learned cancel exists and is
+  real -- wall false-alarms fall 8/10 to 2/10 with `escapeGate` off -- but the reafferent LC4 drive
+  is scene-dominated (a command-conditioned model predicts ~4-19% of it), the blind floor is ~2/10,
+  and the disk assay cannot reach 8/10 at baseline. `escapeGate` stays required.
 - **S5** turns `oaArousalRule` from a scalar signal into the octopamine operator family with rivals.

@@ -48,13 +48,14 @@ async function main() {
   const data = await loadConnectome(status);
   meta = data.meta;
   status('loading body model');
-  const [bm, xml, g, blender, levels, output, sz, sg, bp, wasmBytes, fvb, fvj, fvi, fvm, nmc, detail] = await Promise.all([
+  const [bm, xml, g, blender, levels, output, sz, sg, bp, wasmBytes, fvb, fvj, fvi, fvm, nmc, detail, reaf] = await Promise.all([
     fetch(`${BASE}data/bodymap.json`).then(r => r.json()), fetch(`${BASE}body/fly_physics.xml`).then(r => r.text()), fetch(`${BASE}body/gait.json`).then(r => r.json()),
     loadBlenderFly(BASE, status), loadArenaDetail(BASE), blenderOutput(BASE),
     fetch(`${BASE}data/neuron_size.bin`).then(r => r.arrayBuffer()), fetch(`${BASE}data/ntsign.bin`).then(r => r.arrayBuffer()),
     fetch(`${BASE}data/brain_params.json`).then(r => r.ok ? r.json() : {}).catch(() => ({})), fetch(`${BASE}lif.wasm`).then(r => r.arrayBuffer()),
     fetch(`${BASE}vision/flyvis.bin`).then(r => r.arrayBuffer()), fetch(`${BASE}vision/flyvis.json`).then(r => r.json()), fetch(`${BASE}vision/flyvis_inputs.json`).then(r => r.json()), fetch(`${BASE}vision/flyvis_map.json`).then(r => r.json()),
-    fetch(`${BASE}data/neuromod.json`).then(r => r.ok ? r.json() : null).catch(() => null), loadCuticleDetail(`${BASE}body/cuticle_detail.png`)]);
+    fetch(`${BASE}data/neuromod.json`).then(r => r.ok ? r.json() : null).catch(() => null), loadCuticleDetail(`${BASE}body/cuticle_detail.png`),
+    fetch(`${BASE}data/reafference.json`).then(r => r.ok ? r.json() : null).catch(() => null)]);
   // Passing null here also skips the sensoryMask that would otherwise zero these neurons'
   // incoming synapses (allocBrainMemory marks flyvis-driven neurons sensory because flyvis
   // normally replaces their input). Blind flies therefore keep an intact, wired optic lobe.
@@ -63,6 +64,9 @@ async function main() {
   shared = { N: data.N, E: data.E, indptr: toShared(data.indptr), indices: toShared(data.indices), weights: toShared(data.weights), nt: toShared(data.nt),
     side: toShared(data.side), superclass: toShared(data.superclass), cls: toShared(data.cls), size: toShared(new Float32Array(sz)), sign: toShared(new Float32Array(sg)) };
   brainParams = { ...bp, neuromod: !!(bp.neuromod && nmc) };
+  // the fitted self-motion cancel (spec S3) rides to the reafference plugin through scaffoldParams;
+  // no file = unfitted model = inert channel
+  if (reaf) brainParams.scaffoldParams = { ...(bp.scaffoldParams || {}), reafference: { ...(bp.scaffoldParams?.reafference || {}), model: reaf } };
   if (new URLSearchParams(location.search).get('gpu') === '0') brainParams.gpu = false;   // ?gpu=0 forces the WASM kernel
   // ?off=cpg,escapeGate disables scaffold plugins at load (docs/37-scaffold-ledger.md); the
   // panel checkboxes below toggle them live afterwards

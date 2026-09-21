@@ -32,6 +32,10 @@ const MJ = await loadMujoco(); const WASM = fs.readFileSync('public/lif.wasm');
 // differs between them is the read-out. They are reported as `mn_<pool>` and never scored.
 const POOLS = motorPools(D);
 const NEUROMOD = loadNeuromod();
+// The fitted self-motion cancel (spec S3), loaded once and passed to every fly through the
+// reafference plugin's model param. Absent file = unfitted forward model = inert channel.
+const REAFFERENCE = fs.existsSync('public/data/reafference.json')
+  ? JSON.parse(fs.readFileSync('public/data/reafference.json')) : null;
 
 // Weight-vector variants. Same definitions as scripts/calib_eval.mjs: the physiological benchmark needs
 // these to build the graph, and the embodied path reaches them by transforming the data object before
@@ -85,6 +89,8 @@ const median = a => { if (!a.length) return 0; const s = a.slice().sort((x, y) =
 
 async function runSeed(cfg, seed) {
   const o = { ...BRAIN_DEFAULTS, ...cfg };
+  if (REAFFERENCE && o.reafference !== false)
+    o.scaffoldParams = { ...(cfg.scaffoldParams || {}), reafference: { ...(cfg.scaffoldParams?.reafference || {}), model: REAFFERENCE } };
   const data = (o.wBinary || o.wShuffle || o.wEB) ? { ...DATA, weights: weightsFor({ ...o, seed }) } : DATA;
   const mem = allocBrainMemory(data, SIZE, o.signFree ? ALL_EXC : SIGN, o, 1, VISION);
   const brain = await attachBrain(WASM, mem, 0, data, (seed * 2654435761) >>> 0); brain.reset();
