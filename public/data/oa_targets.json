@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "spec": "S5 octopamine operator family (docs/40). Receptor types are not in the connectome, so every typed subset below is a hypothesis. Changing a list is a new degree of freedom: bump version, keep the old file's diff in git, do not edit silently.",
+  "thrTyped": [
+    "T4.*", "T5.*",
+    "LC4.*", "LPLC2.*", "LPLC4.*", "LC10.*",
+    "DNp01", "DNp02", "DNp04", "DNp09", "DNp11", "DNp26",
+    "DNa01", "DNa02", "DNa05", "DNa07", "DNg13", "DNg97", "DNg100", "DNg25", "MDN"
+  ],
+  "gainField": {
+    "superclasses": ["ol_intrinsic", "visual_projection", "visual_centrifugal"],
+    "types": ["DNp01", "DNp02", "DNp04", "DNp09", "DNp26", "DNa01", "DNa02", "DNa05", "DNa07", "DNg25", "DNg97", "DNg100", "DNa08", "DNg02.*", "MDN"]
+  }
+}

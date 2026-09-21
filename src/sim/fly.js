@@ -34,7 +34,11 @@ export class FlyAgent {
     this.brain = brain || createBrain(data, size, brainOpts, sign);   // wasm brain can be injected (shared connectome memory)
     // hunger as hormones and octopamine (neuromod: { calib: neuromod.json, block }); needs brainOpts.neuromod, which
     // also removes the OA neurons' fast synapses from the graph
-    this.neuromod = brainOpts.neuromod ? new Neuromod(data, this.brain, { calib: neuromod?.calib, block: neuromod?.block, params: neuromod?.params, minSyn: brainOpts.minSyn ?? 5 }) : null;
+    const nmExtra = {};
+    const oaMode = neuromod?.oaMode ?? brainOpts.oaMode, oaTargets = neuromod?.oaTargets ?? brainOpts.oaTargets;
+    if (oaMode) nmExtra.oaMode = oaMode;
+    if (oaTargets) nmExtra.oaTargets = oaTargets;
+    this.neuromod = brainOpts.neuromod ? new Neuromod(data, this.brain, { calib: neuromod?.calib, block: neuromod?.block, params: { ...neuromod?.params, ...nmExtra }, minSyn: brainOpts.minSyn ?? 5 }) : null;
     const typeOf = data.meta.types, sideOf = data.side;
     this.senses = new Senses(bodymap, mj, M); this.senses.bindTypes(typeOf, sideOf);
     // LC10 small-object visual projection neurons: the eye-to-courtship channel. A nearby fly is detected

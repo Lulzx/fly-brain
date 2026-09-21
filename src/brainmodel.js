@@ -32,6 +32,9 @@ export function applyClassPhysiology(net, data, o) {
 // fast synapses leave the graph. Returns a copy of the per-neuron sign array (or of the transmitter table's signs).
 export function modulatorySign(data, preSign, o) {
   if (!o.neuromod) return preSign;
+  // oaMode 'synFast' (spec S5): the OA neurons' fast synapses stay in the graph -- that operator's
+  // postsynaptic action IS the chemical synapse, so there is no field to protect the graph from.
+  if (o.oaMode === 'synFast') return preSign || Float32Array.from(data.nt, n => EXC_SIGN[n]);
   const types = data.meta.types, s = preSign ? Float32Array.from(preSign) : Float32Array.from(data.nt, n => EXC_SIGN[n]);
   for (let i = 0; i < data.N; i++) if (isOctopaminergic(types[i])) s[i] = 0;
   return s;
