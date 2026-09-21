@@ -41,6 +41,10 @@ const REAFFERENCE = fs.existsSync('public/data/reafference.json')
 const STANDFIT = fs.existsSync('public/data/stand_fit.json')
   ? JSON.parse(fs.readFileSync('public/data/stand_fit.json')) : null;
 const GAINTABLE = STANDFIT ? Object.fromEntries(STANDFIT.gains.map(g => [g.orig, g.logGain])) : null;
+// S5: the versioned typed-subset lists the thrTyped/gainField octopamine operators act on
+// (docs/40). Loaded into brainOpts so Neuromod sees it; a missing file fails loudly there.
+const OATARGETS = fs.existsSync('public/data/oa_targets.json')
+  ? JSON.parse(fs.readFileSync('public/data/oa_targets.json')) : null;
 
 // Weight-vector variants. Same definitions as scripts/calib_eval.mjs: the physiological benchmark needs
 // these to build the graph, and the embodied path reaches them by transforming the data object before
@@ -97,6 +101,7 @@ async function runSeed(cfg, seed) {
   if (REAFFERENCE && o.reafference !== false)
     o.scaffoldParams = { ...(cfg.scaffoldParams || {}), reafference: { ...(cfg.scaffoldParams?.reafference || {}), model: REAFFERENCE } };
   if (GAINTABLE && o.standFit !== false && !o.neuronGainTable) o.neuronGainTable = GAINTABLE;
+  if (o.oaMode && OATARGETS && !o.oaTargets) o.oaTargets = OATARGETS;
   const data = (o.wBinary || o.wShuffle || o.wEB) ? { ...DATA, weights: weightsFor({ ...o, seed }) } : DATA;
   const mem = allocBrainMemory(data, SIZE, o.signFree ? ALL_EXC : SIGN, o, 1, VISION);
   const brain = await attachBrain(WASM, mem, 0, data, (seed * 2654435761) >>> 0); brain.reset();

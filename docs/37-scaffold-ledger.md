@@ -48,7 +48,7 @@ The plugins, grouped by host:
 | Intrinsic | `courtship` | male chase/station-keeping/song trigger from the pIP10+DNp13 readout |
 | Intrinsic | `femaleRejection` | decamp run and hind-leg kick |
 | Intrinsic | `flightSaccade` | spontaneous and collision-avoidance saccades in flight |
-| Intrinsic | `oaArousalRule` | the single arousal signal (OA level, else energy deficit) every consumer reads |
+| Intrinsic | `oaArousalRule` | the single arousal signal (OA level, else energy deficit) every consumer reads; S5 tested four chemical-graph OA operators against it — none reproduce starved hyperactivity, still required (docs/40) |
 
 Three named modules predate the registry and keep their own switches; the ledger lists them as
 host-managed: `neuromod` (brainOpts.neuromod / neuromod.block), `song` (driven by
@@ -150,4 +150,11 @@ readout math in `Motor.apply`, and MuJoCo physics are the substrate the plugins 
   real -- wall false-alarms fall 8/10 to 2/10 with `escapeGate` off -- but the reafferent LC4 drive
   is scene-dominated (a command-conditioned model predicts ~4-19% of it), the blind floor is ~2/10,
   and the disk assay cannot reach 8/10 at baseline. `escapeGate` stays required.
-- **S5** turns `oaArousalRule` from a scalar signal into the octopamine operator family with rivals.
+- **S5** ran the octopamine operator family to its split table (docs/40-oa-operators.md): four
+  postsynaptic OA actions (`synFast`, `thrField`, `gainField`, `thrTyped`, all killable via
+  `oaMode`) over 4 conditions × fed/starved. `synFast` is eliminated on direction — OA's fast
+  synapses are net inhibitory, starvation *reduces* walking (0.84×). No operator reproduces
+  starved hyperactivity with `oaArousalRule` off (ratios 0.85–1.09 at full OA tone), so the rule
+  keeps its required label; the field family members separate from each other only weakly.
+  `oaArousalRule` row: still required, now with the sharper statement that the need was tested
+  against three rival postsynaptic actions, not asserted.

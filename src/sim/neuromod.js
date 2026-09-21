@@ -34,6 +34,17 @@ export const NEUROMOD = {
   oaFed: 2, oaStarved: 12,                      // Hz: tonic rate targeted when fed (calibration), and the level that counts as fully aroused
   targetShift: 2, targetHalf: 400,              // max threshold decrease (mV) on OA targets; half-saturation in synapses x Hz
   locoDrive: 6,                                 // locomotion excites the optic-lobe OA cells (corollary discharge; Suver et al. 2012)
+  // S5 (docs/40): the postsynaptic action of octopamine is the unsettled part, so it is an operator
+  // with rivals, selected by oaMode:
+  //   'thrField'  shipped: lower target spike thresholds (<= targetShift mV), saturating in synapses x Hz
+  //   'synFast'   historical regression arm: OA neurons keep their fast synapses in the graph and this
+  //               field does nothing (modulatorySign leaves their signs in place when oaMode='synFast')
+  //   'gainField' OA exposure multiplies the *outgoing* gain of typed sets (optic lobe + behaviourally
+  //               annotated DNs), written into the kernel's per-neuron sign array -- no threshold shift
+  //   'thrTyped'  the threshold field restricted to the versioned type list in oa_targets.json
+  oaMode: 'thrField',
+  gainMax: 2,                                   // gainField: outgoing gain = 1 + gainMax * a, so <= 3x (Suver et al. 2012)
+  oaTargets: null,                              // parsed public/data/oa_targets.json; required by thrTyped and gainField
 };
 export const AKHR_TYPES = /^OA-(VUMa|VPM)/;
 export const OPTIC_OA_TYPES = /^OA-(AL2i|ASM)/;   // octopamine neurons whose arbours are in the optic lobes
@@ -67,10 +78,40 @@ export class Neuromod {
     this.cellTarget = Int32Array.from(this.cells, i => tIx.get(i) ?? -1);
     this.akh = 0; this.dilp = 1; this.t = 0;
     this.adapt = null;   // calibration: { eta } moves the cells' resting thresholds toward their fed rates
+    // S5 operator selection (docs/40). Everything above is the shared hunger->OA pathway; oaMode
+    // chooses only what OA release does to the rest of the brain.
+    this.oaMode = this.P.oaMode;
+    const T = this.P.oaTargets;
+    const typeMatch = list => {
+      const re = list.map(k => /[\\^$*+?()[\]{}|]/.test(k) ? new RegExp(`^(?:${k})$`) : null);
+      return i => list.some((k, m) => re[m] ? re[m].test(types[i]) : types[i] === k);
+    };
+    // typed mask over `targets`: which neurons the field is allowed to act on. All for thrField,
+    // the versioned hypothesis list for thrTyped, the optic+DN sets for gainField.
+    this.fieldMask = null;
+    if (this.oaMode === 'thrTyped') {
+      if (!T || !T.thrTyped) throw new Error("oaMode 'thrTyped' requires params.oaTargets (public/data/oa_targets.json)");
+      const match = typeMatch(T.thrTyped);
+      this.fieldMask = Uint8Array.from(this.targets, q => match(q) ? 1 : 0);
+    }
+    if (this.oaMode === 'gainField') {
+      if (!T || !T.gainField) throw new Error("oaMode 'gainField' requires params.oaTargets (public/data/oa_targets.json)");
+      const sup = data.meta.superclasses, sc = data.sc || data.superclass;
+      const inSup = new Set(T.gainField.superclasses.map(s => sup.indexOf(s)));
+      const match = typeMatch(T.gainField.types || []);
+      this.fieldMask = Uint8Array.from(this.targets, q => inSup.has(sc[q]) || match(q) ? 1 : 0);
+      // The kernel's per-neuron `sign` is s*wSyn read fresh at every spike delivery: scaling |sign|
+      // scales outgoing gain with no kernel change. The array lives in the shared graph, so the
+      // gain applies to every brain in this memory -- fine for the single-fly assay; a per-brain
+      // gain array would need a kernel change.
+      const signArr = brain.mem && brain.graph ? new Float32Array(brain.mem.buffer, brain.graph.sign, brain.N) : brain.sign;
+      if (!signArr) throw new Error("oaMode 'gainField' needs a writable per-neuron sign array (LIFWasm or LIFNetwork)");
+      this.signArr = signArr; this.sign0 = Float32Array.from(signArr);
+    }
     this.setCellThr();
   }
   /** after brain.reset() (spike counts cleared): back to the fed steady state */
-  reset() { this.last.set(Array.from(this.cells, i => this.brain.spikeCount[i])); this.r.fill(this.P.oaFed, 0, this.nOA).fill(this.P.ipcFed, this.nOA); this.akh = 0; this.dilp = 1; this.t = 0; this.setCellThr(); }
+  reset() { this.last.set(Array.from(this.cells, i => this.brain.spikeCount[i])); this.r.fill(this.P.oaFed, 0, this.nOA).fill(this.P.ipcFed, this.nOA); this.akh = 0; this.dilp = 1; this.t = 0; if (this.signArr) this.signArr.set(this.sign0); this.setCellThr(); }
   /** one ms; sugar = haemolymph sugar (energy 0..1); loco = locomotor state 0..1 (walking or flying) */
   update(dtMs, sugar, loco = 0) {
     const P = this.P, B = this.brain; const t = this.t += dtMs;
@@ -95,11 +136,29 @@ export class Neuromod {
     this.setCellThr();
   }
   setCellThr() { for (let n = 0; n < this.cells.length; n++) { const m = this.cellTarget[n]; this.brain.setThr(this.cells[n], this.base[n] + this.P.sfa * this.r[n] - (m < 0 ? 0 : this.shift[m])); } }
-  /** octopamine lowers the spike threshold of its synaptic targets, saturating */
+  /** octopamine's postsynaptic action, per oaMode (docs/40). `x` is per-target OA exposure in
+      synapses x Hz; what it does to the target is the operator under test. */
   modulate() {
     const P = this.P, B = this.brain, x = this.x; x.fill(0);
     for (let n = 0; n < this.rows.length; n++) { const r = this.rows[n], c = this.c[n]; if (c <= 0) continue; for (let m = 0; m < r.length; m += 2) x[r[m]] += r[m + 1] * c; }
-    for (let m = 0; m < x.length; m++) { this.shift[m] = P.targetShift * x[m] / (x[m] + P.targetHalf); if (!this.isCell[m]) B.setThr(this.targets[m], this.thr0[m] - this.shift[m]); }
+    // synFast: OA acts only through its fast synapses, which stayed in the graph; no field.
+    if (this.oaMode === 'synFast') { this.shift.fill(0); return; }
+    const mask = this.fieldMask;
+    if (this.oaMode === 'gainField') {
+      // outgoing gain = 1 + gainMax * a on the typed sets; thresholds untouched. Unmasked targets
+      // are restored to baseline so a mode switch or reset never leaves a stale gain behind.
+      const { signArr, sign0 } = this;
+      for (let m = 0; m < x.length; m++) {
+        const q = this.targets[m];
+        this.shift[m] = 0;
+        signArr[q] = mask[m] ? sign0[q] * (1 + P.gainMax * x[m] / (x[m] + P.targetHalf)) : sign0[q];
+      }
+      return;
+    }
+    for (let m = 0; m < x.length; m++) {
+      this.shift[m] = (!mask || mask[m]) ? P.targetShift * x[m] / (x[m] + P.targetHalf) : 0;
+      if (!this.isCell[m]) B.setThr(this.targets[m], this.thr0[m] - this.shift[m]);
+    }
   }
   /** mean octopamine release of the AKH-sensitive OA neurons (Hz) */
   get oaTone() { let s = 0; for (const n of this.akhrPos) s += this.c[n]; return s / this.akhrPos.length; }

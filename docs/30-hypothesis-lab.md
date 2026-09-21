@@ -415,7 +415,7 @@ reference into anything another condition can mutate.
 | `heading-lab` | heading | ready — the hypothesis lab as data |
 | `loom-vs-gait` | arena | ready — gate-window ensemble; kills the gate, reafference, jump |
 | `stand-scramble` | arena | ready — motor-gain ensemble; `premotor_scramble` recorded unimplemented until S2 |
-| `oa-split` | arena | pending — S5's OA operator family |
+| `oa-split` | arena | ran — S5's operator split is in docs/40; `synFast` eliminated, field family degenerate, `oaArousalRule` stays required |
 | `engram-recover` | engram | pending — S6's engram harness |
 
 ## What's next
