@@ -48,6 +48,15 @@ export const RUNGS = [
   { key: 'add_adaptation', level: 'cellular', dir: 'add', patch: { adaptInc: 2 }, frozen: ['adaptInc'],
     note: 'spike-frequency adaptation switched on; the fit chose to leave it off' },
 
+  // Roadmap item M4. `perClassMuscles` gives each muscle class its own force-frequency curve
+  // (src/sim/motor.js MUSCLE_FF); this rung switches it back off, so the ladder measures what the one
+  // 17 Hz constant standing in for every neuromuscular junction was costing. It is a behavioural rung
+  // only: the physiological benchmark never reaches a muscle. Note before running it that in
+  // 'descending' mode the constant reaches only the proboscis and antennae, because the legs are driven
+  // by the stepping generator -- so a null result here is expected and is a statement about the mode.
+  { key: 'muscle_single', level: 'body', dir: 'drop', patch: { perClassMuscles: false }, frozen: [],
+    note: 'per-class force-frequency curves replaced by the single 17 Hz saturation constant' },
+
   { key: 'no_neuromod', level: 'modulatory', dir: 'drop', patch: { neuromod: false }, frozen: [],
     note: 'fed octopamine tone and the modulatory-synapse split removed' },
 

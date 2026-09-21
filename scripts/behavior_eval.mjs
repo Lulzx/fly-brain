@@ -16,6 +16,7 @@ import { DEFAULT_ENV } from '../src/sim/world.js';
 import { allocBrainMemory, attachBrain, attachEyes } from '../src/brainsetup.js';
 import { parseFlyVis } from '../src/flyvis.js';
 import { BRAIN_DEFAULTS } from '../src/brainmodel.js';
+import { motorPools } from './motor_pools.mjs';
 
 const D = loadAll(); const DATA = { ...D, superclass: D.sc };
 const SIZE = new Float32Array(fs.readFileSync('public/data/neuron_size.bin').buffer.slice(0));
@@ -26,6 +27,10 @@ const FLYXML = fs.readFileSync('public/body/fly_physics.xml', 'utf8');
 const FB = fs.readFileSync('public/vision/flyvis.bin');
 const VISION = { model: parseFlyVis(FB.buffer.slice(FB.byteOffset, FB.byteOffset + FB.byteLength), JSON.parse(fs.readFileSync('public/vision/flyvis.json')), JSON.parse(fs.readFileSync('public/vision/flyvis_inputs.json'))), map: JSON.parse(fs.readFileSync('public/vision/flyvis_map.json')) };
 const MJ = await loadMujoco(); const WASM = fs.readFileSync('public/lif.wasm');
+// Motor-pool rates are read out of the same runs as the behaviour, which is what makes roadmap item M6
+// a fair comparison: the two observables come from one animal on one trial, so the only thing that
+// differs between them is the read-out. They are reported as `mn_<pool>` and never scored.
+const POOLS = motorPools(D);
 const NEUROMOD = loadNeuromod();
 
 // Weight-vector variants. Same definitions as scripts/calib_eval.mjs: the physiological benchmark needs
@@ -68,11 +73,14 @@ async function runSeed(cfg, seed) {
   const mem = allocBrainMemory(data, SIZE, o.signFree ? ALL_EXC : SIGN, o, 1, VISION);
   const brain = await attachBrain(WASM, mem, 0, data, (seed * 2654435761) >>> 0); brain.reset();
   const obs = { flipMs: 0, totalMs: 0, alive: 1, foodDist: 1e9, feedLatency: null, escapes: 0, walkBouts: [], schedBouts: [] };
+  const mnSpikes = Object.fromEntries(Object.keys(POOLS).map(k => [k, 0]));   // spikes per pool, summed over scenarios
+  let mnMs = 0;
   for (const [name, sc] of Object.entries(SCENARIOS)) {
     // Each scenario starts from a clean brain and fresh eyes, as scripts/behavior_report.mjs does by
     // building a new fly per scenario: a stale membrane potential or a stale eye state would make the
     // scenarios order-dependent, and the order is an implementation detail.
     brain.reset();
+    const mnPrev = Uint32Array.from(brain.spikeCount);   // reset() zeroes the counts; kept explicit
     const env = structuredClone(DEFAULT_ENV);
     const [pos, yaw] = sc.setup(env);
     const fly = new FlyAgent({ mj: MJ, flyXML: FLYXML, env, data, size: SIZE, sign: SIGN, bodymap: D.bodymap, gait: GAIT,
@@ -114,6 +122,8 @@ async function runSeed(cfg, seed) {
         if (name === 'threat' && !escaped && (fly.jumps > 0 || fly.flight.active)) escaped = true;
       }
     }
+    for (const [k, p] of Object.entries(POOLS)) { let n = 0; for (const i of p.idx) n += brain.spikeCount[i] - mnPrev[i]; mnSpikes[k] += n; }
+    mnMs += sc.secs * 1000;
     if (running > 0) obs.walkBouts.push(running);
     if (schedRun > 0) obs.schedBouts.push(schedRun);
     if (!fly.alive) obs.alive = 0;
@@ -123,6 +133,10 @@ async function runSeed(cfg, seed) {
     fly.dispose();
   }
   if (obs.foodDist > 1e8) obs.foodDist = 1.2;
+  // "never fed" is the length of the assay, not null. It scored the same either way -- clamp(1 - 4000/2000)
+  // is 0, which is what the null branch returned -- and as a number it survives being averaged across
+  // seeds and being read as an observable, which scripts/motor_identify.mjs does.
+  if (obs.feedLatency == null) obs.feedLatency = SCENARIOS.onfood.secs * 1000;
   obs.flipFrac = obs.flipMs / Math.max(1, obs.totalMs);
   obs.boutMedian = median(obs.schedBouts);
   obs.boutMean = mean(obs.schedBouts);
@@ -130,6 +144,7 @@ async function runSeed(cfg, seed) {
   obs.bodyBoutMedian = median(obs.walkBouts);
   obs.bodyBoutN = obs.walkBouts.length;
   delete obs.walkBouts; delete obs.schedBouts;
+  for (const [k, n] of Object.entries(mnSpikes)) obs['mn_' + k] = n / POOLS[k].n / (mnMs / 1000);
   return obs;
 }
 
@@ -142,7 +157,7 @@ export function scoreObs(obs) {
     alive: clamp(obs.alive),
     flips: clamp(1 - obs.flipFrac / 0.05),
     food: clamp(1 - obs.foodDist / 1.2),
-    feed: obs.feedLatency == null ? 0 : clamp(1 - obs.feedLatency / 2000),
+    feed: clamp(1 - obs.feedLatency / 2000),
     bout: obs.boutMedian > 0 ? clamp(1 - Math.abs(Math.log(obs.boutMedian / 2200)) / 2) : 0,
     escape: clamp(obs.escapes),
   };

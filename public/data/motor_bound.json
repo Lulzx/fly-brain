@@ -1,0 +1,92 @@
+{
+ "_source": "scripts/motor_bound.mjs",
+ "seconds": 20,
+ "seed": 7,
+ "cells": {
+  "motorTotal": 815,
+  "reachable": 465,
+  "stranded": 350,
+  "strandedFraction": 0.4294
+ },
+ "spikes": {
+  "reachable": 203540,
+  "stranded": 149950,
+  "strandedFraction": 0.4242,
+  "rateReachableHz": 21.89,
+  "rateStrandedHz": 21.42
+ },
+ "bodymapUnmapped": {
+  "typeEntries": 285,
+  "cellsClaimed": 422,
+  "cellsResolved": 422,
+  "typeEntriesUnresolved": 0,
+  "resolvedAndReachable": 82,
+  "resolvedNotInMotorSuperclass": 0,
+  "subclassTableCells": 340
+ },
+ "bySubclass": {
+  "ad": {
+   "name": "abdominal",
+   "cells": 214,
+   "rateHz": 20.91,
+   "spikes": 89483,
+   "shareOfStrandedSpikes": 0.5968
+  },
+  "hl": {
+   "name": "haltere (hl)",
+   "cells": 21,
+   "rateHz": 4.89,
+   "spikes": 2053,
+   "shareOfStrandedSpikes": 0.0137
+  },
+  "hm": {
+   "name": "haltere",
+   "cells": 16,
+   "rateHz": 47.24,
+   "spikes": 15117,
+   "shareOfStrandedSpikes": 0.1008
+  },
+  "ml": {
+   "name": "mesothoracic (ml)",
+   "cells": 24,
+   "rateHz": 1.26,
+   "spikes": 607,
+   "shareOfStrandedSpikes": 0.004
+  },
+  "nm": {
+   "name": "neck",
+   "cells": 44,
+   "rateHz": 29.03,
+   "spikes": 25549,
+   "shareOfStrandedSpikes": 0.1704
+  },
+  "pm": {
+   "name": "prothoracic (pm)",
+   "cells": 0,
+   "rateHz": 0,
+   "spikes": 0,
+   "shareOfStrandedSpikes": 0
+  },
+  "rm": {
+   "name": "rm",
+   "cells": 7,
+   "rateHz": 56.71,
+   "spikes": 7940,
+   "shareOfStrandedSpikes": 0.053
+  },
+  "wm": {
+   "name": "wing",
+   "cells": 8,
+   "rateHz": 31.78,
+   "spikes": 5085,
+   "shareOfStrandedSpikes": 0.0339
+  },
+  "xm": {
+   "name": "xm",
+   "cells": 6,
+   "rateHz": 20.73,
+   "spikes": 2487,
+   "shareOfStrandedSpikes": 0.0166
+  }
+ }
+}

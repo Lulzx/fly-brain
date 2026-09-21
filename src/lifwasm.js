@@ -22,7 +22,11 @@ export function writeGraph(memory, base, { N, E, indptr, indices, weights, nt },
     const s = preSign ? preSign[j] : SIGN[nt[j]]; sg[j] = s * p.wSyn;
     const og = outScale ? outScale[j] : 1, ig = (s < 0 ? p.inhGain : 1) * og;
     for (let k = indptr[j]; k < indptr[j + 1]; k++) { const q = indices[k], c = weights[k];
-      w[k] = (c >= p.minSyn && !(sensoryMask && sensoryMask[q])) ? c * (inScale ? inScale[q] : 1) * ig : 0; }
+      // Input onto sensory neurons is dropped: they are Poisson-forced, so a synapse onto one has no
+      // effect and only costs a scatter. The exception is presynaptic gain control (p.preInh > 0),
+      // which needs the *inhibitory* edges onto them kept so the kernel can divide their release.
+      const keep = !(sensoryMask && sensoryMask[q]) || (p.preInh > 0 && s < 0);
+      w[k] = (c >= p.minSyn && keep) ? c * (inScale ? inScale[q] : 1) * ig : 0; }
   }
   return { indptr: ip.byteOffset, indices: ix.byteOffset, weights: w.byteOffset, sign: sg.byteOffset, end: o, outScale };
 }
@@ -58,7 +62,7 @@ export class LIFWasm {
     u(this.graph.sign); u(this.spikeCount.byteOffset); u(this.graph.indptr); u(this.graph.indices); u(this.graph.weights);
     u(this.ring.byteOffset); u(this.ringCount.byteOffset); u(this.drivenList.byteOffset);
     i32(0); i32(0); i32(0);
-    f(this.N * (p.bgRate || 0) * p.dt / 1000); f(p.bgAmp || 0); f(0);
+    f(this.N * (p.bgRate || 0) * p.dt / 1000); f(p.bgAmp || 0); f(0); f(p.preInh || 0);
   }
   setBackground(rateHz, ampMv) { this.p.bgRate = rateHz; this.p.bgAmp = ampMv; this.dv.setFloat32(172, this.N * rateHz * this.p.dt / 1000, true); this.dv.setFloat32(176, ampMv, true); }
   _syncDriven() { let n = 0; for (const i of this.drivenSet) this.drivenList[n++] = i; this.dv.setInt32(160, n, true); this._drivenDirty = false; }

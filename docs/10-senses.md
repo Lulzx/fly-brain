@@ -30,6 +30,12 @@ File: `src/sim/senses.js`. Rates are recomputed every millisecond and set as Poi
   (`AL_NORM`): strong or many-channel odours compress total input instead of swamping the lobe, so the
   glomerular pattern — the odour's identity — survives while the overall level is bounded. Stands in for
   GABA_B presynaptic inhibition of receptor terminals.
+  Two things it does *not* do, both measured in [M3](20-roadmap.md). It normalises the evoked term and
+  leaves `ORN_SPONTANEOUS` alone, so the 6 Hz spontaneous rate passes through it untouched — and that
+  spontaneous rate is the entire input in a resting condition, where it carries the antennal lobe to
+  **77 Hz per projection neuron**. And the physiological benchmark never reaches it at all:
+  `scripts/calib_eval.mjs` sets receptor drive directly, so the one gain-control mechanism the model
+  owns is bypassed by the measurement that scores the lobe.
 - **Pheromone.** Each other fly carries a short-range cVA-like plume (`FLY_ODOR`, σ = 0.28 cm) into DA1,
   VA1v and VA1d — the courtship circuit's close-range channel (see [Courtship](26-courtship.md)).
 - Tactile bristles are rapidly adapting. Constant contact encoding drove the walking neurons and kept the

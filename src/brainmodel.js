@@ -53,14 +53,37 @@ export const PATHWAY_TYPES = {
   escape: ['T4a|T4b|T4c|T4d', 'T5a|T5b|T5c|T5d', 'LPLC2', 'LC4', 'DNp01', 'DNp02', 'DNp04'],
   feeding: ['LB3b|LB3c', 'GNG232', 'DNge080', 'MN9'],
 };
+// `classGain` is the same multiplier keyed on the annotated *class* rather than the cell type, for
+// populations the release names collectively and that have no small set of type names -- the 420
+// antennal-lobe local neurons are the case this exists for (docs/20-roadmap.md M3), where the
+// quantity of interest is the strength of the lobe's lateral inhibition as a whole.
 export function typeGains(data, o = {}) {
-  const spec = o.typeGain; if (!spec) return null;
-  const keys = Object.keys(spec).filter(k => spec[k] !== 1);
-  if (!keys.length) return null;
+  const spec = o.typeGain, cspec = o.classGain;
+  const keys = spec ? Object.keys(spec).filter(k => spec[k] !== 1) : [];
+  const ckeys = cspec ? Object.keys(cspec).filter(k => cspec[k] !== 1) : [];
+  if (!keys.length && !ckeys.length && !(o.neuronGain && o.neuronGain.sigma)) return null;
   const types = data.meta.types, g = new Float32Array(data.N).fill(1);
   for (const k of keys) {
     const re = /[\\^$*+?()[\]{}|]/.test(k) ? new RegExp(`^(?:${k})$`) : null;
     for (let i = 0; i < data.N; i++) if (re ? re.test(types[i]) : types[i] === k) g[i] *= spec[k];
+  }
+  // `neuronGain` is an individual: a lognormal multiplier on every neuron's output, drawn from a seed.
+  // It is the same quantity the per-neuron adjoint fit of doc 33 adjusts, and doc 34's C1 varies
+  // between animals, so roadmap item M6 uses it to make simulated individuals that differ in exactly
+  // the way the real experiment would have them differ. Given as {sigma, seed} rather than as an array
+  // because it has to cross a fork boundary.
+  if (o.neuronGain && o.neuronGain.sigma) {
+    const { sigma, seed = 1 } = o.neuronGain;
+    let a = (seed * 2654435761) | 0;
+    const rnd = () => { a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+    for (let i = 0; i < data.N; i++) {
+      let u = rnd(); const v = rnd(); if (u <= 0) u = 1e-9;
+      g[i] *= Math.exp(sigma * Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v));
+    }
+  }
+  if (ckeys.length) {
+    const cls = data.cls, classes = data.meta.classes;
+    for (let i = 0; i < data.N; i++) { const v = cspec[classes[cls[i]]]; if (v !== undefined) g[i] *= v; }
   }
   return g;
 }

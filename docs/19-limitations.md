@@ -6,7 +6,19 @@
   neurons, so odour channels still bleed into each other downstream. Antennal-lobe gain is now bounded by
   a divisive ORN normalisation standing in for GABA_B presynaptic inhibition ([Senses](10-senses.md)) —
   the lateral-inhibitory sharpening of the real lobe is still not modelled.
-- **Proboscis.** MN9 is partly driven by olfactory channels, so flies often walk with the proboscis out.
+- **Proboscis, and the antennal lobe behind it.** MN9's 26.6 Hz idle is *entirely* olfactory: cutting the
+  antennal lobe's projection neurons out of the network takes it to 0.0 Hz, and 85% of its excitatory
+  drive at rest arrives through a single GNG120 neuron ([M3](20-roadmap.md)). The number upstream is the
+  real limitation — the lobe idles at **77 Hz per projection neuron** against a few to twenty in the
+  imaging literature. The gain control that would bound it exists in the connectome and is deleted by
+  the model: `writeGraph` drops every synapse onto a sensory neuron, which removes 51,958 connections
+  onto the olfactory receptor neurons, 97.8% of whose inhibitory synapses are ALLN→ORN. Restoring it as
+  presynaptic divisive inhibition (`preInh`) moves the lobe from 77 Hz to 67, and to only 53 in the
+  limit, because 605 of 2,639 receptor neurons receive no local-neuron inhibition at all in v1.0 and the
+  lobe sustains itself once ignited.
+- **Tarsal sugar does not reach MN9 at all.** Paired over eight seeds, the tarsal-evoked component of
+  MN9 is **−0.16 ± 1.57 Hz**. The `tarsalPER` benchmark term scored 0.85 on it until the term was
+  changed to read the evoked increase, at which point it reads 0.05 ([M3](20-roadmap.md)).
 - **Tarsal reflex** is weak: 15 Hz, partial extension.
 - **Few intrinsic drives.** Hunger reaches the octopamine neurons through AKH and insulin
   ([Neuromodulation](25-neuromodulation.md)), but the bouts it lengthens are still rules
@@ -23,6 +35,12 @@
   rhythm in a front-leg subnetwork for about 3% of descending neurons. Hence the descending-command mode.
 - The full-connectome mode cannot hold posture.
 - Descending-neuron roles and readout thresholds are chosen from the literature, not derived.
+- **42% of motor output cannot reach the body.** Over 20 s of foraging, 350 of the model's 815 motor
+  neurons have no route to any actuator, and they are not quiet: they fire at 21.4 Hz against 21.9 Hz for
+  the ones the body can read, so **42.4% of all motor-neuron spikes are emitted into nothing**
+  ([M5](20-roadmap.md), `scripts/motor_bound.mjs`). The largest stranded pools are abdominal, neck and
+  haltere; the neck pool is the consequential one, because head stabilisation is a visual-feedback loop
+  the model cannot close.
 - **The wing motor neurons are annotated and unused, and measurement says why.** All six wing pools —
   power, basalar, both axillary groups, hg and the pitch group — fire at 33–109 Hz whether the fly is
   walking or flying (the power pool changes by 7% at takeoff), and their left-right asymmetry does not
@@ -34,6 +52,13 @@
   are not always recovered ([Flight](24-flight.md)).
 
 ## Behaviour
+- **The supplied scheduler's walk bouts carry no individual information, and the body's do.** Over twelve
+  simulated individuals, the scheduler's own bout median has ρ = 0.00 between animals and the bout median
+  read off the motor command has ρ = 0.74 ([M6](20-roadmap.md)). The scored `bout` term
+  ([doc 35](35-behaviour-ladder.md)) is the first of those. More generally, five of the six behavioural
+  observables in [doc 34](34-individual-validation.md) come back at ρ ≤ 0.03 in this arena while the motor
+  pools identify all twelve individuals — the model's behaviour is produced by machinery the brain is
+  barely in.
 - Looming escape is intermittent. The takeoff DNs reach their 70 Hz trigger during self-motion and
   grooming, and real looms reach only 70 to 100 Hz. Escape gating removes the false alarms near walls, but
   2 of 10 test looms produced an escape (the original readout produced none away from walls).

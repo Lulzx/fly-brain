@@ -13,6 +13,29 @@ does over five scenarios. The rung list is shared with the physiological ladder
 (`scripts/rungs.mjs`), so the two tables describe the same twenty manipulations and can be read against
 each other row by row.
 
+A twenty-first rung, `muscle_single`, has since been added and run: it replaces the per-class
+force–frequency curves of [M4](20-roadmap.md) with the single 17 Hz saturation constant that used to
+stand in for every neuromuscular junction in the animal. It is a behavioural rung only — the
+physiological benchmark never reaches a muscle — and its true effect is **known in advance to be exactly
+zero**: in `'descending'` mode the curve reaches the proboscis and antennae and not the legs, and every
+one of those muscles keeps f₅₀ at 17 Hz, so the rung changes no quantity the eval can read.
+
+It scored **+0.102 ± 0.042**. The mechanism is pinned exactly and it is not biological: the per-class
+path evaluates `1 − exp(−ln2·(rate/17)¹)` where the single-constant path evaluates
+`1 − exp(−rate·(ln2/17))`, and the two orderings differ by at most one ulp — 2.2e-16 — for 4.4% of
+rate values. Over 36 s of embodied simulation the body–brain loop amplifies a last-ulp difference in
+six driven actuators into an O(0.1) score difference, mostly through the binary `escape` term
+(+0.5 ± 0.19, six of twelve seeds flipping at a threshold). The proof that the whole difference lives
+in that ulp is in the table: `muscle_single` — the old formula bit-for-bit — reproduced the previous
+baseline row *exactly* on every observable, while the reordered baseline moved to 0.758.
+
+That makes it the most useful rung in the table for a reason that has nothing to do with muscles. Arm
+one's problem is that nineteen of twenty rungs sit within two standard errors of the baseline, and
+nothing in the table could distinguish a model that is robust from an assay that is noisy.
+`muscle_single` is a null rung with a guarantee, and its answer is that **the assay is noisy at
+±0.1 in score**: a change that is provably zero in every quantity the model can express moves the
+composite by more than most real substitutions do. Rows within that band are unresolved, not robust.
+
 ```sh
 node scripts/behavior_ladder.mjs 12       # ~2 h: 20 rungs x 12 seeds on 12 workers
 node scripts/behavior_refit.mjs [gens] [pop] [rung]   # arm two; see below
@@ -139,6 +162,11 @@ walks in bouts whose median is 2370 ms against the 2200 ms the scheduler was fit
 | `w_shuffle` | efficacy | 0.890 | +0.030 ± 0.040 | (none) |
 | `add_adaptation` | cellular | 0.907 | +0.047 ± 0.032 | bout |
 | `add_depression` | cellular | 0.916 | +0.056 ± 0.032 | bout |
+| `muscle_single` | body | 0.860 | +0.102 ± 0.042 † | (none) |
+
+† `muscle_single` was run after the other twenty, paired against the per-class baseline (0.758 ± 0.021),
+and its true effect is zero by construction — see the note at the top of this document. Its +0.102 is
+the assay's noise floor, not a substitution effect.
 
 **The two ladders do not rank the substitutions the same way, and not even close.** The Spearman
 correlation between the physiological and behavioural orderings of these nineteen manipulations is

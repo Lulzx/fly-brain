@@ -16,6 +16,12 @@ typedef struct {
   float bgEvents;   // expected background synaptic events per step (N * rate * dt)
   float bgAmp;      // PSP amplitude of one background event (mV-equivalent, excitatory)
   float bgAcc;      // fractional accumulator
+  // Presynaptic gain control on driven (sensory) neurons. GABAergic local neurons inhibit receptor-
+  // neuron *terminals* (Olsen & Wilson 2008), which divides transmitter release without changing the
+  // receptor neuron's spike rate; with preInh > 0 a driven neuron's release is scaled by
+  // 1/(1 + preInh * |gI|), and JS keeps the inhibitory edges onto sensory neurons in the graph so gI
+  // there is not identically zero. preInh = 0 reproduces the model exactly. docs/20-roadmap.md M3.
+  float preInh;
 } Brain;
 
 static inline uint32_t xs(uint32_t *s) { uint32_t x = *s; x ^= x << 13; x ^= x >> 17; x ^= x << 5; *s = x; return x; }
@@ -29,6 +35,7 @@ int32_t lif_step(Brain *b) {
   int32_t *arr = b->ring + (int64_t)b->head * N; int32_t na = b->ringCount[b->head];
   for (int32_t k = 0; k < na; k++) {
     int32_t pre = arr[k]; float s = sign[pre] * res[pre]; if (s == 0.f) continue;
+    if (b->preInh > 0.f && drive[pre] > 0.f) s /= 1.f + b->preInh * (gI[pre] < 0.f ? -gI[pre] : 0.f);
     res[pre] -= b->depU * res[pre];
     uint32_t a = indptr[pre], e = indptr[pre + 1];
     if (s > 0) for (uint32_t j = a; j < e; j++) gE[indices[j]] += W[j] * s;

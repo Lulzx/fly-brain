@@ -14,7 +14,7 @@
 // re-derives that null from the data, which catches the cases where z-scoring or ties break it.
 //
 //   node scripts/identify_test.mjs curve                       # power vs. observable reliability
-//   node scripts/identify_test.mjs sim 12 0.5 6 2000           # M rho K trials
+//   node scripts/identify_test.mjs sim 12 0.5 6 2000 1 0       # M rho K trials kappa beta
 //   node scripts/identify_test.mjs run data/identify.json      # score a real dataset
 //
 // Dataset format (see docs/34-individual-validation.md for what may and may not be in it):
@@ -136,8 +136,13 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
       ? '\nbeta held at 0.25. kappa near 0 is scaffolded behaviour: the readout never carries the animal.'
       : '\nkappa held at 1. beta is the fit\'s own error; rho is the only one of the three a recording yields.');
   } else if (mode === 'sim') {
-    const [M, rho, K, trials, beta] = [+(argv[1] || 12), +(argv[2] || 0.5), +(argv[3] || 6), +(argv[4] || 2000), +(argv[5] || 0)];
-    console.log(JSON.stringify(sim(M, K, rho, trials, 1, beta)));
+    // sim M rho K trials [kappa] [beta]. The two coefficients used to be collapsed into one positional
+    // argument that was passed to `sim` in `kappa`'s slot, so `sim ... 1` set the readout sensitivity
+    // and never the fit error. Nothing in docs/34-individual-validation.md's numbers came through this
+    // path -- the tables are from `curve` and `grid`, which always passed both -- but the null example
+    // in that document was passing beta as kappa and getting the right answer for the wrong reason.
+    const [M, rho, K, trials, kappa, beta] = [+(argv[1] || 12), +(argv[2] || 0.5), +(argv[3] || 6), +(argv[4] || 2000), argv[5] === undefined ? 1 : +argv[5], +(argv[6] || 0)];
+    console.log(JSON.stringify(sim(M, K, rho, trials, 1, kappa, beta)));
   } else if (mode === 'run') {
     const d = JSON.parse(fs.readFileSync(argv[1]));
     const r = identify(d.animals, d.observed, d.predicted);
@@ -151,6 +156,6 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
     const zs = d.observables.map((o, k) => { const v = d.animals.map(a => d.observed[a][k]); const [m, s] = stats(v); return `${o}: mean ${m.toPrecision(4)} sd ${s.toPrecision(4)}`; });
     console.log('observed spread (this is the rho input):\n  ' + zs.join('\n  '));
   } else {
-    console.log('usage: identify_test.mjs curve|grid [M] [K] [trials] | sim [M] [rho] [K] [trials] [beta] | run <file.json>');
+    console.log('usage: identify_test.mjs curve|grid [M] [K] [trials] | sim [M] [rho] [K] [trials] [kappa] [beta] | run <file.json>');
   }
 }

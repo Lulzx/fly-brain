@@ -61,23 +61,26 @@ is more than the leg map gets:
 | pitch / tergopleural | `ps1 MN`, `tp1 MN`, `tp2 MN`, `tpn MN`, `hDVM MN` | 10 |
 
 `scripts/wing_mn.mjs` flies the fly headless and records what each pool does, per side, through
-takeoff, cruise and turns (`public/data/wing_mn.json`). Six seconds, one takeoff at 1.5 s, 117 flying
+takeoff, cruise and turns (`public/data/wing_mn.json`). Eight seconds, one takeoff at 1.5 s, 217 flying
 samples and 183 on the ground:
 
 | pool | ground (Hz) | flight (Hz) | r(L−R asymmetry, commanded turn) |
 |---|---|---|---|
-| power | 101.7 | 109.2 | 0.08 |
-| basalar | 47.6 | 39.9 | 0.08 |
-| first axillary | 69.5 | 71.4 | 0.06 |
-| third axillary | 33.4 | 40.5 | 0.06 |
-| hg | 51.6 | 44.3 | 0.04 |
-| pitch | 61.5 | 69.4 | −0.06 |
+| power | 101.7 | 107.3 | 0.02 |
+| basalar | 47.6 | 43.8 | 0.07 |
+| first axillary | 69.5 | 78.1 | 0.07 |
+| third axillary | 33.4 | 42.2 | 0.09 |
+| hg | 51.6 | 45.0 | 0.14 |
+| pitch | 61.5 | 71.4 | −0.09 |
+
+(the six-second run this table first reported gave the same picture: power 101.7 → 109.2 and
+|r| ≤ 0.08 in every pool)
 
 **Two things are wrong with these numbers, and together they close the item.** The pools barely notice
 that the fly has taken off — the power motor neurons, which in the animal are silent on the ground and
-drive the asynchronous muscle only in flight, change by 7% — and their left-right asymmetry, which is
+drive the asynchronous muscle only in flight, change by 5% — and their left-right asymmetry, which is
 the entire mechanism by which steering muscles steer, is uncorrelated with the turn the brain is
-commanding (|r| ≤ 0.08 in every pool). A stroke driven from these pools would be a constant, almost
+commanding (|r| ≤ 0.14 in every pool, against the 0.5 the roadmap asks for). A stroke driven from these pools would be a constant, almost
 symmetric command that does not know whether the animal is flying.
 
 **The cause is upstream and is the same one as the walking gap.** Flight in this model is initiated and
@@ -92,6 +95,24 @@ from the motor neurons" would replace a working controller with an unsteerable o
 listen to" — a descending flight command read from the graph, scored on the pools' flight-versus-ground
 contrast and on asymmetry-versus-turn correlation, both of which `wing_mn.mjs` now measures. Those two
 numbers are the success criterion, and they are near zero today.
+
+### The search for that command has now been run, and it failed for a reason worth having
+
+`scripts/dn_flight.mjs` drives each of the 480 descending types in turn and ranks them by what reaches
+the wing pools. DNa08 comes first and DNg02_a second, both putting about 80% of their effect on the
+wings rather than the legs — and DNg02 is independently the population Namiki et al. 2018 assign to
+wing-amplitude control, which the screen was not told. The graph connects a plausible command.
+
+In the embodied model that command is silent: the 27 cells fire at **2.35 Hz on the ground and 1.98 Hz
+in flight**, while the power pool sits at 101.7 and 107.3 Hz. Decomposing the drive onto the power pool
+says why — **90.4% of it is VNC intrinsic interneurons** (IN19B043, IN19B067 and IN19B040, at 45–122 Hz)
+and only 8.6% is descending, from all 63 descending cells that touch the pool put together. The wing
+motor neurons are not waiting for a command; they are being held near 100 Hz by the nerve cord itself.
+
+The readout is built anyway and reported as `cmd.flightDrive` and `cmd.flightAsym`
+(`src/sim/motor.js`), and nothing is gated on it, because a threshold on a 2 Hz signal that falls at
+takeoff is a threshold on noise. See [M1](20-roadmap.md) for the full table and for what it does to the
+ordering of the roadmap.
 
 ## Why the prior flight failed
 

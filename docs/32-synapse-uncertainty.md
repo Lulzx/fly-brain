@@ -151,8 +151,10 @@ The calibrated cut at six contacts is not arbitrary, and it is not free either:
 
 The fitted threshold discards 52% of the connections and 19% of the synapses, and buys three points of
 mean reliability for it. [Doc 31](31-ablation-ladder.md) measures what that trade is worth on the
-benchmark: removing the threshold entirely costs 0.037 ± 0.007 and doubling it costs 0.139 ± 0.008,
-and neither is recoverable by refitting the other eight parameters. In the arena the same two rungs cost
+benchmark: removing the threshold entirely costs 0.037 ± 0.007 and doubling it costs 0.139 ± 0.008, and
+the two directions part company on a refit — the other eight parameters absorb the removal completely
+(66% recovered, a residual of 0.013, inside the search's own resolution) and can do almost nothing about
+the doubling (21%, a residual of 0.110). In the arena the same two rungs cost
 0.154 ± 0.051 and 0.214 ± 0.061, the second and fourth largest of twenty
 ([doc 35](35-behaviour-ladder.md)) — the one place where the two objectives agree that something
 matters.

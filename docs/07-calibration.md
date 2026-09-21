@@ -81,6 +81,34 @@ with no tastant against a target of 10, is still the only term pinned at exactly
 The one term that punishes a busy baseline and the one term the fit cannot satisfy are the same term,
 and separating those two facts is the remaining work on [A7](20-roadmap.md).
 
+**That separation has now been done, and it moved the composite.** [M3](20-roadmap.md) measured the
+tarsal-evoked component of MN9 at **−0.16 ± 1.57 Hz** paired over eight seeds: the model has no tarsal
+pathway to the proboscis motor neuron at all, and `tarsalPER` — weight 1.5 — was scoring 0.85 on the
+same olfactory idle that `quietMN9`, weight 0.5, was punishing. The two terms were one number read with
+opposite signs, and the heavier one won every fit, which is why `quietMN9` could never move. The feeding
+block now shares a seed across its runs and scores the *evoked increase* for the response terms, leaving
+the quiescence terms absolute. At these unchanged parameters over twelve seeds:
+
+| | before | after |
+|---|---|---|
+| `tarsalPER` | 0.854 | 0.049 |
+| `sugar` | 0.716 | 0.452 |
+| composite | 0.794 ± 0.005 | **0.697 ± 0.009** |
+
+Every other term is unchanged to three decimals. As with the three odour repairs above, this is not a
+regression: about **0.098 of the quoted 0.794 was MN9's olfactory idle being counted as a taste
+response**. The parameters in `public/data/brain_params.json` were selected against the pre-repair
+objective and are **not** refitted here; the `_score` and `_rescore` fields in that file and the numbers
+quoted above and in [doc 31](31-ablation-ladder.md) are the old objective's.
+
+Two short searches against the repaired objective are recorded in `data/calib_best_repaired_plain.json`
+and `data/calib_best_repaired_algains.json`, and neither is promoted. The plain one re-scores at
+0.681 ± 0.007, *below* the 0.697 it was seeded from — the single-seed selection noise this document
+already records once. The other holds [M3](20-roadmap.md)'s antennal-lobe and gustatory-relay gains and
+re-scores at 0.686 ± 0.013, with MN9 finally quiet (0.52 Hz, `quietMN9` 0.948) and a real tarsal
+response (22.0 Hz evoked against 1.5 here) — bought back out of the odour terms, so the composite does
+not move. The objective cannot tell the two flies apart, which is the finding.
+
 ## Pitfalls found
 - An objective that rewarded odour specificity when no Kenyon cells fired. Fixed by requiring activity.
 - Reused wasm memory carried spike counts between runs. Fixed by resetting all state.
