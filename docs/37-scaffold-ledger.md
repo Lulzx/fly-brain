@@ -158,3 +158,11 @@ readout math in `Motor.apply`, and MuJoCo physics are the substrate the plugins 
   keeps its required label; the field family members separate from each other only weakly.
   `oaArousalRule` row: still required, now with the sharper statement that the need was tested
   against three rival postsynaptic actions, not asserted.
+- **S6** built the engram harness (docs/42-engram.md): the KC→MBON compartment map is parsed from
+  the FlyWire instance annotations (`src/mb/edges.js`), the plastic layer is a named per-edge
+  multiplier `edgeGain` shared by `LIFDiff` and `writeGraph` (`src/mb/plastic.js`, killable with
+  `edgeGain: null` — twin audit still bit-identical on the default path), and the teach rule is a
+  three-factor PAM-depression operator with the DAN burst as a real driven event
+  (`src/mb/teach.js`). One γ4 pairing moved tagged MBONs 8× above noise with the predicted
+  pattern (corr 0.89) and shifted held-out CS+ preference approach-ward; per-edge inversion
+  failed at 200 probes and is recorded as a measurement limit, not tuned around.

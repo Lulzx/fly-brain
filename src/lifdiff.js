@@ -125,6 +125,10 @@ export class LIFDiff {
     // sends, the other an additive millivolt offset on its threshold; both default to inert.
     this.outScale = opts.outScale ? Float32Array.from(opts.outScale) : null;
     this.thrOffset = opts.thrOffset ? Float32Array.from(opts.thrOffset) : new Float32Array(data.N);
+    // edgeGain (S6 engram harness): a per-edge multiplier on the delivered weight, applied where
+    // counts enters the delivery. The minSyn gate still reads the raw count -- a depressed synapse
+    // still exists, it just carries less current. null = every edge at 1.
+    this.edgeGain = opts.edgeGain ? Float32Array.from(opts.edgeGain) : null;
     this.nslots = Math.max(1, Math.round(p.delay / p.dt)) + 1;
     this.drive = new Float32Array(data.N);
     this.drivenSet = new Set();
@@ -174,14 +178,14 @@ export class LIFDiff {
       // lif.c sums vThresh + adapt + thr and nothing else: the additive field (kcThreshold and any
       // neuromod tone) must already be composed into thrOffset, exactly as net.thr stores it.
       for (let i = 0; i < N; i++) if (this.thrMask[i]) throw new Error('exact32 requires the full threshold field in thrOffset; thrMask must be empty');
-      const E = this.counts.length;
+      const E = this.counts.length, eg = this.edgeGain;
       this.signW32 = new Float32Array(N); this.W32 = new Float32Array(E);
       for (let j = 0; j < N; j++) {
         const s = this.sign[j];
         this.signW32[j] = s * p.wSyn;
         const og = this.outScale ? this.outScale[j] : 1, ig = (s < 0 ? p.inhGain : 1) * og;
         for (let k = this.indptr[j]; k < this.indptr[j + 1]; k++)
-          this.W32[k] = this.gate[k] ? this.counts[k] * this.inScale[this.indices[k]] * ig : 0;
+          this.W32[k] = this.gate[k] ? this.counts[k] * (eg ? eg[k] : 1) * this.inScale[this.indices[k]] * ig : 0;
       }
     }
   }
@@ -220,6 +224,7 @@ export class LIFDiff {
     const kM = p.dt / p.tauM, dtS = p.dt / 1000;
     const cE = 1 / (p.eExc - p.vRest), cI = 1 / (p.vRest - p.eInh);
     const { v, gE, gI, adapt, res, refr, spikeCount, indptr, indices, counts, gate, inScale, sign, logGain, drive } = this;
+    const eG = this.edgeGain;
     const driveSoft = p.driveSoft, dIdx = this.driveIdx, ep = this.driveEpoch;
     const outScale = this.outScale, thrOffset = this.thrOffset;
     const betaArr = typeof p.surrogateBeta === 'number' ? null : p.surrogateBeta;
@@ -273,8 +278,8 @@ export class LIFDiff {
         const eff = sg * p.wSyn * (outScale ? outScale[pre] : 1) * Math.exp(logGain[pre]) * res[pre] * amp;
         res[pre] -= p.depU * res[pre];
         const a = indptr[pre], b = indptr[pre + 1];
-        if (eff > 0) { for (let j = a; j < b; j++) if (gate[j]) gE[indices[j]] += counts[j] * inScale[indices[j]] * eff; }
-        else { const ig = p.inhGain; for (let j = a; j < b; j++) if (gate[j]) gI[indices[j]] += counts[j] * inScale[indices[j]] * ig * eff; }
+        if (eff > 0) { for (let j = a; j < b; j++) if (gate[j]) gE[indices[j]] += counts[j] * (eG ? eG[j] : 1) * inScale[indices[j]] * eff; }
+        else { const ig = p.inhGain; for (let j = a; j < b; j++) if (gate[j]) gI[indices[j]] += counts[j] * (eG ? eG[j] : 1) * inScale[indices[j]] * ig * eff; }
       }
 
       // --- exogenous drive first, in drivenSet insertion order: lif.c's step 2 draws one uniform
@@ -389,6 +394,7 @@ export class LIFDiff {
     const kM = p.dt / p.tauM, dtS = p.dt / 1000;
     const cE = 1 / (p.eExc - p.vRest), cI = 1 / (p.vRest - p.eInh);
     const { v, gE, gI, adapt, res, refr, indptr, indices, counts, gate, inScale, sign, logGain, drive } = this;
+    const eG = this.edgeGain;
     const driveSoft = p.driveSoft, dIdx = this.driveIdx, ep = this.driveEpoch, dTape = this.tape.driveAt;
     const outScale = this.outScale, thrOffset = this.thrOffset;
     const betaArr = typeof p.surrogateBeta === 'number' ? null : p.surrogateBeta;
@@ -414,8 +420,8 @@ export class LIFDiff {
         const eff = sg * p.wSyn * (outScale ? outScale[pre] : 1) * Math.exp(logGain[pre]) * res[pre] * amp;
         res[pre] -= p.depU * res[pre];
         const a = indptr[pre], b = indptr[pre + 1];
-        if (eff > 0) { for (let j = a; j < b; j++) if (gate[j]) gE[indices[j]] += counts[j] * inScale[indices[j]] * eff; }
-        else { const ig = p.inhGain; for (let j = a; j < b; j++) if (gate[j]) gI[indices[j]] += counts[j] * inScale[indices[j]] * ig * eff; }
+        if (eff > 0) { for (let j = a; j < b; j++) if (gate[j]) gE[indices[j]] += counts[j] * (eG ? eG[j] : 1) * inScale[indices[j]] * eff; }
+        else { const ig = p.inhGain; for (let j = a; j < b; j++) if (gate[j]) gI[indices[j]] += counts[j] * (eG ? eG[j] : 1) * inScale[indices[j]] * ig * eff; }
       }
       forced.fill(0);
       if (!driveSoft) for (const i of this.drivenSet) {
@@ -492,6 +498,7 @@ export class LIFDiff {
     const kM = p.dt / p.tauM, dtS = p.dt / 1000;
     const cE = 1 / (p.eExc - p.vRest), cI = 1 / (p.vRest - p.eInh);
     const { indptr, indices, counts, gate, inScale, sign, logGain, sizeLog } = this;
+    const eGb = this.edgeGain;
     const betaArr = typeof p.surrogateBeta === 'number' ? null : p.surrogateBeta;
     const aClip = p.adjClip || 0;
     // Everything the inner loops touch, hoisted: the loops run 165,122 times a step for 200 steps, and
@@ -639,11 +646,11 @@ export class LIFDiff {
           const a = indptr[pre], b2 = indptr[pre + 1];
           let lRaw = 0;                                   // d(loss) / d(eff), summed over the fan-out
           if (eff > 0) {
-            for (let j = a; j < b2; j++) { if (!gate[j]) continue; const q = indices[j], cw = counts[j];
+            for (let j = a; j < b2; j++) { if (!gate[j]) continue; const q = indices[j], cw = counts[j] * (eGb ? eGb[j] : 1);
               lRaw += lgE[q] * cw * inScale[q]; gInScale[q] += lgE[q] * cw * eff; }
           } else {
             const ig = p.inhGain;
-            for (let j = a; j < b2; j++) { if (!gate[j]) continue; const q = indices[j], cw = counts[j];
+            for (let j = a; j < b2; j++) { if (!gate[j]) continue; const q = indices[j], cw = counts[j] * (eGb ? eGb[j] : 1);
               lRaw += lgI[q] * cw * inScale[q] * ig; gInScale[q] += lgI[q] * cw * ig * eff;
               g.inhGain += lgI[q] * cw * inScale[q] * eff; }
           }
