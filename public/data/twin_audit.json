@@ -1,0 +1,404 @@
+{
+ "generated": "2026-09-21T10:19:04.282Z",
+ "gate": "spec S4.3",
+ "pass": true,
+ "criteria": "per named type: |dmean spikes/neuron| <= max(1, 2% wasm); |drate| <= 0.5 Hz",
+ "construction": {
+  "thrOffset": {
+   "mismatched": 0,
+   "maxAbsErrMv": 1.73e-9
+  },
+  "bias": {
+   "mismatched": 0,
+   "maxAbsErrMv": 1.05e-7
+  },
+  "typeGains": {
+   "mismatched": 0,
+   "fitted": false
+  },
+  "sign": {
+   "mismatched": 0
+  },
+  "sensoryMask": {
+   "mismatched": 0
+  },
+  "inScale": {
+   "mismatched": 0,
+   "maxAbsErr": 0
+  },
+  "params": {
+   "kcThreshold": 7.319,
+   "laminaBias": 2.86,
+   "neuromod": true,
+   "oaOperator": "thrField (static tone via Neuromod.modulate)"
+  }
+ },
+ "traces": [
+  {
+   "name": "sugar",
+   "durS": 0.7,
+   "seeds": 4,
+   "totalWasm": 448344,
+   "totalDiff": 448344,
+   "totalRatio": 1,
+   "fail": 0,
+   "rows": [
+    {
+     "type": "MN9",
+     "n": 2,
+     "wasm": 20.375,
+     "diff": 20.375,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    },
+    {
+     "type": "GNG232",
+     "n": 2,
+     "wasm": 7.25,
+     "diff": 7.25,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    },
+    {
+     "type": "DNge080",
+     "n": 2,
+     "wasm": 9.375,
+     "diff": 9.375,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    }
+   ]
+  },
+  {
+   "name": "loom",
+   "durS": 0.6,
+   "seeds": 4,
+   "totalWasm": 426395.8,
+   "totalDiff": 426395.8,
+   "totalRatio": 1,
+   "fail": 0,
+   "rows": [
+    {
+     "type": "DNp01",
+     "n": 2,
+     "wasm": 1.875,
+     "diff": 1.875,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    },
+    {
+     "type": "LC4",
+     "n": 126,
+     "wasm": 2.171,
+     "diff": 2.171,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    },
+    {
+     "type": "LPLC2",
+     "n": 185,
+     "wasm": 0.191,
+     "diff": 0.191,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    },
+    {
+     "type": "DNp02",
+     "n": 2,
+     "wasm": 19.125,
+     "diff": 19.125,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    },
+    {
+     "type": "DNp04",
+     "n": 2,
+     "wasm": 10.625,
+     "diff": 10.625,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    }
+   ]
+  },
+  {
+   "name": "proprio",
+   "durS": 0.2,
+   "seeds": 4,
+   "totalWasm": 124582.3,
+   "totalDiff": 124582.3,
+   "totalRatio": 1,
+   "fail": 0,
+   "rows": [
+    {
+     "type": "SApp23",
+     "n": 22,
+     "wasm": 5.568,
+     "diff": 5.568,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    },
+    {
+     "type": "SNpp39",
+     "n": 39,
+     "wasm": 9.064,
+     "diff": 9.064,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    },
+    {
+     "type": "SNpp51",
+     "n": 30,
+     "wasm": 9.675,
+     "diff": 9.675,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    },
+    {
+     "type": "SNpp41",
+     "n": 21,
+     "wasm": 10.5,
+     "diff": 10.5,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    },
+    {
+     "type": "SNpp57",
+     "n": 12,
+     "wasm": 9.917,
+     "diff": 9.917,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    },
+    {
+     "type": "SNpp43",
+     "n": 18,
+     "wasm": 10.306,
+     "diff": 10.306,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    },
+    {
+     "type": "SNpp60",
+     "n": 41,
+     "wasm": 10.226,
+     "diff": 10.226,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    },
+    {
+     "type": "SNpp40",
+     "n": 30,
+     "wasm": 8.808,
+     "diff": 8.808,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    },
+    {
+     "type": "SNpp59",
+     "n": 6,
+     "wasm": 10.5,
+     "diff": 10.5,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    },
+    {
+     "type": "SNpp47",
+     "n": 40,
+     "wasm": 10.056,
+     "diff": 10.056,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    },
+    {
+     "type": "SNpp50",
+     "n": 61,
+     "wasm": 9.68,
+     "diff": 9.68,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    },
+    {
+     "type": "SNpp45",
+     "n": 40,
+     "wasm": 9.494,
+     "diff": 9.494,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    },
+    {
+     "type": "SNpp53",
+     "n": 12,
+     "wasm": 10.979,
+     "diff": 10.979,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    },
+    {
+     "type": "SNpp58",
+     "n": 16,
+     "wasm": 10.594,
+     "diff": 10.594,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    },
+    {
+     "type": "SNpp49",
+     "n": 4,
+     "wasm": 11.188,
+     "diff": 11.188,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    },
+    {
+     "type": "SNpp48",
+     "n": 10,
+     "wasm": 9.6,
+     "diff": 9.6,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    },
+    {
+     "type": "SNpp44",
+     "n": 5,
+     "wasm": 9.6,
+     "diff": 9.6,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    },
+    {
+     "type": "SNpp56",
+     "n": 9,
+     "wasm": 12.722,
+     "diff": 12.722,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    },
+    {
+     "type": "SNpp52",
+     "n": 20,
+     "wasm": 10.287,
+     "diff": 10.287,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    },
+    {
+     "type": "SApp23,SNpp56",
+     "n": 6,
+     "wasm": 11.542,
+     "diff": 11.542,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    },
+    {
+     "type": "SNpp42",
+     "n": 20,
+     "wasm": 10.463,
+     "diff": 10.463,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    },
+    {
+     "type": "SNpp46",
+     "n": 2,
+     "wasm": 12.5,
+     "diff": 12.5,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    },
+    {
+     "type": "DNg100",
+     "n": 2,
+     "wasm": 0,
+     "diff": 0,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    },
+    {
+     "type": "DNa01",
+     "n": 2,
+     "wasm": 4.125,
+     "diff": 4.125,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    },
+    {
+     "type": "DNa02",
+     "n": 2,
+     "wasm": 5.125,
+     "diff": 5.125,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    },
+    {
+     "type": "MDN",
+     "n": 4,
+     "wasm": 0,
+     "diff": 0,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    },
+    {
+     "type": "DNp09",
+     "n": 2,
+     "wasm": 0,
+     "diff": 0,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    },
+    {
+     "type": "DNg97",
+     "n": 2,
+     "wasm": 0,
+     "diff": 0,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    },
+    {
+     "type": "DNp26",
+     "n": 2,
+     "wasm": 6.5,
+     "diff": 6.5,
+     "countTol": 1,
+     "rateDiffHz": 0,
+     "pass": true
+    }
+   ]
+  }
+ ]
+}
