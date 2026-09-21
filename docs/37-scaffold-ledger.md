@@ -164,5 +164,14 @@ readout math in `Motor.apply`, and MuJoCo physics are the substrate the plugins 
   `edgeGain: null` — twin audit still bit-identical on the default path), and the teach rule is a
   three-factor PAM-depression operator with the DAN burst as a real driven event
   (`src/mb/teach.js`). One γ4 pairing moved tagged MBONs 8× above noise with the predicted
-  pattern (corr 0.89) and shifted held-out CS+ preference approach-ward; per-edge inversion
-  failed at 200 probes and is recorded as a measurement limit, not tuned around.
+  pattern (corr 0.89) and shifted held-out CS+ preference avoid-ward on all five seeds — a
+  reliable odor-specific shift whose sign falsified the initial approach prediction; per-edge
+  inversion failed at 200 probes and is recorded as a measurement limit, not tuned around.
+- **S4.7** ported the backward sweep to WebGPU (`src/lifdiff_gpu.js`, docs/43-gpu-adjoint.md):
+  two ordered dispatches per step — a per-neuron mode-dispatched adjoint kernel and a
+  per-arrival fan-out scatter over the edge set — with CPU `_replay` still producing each
+  segment's arena. Gates: ≤1e-4 vs the CPU adjoint on the 800-neuron subgraph (passes at 5e-6 on
+  the soft model; the hard model is κ≈185 ill-conditioned and sits at its f32 floor, gated at
+  1e-3) and ≤1e-3 on full CNS for `wSyn` + a random 64 `logGain`s (passes at 1.4e-4 / 2.4e-5).
+  Not a scaffold — no behaviour depends on it; it is the throughput object for everything that
+  does.

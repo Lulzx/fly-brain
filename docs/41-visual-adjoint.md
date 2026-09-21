@@ -141,7 +141,7 @@ fit means the shipped `brain_params.json` is unchanged.
 | twin audit green | yes — bit-identical on all three traces ([doc 33](33-differentiable-brain.md)) |
 | `vis_grad_check` finite | yes — and now passes on shipped coupling constants via the soft map |
 | 4a improves disk-loom hit rate without breaking sugar→MN9 by > 0.05 | **no** — 0/10 → 1/10, within noise; frozen tests unbroken |
-| GPU adjoint (optional) | not started — S4.7 remains |
+| GPU adjoint (optional) | done — [doc 43](43-gpu-adjoint.md); both gates pass, CPU replay is the remaining share |
 
 The spec's named interesting negative — a correct twin that cannot fit loom and self-motion together
 — is not yet established: 4a's failure is a parameter-class mismatch, not a demonstrated
