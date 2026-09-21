@@ -139,9 +139,13 @@ readout math in `Motor.apply`, and MuJoCo physics are the substrate the plugins 
 
 ## Where this goes next
 
-- **S2** (premotor standing fitter) attacks the biggest row: `cpg` off currently means frozen, not
-  "the VNC walks badly", because the connectome cannot drive legs at all. The fitter's job is to
-  shrink that row.
+- **S2** ran to its kill test (docs/39-vnc-readout.md): the frozen 21,843-neuron leg-premotor
+  subgraph, replayed boundary spike trains in, fitted per-neuron `logGain` readout out. The gains
+  learn real signal (held-out ctrl MSE 0.401 raw -> 0.285 fitted) and deploy through
+  `typeGains`' `neuronGainTable` — but the degree-matched scramble fits 4× *better* (0.073), so
+  the readout is a reservoir task: the wiring is not the load-bearing part at this level. The
+  fitted table is in `public/data/stand_fit.json`, on by default in the eval, killable with
+  `standFit: false`.
 - **S3** shipped as a recorded negative (docs/38-reafference.md): the learned cancel exists and is
   real -- wall false-alarms fall 8/10 to 2/10 with `escapeGate` off -- but the reafferent LC4 drive
   is scene-dominated (a command-conditioned model predicts ~4-19% of it), the blind floor is ~2/10,

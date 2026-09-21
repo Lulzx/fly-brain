@@ -1,0 +1,92 @@
+{
+ "fit": "public/data/stand_fit.json",
+ "data": "/tmp/fitdata_v2",
+ "baseline": 0.28538209740728443,
+ "gainsOff": 0.4006489113136775,
+ "rows": [
+  {
+   "group": "role:interneuron",
+   "n": 14395,
+   "gainOff": 0.0903,
+   "edgeOff": 0.0899
+  },
+  {
+   "group": "side:right",
+   "n": 7831,
+   "gainOff": 0.0492,
+   "edgeOff": 0.0876
+  },
+  {
+   "group": "side:left",
+   "n": 7910,
+   "gainOff": 0.0756,
+   "edgeOff": 0.0377
+  },
+  {
+   "group": "role:descending",
+   "n": 1273,
+   "gainOff": 0.0188,
+   "edgeOff": -0.0323
+  },
+  {
+   "group": "role:sensory",
+   "n": 5847,
+   "gainOff": -0.004,
+   "edgeOff": -0.0163
+  },
+  {
+   "group": "dn:DNa02",
+   "n": 2,
+   "gainOff": 0,
+   "edgeOff": -0.0009
+  },
+  {
+   "group": "dn:DNa01",
+   "n": 2,
+   "gainOff": 0,
+   "edgeOff": -0.0003
+  },
+  {
+   "group": "dn:DNp26",
+   "n": 2,
+   "gainOff": 0,
+   "edgeOff": -0.0001
+  },
+  {
+   "group": "dn:DNg97",
+   "n": 2,
+   "gainOff": 0.0001,
+   "edgeOff": 0.0001
+  },
+  {
+   "group": "dn:DNg100",
+   "n": 2,
+   "gainOff": 0,
+   "edgeOff": 0
+  },
+  {
+   "group": "dn:MDN",
+   "n": 4,
+   "gainOff": 0,
+   "edgeOff": 0
+  },
+  {
+   "group": "dn:DNp09",
+   "n": 2,
+   "gainOff": 0,
+   "edgeOff": 0
+  },
+  {
+   "group": "dn:DNa05",
+   "n": 2,
+   "gainOff": 0,
+   "edgeOff": 0
+  },
+  {
+   "group": "dn:DNa07",
+   "n": 2,
+   "gainOff": 0,
+   "edgeOff": 0
+  }
+ ]
+}

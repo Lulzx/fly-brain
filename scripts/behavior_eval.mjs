@@ -36,6 +36,11 @@ const NEUROMOD = loadNeuromod();
 // reafference plugin's model param. Absent file = unfitted forward model = inert channel.
 const REAFFERENCE = fs.existsSync('public/data/reafference.json')
   ? JSON.parse(fs.readFileSync('public/data/reafference.json')) : null;
+// The S2 premotor readout (scripts/stand_fit.mjs), deployed through typeGains' neuronGainTable:
+// each fitted neuron's outgoing synapses scale by exp(logGain). Absent file = raw graph.
+const STANDFIT = fs.existsSync('public/data/stand_fit.json')
+  ? JSON.parse(fs.readFileSync('public/data/stand_fit.json')) : null;
+const GAINTABLE = STANDFIT ? Object.fromEntries(STANDFIT.gains.map(g => [g.orig, g.logGain])) : null;
 
 // Weight-vector variants. Same definitions as scripts/calib_eval.mjs: the physiological benchmark needs
 // these to build the graph, and the embodied path reaches them by transforming the data object before
@@ -91,6 +96,7 @@ async function runSeed(cfg, seed) {
   const o = { ...BRAIN_DEFAULTS, ...cfg };
   if (REAFFERENCE && o.reafference !== false)
     o.scaffoldParams = { ...(cfg.scaffoldParams || {}), reafference: { ...(cfg.scaffoldParams?.reafference || {}), model: REAFFERENCE } };
+  if (GAINTABLE && o.standFit !== false && !o.neuronGainTable) o.neuronGainTable = GAINTABLE;
   const data = (o.wBinary || o.wShuffle || o.wEB) ? { ...DATA, weights: weightsFor({ ...o, seed }) } : DATA;
   const mem = allocBrainMemory(data, SIZE, o.signFree ? ALL_EXC : SIGN, o, 1, VISION);
   const brain = await attachBrain(WASM, mem, 0, data, (seed * 2654435761) >>> 0); brain.reset();

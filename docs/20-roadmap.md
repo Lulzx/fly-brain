@@ -136,7 +136,11 @@ four things that have to be built before the first informative measurement (a st
 does not presume the phase; proprioceptive feedback at the timescale it operates on; a gradient that
 reaches the body; and [M4](20-roadmap.md)'s muscle model), the two conditions that would count as
 finishing it, and — the part worth writing down in advance — **the two points at which it should be
-stopped instead.**
+stopped instead.** The first measurement has now run: [doc 39](39-vnc-readout.md) records that the
+frozen subgraph routes a replayed premotor state into muscle commands *worse* than a degree-matched
+scramble of itself (0.285 vs 0.073 held-out ctrl MSE after the same gain fit) — the readout is a
+reservoir task, so the wiring's contribution, if any, lives in the dynamics the assay replays rather
+than in the last-mile edges it computes.
 
 [M1](20-roadmap.md) has since made it more central rather than less. The wing motor neurons turn out to
 take 90.4% of their drive from VNC intrinsic interneurons and 8.6% from every descending neuron in the
