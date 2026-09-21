@@ -20,14 +20,17 @@ Loaders: load_fly() (MaleCNS flat tables in public/data), load_worm() (Cook et a
 adjacency CSVs from Netzschleuder + neurotransmitter table from the OpenWorm db dump).
 save_ir / load_ir cache a dataset to a single .npz.
 """
-import csv, json, re, sys
+import csv, json, os, re, sys
 import numpy as np
 import scipy.sparse as sp
 
 
 def load_fly(data='public/data'):
     """MaleCNS as already packed for the browser sim (graph_w3.bin = connections >=3 syn)."""
-    meta = json.load(open(f'{data}/meta.json')); N = meta['N']
+    data = os.path.normpath(data)
+    if data.split(os.sep)[0] == os.pardir or os.pardir + os.sep in data:
+        raise ValueError(f'invalid data path: {data!r}')
+    meta = json.load(open(os.path.join(data, 'meta.json'))); N = meta['N']
     types = np.array(meta['types']); inst = np.array(meta['instances'])
     nb = np.fromfile(f'{data}/neurons.bin', dtype=np.uint8); off = 8
     off += N * 8 + N * 12 + N * 4 + N * 4
@@ -156,13 +159,19 @@ def csr_of(ir, gap=False):
 
 if __name__ == '__main__':
     # fetch + build the worm IR (data cached under data/ir/)
-    import os
+    import os, urllib.parse, zipfile
+    import requests
     os.makedirs('data/ir', exist_ok=True)
     base = 'data/ir'
-    dl = lambda u, p: os.system(f'curl -sL "{u}" -o {p}') if not os.path.exists(p) else None
+
+    def dl(u, p):
+        if urllib.parse.urlsplit(u).scheme != 'https': raise ValueError(f'refusing non-https URL: {u!r}')
+        if not os.path.exists(p):
+            r = requests.get(u, timeout=30); r.raise_for_status()
+            with open(p, 'wb') as f: f.write(r.content)
     for kind in ('chemical_corrected', 'gap_junction_corrected'):
         z = f'{base}/herm_{kind}.zip'; dl(f'https://networks.skewed.de/net/celegans_2019/files/hermaphrodite_{kind}.csv.zip', z)
-        os.system(f'unzip -o -q {z} -d {base}/herm_{kind}')
+        with zipfile.ZipFile(z) as zf: zf.extractall(f'{base}/herm_{kind}')
     dl('https://raw.githubusercontent.com/openworm/ConnectomeToolbox/main/cect/data/Modified%20celegans%20db%20dump.csv', f'{base}/nt_dump.csv')
     ir = load_worm(f'{base}/herm_chemical_corrected/edges.csv', f'{base}/herm_gap_junction_corrected/edges.csv', f'{base}/nt_dump.csv')
     W = csr_of(ir)
