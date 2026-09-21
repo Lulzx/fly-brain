@@ -179,9 +179,8 @@ gradient is the prerequisite, not the result.
   neuromodulatory timescales. What it still cannot see is anything outside the window it is given:
   a 100 ms fit cannot attribute a loss to a parameter that acted at 300 ms, because the trajectory
   does not reach that far. That is a limit of the experiment, not of the adjoint.
-- The backward pass costs about 2.3× the forward pass at whole-CNS settings, and the remaining
-  factor available is an event-driven backward pass (bounded at ~7× on the neuron loops by the 13.3%
-  density above) or moving the kernel to WebGPU ([doc 27](27-webgpu.md)). Neither is done.
+- The backward pass costs about 2.3× the forward pass at whole-CNS settings. The WebGPU sweep is
+  now done ([doc 43](43-gpu-adjoint.md)) — the remaining CPU share is the segment replay.
 - No gradient flows to `minSyn`, `tRef` or `delay`. Three of the nine calibrated globals are still
   reachable only by population search.
 - `Float32` state limits the finite-difference check to about four digits, which is enough to catch a

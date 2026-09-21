@@ -589,12 +589,13 @@ and two of them do not survive:
   log-space (`adjClip`), and the surrogate width that passes the 150-vs-600-step cosine gate is a
   *global* β = 10 — the typed-split hypothesis (wide on visual projection neurons, narrow elsewhere)
   fails the gate in every tested configuration.
-- **WebGPU for the adjoint** ([doc 27](27-webgpu.md)) is what is left, and it is still the right target:
-  the remaining cost is one pass over eleven 165,122-element arrays per step plus a scatter over 10.5 M
-  edges, both of which are exactly the shape a GPU wants.
+- **WebGPU for the adjoint** is done ([doc 43](43-gpu-adjoint.md)): the sweep over eleven
+  165,122-element arrays and the scatter over 10.5 M edges run as two ordered dispatches per
+  step, and both correctness gates pass. On the software rasterizer it already beats the CPU
+  sweep; the remaining CPU share is the checkpoint replay that feeds it.
 
-**What success would now look like:** the WebGPU adjoint, at which point a gradient over 165,122
-parameters costs less than one benchmark evaluation rather than two.
+**What success would now look like:** with the sweep on the device, a gradient over 165,122
+parameters is bounded by the replay that rebuilds each segment — that is the next timed target.
 
 ### A6. A second individual, through the IR
 [Doc 29](29-connectome-compiler.md) runs on the fly and the worm. FlyWire (139,255 neurons, adult
