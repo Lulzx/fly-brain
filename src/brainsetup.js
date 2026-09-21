@@ -15,7 +15,7 @@ export function allocBrainMemory(data, size, sign, opts = {}, maxFlies = MAX_FLI
   const memory = new WebAssembly.Memory({ initial: pages, maximum: pages, shared: true });
   const { inScale, sensoryMask } = brainScales(data, size, o);
   if (vision) for (const sd of ['L', 'R']) for (const [i] of vision.map.eyes[sd].pairs) sensoryMask[i] = 1;
-  const graph = writeGraph(memory, 1024, data, { ...LIF_DEFAULTS, ...o }, inScale, sensoryMask, modulatorySign(data, sign, o), typeGains(data, o));
+  const graph = writeGraph(memory, 1024, data, { ...LIF_DEFAULTS, ...o }, inScale, sensoryMask, modulatorySign(data, sign, o), typeGains(data, o), o.edgeGain || null);
   const bases = []; let b = (graph.end + 4095) & ~4095; for (let k = 0; k < maxFlies; k++) { bases.push(b); b = (b + brainBytes(data.N) + 4095) & ~4095; }
   let fv = null;
   if (vision) { // shared flyvis parameters once, then 2 eye-state blocks per fly

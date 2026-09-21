@@ -69,6 +69,7 @@ which covers the structural analysis and the model ensembles.
 39. [VNC readout](39-vnc-readout.md): fitting leg-motor gains on the frozen subgraph — and the scramble that beats the real wiring
 40. [Octopamine operators](40-oa-operators.md): four typed OA mechanisms and the discriminator assay that split them
 41. [Visual adjoint](41-visual-adjoint.md): the C¹ coupling, the stable reverse kernel, and the first permitted visual fit — a recorded negative
+42. [Engram](42-engram.md): the mushroom-body memory harness — anatomy-derived compartments, a named per-edge gain, a teach rule, and whether the written engram can be read back
 
 ## Repository layout
 

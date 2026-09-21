@@ -11,7 +11,7 @@ export function brainBytes(N, nslots = 5) { return HDR + 64 + align(N * 4) * 13 
 /** Build the effective weight/sign arrays (depend on model params) and place them in memory.
  *  outScale, when given, is a per-presynaptic-neuron gain on every outgoing synapse: the pathway
  *  scale factors fitted in scripts/pathway_fit.mjs (doc 07). */
-export function writeGraph(memory, base, { N, E, indptr, indices, weights, nt }, p, inScale, sensoryMask, preSign, outScale) {
+export function writeGraph(memory, base, { N, E, indptr, indices, weights, nt }, p, inScale, sensoryMask, preSign, outScale, edgeGain = null) {
   const buf = memory.buffer; let o = base;
   const ip = new Uint32Array(buf, o, N + 1); ip.set(indptr); o += align((N + 1) * 4);
   const ix = new Uint32Array(buf, o, E); ix.set(indices); o += align(E * 4);
@@ -25,8 +25,10 @@ export function writeGraph(memory, base, { N, E, indptr, indices, weights, nt },
       // Input onto sensory neurons is dropped: they are Poisson-forced, so a synapse onto one has no
       // effect and only costs a scatter. The exception is presynaptic gain control (p.preInh > 0),
       // which needs the *inhibitory* edges onto them kept so the kernel can divide their release.
+      // edgeGain (S6 engram) multiplies the delivered weight only: the minSyn gate still reads the
+      // raw count, so a depressed synapse weakens rather than disappearing.
       const keep = !(sensoryMask && sensoryMask[q]) || (p.preInh > 0 && s < 0);
-      w[k] = (c >= p.minSyn && keep) ? c * (inScale ? inScale[q] : 1) * ig : 0; }
+      w[k] = (c >= p.minSyn && keep) ? c * (edgeGain ? edgeGain[k] : 1) * (inScale ? inScale[q] : 1) * ig : 0; }
   }
   return { indptr: ip.byteOffset, indices: ix.byteOffset, weights: w.byteOffset, sign: sg.byteOffset, end: o, outScale };
 }
