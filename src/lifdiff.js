@@ -87,6 +87,14 @@ export class LIFDiff {
       wSyn: 0.3, adaptInc: 0, adaptTau: 100, depU: 0, depTau: 200, minSyn: 1,
       coba: true, eExc: 0, eInh: -70, inhGain: 1, sizeAlpha: 0, maxSizeScale: 20, boostCap: 1,
       kcThreshold: 0, laminaBias: 0, surrogateBeta: 2.0,
+      // surrogateBeta may be a Float32Array(N) instead of a scalar (S4.5's typed surrogate): a wider
+      // surrogate on visual projection neurons, a narrower one elsewhere. A single global beta that
+      // rotates the gradient direction between values is a known landmine (scripts/vis_fit.mjs), so
+      // the split is per-neuron and lives in the parameter, not in a post-hoc rescale.
+      // adjClip (S4.5): bound every adjoint state component to +-adjClip each backward step,
+      // adj <- sign(adj) * min(|adj|, adjClip). 0 = unbounded, which stays the default because the
+      // twin audit and the small-graph gradient checks must see the unclipped derivative; a visual
+      // fit at whole-CNS scale over hundreds of steps is where overflow actually happens.
       // soft: replace the hard threshold in the FORWARD pass too, so the model is genuinely smooth
       // and the adjoint can be checked against finite differences. The gradient code is identical
       // either way; only the spike amplitude changes from {0,1} to a logistic in (0,1).
@@ -214,6 +222,7 @@ export class LIFDiff {
     const { v, gE, gI, adapt, res, refr, spikeCount, indptr, indices, counts, gate, inScale, sign, logGain, drive } = this;
     const driveSoft = p.driveSoft, dIdx = this.driveIdx, ep = this.driveEpoch;
     const outScale = this.outScale, thrOffset = this.thrOffset;
+    const betaArr = typeof p.surrogateBeta === 'number' ? null : p.surrogateBeta;
     const ex = p.exact32, F = Math.fround, W32 = this.W32, signW32 = this.signW32;
     // lif.c reads every scalar from the f32 brain header, so under exact32 the same rounded values
     // must be used -- an f64 constant differs from its header copy by an ulp, and that ulp enters
@@ -318,7 +327,7 @@ export class LIFDiff {
         if (!wasRefr) {
           const thr = ex ? F(F(vTh + adapt[i]) + thrOffset[i])
             : p.vThresh + adapt[i] + (this.thrMask[i] ? p.kcThreshold : 0) + thrOffset[i];
-          s = p.soft ? 1 / (1 + Math.exp(-(vi - thr) / p.surrogateBeta)) : (vi >= thr ? 1 : 0);
+          s = p.soft ? 1 / (1 + Math.exp(-(vi - thr) / (betaArr ? betaArr[i] : p.surrogateBeta))) : (vi >= thr ? 1 : 0);
           // the drive as an expectation rather than a sample: fires because driven, or else because
           // it crossed threshold. Same expected count as the Poisson pre-pass above, and smooth.
           if (driveSoft && drive[i] > 0) { const sd = Math.min(DRIVE_MAX, drive[i] * dtS); s = sd + (1 - sd) * s; }
@@ -382,6 +391,7 @@ export class LIFDiff {
     const { v, gE, gI, adapt, res, refr, indptr, indices, counts, gate, inScale, sign, logGain, drive } = this;
     const driveSoft = p.driveSoft, dIdx = this.driveIdx, ep = this.driveEpoch, dTape = this.tape.driveAt;
     const outScale = this.outScale, thrOffset = this.thrOffset;
+    const betaArr = typeof p.surrogateBeta === 'number' ? null : p.surrogateBeta;
     let resTotal = 0; for (let t = from; t < to; t++) resTotal += this.tape.arrivals[t].idx.length;
     const A = this._arena(to - from, resTotal);
     const { vPre, sp, mode, resAt } = A, sG = A.gE, sI = A.gI, sA = A.adapt;
@@ -433,7 +443,7 @@ export class LIFDiff {
         sA[off + i] = adapt[i];              // adapt at the threshold check: decayed, pre-increment
         if (!wasRefr) {
           const thr = p.vThresh + adapt[i] + (this.thrMask[i] ? p.kcThreshold : 0) + thrOffset[i];
-          sv = p.soft ? 1 / (1 + Math.exp(-(vi - thr) / p.surrogateBeta)) : (vi >= thr ? 1 : 0);
+          sv = p.soft ? 1 / (1 + Math.exp(-(vi - thr) / (betaArr ? betaArr[i] : p.surrogateBeta))) : (vi >= thr ? 1 : 0);
           if (driveSoft && drive[i] > 0) { const sd = Math.min(DRIVE_MAX, drive[i] * dtS); sv = sd + (1 - sd) * sv; md = 3; }
           if (sv > 0) { vi = sv * p.vReset + (1 - sv) * vi; if (!p.soft) refr[i] = p.tRef; adapt[i] += sv * p.adaptInc; }
         }
@@ -482,7 +492,8 @@ export class LIFDiff {
     const kM = p.dt / p.tauM, dtS = p.dt / 1000;
     const cE = 1 / (p.eExc - p.vRest), cI = 1 / (p.vRest - p.eInh);
     const { indptr, indices, counts, gate, inScale, sign, logGain, sizeLog } = this;
-    const beta = p.surrogateBeta;
+    const betaArr = typeof p.surrogateBeta === 'number' ? null : p.surrogateBeta;
+    const aClip = p.adjClip || 0;
     // Everything the inner loops touch, hoisted: the loops run 165,122 times a step for 200 steps, and
     // a property load per neuron per step costs more than the arithmetic it feeds.
     const thrMask = this.thrMask, biasMask = this.biasMask;
@@ -569,6 +580,7 @@ export class LIFDiff {
             sd = Math.min(DRIVE_MAX, rate * dtS); st = (s - sd) / (1 - sd);
           }
           // exact derivative when the forward pass is smooth; the fast-sigmoid surrogate when it is not
+          const beta = betaArr ? betaArr[i] : p.surrogateBeta;
           let sg;
           if (soft) sg = st * (1 - st) / beta;
           else { const t = 1 + Math.abs(d) / beta; sg = 1 / (beta * t * t); }
@@ -595,6 +607,18 @@ export class LIFDiff {
           if (bias !== 0) sLamin += lu * kM;
           sEInh += lu * kM * gIv * cI * (-1 + (vv - eInhP) * cI);
           ls[i] = 0;
+        }
+
+        // S4.5: bound the carried adjoint state once a step, before the arrival loop reads it.
+        // Clipping here -- rather than at the returned gradient -- is what stops the Jacobian
+        // products from compounding over a long window; the gradient entries below still see the
+        // pre-clip values of this step's own contribution, and `clamped` still reports any overflow.
+        if (aClip) for (let i = 0; i < N; i++) {
+          if (lv[i] > aClip) lv[i] = aClip; else if (lv[i] < -aClip) lv[i] = -aClip;
+          if (lgE[i] > aClip) lgE[i] = aClip; else if (lgE[i] < -aClip) lgE[i] = -aClip;
+          if (lgI[i] > aClip) lgI[i] = aClip; else if (lgI[i] < -aClip) lgI[i] = -aClip;
+          if (lad[i] > aClip) lad[i] = aClip; else if (lad[i] < -aClip) lad[i] = -aClip;
+          if (lres[i] > aClip) lres[i] = aClip; else if (lres[i] < -aClip) lres[i] = -aClip;
         }
 
         // --- reverse the synaptic delivery that happened at the top of this step.
@@ -625,11 +649,13 @@ export class LIFDiff {
           }
           g.wSyn += lRaw * sgn * gain * resAtv * amp;
           gLogGain[pre] += lRaw * eff;                    // d(eff) / d(logGain) = eff
-          if (target) target[pre] += lRaw * base;         // d(delivered) / d(the spike amplitude)
+          if (target) { target[pre] += lRaw * base;       // d(delivered) / d(the spike amplitude)
+            if (aClip) { const q = target[pre]; target[pre] = q > aClip ? aClip : q < -aClip ? -aClip : q; } }
           // res[pre] was read here and then depressed: res_after = res * (1 - depU)
           const lresAfter = lres[pre];
           g.depU += -lresAfter * resAtv;
           lres[pre] = lresAfter * (1 - p.depU) + lRaw * sgn * p.wSyn * gain * amp;
+          if (aClip) { const q = lres[pre]; lres[pre] = q > aClip ? aClip : q < -aClip ? -aClip : q; }
         }
       }
     }

@@ -64,6 +64,11 @@ which covers the structural analysis and the model ensembles.
 34. [Individual validation](34-individual-validation.md): testing the model against one identified fly rather than against population averages — and which observable to record, now measured
 35. [Behavioural ladder](35-behaviour-ladder.md): the same substitutions, measured in the arena instead of on the physiological benchmark
 36. [Stepping from the nerve cord](36-vnc-stepping.md): roadmap item M2 scoped as a project of its own — what it needs, what would finish it, and the two points at which to stop
+37. [Scaffold ledger](37-scaffold-ledger.md): every named mechanism that isn't the graph, what it costs, and the kill tests that say whether it is required
+38. [Reafference](38-reafference.md): learning to cancel self-generated sensory input — what it fixed, and what it could not
+39. [VNC readout](39-vnc-readout.md): fitting leg-motor gains on the frozen subgraph — and the scramble that beats the real wiring
+40. [Octopamine operators](40-oa-operators.md): four typed OA mechanisms and the discriminator assay that split them
+41. [Visual adjoint](41-visual-adjoint.md): the C¹ coupling, the stable reverse kernel, and the first permitted visual fit — a recorded negative
 
 ## Repository layout
 

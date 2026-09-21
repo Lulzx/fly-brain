@@ -89,6 +89,32 @@ export function diffOptions(data, size, opts = {}, preSign = null) {
   return { sizeLog, thrMask, biasMask, thrOffset, outScale, sensoryMask, preSign: sign };
 }
 
+/**
+ * S4.5's typed surrogate: a per-neuron surrogateBeta as a Float32Array, wider on the classes whose
+ * gradients overflow first. The split is a hypothesis about where surrogate width is needed -- the
+ * connectome has no opinion about it -- so the spec is explicit: { base, bySuperclass, byType },
+ * last match wins, entries of byType are exact names or regex strings (same convention as
+ * public/data/oa_targets.json).
+ *
+ *   typedBeta(data, { base: 2, bySuperclass: { visual_projection: 5 } })
+ *
+ * @returns Float32Array(N) for `surrogateBeta`, which LIFDiff accepts per-neuron.
+ */
+export function typedBeta(data, spec) {
+  const N = data.N, types = data.meta.types;
+  const sup = data.meta.superclasses, sc = data.superclass ?? data.sc;
+  const out = new Float32Array(N).fill(spec.base);
+  const supIx = new Map(); for (const [k, v] of Object.entries(spec.bySuperclass || {})) {
+    const ix = sup.indexOf(k); if (ix >= 0) supIx.set(ix, v); else throw new Error(`typedBeta: unknown superclass '${k}'`);
+  }
+  if (supIx.size) for (let i = 0; i < N; i++) { const v = supIx.get(sc[i]); if (v !== undefined) out[i] = v; }
+  for (const [k, v] of Object.entries(spec.byType || {})) {
+    const m = /[\\^$*+?()[\]{}|]/.test(k) ? new RegExp(`^(?:${k})$`) : null;
+    for (let i = 0; i < N; i++) if (m ? m.test(types[i]) : types[i] === k) out[i] = v;
+  }
+  return out;
+}
+
 /** What the setup changed, for a script that wants to say so out loud. */
 export function diffSummary(d) {
   let thr = 0, gains = 0, silenced = 0;

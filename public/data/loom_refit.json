@@ -1,0 +1,1 @@
+{"version":1,"spec":"S4.6 step 4a: escape-chain logGain only (DNp01/DNp02/DNp04)","beta":10,"adjClip":100,"iters":3,"gains":[{"orig":6,"logGain":-0.13707755506038666},{"orig":103,"logGain":-0.13944630324840546},{"orig":178,"logGain":-0.13432778418064117},{"orig":133740,"logGain":-0.12872228026390076}]}

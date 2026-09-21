@@ -2,8 +2,11 @@
 // 2024) at 50 Hz -> drives the matching male-CNS optic-lobe neurons (same type, same column). Male-CNS
 // photoreceptors are driven by the luminance of their nearest column with light adaptation.
 export class FlyVisionFV {
-  constructor(mj, model, data, bodymap, fvmap, eyes, headBodyId, thoraxBodyId, gain = 60, vRest = null) {
+  constructor(mj, model, data, bodymap, fvmap, eyes, headBodyId, thoraxBodyId, gain = 60, vRest = null, coupling = 'hard') {
     this.mj = mj; this.model = model; this.data = data; this.head = headBodyId; this.eyes = eyes; this.gain = gain; this.map = fvmap;
+    // 'hard' is the shipped deadband rectifier; 'soft' is the C1 map of src/visdiff.js (S4.4) so the
+    // arena can A/B whether the smoothing changes behaviour. Default stays hard.
+    this.coupling = coupling;
     this.sides = ['L', 'R'];
     mj.mj_forward(model, data);
     const Rh = data.xmat.slice(headBodyId * 9, headBodyId * 9 + 9), Rt = data.xmat.slice(thoraxBodyId * 9, thoraxBodyId * 9 + 9);
@@ -62,7 +65,12 @@ export class FlyVisionFV {
     const g = this.gain;
     for (let s = 0; s < 2; s++) { const v = this.eyes[s].v, P = this.pairs[s]; const one = [0];
       const vr = this.vRest;
-      for (let k = 0; k < P.neuron.length; k++) { const n = P.node[k]; const a = v[n] - vr[n]; if (a > 0.02) { one[0] = P.neuron[k]; set(one, Math.min(200, g * a)); } } }
+      for (let k = 0; k < P.neuron.length; k++) { const n = P.node[k]; const a = v[n] - vr[n];
+        let rate = 0;
+        if (this.coupling === 'soft') {   // mirror of the 'soft' map in src/visdiff.js (COUPLING_SOFT)
+          const u = 200 - g * a, e = 0.05, inner = 200 - 0.5 * (u + Math.sqrt(u * u + e * e)), gate = 1 / (1 + Math.exp(-8000 * (a - 0.02))); rate = Math.max(0, inner * gate); }
+        else if (a > 0.02) rate = Math.min(200, g * a);
+        if (rate > 0) { one[0] = P.neuron[k]; set(one, rate); } } }
     const ka = Math.min(1, dtMs / 300), one = [0];
     for (let k = 0; k < this.photo.length; k++) { const ll = Math.log(1e-3 + this.lum[this.photoCol[k]]); if (Number.isNaN(this.adapt[k])) this.adapt[k] = ll;
       this.adapt[k] += ka * (ll - this.adapt[k]); const rate = Math.max(0, Math.min(250, 40 + 90 * (ll - this.adapt[k]))); if (rate > 1) { one[0] = this.photo[k]; set(one, rate); } }

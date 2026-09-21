@@ -116,9 +116,13 @@ const biasMask = new Uint8Array(C.n);
 const logGain = Float32Array.from({ length: C.n }, () => (rnd() - 0.5) * 0.2);
 const target = []; for (let i = 0; i < C.n; i++) if (rnd() < 0.3) target.push(i);
 
+// COUPLING=soft runs the check on the shipped deadband and cap through the C1 map of S4.4 instead of
+// suspending the discontinuity -- the finite differences then measure the real operating point.
+const SOFT = process.env.COUPLING === 'soft';
 const P0 = { soft: true, driveSoft: true, tRef: 0, minSyn: 3, coba: true, wSyn: 0.5, sizeAlpha: 0.6,
   inhGain: 0.8, eInh: -76, vThresh: -45, kcThreshold: 2, laminaBias: 0, adaptInc: 0.4, depU: 0.15,
-  surrogateBeta: 1.5, gain: 250, dead: 0, cap: 1e9, sizeLog, thrMask, biasMask };
+  surrogateBeta: 1.5, gain: 250, dead: SOFT ? 0.02 : 0, cap: SOFT ? 200 : 1e9, coupling: SOFT ? 'soft' : 'hard',
+  sizeLog, thrMask, biasMask };
 
 // A moving bright bar across the input columns: smooth in time, and it drives the subgraph hard
 // enough that a good share of the coupling sits in the live band.
