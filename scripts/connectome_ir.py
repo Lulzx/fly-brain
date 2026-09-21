@@ -20,13 +20,16 @@ Loaders: load_fly() (MaleCNS flat tables in public/data), load_worm() (Cook et a
 adjacency CSVs from Netzschleuder + neurotransmitter table from the OpenWorm db dump).
 save_ir / load_ir cache a dataset to a single .npz.
 """
-import csv, json, re, sys
+import csv, json, os, re, sys
 import numpy as np
 import scipy.sparse as sp
 
 
 def load_fly(data='public/data'):
     """MaleCNS as already packed for the browser sim (graph_w3.bin = connections >=3 syn)."""
+    data = os.path.normpath(data)
+    if '..' in data.split(os.sep):
+        raise ValueError(f'invalid data path: {data!r}')
     meta = json.load(open(f'{data}/meta.json')); N = meta['N']
     types = np.array(meta['types']); inst = np.array(meta['instances'])
     nb = np.fromfile(f'{data}/neurons.bin', dtype=np.uint8); off = 8
