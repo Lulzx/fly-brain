@@ -355,8 +355,51 @@ This reaches backwards. The whole-CNS fit reported earlier in this document star
 and drove it to 62.5 Hz against a 60 Hz target, while the shipped model at those parameters sits at
 52.7 Hz. The fit was real and the adjoint was right; the 25 Hz was the missing structure, not the
 model's resting behaviour, and that fit is worth rerunning now that `grad_fit.mjs` goes through
-`src/diffsetup.js`. **The gradient machinery is built end to end and verified end to end: the forward
-pass is bit-identical to the shipped kernel on the optic-lobe half and within sampling error on the
-sugar chain, and every gradient that crosses the join matches finite differences. What still blocks a
-visual fit is not the join and not the adjoint — it is that the CNS half diverges under sparse drive,
-and that the surrogate gradient has no stable direction at this scale over this window.**
+`src/diffsetup.js`.
+
+### The twin audit (S4.3): bit-identical, not statistically close
+
+`scripts/twin_audit.mjs` is the gate the spec asks for: construction identity checked elementwise,
+then three traces — sugar (the benchmark protocol), loom (the shipped brain's recorded flyvis drive
+replayed into both kernels), and a synthetic tripod-gait proprioceptive drive with no vision —
+averaged over seeds. It fails nonzero until every named type matches.
+
+Getting the CNS half to agree took five real corrections, in the order the audit exposed them:
+
+1. **The loom "hyperactivity" was a replay bug, not a model bug.** `lifdiff_loom_equiv.mjs` built the
+   twin without `driveEpoch`, so each epoch's drive applied for one step and then the array ran out —
+   freezing the drive at near-peak loom for the rest of the run. With `driveEpoch: 40` the same drive
+   produces DNp01 2.0 vs 1.5 spikes/neuron, inside replay noise. The 1.71x table above measured the
+   artifact.
+2. **Draw order.** The shipped kernel draws one uniform per non-refractory driven neuron, in
+   `drivenSet` insertion order, before integrating. The twin drew per index inside the fused loop.
+   `LIFDiff` now keeps a `drivenSet` with the same insertion semantics and draws in the same order, so
+   a shared seed reproduces the same forced spikes rather than the same statistics. Driven-neuron
+   counts went bit-identical immediately.
+3. **f32 arithmetic.** The remaining downstream divergence (~1 spike flip per neuron-second) was
+   intermediate precision: lif.c computes in f32 with f32 header constants, JS computed in f64 and
+   stored f32. `exact32` mode rounds every intermediate with `Math.fround` in lif.c's evaluation order
+   — legal because f64 arithmetic on f32 operands is exact, so `fround(f64op)` is the C op — and bakes
+   the same `W = c·inScale·ig` and `sign·wSyn` arrays `writeGraph` bakes. It also reads the f32-rounded
+   header constants, because an f64 constant differs from its header copy by an ulp and that ulp
+   enters every neuron every step.
+4. **`inScale` was a different formula.** The twin reconstructed it as `exp(-sizeAlpha·sizeLog)`;
+   `brainScales` computes `pow(size/ref, -sizeAlpha)` with a different clamp structure and a `vncGain`
+   term the twin lacked. `LIFDiff` now takes the shipped array verbatim via `opts.inScale`.
+5. **The sensory mask is wider than the superclass mask.** `makeBrain` marks all 62,157 flyvis-coupled
+   neurons sensory before `writeGraph`, culling their central input. Undriven on the sugar and
+   proprio traces, they still integrated and spiked in the twin — the source of the residual
+   divergence the audit was seeing.
+
+It also fixed two ordering bugs that were real but below the noise floor: the threshold now reads
+*decayed* `adapt` and adds `adaptInc` after the decay, matching lif.c's step 3/4 split (and the
+adjoint's adapt edges were re-derived to match; `adjoint_window.mjs` still agrees with finite
+differences at full window); and `adapt` decays for refractory neurons too, as lif.c does.
+
+Result: **all three traces are bit-identical** — every named type reports the same spike count, not
+within tolerance. The gate criteria (≤2%/1 spike, ≤0.5 Hz) are now trivially satisfied, and they stay
+armed: any future regression is a test failure, not a tolerance judgement call.
+
+```
+node --max-old-space-size=14000 scripts/twin_audit.mjs   # the gate; writes public/data/twin_audit.json
+```

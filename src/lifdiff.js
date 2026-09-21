@@ -93,7 +93,12 @@ export class LIFDiff {
       soft: false,
       // driveSoft: the same move for the exogenous drive -- replace the Poisson sample with its
       // expectation as a graded spike amplitude, which makes the drive a differentiable input.
-      driveSoft: false, ...opts,
+      driveSoft: false,
+      // exact32: round every forward-pass intermediate to f32 in lif.c's evaluation order, so the
+      // hard-spike path is bit-identical to the shipped kernel rather than statistically identical.
+      // Scripts/twin_audit.mjs runs the gate in this mode. The differentiable paths (soft,
+      // driveSoft, backward) are unaffected -- they are a different object than lif.c by design.
+      exact32: false, ...opts,
     };
     this.N = data.N; this.indptr = data.indptr; this.indices = data.indices;
     this.counts = data.weights;                                  // raw synapse counts, never mutated
@@ -103,6 +108,10 @@ export class LIFDiff {
     this.thrMask = opts.thrMask || new Uint8Array(data.N);
     this.biasMask = opts.biasMask || new Uint8Array(data.N);
     this.sensory = opts.sensoryMask || new Uint8Array(data.N);
+    // When the caller already has the shipped build's inScale (brainScales' pow/clamp/vncGain
+    // formula), take it verbatim: the twin's own exp(-sizeAlpha*sizeLog) reconstruction differs at
+    // the ulp level, which is invisible to a fit but fatal to a bit-identity audit.
+    this.inScaleSrc = opts.inScale ? Float32Array.from(opts.inScale) : null;
     this.logGain = opts.logGain || new Float32Array(data.N);      // per-neuron parameter, zero = off
     // Fixed per-neuron structure from src/diffsetup.js. One is a multiplier on everything a neuron
     // sends, the other an additive millivolt offset on its threshold; both default to inert.
@@ -110,6 +119,7 @@ export class LIFDiff {
     this.thrOffset = opts.thrOffset ? Float32Array.from(opts.thrOffset) : new Float32Array(data.N);
     this.nslots = Math.max(1, Math.round(p.delay / p.dt)) + 1;
     this.drive = new Float32Array(data.N);
+    this.drivenSet = new Set();
     // Neurons whose drive is an input to be differentiated, and how many steps a drive value is held
     // for. The optic lobe runs at 50 Hz against the LIF's 2 kHz, so one drive value covers 40 steps
     // and the drive gradient is accumulated per epoch rather than per step -- at 62,157 coupled
@@ -135,15 +145,35 @@ export class LIFDiff {
   /** inScale and the effective per-edge weight depend on sizeAlpha, inhGain and minSyn. */
   _prepare() {
     const p = this.p, N = this.N;
-    for (let i = 0; i < N; i++) {
+    if (this.inScaleSrc) this.inScale.set(this.inScaleSrc);
+    else for (let i = 0; i < N; i++) {
       const s = Math.exp(-p.sizeAlpha * this.sizeLog[i]);
       this.inScale[i] = Math.min(p.boostCap, Math.max(1 / p.maxSizeScale, s));
     }
-    // gate: a connection under minSyn, or one landing on a neuron driven from outside, carries nothing
-    if (!this.gate || this.gateMin !== p.minSyn) {
-      this.gate = new Uint8Array(this.counts.length); this.gateMin = p.minSyn;
+    // gate: a connection under minSyn, or one landing on a neuron driven from outside, carries nothing.
+    // Rebuilt if the sensory mask object changes -- the audit and the live model widen it.
+    if (!this.gate || this.gateMin !== p.minSyn || this.gateSens !== this.sensory) {
+      this.gate = new Uint8Array(this.counts.length); this.gateMin = p.minSyn; this.gateSens = this.sensory;
       for (let j = 0; j < this.counts.length; j++) {
         this.gate[j] = (this.counts[j] >= p.minSyn && !this.sensory[this.indices[j]]) ? 1 : 0;
+      }
+    }
+    // exact32 bakes the same two arrays writeGraph bakes for lif.c: W[k] = c*inScale*ig and
+    // sign[j] = s*wSyn. Both expressions are evaluated in f64 and stored f32, so a Float32Array
+    // write reproduces the shipped bits exactly -- f64 arithmetic on f32 operands is exact, and
+    // the store applies the single rounding the C code applies.
+    if (p.exact32) {
+      // lif.c sums vThresh + adapt + thr and nothing else: the additive field (kcThreshold and any
+      // neuromod tone) must already be composed into thrOffset, exactly as net.thr stores it.
+      for (let i = 0; i < N; i++) if (this.thrMask[i]) throw new Error('exact32 requires the full threshold field in thrOffset; thrMask must be empty');
+      const E = this.counts.length;
+      this.signW32 = new Float32Array(N); this.W32 = new Float32Array(E);
+      for (let j = 0; j < N; j++) {
+        const s = this.sign[j];
+        this.signW32[j] = s * p.wSyn;
+        const og = this.outScale ? this.outScale[j] : 1, ig = (s < 0 ? p.inhGain : 1) * og;
+        for (let k = this.indptr[j]; k < this.indptr[j + 1]; k++)
+          this.W32[k] = this.gate[k] ? this.counts[k] * this.inScale[this.indices[k]] * ig : 0;
       }
     }
   }
@@ -157,11 +187,17 @@ export class LIFDiff {
     this._prepare();
   }
 
-  setDrive(ix, rate) { for (const i of ix) this.drive[i] = rate; }
-  setDriveOne(i, rate) { this.drive[i] = rate; }
+  setDrive(list, rate) { for (let k = 0; k < list.length; k++) this.setDriveOne(list[k], rate); }
+  // drivenSet mirrors LIFWasm's exactly: insertion order is the order a neuron first went above
+  // zero, and the forward pass draws one uniform per non-refractory member in that order -- the
+  // same sequence lif.c consumes -- so a shared seed produces the same forced spikes, not just the
+  // same statistics.
+  setDriveOne(i, rate) { this.drive[i] = rate; if (rate > 0) this.drivenSet.add(i); else this.drivenSet.delete(i); }
 
   /** random number source; deterministic so the forward pass can be replayed exactly */
-  _rand() { let s = this._seed; s ^= s << 13; s ^= s >>> 17; s ^= s << 5; this._seed = s >>> 0; return (s >>> 0) / 4294967296; }
+  // Same xorshift32 and same extraction as lif.c's xs(): the top 24 bits scaled by 2^-24. Matching
+  // the exact uniform values -- not just the generator -- keeps drive decisions bit-identical.
+  _rand() { let s = this._seed; s ^= s << 13; s ^= s >>> 17; s ^= s << 5; this._seed = s >>> 0; return (s >>> 8) * (1 / 16777216); }
 
   // ------------------------------------------------------------------ forward
   /**
@@ -178,6 +214,16 @@ export class LIFDiff {
     const { v, gE, gI, adapt, res, refr, spikeCount, indptr, indices, counts, gate, inScale, sign, logGain, drive } = this;
     const driveSoft = p.driveSoft, dIdx = this.driveIdx, ep = this.driveEpoch;
     const outScale = this.outScale, thrOffset = this.thrOffset;
+    const ex = p.exact32, F = Math.fround, W32 = this.W32, signW32 = this.signW32;
+    // lif.c reads every scalar from the f32 brain header, so under exact32 the same rounded values
+    // must be used -- an f64 constant differs from its header copy by an ulp, and that ulp enters
+    // every neuron every step.
+    const vR = ex ? F(p.vRest) : p.vRest, eE = ex ? F(p.eExc) : p.eExc, eI = ex ? F(p.eInh) : p.eInh,
+      vTh = ex ? F(p.vThresh) : p.vThresh, vRs = ex ? F(p.vReset) : p.vReset, tRf = ex ? F(p.tRef) : p.tRef,
+      aI = ex ? F(p.adaptInc) : p.adaptInc, dT = ex ? F(p.dt) : p.dt, dU = ex ? F(p.depU) : p.depU,
+      lB = ex ? F(p.laminaBias) : p.laminaBias,
+      dEp = ex ? F(dE) : dE, dAp = ex ? F(dA) : dA, kRp = ex ? F(kRec) : kRec,
+      kMp = ex ? F(kM) : kM, dtSp = ex ? F(dtS) : dtS, cEp = ex ? F(cE) : cE, cIp = ex ? F(cI) : cI;
 
     const tape = record ? { spikes: [], arrivals: [], checkpoints: new Map(), steps, seed } : null;
     if (record) tape.checkpoints.set(0, this._snapshot());
@@ -198,7 +244,21 @@ export class LIFDiff {
       if (record) tape.arrivals.push({ idx: arriving.idx.slice(), amp: arriving.amp.slice() });
       // --- deliver arriving spikes
       for (let k = 0; k < arriving.idx.length; k++) {
-        const pre = arriving.idx[k], sg = sign[pre], amp = arriving.amp[k];
+        const pre = arriving.idx[k], amp = arriving.amp[k];
+        if (ex) {
+          // lif.c's factorization: s = sign*res (sign already carrying wSyn), one f32 product per
+          // edge into the conductance. The shipped kernel has no amplitude -- hard mode always
+          // sends 1 -- and no logGain; exact32 expects both inert.
+          let s = F(signW32[pre] * res[pre]);
+          if (amp !== 1) s = F(s * amp);
+          if (s === 0) continue;
+          res[pre] -= dU * res[pre];
+          const a = indptr[pre], b = indptr[pre + 1];
+          if (s > 0) { for (let j = a; j < b; j++) { const dlt = F(W32[j] * s); if (dlt) gE[indices[j]] += dlt; } }
+          else { for (let j = a; j < b; j++) { const dlt = F(W32[j] * s); if (dlt) gI[indices[j]] += dlt; } }
+          continue;
+        }
+        const sg = sign[pre];
         if (sg === 0) continue;
         const eff = sg * p.wSyn * (outScale ? outScale[pre] : 1) * Math.exp(logGain[pre]) * res[pre] * amp;
         res[pre] -= p.depU * res[pre];
@@ -207,27 +267,55 @@ export class LIFDiff {
         else { const ig = p.inhGain; for (let j = a; j < b; j++) if (gate[j]) gI[indices[j]] += counts[j] * inScale[indices[j]] * ig * eff; }
       }
 
-      // --- integrate and spike
+      // --- exogenous drive first, in drivenSet insertion order: lif.c's step 2 draws one uniform
+      // per non-refractory driven neuron before integrating, and matching that draw order is what
+      // makes a shared seed replay the same forced spikes rather than the same statistics. The
+      // integrate pass below decrements the tRef+dt we set here, as lif.c's step 3 does.
       const fIdx = [], fAmp = [];
+      if (!driveSoft) for (const i of this.drivenSet) {
+        if (refr[i] > 0) continue;
+        if (this._rand() < (ex ? F(drive[i] * dtSp) : drive[i] * dtS)) {
+          refr[i] = ex ? F(tRf + dT) : p.tRef + p.dt;
+          fIdx.push(i); fAmp.push(1);
+          spikeCount[i] += 1; adapt[i] += aI;
+        }
+      }
+      // --- integrate and spike, in lif.c's order: the membrane update reads pre-decay
+      // conductances, then gE/gI/adapt/res decay for every neuron, and only then is the threshold
+      // checked -- against the *decayed* adapt, with the increment landing after the decay.
+      // Checking before the decay would make the effective threshold high by adapt*(1-dA):
+      // small, but systematic.
       for (let i = 0; i < N; i++) {
         let vi = v[i], s = 0;
-        if (refr[i] > 0) { refr[i] -= p.dt; vi = p.vReset; }
-        else if (!driveSoft && drive[i] > 0 && this._rand() < drive[i] * dtS) {
-          vi = p.vReset; refr[i] = p.tRef; s = 1;
+        const wasRefr = refr[i] > 0;
+        if (wasRefr) { refr[i] -= dT; vi = vRs; }
+        else if (ex) {
+          // lif.c's expression, one f32 rounding per C operation, in the C order. thrOffset must
+          // carry the full additive threshold field for this mode (the audit passes the shipped
+          // net.thr array), because lif.c sums vThresh + adapt + thr and nothing else.
+          const bias = this.biasMask[i] ? lB : 0;
+          let acc = F(vR - vi);
+          acc = F(acc + F(F(gE[i] * F(eE - vi)) * cEp));
+          acc = F(acc + F(F(gI[i] * F(vi - eI)) * cIp));
+          vi = F(vi + F(F(acc + bias) * kMp));
         } else {
           vi += (p.vRest - vi + gE[i] * (p.eExc - vi) * cE + gI[i] * (vi - p.eInh) * cI
             + (this.biasMask[i] ? p.laminaBias : 0)) * kM;
-          const thr = p.vThresh + adapt[i] + (this.thrMask[i] ? p.kcThreshold : 0) + thrOffset[i];
+        }
+        gE[i] *= dEp; gI[i] *= dEp; adapt[i] *= dAp;
+        res[i] += ex ? F(F(1 - res[i]) * kRp) : (1 - res[i]) * kRp;
+        if (!wasRefr) {
+          const thr = ex ? F(F(vTh + adapt[i]) + thrOffset[i])
+            : p.vThresh + adapt[i] + (this.thrMask[i] ? p.kcThreshold : 0) + thrOffset[i];
           s = p.soft ? 1 / (1 + Math.exp(-(vi - thr) / p.surrogateBeta)) : (vi >= thr ? 1 : 0);
           // the drive as an expectation rather than a sample: fires because driven, or else because
-          // it crossed threshold. Same expected count as the Poisson branch above, and smooth.
+          // it crossed threshold. Same expected count as the Poisson pre-pass above, and smooth.
           if (driveSoft && drive[i] > 0) { const sd = Math.min(DRIVE_MAX, drive[i] * dtS); s = sd + (1 - sd) * s; }
-          if (s > 0) { vi = s * p.vReset + (1 - s) * vi; if (!p.soft) refr[i] = p.tRef; }
+          if (s > 0) { vi = s * vRs + (1 - s) * vi; if (!p.soft) refr[i] = tRf; adapt[i] += s * aI; }
+          spikeCount[i] += s;
+          if (s > (p.soft ? 1e-4 : 0.5)) { fIdx.push(i); fAmp.push(s); }
         }
-        if (s > (p.soft ? 1e-4 : 0.5)) { fIdx.push(i); fAmp.push(s); }
-        spikeCount[i] += s;
-        adapt[i] += s * p.adaptInc;
-        v[i] = vi; gE[i] *= dE; gI[i] *= dE; adapt[i] *= dA; res[i] += (1 - res[i]) * kRec;
+        v[i] = vi;
       }
       const fired = { idx: Int32Array.from(fIdx), amp: Float32Array.from(fAmp) };
       if (record) tape.spikes.push(fired);
@@ -259,13 +347,14 @@ export class LIFDiff {
   _snapshot() {
     return { v: this.v.slice(), gE: this.gE.slice(), gI: this.gI.slice(), adapt: this.adapt.slice(),
       res: this.res.slice(), refr: this.refr.slice(), ring: this.ring.map(a => ({ idx: a.idx.slice(), amp: a.amp.slice() })), head: this.head,
-      seed: this._seed };
+      seed: this._seed, driven: Int32Array.from(this.drivenSet) };
   }
 
   _restore(c) {
     this.v.set(c.v); this.gE.set(c.gE); this.gI.set(c.gI); this.adapt.set(c.adapt);
     this.res.set(c.res); this.refr.set(c.refr);
     this.ring = c.ring.map(a => ({ idx: a.idx.slice(), amp: a.amp.slice() })); this.head = c.head; this._seed = c.seed;
+    this.drivenSet = new Set(c.driven);
   }
 
   /**
@@ -285,13 +374,16 @@ export class LIFDiff {
     let resTotal = 0; for (let t = from; t < to; t++) resTotal += this.tape.arrivals[t].idx.length;
     const A = this._arena(to - from, resTotal);
     const { vPre, sp, mode, resAt } = A, sG = A.gE, sI = A.gI, sA = A.adapt;
+    const forced = new Uint8Array(N);
     for (let t = from; t < to; t++) {
       const r = t - from, off = r * N;
       // The drive the forward pass used at this step, read back rather than recomputed. A segment
       // boundary need not land on an epoch boundary -- CHECKPOINT is 16 and an epoch is 40 steps --
-      // so the first step of every segment reloads too, or it would inherit a stale drive.
+      // so the first step of every segment reloads too, or it would inherit a stale drive. The
+      // drivenSet updates mirror setDriveOne so the draw order below stays identical to forward's.
       if (dTape && (t === from || t % ep === 0)) { const d0 = ((t / ep) | 0) * dIdx.length;
-        for (let k = 0; k < dIdx.length; k++) drive[dIdx[k]] = dTape[d0 + k]; }
+        for (let k = 0; k < dIdx.length; k++) { const i = dIdx[k], r0 = dTape[d0 + k]; drive[i] = r0;
+          if (r0 > 0) this.drivenSet.add(i); else this.drivenSet.delete(i); } }
       const arriving = this.tape.arrivals[t];
       const ro = A.resOff[r], rn = A.resOff[r + 1] = ro + arriving.idx.length;
       for (let k = 0; k < arriving.idx.length; k++) {
@@ -304,22 +396,30 @@ export class LIFDiff {
         if (eff > 0) { for (let j = a; j < b; j++) if (gate[j]) gE[indices[j]] += counts[j] * inScale[indices[j]] * eff; }
         else { const ig = p.inhGain; for (let j = a; j < b; j++) if (gate[j]) gI[indices[j]] += counts[j] * inScale[indices[j]] * ig * eff; }
       }
+      forced.fill(0);
+      if (!driveSoft) for (const i of this.drivenSet) {
+        if (refr[i] > 0) continue;
+        if (this._rand() < drive[i] * dtS) { refr[i] = p.tRef + p.dt; adapt[i] += p.adaptInc; forced[i] = 1; }
+      }
       for (let i = 0; i < N; i++) {
         let vi = v[i], sv = 0, md = 0;       // md: 0 integrated, 1 refractory, 2 exogenous spike
-        vPre[off + i] = vi; sG[off + i] = gE[i]; sI[off + i] = gI[i]; sA[off + i] = adapt[i];
-        if (refr[i] > 0) { refr[i] -= p.dt; vi = p.vReset; md = 1; }
-        else if (!driveSoft && drive[i] > 0 && this._rand() < drive[i] * dtS) { vi = p.vReset; refr[i] = p.tRef; sv = 1; md = 2; }
+        vPre[off + i] = vi; sG[off + i] = gE[i]; sI[off + i] = gI[i];
+        const wasRefr = refr[i] > 0;
+        if (wasRefr) { refr[i] -= p.dt; vi = p.vReset; if (forced[i]) { md = 2; sv = 1; } else md = 1; }
         else {
           vi += (p.vRest - vi + gE[i] * (p.eExc - vi) * cE + gI[i] * (vi - p.eInh) * cI
             + (this.biasMask[i] ? p.laminaBias : 0)) * kM;
+        }
+        gE[i] *= dE; gI[i] *= dE; adapt[i] *= dA; res[i] += (1 - res[i]) * kRec;
+        sA[off + i] = adapt[i];              // adapt at the threshold check: decayed, pre-increment
+        if (!wasRefr) {
           const thr = p.vThresh + adapt[i] + (this.thrMask[i] ? p.kcThreshold : 0) + thrOffset[i];
           sv = p.soft ? 1 / (1 + Math.exp(-(vi - thr) / p.surrogateBeta)) : (vi >= thr ? 1 : 0);
           if (driveSoft && drive[i] > 0) { const sd = Math.min(DRIVE_MAX, drive[i] * dtS); sv = sd + (1 - sd) * sv; md = 3; }
-          if (sv > 0) { vi = sv * p.vReset + (1 - sv) * vi; if (!p.soft) refr[i] = p.tRef; }
+          if (sv > 0) { vi = sv * p.vReset + (1 - sv) * vi; if (!p.soft) refr[i] = p.tRef; adapt[i] += sv * p.adaptInc; }
         }
         mode[off + i] = md; sp[off + i] = sv;
-        adapt[i] += sv * p.adaptInc;
-        v[i] = vi; gE[i] *= dE; gI[i] *= dE; adapt[i] *= dA; res[i] += (1 - res[i]) * kRec;
+        v[i] = vi;
       }
       const slot = (this.head + this.nslots - 1) % this.nslots;
       const f = this.tape.spikes[t];
@@ -413,7 +513,12 @@ export class LIFDiff {
         // neuron carries its adjoint through even though it skips the integration below.
         for (let i = 0; i < N; i++) {
           const md = mode[off + i];
-          const lE = lgE[i] * dE, lI = lgI[i] * dE, lA = lad[i] * dA, lR = lres[i] * (1 - kRec);
+          // lpA is the adjoint of post-step adapt before this step's edges are reversed; lA is it
+          // carried through the adapt decay. Under lif.c's order a threshold spike's increment lands
+          // after the decay (a' = a*dA + s*inc), so its edges take lpA, while a driven spike's
+          // increment lands before it ((a+inc)*dA) and takes lA.
+          const lpA = lad[i];
+          const lE = lgE[i] * dE, lI = lgI[i] * dE, lA = lpA * dA, lR = lres[i] * (1 - kRec);
           lgE[i] = lE; lgI[i] = lI; lad[i] = lA; lres[i] = lR;
           if (md === 1) { lv[i] = 0; continue; }                 // clamped to vReset while refractory
           if (md === 2) {
@@ -447,7 +552,7 @@ export class LIFDiff {
           const lspike = ls[i] + (scored ? dLdSpike[i] : 0);        // downstream + direct loss term
           // v_new = s * vReset + (1-s) * u ; adapt_new = adapt + s * adaptInc
           const lvNew = lv[i];
-          const lsTot = (vReset - u) * lvNew + lA * adaptIncP + lspike;   // adjoint of the emitted s
+          const lsTot = (vReset - u) * lvNew + lpA * adaptIncP + lspike;   // adjoint of the emitted s
           const lt = lsTot * (1 - sd) * sg;                        // ... through st, then through d
           const lu = lvNew * (1 - s) + lt;
           const lthr = -lt;
@@ -455,10 +560,10 @@ export class LIFDiff {
           // With a sampling drive (md === 0) sd is zero in the forward pass and st is s, so this is
           // the surrogate described at the top of the file rather than an exact derivative.
           if (dSlot && dSlot[i] >= 0) gDrive[dOff + dSlot[i]] += lsTot * (1 - st) * dtS;
-          sAdaptInc += lA * s;
+          sAdaptInc += lpA * s;
           sVThresh += lthr;
           if (thrMask[i]) sKc += lthr;
-          lad[i] = lA + lthr;                                      // adapt enters through the threshold
+          lad[i] = lA + lthr * dA;             // the threshold reads decayed adapt: lthr crosses dA too
 
           // u = v + (vRest - v + gE (eExc - v) cE + gI (v - eInh) cI + bias) kM
           lv[i] = lu * (1 + kM * (-1 - gEv * cE + gIv * cI));

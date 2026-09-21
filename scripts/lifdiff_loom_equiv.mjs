@@ -80,7 +80,10 @@ console.log(`shipped LIFWasm:  DNp01 ${(gfW/GF.length).toFixed(3)} spikes/neuron
 const SETUP=diffOptions(D,SIZE,o,SIGN);
 const sm2=Uint8Array.from(SETUP.sensoryMask); for(const sd of ['L','R']) for(const [i] of FVMAP.eyes[sd].pairs) sm2[i]=1;
 const ALLN=[...FVPAIRS[0].n,...FVPAIRS[1].n];
-const nd=new LIFDiff(D,{...o,...SETUP,sensoryMask:sm2,soft:false});
+// driveEpoch must match the 40-step cadence the drive was recorded on -- without it the epochs
+// apply on consecutive steps, drives[30..] is undefined, and the last recorded epoch (near-peak
+// loom) is held for the rest of the run. That replay bug, not the model, was the "mismatch".
+const nd=new LIFDiff(D,{...o,...SETUP,sensoryMask:sm2,soft:false,driveEpoch:40});
 nd.setDrive(ORN,6);
 const tape=nd.forward(1200,{seed:1,record:true,onEpoch:(e)=>{
   const rec=drives[e]; if(!rec) return; for(let k=0;k<ALLN.length;k++) nd.setDriveOne(ALLN[k],rec[k]);}});
