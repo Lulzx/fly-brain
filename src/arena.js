@@ -13,6 +13,7 @@ import { PRESETS } from './sim/world.js';
 import { allocBrainMemory, MAX_FLIES } from './brainsetup.js';
 import { parseFlyVis } from './flyvis.js';
 import { buildGroups } from './sim/groups.js';
+import { SCAFFOLD_IDS, createScaffoldSet } from './sim/scaffold/index.js';
 const BASE = import.meta.env.BASE_URL; // "/" in dev, "/fly-brain/" on GitHub Pages
 
 const $ = s => document.querySelector(s);
@@ -63,6 +64,10 @@ async function main() {
     side: toShared(data.side), superclass: toShared(data.superclass), cls: toShared(data.cls), size: toShared(new Float32Array(sz)), sign: toShared(new Float32Array(sg)) };
   brainParams = { ...bp, neuromod: !!(bp.neuromod && nmc) };
   if (new URLSearchParams(location.search).get('gpu') === '0') brainParams.gpu = false;   // ?gpu=0 forces the WASM kernel
+  // ?off=cpg,escapeGate disables scaffold plugins at load (docs/37-scaffold-ledger.md); the
+  // panel checkboxes below toggle them live afterwards
+  const offParam = (new URLSearchParams(location.search).get('off') || '').split(',').map(s => s.trim()).filter(Boolean);
+  if (offParam.length) brainParams.scaffolds = { ...(brainParams.scaffolds || {}), ...Object.fromEntries(offParam.map(id => [id, false])) };
   neuromodCalib = nmc; wasmModule = await WebAssembly.compile(wasmBytes);
   status('writing connectome into shared memory');
   status('writing connectome and optic-lobe model into shared memory');
@@ -262,7 +267,22 @@ function buildUI() {
   $('#light').oninput = e => { env.light.sky = +e.target.value; scene.background = new THREE.Color().setHSL(0.6, 0.3, 0.02 + 0.05 * env.light.sky); syncEnv(); };
   $('#threat').onclick = () => launchThreat();
   $('#takeoff').onclick = () => flies.find(x => x.id === selected)?.worker.postMessage({ type: 'takeoff' });
+  buildScaffoldUI();
   setInterval(() => { if (foodDirty) { foodDirty = false; syncEnv(); envGroup.children.forEach(m => { if (m.userData.food) m.material.opacity = 0.35 + 0.65 * Math.min(1, m.userData.food.amount / 5); }); } renderFlyList(); }, 500);
+}
+// Scaffold toggles: one checkbox per registered plugin (src/sim/scaffold/). Unchecking posts a new
+// config to every fly's worker (FlyAgent.setScaffolds); new flies inherit via brainParams.scaffolds.
+function buildScaffoldUI() {
+  const box = $('#scaffolds'); if (!box) return;
+  const titles = Object.fromEntries(SCAFFOLD_IDS.map(id => [id, createScaffoldSet()[id].title]));
+  const state = () => Object.fromEntries(SCAFFOLD_IDS.map(id => [id, brainParams.scaffolds?.[id] !== false]));
+  box.innerHTML = SCAFFOLD_IDS.map(id =>
+    `<label class="scf" title="${titles[id]}"><input type="checkbox" data-scf="${id}" ${brainParams.scaffolds?.[id] === false ? '' : 'checked'}> ${id}</label>`).join('');
+  box.querySelectorAll('input').forEach(cb => cb.onchange = () => {
+    brainParams.scaffolds = { ...(brainParams.scaffolds || {}), [cb.dataset.scf]: cb.checked };
+    const cfg = state();
+    for (const f of flies) if (f.ready) f.worker.postMessage({ type: 'scaffolds', scaffolds: cfg });
+  });
 }
 function onClick(e) {
   const m = new THREE.Vector2(e.clientX / innerWidth * 2 - 1, -(e.clientY / innerHeight) * 2 + 1); raycaster.setFromCamera(m, camera);

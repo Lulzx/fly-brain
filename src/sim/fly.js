@@ -4,12 +4,13 @@
 //   -> Motor (descending commands / motor neurons) -> actuators -> physics (10 x 0.1 ms MuJoCo steps)
 import { buildWorldXML } from './world.js';
 import { Senses, CompoundEye, clearance, heatAt } from './senses.js';
-import { Intrinsic } from './intrinsic.js';
+import { Intrinsic, INTRINSIC } from './intrinsic.js';
 import { Neuromod } from './neuromod.js';
 import { Flight } from './flight.js';
 import { FlyVisionFV } from './vision.js';
-import { Motor } from './motor.js';
+import { Motor, READOUT } from './motor.js';
 import { createBrain } from '../brainmodel.js';
+import { createScaffoldSet, bindScaffoldParams, scaffoldManifest } from './scaffold/index.js';
 
 const Rt9 = (xm, b) => [xm[b * 9], xm[b * 9 + 3], xm[b * 9 + 6]];   // body x axis (heading) in world frame
 
@@ -47,6 +48,10 @@ export class FlyAgent {
     this.motor = new Motor(mj, M, this.mjd, bodymap, typeOf, sideOf, gait, mode, brainOpts);
     this.intrinsic = intrinsic ? new Intrinsic(typeOf, sideOf, id + 1 + (seed || 0), bodymap.feeding) : null;
     this.flight = new Flight({ mj, model: M, data: this.mjd, thorax: this.bid.thorax, jointAdr: this.jointAdr, act: this.motor.act, range: this.motor.range, rand: this.intrinsic?.rand });
+    // one scaffold set for the whole animal: every non-graph mechanism (stepping generator, escape
+    // gate, bout scheduler, ...) is a plugin from src/sim/scaffold/, switched by brainOpts.scaffolds
+    // and listed in this.scaffoldManifest for the ledger.
+    this.setScaffolds(brainOpts.scaffolds);
     this.flights = 0;
     this.driven = new Int32Array(0);
     // physiology
@@ -67,6 +72,19 @@ export class FlyAgent {
   }
 
   requestTakeoff() { if (this.alive && !this.flight.active) this.takeoffPending = true; }
+  /** (re)build the scaffold set and hand the same one to every subsystem, so a kill switch turns a
+   *  mechanism off everywhere at once. Called at construction (brainOpts.scaffolds) and live by the
+   *  arena's scaffold toggles; rebuilding loses plugin state, which is fine for a debug toggle. */
+  setScaffolds(config = {}) {
+    this.scaffolds = createScaffoldSet(config);
+    this.senses.scaffolds = this.scaffolds;
+    this.motor.scaffolds = this.scaffolds;
+    if (this.intrinsic) this.intrinsic.scaffolds = this.scaffolds;
+    bindScaffoldParams(this.scaffolds, 'READOUT', READOUT);
+    bindScaffoldParams(this.scaffolds, 'INTRINSIC', INTRINSIC);
+    for (const p of Object.values(this.scaffolds)) p?.setup?.(this);
+    this.scaffoldManifest = scaffoldManifest(this.scaffolds, { INTRINSIC, READOUT });
+  }
   state() {
     const d = this.mjd, xp = d.xpos, B = this.bid;
     const P = b => [xp[3 * b], xp[3 * b + 1], xp[3 * b + 2]];
@@ -156,18 +174,9 @@ export class FlyAgent {
       }
       if (court) court.level = this.motor.cmd.court || 0;
       // LC10 drive: a nearby fly subtends a small moving object on the eye. Salience ~ angular size,
-      // gated to the frontal-lateral field; the ipsilateral LC10 population carries it to pIP10
-      for (const o of st.otherFlies) {
-        const a = Math.atan2(o.y - st.pos[1], o.x - st.pos[0]) - Math.atan2(fx[1], fx[0]);
-        const bearing = Math.atan2(Math.sin(a), Math.cos(a));
-        const dd = Math.hypot(o.x - st.pos[0], o.y - st.pos[1]);
-        const angular = Math.atan2(0.13, dd);              // fly ~1.3 mm radius
-        if (Math.abs(bearing) < 2.2 && dd < 3 && angular > 0.04) {
-          const hz = Math.min(140, 200 * angular);         // saturating small-object response
-          const pool = this.lc10[bearing > 0 ? 'left' : 'right'];
-          for (let k = 0; k < pool.length; k += 4) if ((rates.get(pool[k]) || 0) < hz) rates.set(pool[k], hz);   // ~1/4 of the column: the object covers part of the visual field
-        }
-      }
+      // gated to the frontal-lateral field; the ipsilateral LC10 population carries it to pIP10.
+      // The channel is the `lc10Channel` scaffold plugin; off, another fly drives no LC10 neurons.
+      this.scaffolds.lc10Channel?.drive(this, st, rates, Math.atan2(fx[1], fx[0]));
     }
     // Hold an explicit request until the startup/contact gates actually permit a launch.
     // The former 80 ms pulse silently expired if the user clicked just after loading.
@@ -176,18 +185,19 @@ export class FlyAgent {
       heat: { left: heatAt(st.antenna.left, this.env), right: heatAt(st.antenna.right, this.env) }, sugar: this._sugar || 0, flying: this.flight.active, ahead: st.ahead, court, suitor,
       mouthOnFood: this.env.food.some(f => f.amount > 0 && Math.hypot(st.labellum[0] - f.x, st.labellum[1] - f.y) < f.r - 0.02) });
     const nd = new Int32Array(rates.size); let k = 0; for (const [i, hz] of rates) { B.setDriveOne(i, hz); nd[k++] = i; } this.driven = nd;
-    // GF -> TTMn electrical synapse (not in the chemical connectome): GF spikes depolarise TTMn directly
-    const before = this.brain.spikeCount[this.motor.dn.escape[0]] + this.brain.spikeCount[this.motor.dn.escape[1]];
     this.brain.step(); this.brain.step();
-    const after = this.brain.spikeCount[this.motor.dn.escape[0]] + this.brain.spikeCount[this.motor.dn.escape[1]];
-    if (after > before) this.brain.pulse(this.motor.ttmn, 20);
+    // GF -> TTMn electrical synapse (not in the chemical connectome): GF spikes depolarise TTMn directly.
+    // The `gfGap` scaffold plugin; off, the giant-fibre escape channel is closed.
+    this.scaffolds.gfGap?.step(this);
     this.motor.readBrain(this.brain.spikeCount, 1);
     // escape gating: a static surface the fly is walking up to, touching, or backing away from looms on the eye,
     // its own pivots sweep the scene across the eye, and grooming legs pass over it. Touch, optic flow that matches
-    // its own translation, and efference copies of its movements (Kim et al. 2015) tell the brain none is a predator.
-    if (st.frontTouch.left || st.frontTouch.right || st.nearAhead || st.bodyContact.left || st.bodyContact.right || this.intrinsic?.avoid || this.cmd?.grooming) this.lastTouch = this.t;
-    if (this.motor.pivot) this.lastPivot = this.t;
-    const gated = this.t - (this.lastTouch ?? -1e9) < 500 || this.t - (this.lastPivot ?? -1e9) < 300;
+    // its own translation, and efference copies of its movements (Kim et al. 2015) tell the brain none is a
+    // predator. The `escapeGate` scaffold plugin; off, self-motion looms are never vetoed.
+    const gated = this.scaffolds.escapeGate ? this.scaffolds.escapeGate.gate(this, {
+      frontTouch: st.frontTouch, nearAhead: st.nearAhead, bodyContact: st.bodyContact,
+      avoiding: !!this.intrinsic?.avoid, grooming: !!this.cmd?.grooming, pivot: !!this.motor.pivot,
+    }) : false;
     this.motor.flying = this.flight.active;
     this.cmd = this.motor.apply(this.t, 1, { up: this.mjd.xmat[this.bid.thorax * 9 + 8], touching: gated, voluntary: this.takeoffPending || (this.intrinsic && this.t < this.intrinsic.takeoffUntil),
       // song mode needs his range to her and his own ground speed (src/sim/song.js); the kick is the

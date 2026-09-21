@@ -10,7 +10,14 @@
 // state (inhibition ~3x the leak) where an injected current is shunted.
 // The connectome still integrates this drive with sensory input, so inhibition (sugar stop, bitter,
 // contact) can still veto it, and every command leaves the brain through the usual DN readout.
+//
+// Every mechanism below is a scaffold plugin (src/sim/scaffold/): this file owns the shared state and the
+// parameter table; the decisions — bout scheduling, feeding, avoidance, courtship, rejection, flight
+// saccades and the arousal signal itself — are plugin calls, so each can be switched off for a ladder
+// rung and counted in the ledger. The plugins run in exactly the order the monolith did and draw from
+// this.rand() at the same points, so a default-on set is behaviourally identical.
 import { DN_ROLES } from './motor.js';
+import { createScaffoldSet, bindScaffoldParams } from './scaffold/index.js';
 const TYPES = { fwd: ['DNg100', 'DNg97'], turn: ['DNa02', 'DNa01'], groom: ['DNg07', 'DNg08', 'DNg12'], back: ['MDN'], brake: Object.keys(DN_ROLES.forward), takeoff: Object.keys(DN_ROLES.takeoff) };
 export const INTRINSIC = {
   walkBout: [2.2, 0.9],     // lognormal bout durations: median s, log-sd
@@ -40,21 +47,27 @@ export const INTRINSIC = {
 function mulberry(seed) { let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
 
 export class Intrinsic {
-  constructor(typeOf, sideOf, seed = 1, feeding = []) {
+  constructor(typeOf, sideOf, seed = 1, feeding = [], scaffoldCfg) {
     const pick = (types, s) => { const o = []; for (let i = 0; i < typeOf.length; i++) if (types.includes(typeOf[i]) && (s === undefined || sideOf[i] === s)) o.push(i); return o; };
     this.ix = { feed: [...new Set([...pick(['MN9']), ...feeding])], takeoff: pick(TYPES.takeoff), brake: pick(TYPES.brake), fwd: pick(TYPES.fwd), turnL: pick(TYPES.turn, 1), turnR: pick(TYPES.turn, 2), groom: pick(TYPES.groom), back: pick(TYPES.back) };
     this.rand = mulberry(seed * 7919 + 17);
     this.state = 'stop'; this.left = 300 + 700 * this.rand();   // settle briefly before the first decision
     this.fwdNoise = 0; this.sacc = null; this.sinceSacc = 0; this.avoid = null; this.t = 0; this.touchL = this.touchR = this.lastGraze = this.lastHeat = this.leftFood = this.lastAvoid = this.lastSugar = -1e9; this.avoidDir = 1; this.searchUntil = 0; this.hot = 0; this.approach = false; this.lastDir = this.rand() < 0.5 ? 1 : -1;
     this.bias = { fwd: 0, turnL: 0, turnR: 0, groom: 0, back: 0, takeoff: 0, feed: 0 }; this.takeoffUntil = -1;
+    // FlyAgent overwrites this with the scaffold set shared by the whole animal; a standalone Intrinsic
+    // gets the all-on default. INTRINSIC is bound into the plugins that take their parameters from it.
+    this.scaffolds = createScaffoldSet(scaffoldCfg);
+    bindScaffoldParams(this.scaffolds, 'INTRINSIC', INTRINSIC);
   }
   gauss() { let u = 0; while (!u) u = this.rand(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * this.rand()); }
   lognormal([median, sd]) { return 1000 * median * Math.exp(sd * this.gauss()); }
   /** one ms. ctx: { energy 0..1, touch/heat: {left, right} per antenna, rearing: body pitched up against something } */
   update(dtMs, brain, ctx) {
-    // hunger gates feeding. Starved flies also walk more (Yang et al. 2015): with neuromodulation that comes from
-    // the octopamine level of the AKH-sensitive OA neurons (ctx.arousal, see neuromod.js), otherwise from energy
-    const P = INTRINSIC, hunger = Math.max(0, Math.min(1, (0.7 - ctx.energy) / 0.6)), arousal = ctx.arousal ?? hunger;
+    // hunger gates feeding. Starved flies also walk more (Yang et al. 2015): the behavioural arousal
+    // is the oaArousalRule plugin's signal (ctx.arousal from the OA neurons, else the energy deficit);
+    // with it off the neutral 0.5 below means starvation changes nothing about locomotion
+    const P = INTRINSIC, hunger = Math.max(0, Math.min(1, (0.7 - ctx.energy) / 0.6));
+    const arousal = this.scaffolds.oaArousalRule ? this.scaffolds.oaArousalRule.level(ctx, hunger) : 0.5;
     // obstacle at the front. Head-on (both antennae within 150 ms, or the body rearing up against it): stop,
     // back off, pivot away, walk on. One antenna grazing: turn away while walking, which is how flies come to
     // follow walls.
@@ -64,139 +77,53 @@ export class Intrinsic {
     if (ctx.touch.left) this.touchL = t; if (ctx.touch.right) this.touchR = t;
     // courtship gating: the pheromone-driven courtship readout (pIP10, DNp13) must be high, another fly must
     // be in range, and no avoidance in progress. While courting, contact with the other fly is not an obstacle.
-    const courting = this.state === 'court';
     const court = ctx.court;
-    if (!this.courting && court && court.level > P.courtEnter && court.dist < P.courtRange && !this.avoid && this.state !== 'feed') { this.courting = { lost: 0 }; this.sacc = null; this.state = 'court'; }
-    if (this.courting) {
-      if (!court || court.level < P.courtExit || court.dist > P.courtRange * 1.5 || this.avoid) {
-        if ((this.courting.lost += dtMs) > P.courtLostMs) { this.courting = null; this.courtSing = false; if (this.state === 'court') { this.state = 'stop'; this.left = 400 + 600 * this.rand(); } }
-      } else this.courting.lost = 0;
-    }
+    this.scaffolds.courtship?.gate(this, court, dtMs);
     // rejection: a female with a male inside her rejection range turns away and runs, and kicks if he
-    // is closer still. She yields instead if P.receptivity says so, which is the one knob standing in
-    // for the receptivity decision the male connectome cannot make.
-    const su = ctx.suitor;
-    if (su && !this.avoid && this.state !== 'feed' && this.rand() >= P.receptivity) {
-      if (!this.rejecting && su.dist < P.rejectRange && t - (this.lastReject || -1e9) > P.rejectRefractory) {
-        this.rejecting = { t: 0, dur: P.rejectMs[0] + (P.rejectMs[1] - P.rejectMs[0]) * this.rand(),
-                           dir: su.bearing > 0 ? -1 : 1 };
-        this.sacc = null; this.state = 'reject'; this.rejections = (this.rejections || 0) + 1;
-      }
-      if (su.dist < P.kickRange && t - (this.lastKick || -1e9) > P.kickRefractory) {
-        this.kick = { t: 0, side: su.bearing > 0 ? 'left' : 'right' }; this.lastKick = t; this.kicks = (this.kicks || 0) + 1;
-      }
-    }
-    if (this.rejecting && (this.rejecting.t += dtMs) > this.rejecting.dur) {
-      this.rejecting = null; this.lastReject = t;
-      if (this.state === 'reject') { this.state = 'walk'; this.left = 500 + 700 * this.rand(); }
-    }
-    if (this.kick && (this.kick.t += dtMs) > P.kickMs) this.kick = null;
-    const headOn = ctx.rearing || (t - this.touchL < 150 && t - this.touchR < 150);
-    const graze = ctx.touch.left !== ctx.touch.right;
-    if (!courting && !this.avoid && headOn) {
-      this.avoid = { t: 0, dir: this.touchL > this.touchR ? -1 : this.touchR > this.touchL ? 1 : (this.rand() < 0.5 ? 1 : -1), turn: 500 + 400 * this.rand(), why: ctx.rearing ? 'rear' : 'both' };
-      this.sacc = null;
-      this.avoid.fly = this.rand() < P.pTakeoffWall;   // or leave the wall by air, once turned away from it
-    } else if (!courting && !this.avoid && graze && t - this.lastGraze > P.grazeRefractory) {
-      const dir = ctx.touch.left ? -1 : 1;   // +1 = turn left
-      this.sacc = { t: 0, dur: P.grazeTurnMs[0] + (P.grazeTurnMs[1] - P.grazeTurnMs[0]) * this.rand(), dir }; this.lastDir = dir; this.sinceSacc = 0; this.lastGraze = t;
-    }
-    // noxious heat at the aristae: turn away from the warmer side and run (flies turn back at a hot edge). Deep
-    // inside a hot patch (after landing on it) both sides read the same saturated heat, so turning has no
-    // direction to go: run straight out instead of turning on the spot
-    const hot = Math.max(ctx.heat.left, ctx.heat.right); this.hot = hot;
-    if (hot > 0.08 && !this.avoid && t - this.lastHeat > P.heatRefractory) {
-      const even = Math.abs(ctx.heat.left - ctx.heat.right) < 0.02, dir = even ? this.lastDir : ctx.heat.left > ctx.heat.right ? -1 : 1;
-      if (!(even && hot > 0.9)) { this.sacc = { t: 0, dur: 300 + 300 * this.rand(), dir }; this.lastDir = dir; this.sinceSacc = 0; }
-      this.lastHeat = t; this.state = 'walk'; this.left = Math.max(this.left, 1500);
-    }
+    // is closer still (femaleRejection plugin)
+    this.scaffolds.femaleRejection?.update(this, ctx.suitor, t, dtMs);
+    // contact and heat avoidance (avoidance plugin)
+    this.scaffolds.avoidance?.trigger(this, ctx, t);
     // food: a hungry fly that tastes sugar with its legs or labellum stops there to feed; once it leaves (sated,
     // or the bout ends), it searches locally with frequent turns, looping back to the spot (Dethier 1957,
-    // Kim & Dickinson 2017)
-    this.approach = ctx.sugar > 0.1 && ctx.energy < P.satiety && !ctx.mouthOnFood && this.state !== 'feed';   // sugar underfoot: step onto it
-    if (ctx.sugar > 0.1 && ctx.mouthOnFood && ctx.energy < P.satiety && !this.avoid && this.state !== 'feed' && t - this.leftFood > 3000) {
-      this.state = 'feed'; this.left = this.lognormal(P.feedBout) * (0.5 + 2 * hunger); this.sacc = null;
-    }
-    if (ctx.sugar > 0.1) this.lastSugar = t;
-    if (this.state === 'feed' && (t - this.lastSugar > 400 || !ctx.mouthOnFood || ctx.energy >= P.satiety)) this.left = 0;   // off the food (feet lift and land, so allow gaps), or sated
-    if (this.state === 'feed' && this.left - dtMs <= 0) { this.leftFood = t; this.searchUntil = t + P.searchMs; }
+    // Kim & Dickinson 2017) — the feedingStop plugin
+    this.scaffolds.feedingStop?.update(this, ctx, t, dtMs, hunger);
     const searching = t < this.searchUntil && this.state !== 'feed';
-    if (this.avoid) {
-      const a = this.avoid; a.t += dtMs;
-      if (a.t > P.avoidMs && !this.sacc) this.sacc = { t: 0, dur: a.turn, dir: a.dir };   // pivot away
-      if (a.t > P.avoidMs + a.turn) { if (a.fly) this.takeoffUntil = t + 80; this.avoid = null; this.lastDir = a.dir; this.sinceSacc = 0; this.state = 'walk'; this.left = Math.max(this.left, 1000); }
-    } else if (this.rejecting) {
+    if (this.avoid) this.scaffolds.avoidance?.progress(this, t, dtMs);
+    else if (this.rejecting) {
       // decamping is a bout of its own: no spontaneous saccades and no scheduler transition while it runs
       this.sinceSacc = 0;
     } else if (this.state === 'court' && court) {
       // chasing: no spontaneous saccades or bout transitions; steering is set from the target's bearing below
-      const b = court.bearing;   // rad; >0 = target to the left
-      this.courtSing = court.dist < P.courtSing && Math.abs(b) < 0.9;
-      this.courtSide = b > 0 ? 'left' : 'right';
-      this.sinceSacc = 0;
+      this.scaffolds.courtship?.chase(this, court);
     } else {
-      this.left -= dtMs;
-      if (this.left <= 0) {   // action selection at the end of a bout
-        if (this.approach && this.state !== 'feed') { this.state = 'walk'; this.left = 600; } else
-        if (this.state !== 'feed' && this.state !== 'groom' && this.rand() < P.pTakeoff * (1 + 2 * arousal)) this.takeoffUntil = t + 80;   // leave by air
-        if (this.state === 'feed') { this.state = 'walk'; this.left = this.lognormal(P.walkBout); }
-        else if (this.state === 'walk') { this.state = this.rand() < P.pGroom * (1 - arousal) ? 'groom' : 'stop'; this.left = this.lognormal(this.state === 'groom' ? P.groomBout : P.stopBout) * (1 - 0.6 * arousal); }
-        else { this.state = 'walk'; this.left = this.lognormal(P.walkBout) * (1 + 1.5 * arousal); }
-      }
-      // spontaneous saccades; alternate direction more often than not (flies avoid circling)
-      this.sinceSacc += dtMs;
-      const rate = (this.state === 'walk' ? P.saccadeRate * (searching ? P.searchTurns : 1) : this.state === 'stop' ? P.standSaccadeRate : 0) / 1000;
-      if (!this.sacc && this.sinceSacc > 250 && this.rand() < rate * dtMs) {
-        const dir = this.rand() < (searching ? 0.25 : 0.65) ? -this.lastDir : this.lastDir; this.lastDir = dir;   // searching: keep turning one way, looping
-        this.sacc = { t: 0, dur: P.saccadeMs[0] + (P.saccadeMs[1] - P.saccadeMs[0]) * this.rand(), dir }; this.sinceSacc = 0;
-      }
+      this.scaffolds.boutScheduler?.step(this, dtMs, arousal, searching);
     }
     if (this.sacc && (this.sacc.t += dtMs) > this.sacc.dur) this.sacc = null;
     this.fwdNoise += dtMs / P.fwdTau * (-this.fwdNoise) + Math.sqrt(2 * dtMs / P.fwdTau) * this.gauss();
     const walking = this.state === 'walk' && !this.avoid;
     const B = this.bias;
     B.fwd = walking ? P.fwdDrive * (this.approach ? 0.7 : Math.max(0.3, 1 + P.fwdJitter * this.fwdNoise + 0.25 * arousal + 0.6 * this.hot)) : 0;
-    B.back = this.avoid && this.avoid.t < P.avoidMs ? P.backDrive : 0;
+    B.back = this.scaffolds.avoidance ? this.scaffolds.avoidance.backDrive(this) : 0;
     B.groom = this.state === 'groom' && !this.avoid ? P.groomDrive : 0;
     B.turnL = this.sacc && this.sacc.dir > 0 ? P.turnDrive : 0; B.turnR = this.sacc && this.sacc.dir < 0 ? P.turnDrive : 0;
-    if (this.state === 'court' && court) {
-      // chase: steer onto the target's bearing; close to singing distance, then keep station and extend
-      // the wing facing her. Males keep walking while singing (Ewing & Bennet-Clark 1968).
-      const b = court.bearing;
-      B.turnL = b > 0.04 ? P.courtTurn * Math.min(1, b) : 0; B.turnR = b < -0.04 ? P.courtTurn * Math.min(1, -b) : 0;
-      B.fwd = court.dist > 0.6 ? P.courtDrive : court.dist > 0.4 ? P.courtDrive * 0.4 : P.courtDrive * 0.15;
-    }
-    if (this.rejecting) {
-      // decamping: turn away from his side and run. The turn is on for the first third of the bout so
-      // that the run that follows points away from him rather than across him.
-      const r = this.rejecting, turning = r.t < r.dur / 3;
-      B.turnL = turning && r.dir > 0 ? P.rejectTurn : 0; B.turnR = turning && r.dir < 0 ? P.rejectTurn : 0;
-      B.fwd = P.rejectDrive; B.groom = 0;
-    }
+    if (this.state === 'court' && court) this.scaffolds.courtship?.bias(this, court, B);
+    if (this.rejecting) this.scaffolds.femaleRejection?.bias(this, B);
     B.takeoff = t < this.takeoffUntil ? P.takeoffDrive : 0;
     // hunger gates the proboscis extension reflex: a hungry fly tasting sugar extends and pumps (MN9, pump MNs)
-    B.feed = this.state === 'feed' ? P.feedDrive * (0.4 + hunger) : 0;
+    B.feed = this.state === 'feed' && this.scaffolds.feedingStop ? this.scaffolds.feedingStop.feedDrive(hunger) : 0;
     for (const k in B) if (B[k] > 0) brain.pulse(this.ix[k], B[k] * dtMs);
-    const brake = this.state === 'feed' ? P.feedBrake : this.state === 'stop' || this.state === 'groom' ? P.stopBrake : 0;
+    const brake = this.state === 'feed' ? (this.scaffolds.feedingStop ? this.scaffolds.feedingStop.brake() : 0)
+      : this.state === 'stop' || this.state === 'groom' ? (this.scaffolds.boutScheduler ? this.scaffolds.boutScheduler.brake() : 0) : 0;
     if (brake) for (const i of this.ix.brake) brain.addG(i, 0, -brake * dtMs);
   }
   /** in flight: spontaneous saccades, and collision-avoidance saccades toward open space when a wall or block
    *  lies ahead (flies turn away from the side of visual expansion; Tammero & Dickinson 2002). ctx.ahead gives
    *  clearance (cm) at the lookahead point straight ahead and 40 degrees to each side. */
   flightUpdate(t, dtMs, brain, ctx) {
-    const P = INTRINSIC, a = ctx.ahead;
+    const P = INTRINSIC;
     if (this.state !== 'fly') { this.state = 'fly'; this.sacc = null; this.avoid = null; this.lastDir = this.rand() < 0.5 ? 1 : -1; }
-    this.sinceSacc += dtMs;
-    if (a && a.center < P.avoidAhead && (!this.sacc || !this.sacc.strong)) {
-      // commit to one direction until the way ahead is clear, or the fly dithers in front of the wall
-      const dir = t - this.lastAvoid < 400 ? this.avoidDir : Math.abs(a.left - a.right) < 0.05 ? this.lastDir : a.left > a.right ? 1 : -1;
-      this.sacc = { t: 0, dur: 150 + 100 * this.rand(), dir, strong: true }; this.lastDir = this.avoidDir = dir; this.sinceSacc = 0;
-    }
-    if (this.sacc?.strong && a && a.center < P.avoidAhead) this.lastAvoid = t;
-    if (!this.sacc && this.sinceSacc > 200 && this.rand() < P.flightSaccadeRate / 1000 * dtMs) {
-      const dir = this.rand() < 0.6 ? -this.lastDir : this.lastDir; this.lastDir = dir;
-      this.sacc = { t: 0, dur: P.flightSaccadeMs[0] + (P.flightSaccadeMs[1] - P.flightSaccadeMs[0]) * this.rand(), dir }; this.sinceSacc = 0;
-    }
+    this.scaffolds.flightSaccade?.update(this, ctx, t, dtMs);
     if (this.sacc && (this.sacc.t += dtMs) > this.sacc.dur) this.sacc = null;
     const drive = this.sacc ? (this.sacc.strong ? P.avoidDrive : P.turnDrive) : 0;
     if (drive) brain.pulse(this.sacc.dir > 0 ? this.ix.turnL : this.ix.turnR, drive * dtMs);

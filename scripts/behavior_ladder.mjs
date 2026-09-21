@@ -61,7 +61,7 @@ const rows = rungs.map(r => {
   const runs = Object.values(byRung[r.key] || {});
   const scores = runs.map(o => o.score);
   const row = { ...r, n: runs.length, score: +mean(scores).toFixed(4), scoreSem: +sem(scores).toFixed(4) };
-  if (runs.length) row.obs = Object.fromEntries(Object.keys(runs[0].obs).map(k => [k, +mean(runs.map(o => o.obs[k])).toFixed(4)]));
+  if (runs.length) row.obs = Object.fromEntries(Object.keys(runs[0].obs).filter(k => typeof runs[0].obs[k] === 'number').map(k => [k, +mean(runs.map(o => o.obs[k])).toFixed(4)]));
   if (r.key !== 'baseline' && runs.length) {
     row.dScore = paired(r.key, o => o.score);
     row.terms = Object.fromEntries(TERMS.map(t => [t, paired(r.key, o => o.terms[t])]));

@@ -117,7 +117,7 @@ const rows = (needBase ? [{ key: 'baseline', patch: {}, frozen: [] }, ...rungs] 
       return Math.abs(lossNoRefit) < 1e-6 ? null : +(1 - lossRefit / lossNoRefit).toFixed(3); })(),
     gapToBaseline: +(refit - baseRefit).toFixed(4),
     terms: Object.fromEntries(TERMS.map(t => [t, +mean(runs.map(o => o.terms[t])).toFixed(3)])),
-    obs: Object.fromEntries(Object.keys(runs[0].obs).map(k => [k, +mean(runs.map(o => o.obs[k])).toFixed(4)])) };
+    obs: Object.fromEntries(Object.keys(runs[0].obs).filter(k => typeof runs[0].obs[k] === 'number').map(k => [k, +mean(runs.map(o => o.obs[k])).toFixed(4)])) };
 });
 const kept = (prevFile?.rungs || []).filter(p => !rows.some(r => r.key === p.key));
 const merged = [...rows, ...kept];
