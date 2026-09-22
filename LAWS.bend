@@ -10,6 +10,7 @@ import Base
 import ./connectome.bend as C
 import ./dataset.bend as D
 import ./cord.bend as K
+import ./perturb.bend as P
 
 # ================================================================= 1. Well-formed rows
 
@@ -466,3 +467,80 @@ law dsub_rows_ok:
   for +minW: U32
   for +e: {K.DSub.all_counts_ok(rows, minW) == True{} : Bool}
   {K.DSub.rows_ok(K.DSub.rows(keep, members, rows), K.DSub.kept(keep), minW) == True{} : Bool}
+
+# ================================================================= 9. Perturbations
+# The three channels a walking spec can pull (docs/44-walking-compiler.md), and what each one
+# is not allowed to do. A selector is modelled by the mask it resolves to.
+
+# --- ablation: the cells a spec names are silenced, and no others
+
+# LAW: a silenced cell does not fire, whatever its membrane has done and whether or not it is
+# out of its refractory period. This is the definition `setThr(i, 1e6)` is trying to realise.
+law ablated_never_fires:
+  for atThresh: Bool
+  for free: Bool
+  {P.Fire.rule(False{}, atThresh, free) == False{} : Bool}
+
+# LAW: a living cell's rule is the kernel's original condition, so carrying the flag costs the
+# unperturbed model nothing.
+law alive_rule_is_original:
+  for atThresh: Bool
+  for free: Bool
+  {P.Fire.rule(True{}, atThresh, free) == Bool.and(atThresh, free) : Bool}
+
+# LAW: silenced cells contribute nothing to a step's spikes — taking them out of the sweep's
+# input does not change its answer. "An ablated cell fires at no step", as an equation.
+law sweep_ignores_dead:
+  for cells: List<&2, P.FCell>
+  {P.Fire.sweep(P.Fire.drop_dead(cells)) == P.Fire.sweep(cells) : List<&2, U32>}
+
+# LAW: ablation leaves every cell the mask does not name exactly as it was.
+law ablate_only_selected:
+  for mask: List<&2, Bool>
+  for alive: List<&2, Bool>
+  {P.Mask.unselected_b(mask, P.Ablate.go(mask, alive)) == P.Mask.unselected_b(mask, alive) : List<&2, Bool>}
+
+# LAW: ablation silences every cell the mask does name.
+law ablate_kills_selected:
+  for kill: Bool
+  for alive: Bool
+  for e: {kill == True{} : Bool}
+  {P.Ablate.cell(kill, alive) == False{} : Bool}
+
+# --- edge classes: a class scaling multiplies its class and nothing else
+
+# LAW: the weights outside the class come through a scaling unchanged.
+law scale_outside_class_unchanged:
+  for +f: F32
+  for row: List<&2, P.PEdge>
+  {P.Row.outside(P.Scale.row(f, row)) == P.Row.outside(row) : List<&2, F32>}
+
+# LAW: an edge inside the class is multiplied by the factor, and keeps its target.
+law scale_inside_class:
+  for +f: F32
+  for +post: U32
+  for +w: F32
+  {P.Scale.edge(f, P.PEdge{post, w, True{}}) == P.PEdge{post, F32.mul(w, f), True{}} : P.PEdge}
+
+# LAW: a class scaling never moves, adds or drops an edge.
+law scale_preserves_targets:
+  for +f: F32
+  for row: List<&2, P.PEdge>
+  {P.Row.posts(P.Scale.row(f, row)) == P.Row.posts(row) : List<&2, U32>}
+
+# --- drive: the bias lands on the named population and nowhere else
+
+# LAW: a drive leaves every cell the mask does not name exactly as it was.
+law drive_only_selected:
+  for mask: List<&2, Bool>
+  for bias: List<&2, F32>
+  for +mv: F32
+  {P.Mask.unselected(mask, P.Drive.go(mask, bias, mv)) == P.Mask.unselected(mask, bias) : List<&2, F32>}
+
+# LAW: a driven cell carries the bias the spec asked for.
+law drive_selected_gets_mv:
+  for sel: Bool
+  for +mv: F32
+  for b: F32
+  for e: {sel == True{} : Bool}
+  {P.Drive.cell(sel, mv, b) == mv : F32}

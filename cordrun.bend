@@ -31,17 +31,20 @@ def Ref.off_sign() -> U32:
 def Ref.off_drive() -> U32:
   6548228
 
-def Ref.off_driven() -> U32:
+def Ref.off_alive() -> U32:
   6635600
 
+def Ref.off_driven() -> U32:
+  6722972
+
 def Ref.off_fired() -> U32:
-  6642156
+  6729528
 
 def Ref.off_spikes() -> U32:
-  6646156
+  6733528
 
 def Ref.bytes() -> U32:
-  6733528
+  6820900
 
 # ------------------------------------------------------------------ constants
 def At.f32(xs: List<&2, F32>, +i: Nat) -> F32:
@@ -170,17 +173,18 @@ def Report.go(+chkRef: U32, +firedRef: U32, r: Array<U32> & Tally, +chkGot: U32,
     IO.print("ms_total " ++ Nat.show(Nat.sub(t1, t0)))
 
 def Report.of(+chkRef: U32, +firedRef: U32, +spikes: List<&2, U32>, +t0: Nat, r: Kr.Run) -> IO(Unit):
-  Kr.Run{Kr.Net{rows, sign}, Kr.LSt{Kr.Lane{v, gE, gI, refr, adapt, bias, thr, drive, spk}, r0, r1, r2, r3, rng, chk}} = r
+  Kr.Run{Kr.Net{rows, sign}, Kr.LSt{Kr.Lane{v, gE, gI, refr, adapt, bias, thr, drive, spk, alive}, r0, r1, r2, r3, rng, chk}} = r
   Report.go(chkRef, firedRef, Tally.go(spikes, 0, 0, 0, Array.get(U32, spk, 0)), chk, t0)
 
 def Main.run(+n: U32, +K: Kr.Kc, +driven: List<&2, U32>, +seed: U32, +chkRef: U32, +firedRef: U32,
-  +spikes: List<&2, U32>, +t0: Nat, rows: Array<List<&2, Kr.Edge>>, sign: Array<F32>, drive: Array<F32>) -> IO(Unit):
+  +spikes: List<&2, U32>, +t0: Nat, rows: Array<List<&2, Kr.Edge>>, sign: Array<F32>, drive: Array<F32>,
+  alive: Array<U32>) -> IO(Unit):
   Report.of(chkRef, firedRef, spikes, t0,
     Kr.Kernel.run(U32.to_nat(Ref.steps()), driven, K, n,
       Kr.Run{Kr.Net{rows, sign},
         Kr.LSt{Kr.Lane{Fill.f32(U32.to_nat(n), 0, Kr.Kc.vRest(K), [0.0 : F32^15n]),
           [0.0 : F32^15n], [0.0 : F32^15n], [0.0 : F32^15n], [0.0 : F32^15n], [0.0 : F32^15n],
-          [0.0 : F32^15n], drive, [0 : U32^15n]},
+          [0.0 : F32^15n], drive, [0 : U32^15n], alive},
           Nil{}, Nil{}, Nil{}, Nil{}, seed, 0}}))
 
 def main() -> IO(Unit):
@@ -194,6 +198,7 @@ def main() -> IO(Unit):
     wb : List<&2, U32> <- IOx.Fx.slurp(Ref.path(), Ref.off_weights(), (4 * IOx.Cord.e() : U32))
     sgb : List<&2, U32> <- IOx.Fx.slurp(Ref.path(), Ref.off_sign(), (4 * IOx.Cord.n() : U32))
     drb : List<&2, U32> <- IOx.Fx.slurp(Ref.path(), Ref.off_drive(), (4 * IOx.Cord.n() : U32))
+    alb : List<&2, U32> <- IOx.Fx.slurp(Ref.path(), Ref.off_alive(), (4 * IOx.Cord.n() : U32))
     dvb : List<&2, U32> <- IOx.Fx.slurp(Ref.path(), Ref.off_driven(), (4 * Ref.n_driven() : U32))
     fdb : List<&2, U32> <- IOx.Fx.slurp(Ref.path(), Ref.off_fired(), (4 * Ref.steps() : U32))
     spb : List<&2, U32> <- IOx.Fx.slurp(Ref.path(), Ref.off_spikes(), (4 * IOx.Cord.n() : U32))
@@ -210,4 +215,5 @@ def main() -> IO(Unit):
       Chk.of(fired, 0), Chk.sum(fired, 0), IOx.Bytes.u32s(spb), t0,
       Rows.build(IOx.Lens.of(IOx.Bytes.u32s(ipb)), 0, IOx.Bytes.u32s(gpb), IOx.Bytes.f32s(wb), Array.new(List<&2, Kr.Edge>, 15n, Nil{})),
       IOx.F32s.into(IOx.Bytes.f32s(sgb), 0, [0.0 : F32^15n]),
-      IOx.F32s.into(IOx.Bytes.f32s(drb), 0, [0.0 : F32^15n]))
+      IOx.F32s.into(IOx.Bytes.f32s(drb), 0, [0.0 : F32^15n]),
+      IOx.U32s.into(IOx.Bytes.u32s(alb), 0, [0 : U32^15n]))

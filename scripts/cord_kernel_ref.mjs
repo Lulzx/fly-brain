@@ -21,7 +21,8 @@ import { DEFAULTS } from '../src/lif.js';
 
 const arg = (k, d) => { const a = process.argv.find(x => x.startsWith(`--${k}=`)); return a ? +a.slice(k.length + 3) : d; };
 const STEPS = arg('steps', 1000), SEED = arg('seed', 1);
-const OUT = 'public/data/cord_kernel.bin';
+const sarg = (k, d) => { const a = process.argv.find(x => x.startsWith(`--${k}=`)); return a ? a.slice(k.length + 3) : d; };
+const ABLATE = sarg('ablate', ''), OUT = sarg('out', 'public/data/cord_kernel.bin');
 
 // ---------------------------------------------------------------- the cord IR
 export function loadCord(file = 'public/data/cord_ir.bin', desc = 'public/data/cord_ir.json') {
@@ -84,6 +85,15 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   brain.setDrive(Int32Array.from(driven), 0);
   for (const i of driven) brain.setDriveOne(i, drive[i]);
 
+  // ablation, the way the arena backend does it: the cells are silenced by threshold
+  const alive = new Uint32Array(N).fill(1);
+  if (ABLATE) {
+    const set = cord.sets[ABLATE];
+    if (!set) throw new Error(`no named set '${ABLATE}' (known: ${Object.keys(cord.sets).join(', ')})`);
+    for (const i of set) { brain.setThr(i, 1e6); alive[i] = 0; }
+    console.log(`ablated ${ABLATE}: ${set.length} cells silenced by threshold`);
+  }
+
   const fired = new Uint32Array(STEPS);
   const t0 = Date.now();
   for (let s = 0; s < STEPS; s++) fired[s] = brain.step().length;
@@ -99,13 +109,13 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const consts = Float32Array.from([p.dt, p.vRest, p.vThresh, p.vReset, p.tRef, p.adaptInc, p.depU,
     Math.exp(-p.dt / p.tauSyn), Math.exp(-p.dt / p.adaptTau), p.dt / p.depTau, p.dt / p.tauM, p.dt / 1000,
     p.eExc, p.eInh, 1 / (p.eExc - p.vRest), 1 / (p.vRest - p.eInh)]);
-  const bytes = 4 * HDRN + 4 * CONSTS + 4 * E + 4 * N + 4 * N + 4 * driven.length + 4 * STEPS + 4 * N;
+  const bytes = 4 * HDRN + 4 * CONSTS + 4 * E + 4 * N + 4 * N + 4 * N + 4 * driven.length + 4 * STEPS + 4 * N;
   const buf = Buffer.alloc(bytes); let o = 0;
   const u = v => { buf.writeUInt32LE(v >>> 0, o); o += 4; };
   u(0x4b44524f); u(1); u(N); u(E); u(STEPS); u(driven.length); u(brain._seed); u(brain.nslots);
   u(cut); u(0); u(0); u(0); u(0); u(0); u(0); u(0);
   const put = (a, T) => { Buffer.from(a.buffer, a.byteOffset, a.byteLength).copy(buf, o); o += a.byteLength; };
-  put(consts); put(W); put(SG); put(drive); put(Uint32Array.from(driven)); put(fired); put(spikes);
+  put(consts); put(W); put(SG); put(drive); put(alive); put(Uint32Array.from(driven)); put(fired); put(spikes);
   if (o !== bytes) throw new Error(`layout: wrote ${o} of ${bytes}`);
   fs.writeFileSync(OUT, buf);
 
@@ -115,5 +125,6 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   console.log(`fired[0..7] = ${Array.from(fired.subarray(0, 8)).join(' ')}`);
   let nz = 0; for (const s of spikes) if (s) nz++;
   console.log(`neurons that spiked: ${nz} of ${N}`);
-  console.log(`offsets consts=${4 * HDRN} weights=${4 * HDRN + 4 * CONSTS} sign=${4 * HDRN + 4 * CONSTS + 4 * E} drive=${4 * HDRN + 4 * CONSTS + 4 * E + 4 * N} driven=${4 * HDRN + 4 * CONSTS + 4 * E + 8 * N} fired=${4 * HDRN + 4 * CONSTS + 4 * E + 8 * N + 4 * driven.length} spikes=${4 * HDRN + 4 * CONSTS + 4 * E + 8 * N + 4 * driven.length + 4 * STEPS}`);
+  const B = 4 * HDRN + 4 * CONSTS + 4 * E;
+  console.log(`offsets consts=${4 * HDRN} weights=${4 * HDRN + 4 * CONSTS} sign=${B} drive=${B + 4 * N} alive=${B + 8 * N} driven=${B + 12 * N} fired=${B + 12 * N + 4 * driven.length} spikes=${B + 12 * N + 4 * driven.length + 4 * STEPS} total=${bytes}`);
 }

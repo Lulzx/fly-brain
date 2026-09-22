@@ -16,6 +16,7 @@
 # inhibitory ones, so splitting leaves each accumulator's additions in their original order —
 # which is what the float sum depends on.
 import Base
+import ./perturb.bend as P
 
 # ------------------------------------------------------------------ constants
 type Kc is Data:
@@ -98,7 +99,7 @@ type Edge is Data:
 
 type Lane is Type:
   Lane{v: Array<F32>, gE: Array<F32>, gI: Array<F32>, refr: Array<F32>, adapt: Array<F32>,
-    bias: Array<F32>, thr: Array<F32>, drive: Array<F32>, spk: Array<U32>}
+    bias: Array<F32>, thr: Array<F32>, drive: Array<F32>, spk: Array<U32>, alive: Array<U32>}
 
 # the shared, read-only side: one row per cell and one sign per cell
 type Net is Type:
@@ -253,10 +254,15 @@ def Mem.go(+n: Nat, +K: Kc, +i: U32,
 # Walked from the last cell down, prepending, so the answer comes out in ascending order —
 # the order `lif.c`'s forward loop appends them in.
 type Thr is Type:
-  Thr{v: Array<F32>, refr: Array<F32>, adapt: Array<F32>, thr: Array<F32>, spk: Array<U32>, fired: List<&2, U32>}
+  Thr{v: Array<F32>, refr: Array<F32>, adapt: Array<F32>, thr: Array<F32>, spk: Array<U32>,
+    alive: Array<U32>, fired: List<&2, U32>}
 
+# The silencing flag is consulted through `perturb.bend`'s `Fire.rule`, the function
+# `ablated_never_fires` is proven about. With every cell alive the rule is the kernel's
+# original condition, which `alive_rule_is_original` says and the gate confirms.
 def Thr.go(+n: Nat, +K: Kc, +i: U32, +acc: List<&2, U32>,
-  rv: Array<F32> & F32, rr: Array<F32> & F32, ra: Array<F32> & F32, rt: Array<F32> & F32, rs: Array<U32> & U32) -> Thr:
+  rv: Array<F32> & F32, rr: Array<F32> & F32, ra: Array<F32> & F32, rt: Array<F32> & F32,
+  rs: Array<U32> & U32, rl: Array<U32> & U32) -> Thr:
   match n:
     case 0n:
       (v, vi) = rv
@@ -264,21 +270,25 @@ def Thr.go(+n: Nat, +K: Kc, +i: U32, +acc: List<&2, U32>,
       (adapt, ad) = ra
       (thr, th) = rt
       (spk, sc) = rs
-      Thr{v, refr, adapt, thr, spk, acc}
+      (alive, al) = rl
+      Thr{v, refr, adapt, thr, spk, alive, acc}
     case 1n+p:
       (v, +vi) = rv
       (refr, +r) = rr
       (adapt, +ad) = ra
       (thr, th) = rt
       (spk, +sc) = rs
-      +fire = Bool.and(F32.is_ge(vi, F32.add(F32.add(Kc.vThresh(K), ad), th)), F32.is_le(r, 0.0))
+      (alive, al) = rl
+      +fire = P.Fire.rule(U32.is_gt(al, 0),
+        F32.is_ge(vi, F32.add(F32.add(Kc.vThresh(K), ad), th)), F32.is_le(r, 0.0))
       +i2 = (i - 1 : U32)
       Thr.go(p, K, i2, Bool.pick(List<&2, U32>, fire, i <> acc, acc),
         Array.get(F32, Array.set(F32, v, i, Bool.pick(F32, fire, Kc.vReset(K), vi)), i2),
         Array.get(F32, Array.set(F32, refr, i, Bool.pick(F32, fire, Kc.tRef(K), r)), i2),
         Array.get(F32, Array.set(F32, adapt, i, Bool.pick(F32, fire, F32.add(ad, Kc.adaptInc(K)), ad)), i2),
         Array.get(F32, thr, i2),
-        Array.get(U32, Array.set(U32, spk, i, Bool.pick(U32, fire, (sc + 1 : U32), sc)), i2))
+        Array.get(U32, Array.set(U32, spk, i, Bool.pick(U32, fire, (sc + 1 : U32), sc)), i2),
+        Array.get(U32, alive, i2))
 
 # ------------------------------------------------------------------ the step
 # The delay line is four slots: the front is delivered now and this step's spikes go to the
@@ -295,12 +305,12 @@ type Run is Type:
 def Step.d(net: Net, gE: Array<F32>, gI: Array<F32>, bias: Array<F32>, drive: Array<F32>,
   r1: List<&2, U32>, r2: List<&2, U32>, r3: List<&2, U32>, +rng: U32,
   +chk: U32, +firedA: List<&2, U32>, t: Thr) -> Run:
-  Thr{v2, refr, adapt, thr, spk, firedB} = t
+  Thr{v2, refr, adapt, thr, spk, alive, firedB} = t
   +fired = List.append(&2, U32, firedA, firedB)
-  Run{net, LSt{Lane{v2, gE, gI, refr, adapt, bias, thr, drive, spk}, r1, r2, r3, fired,
+  Run{net, LSt{Lane{v2, gE, gI, refr, adapt, bias, thr, drive, spk, alive}, r1, r2, r3, fired,
     rng, (chk * 1000003 + U32.from_nat(List.length(&2, U32, fired)) : U32)}}
 
-def Step.c(net: Net, +K: Kc, +n: U32, thr: Array<F32>, spk: Array<U32>, drive: Array<F32>,
+def Step.c(net: Net, +K: Kc, +n: U32, thr: Array<F32>, spk: Array<U32>, alive: Array<U32>, drive: Array<F32>,
   r1: List<&2, U32>, r2: List<&2, U32>, r3: List<&2, U32>, +rng: U32, +chk: U32,
   +firedA: List<&2, U32>, m: Mem) -> Run:
   Mem{v, gE, gI, refr, adapt, bias} = m
@@ -308,56 +318,56 @@ def Step.c(net: Net, +K: Kc, +n: U32, thr: Array<F32>, spk: Array<U32>, drive: A
   Step.d(net, gE, gI, bias, drive, r1, r2, r3, rng, chk, firedA,
     Thr.go(U32.to_nat(n), K, last, Nil{},
       Array.get(F32, v, last), Array.get(F32, refr, last), Array.get(F32, adapt, last),
-      Array.get(F32, thr, last), Array.get(U32, spk, last)))
+      Array.get(F32, thr, last), Array.get(U32, spk, last), Array.get(U32, alive, last)))
 
-def Step.b(net: Net, +K: Kc, +n: U32, gE: Array<F32>, gI: Array<F32>, bias: Array<F32>, thr: Array<F32>,
+def Step.b(net: Net, +K: Kc, +n: U32, gE: Array<F32>, gI: Array<F32>, bias: Array<F32>, thr: Array<F32>, alive: Array<U32>,
   r1: List<&2, U32>, r2: List<&2, U32>, r3: List<&2, U32>, +chk: U32, d: Drv) -> Run:
   Drv{v, refr, adapt, drive, spk, firedA, rng} = d
-  Step.c(net, K, n, thr, spk, drive, r1, r2, r3, rng, chk, firedA,
+  Step.c(net, K, n, thr, spk, alive, drive, r1, r2, r3, rng, chk, firedA,
     Mem.go(U32.to_nat(n), K, 0,
       Array.get(F32, v, 0), Array.get(F32, gE, 0), Array.get(F32, gI, 0),
       Array.get(F32, refr, 0), Array.get(F32, adapt, 0), Array.get(F32, bias, 0)))
 
 def Step.a(+driven: List<&2, U32>, +K: Kc, +n: U32, v: Array<F32>, refr: Array<F32>, adapt: Array<F32>,
-  drive: Array<F32>, spk: Array<U32>, gE: Array<F32>, gI: Array<F32>, bias: Array<F32>, thr: Array<F32>,
+  drive: Array<F32>, spk: Array<U32>, alive: Array<U32>, gE: Array<F32>, gI: Array<F32>, bias: Array<F32>, thr: Array<F32>,
   r1: List<&2, U32>, r2: List<&2, U32>, r3: List<&2, U32>, +rng: U32, +chk: U32, net: Net) -> Run:
   +h = Head.u32(driven)
-  Step.b(net, K, n, gE, gI, bias, thr, r1, r2, r3, chk,
+  Step.b(net, K, n, gE, gI, bias, thr, alive, r1, r2, r3, chk,
     Drv.go(driven, K, h, rng, Nil{},
       Array.get(F32, v, h), Array.get(F32, refr, h), Array.get(F32, adapt, h),
       Array.get(F32, drive, h), Array.get(U32, spk, h)))
 
 # deliver the front slot, then run the four phases
 def Step.inh(+driven: List<&2, U32>, +K: Kc, +n: U32, v: Array<F32>, refr: Array<F32>, adapt: Array<F32>,
-  drive: Array<F32>, spk: Array<U32>, bias: Array<F32>, thr: Array<F32>,
+  drive: Array<F32>, spk: Array<U32>, alive: Array<U32>, bias: Array<F32>, thr: Array<F32>,
   r1: List<&2, U32>, r2: List<&2, U32>, r3: List<&2, U32>, +rng: U32, +chk: U32,
   gE: Array<F32>, d: Del3) -> Run:
   Del3{sign, rows, gI} = d
-  Step.a(driven, K, n, v, refr, adapt, drive, spk, gE, gI, bias, thr, r1, r2, r3, rng, chk, Net{rows, sign})
+  Step.a(driven, K, n, v, refr, adapt, drive, spk, alive, gE, gI, bias, thr, r1, r2, r3, rng, chk, Net{rows, sign})
 
 
 def Step.exc(+driven: List<&2, U32>, +K: Kc, +n: U32, v: Array<F32>, refr: Array<F32>, adapt: Array<F32>,
-  drive: Array<F32>, spk: Array<U32>, bias: Array<F32>, thr: Array<F32>,
+  drive: Array<F32>, spk: Array<U32>, alive: Array<U32>, bias: Array<F32>, thr: Array<F32>,
   r1: List<&2, U32>, r2: List<&2, U32>, r3: List<&2, U32>, +rng: U32, +chk: U32,
   +inh: List<&2, U32>, gI: Array<F32>, d: Del3) -> Run:
   Del3{sign, rows, gE} = d
   +inh2 = inh
-  Step.inh(driven, K, n, v, refr, adapt, drive, spk, bias, thr, r1, r2, r3, rng, chk, gE,
+  Step.inh(driven, K, n, v, refr, adapt, drive, spk, alive, bias, thr, r1, r2, r3, rng, chk, gE,
     Del.go(inh2, Array.get(F32, sign, Head.u32(inh2)), Array.get(List<&2, Edge>, rows, Head.u32(inh2)), gI))
 
 
 def Step.deliver(+driven: List<&2, U32>, +K: Kc, +n: U32, v: Array<F32>, refr: Array<F32>, adapt: Array<F32>,
-  drive: Array<F32>, spk: Array<U32>, bias: Array<F32>, thr: Array<F32>,
+  drive: Array<F32>, spk: Array<U32>, alive: Array<U32>, bias: Array<F32>, thr: Array<F32>,
   r1: List<&2, U32>, r2: List<&2, U32>, r3: List<&2, U32>, +rng: U32, +chk: U32,
   rows: Array<List<&2, Edge>>, sp: Array<F32> & Split, gE: Array<F32>, gI: Array<F32>) -> Run:
   (sign, Split{+exc, +inh}) = sp
-  Step.exc(driven, K, n, v, refr, adapt, drive, spk, bias, thr, r1, r2, r3, rng, chk, inh, gI,
+  Step.exc(driven, K, n, v, refr, adapt, drive, spk, alive, bias, thr, r1, r2, r3, rng, chk, inh, gI,
     Del.go(exc, Array.get(F32, sign, Head.u32(exc)), Array.get(List<&2, Edge>, rows, Head.u32(exc)), gE))
 
 
 def Step.one(+driven: List<&2, U32>, +K: Kc, +n: U32, r: Run) -> Run:
-  Run{Net{rows, sign}, LSt{Lane{v, gE, gI, refr, adapt, bias, thr, drive, spk}, +r0, r1, r2, r3, rng, chk}} = r
-  Step.deliver(driven, K, n, v, refr, adapt, drive, spk, bias, thr, r1, r2, r3, rng, chk, rows,
+  Run{Net{rows, sign}, LSt{Lane{v, gE, gI, refr, adapt, bias, thr, drive, spk, alive}, +r0, r1, r2, r3, rng, chk}} = r
+  Step.deliver(driven, K, n, v, refr, adapt, drive, spk, alive, bias, thr, r1, r2, r3, rng, chk, rows,
     Sp.go(r0, Nil{}, Nil{}, Array.get(F32, sign, Head.u32(r0))), gE, gI)
 
 def Kernel.run(steps: Nat, +driven: List<&2, U32>, +K: Kc, +n: U32, r: Run) -> Run:

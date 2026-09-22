@@ -3,6 +3,7 @@ import Base
 import ./connectome.bend as C
 import ./dataset.bend as D
 import ./cord.bend as K
+import ./perturb.bend as P
 import ./LAWS.bend as L
 
 # ================================================================= lemmas
@@ -531,3 +532,100 @@ def L.dsub_rows_ok(keep, members, rows, minW, e):
               {==}
             case +r <> rt:
               L.dsub_rows_ok(keep, mt, rt, minW, Bool.and_true_r(K.DRow.counts_ok(r, minW), K.DSub.all_counts_ok(rt, minW), e))
+
+# ================================================================= 9. Perturbations
+
+def L.ablated_never_fires(atThresh, free):
+  {==}
+
+def L.alive_rule_is_original(atThresh, free):
+  {==}
+
+def L.sweep_ignores_dead(cells):
+  match cells:
+    case Nil{}:
+      {==}
+    case P.FCell{+idx, +alive, atThresh, free} <> t:
+      match alive:
+        case False{}:
+          L.sweep_ignores_dead(t)
+        case True{}:
+          %L.sweep_ignores_dead(t) : {Bool.pick(List<&2, U32>, Bool.and(atThresh, free), idx <> P.Fire.sweep(P.Fire.drop_dead(t)), P.Fire.sweep(P.Fire.drop_dead(t)))
+            == Bool.pick(List<&2, U32>, Bool.and(atThresh, free), idx <> _, _) : List<&2, U32>}
+          {==}
+
+def L.ablate_only_selected(mask, alive):
+  match mask:
+    case Nil{}:
+      {==}
+    case m <> mt:
+      match m:
+        case True{}:
+          match alive:
+            case Nil{}:
+              {==}
+            case a <> at:
+              L.ablate_only_selected(mt, at)
+        case False{}:
+          match alive:
+            case Nil{}:
+              {==}
+            case a <> at:
+              %L.ablate_only_selected(mt, at) : {a <> P.Mask.unselected_b(mt, P.Ablate.go(mt, at)) == a <> _ : List<&2, Bool>}
+              {==}
+
+def L.ablate_kills_selected(kill, alive, e):
+  %Equal.sym(Bool, kill, True{}, e) : {P.Ablate.cell(_, alive) == False{} : Bool}
+  {==}
+
+def L.scale_outside_class_unchanged(f, row):
+  match row:
+    case Nil{}:
+      {==}
+    case P.PEdge{post, +w, +cls} <> t:
+      match cls:
+        case True{}:
+          L.scale_outside_class_unchanged(f, t)
+        case False{}:
+          %L.scale_outside_class_unchanged(f, t) : {w <> P.Row.outside(P.Scale.row(f, t)) == w <> _ : List<&2, F32>}
+          {==}
+
+def L.scale_inside_class(f, post, w):
+  {==}
+
+def L.scale_preserves_targets(f, row):
+  match row:
+    case Nil{}:
+      {==}
+    case P.PEdge{+post, w, +cls} <> t:
+      match cls:
+        case True{}:
+          %L.scale_preserves_targets(f, t) : {post <> P.Row.posts(P.Scale.row(f, t)) == post <> _ : List<&2, U32>}
+          {==}
+        case False{}:
+          %L.scale_preserves_targets(f, t) : {post <> P.Row.posts(P.Scale.row(f, t)) == post <> _ : List<&2, U32>}
+          {==}
+
+def L.drive_only_selected(mask, bias, mv):
+  match mask:
+    case Nil{}:
+      {==}
+    case m <> mt:
+      match m:
+        case True{}:
+          match bias:
+            case Nil{}:
+              {==}
+            case b <> bt:
+              L.drive_only_selected(mt, bt, mv)
+        case False{}:
+          match bias:
+            case Nil{}:
+              {==}
+            case b <> bt:
+              %L.drive_only_selected(mt, bt, mv) : {b <> P.Mask.unselected(mt, P.Drive.go(mt, bt, mv)) == b <> _ : List<&2, F32>}
+              {==}
+
+def L.drive_selected_gets_mv(sel, mv, b, e):
+  %Equal.sym(Bool, sel, True{}, e) : {P.Drive.cell(_, mv, b) == mv : F32}
+  {==}
