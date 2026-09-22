@@ -51,9 +51,11 @@ cord is always next to a read on the generator under the same brain.
 - `ablateType` now takes a neuron selector (`src/exp/select.js`): `hemilineage:13A`,
   `type:IN19B012@left`, `regex:^IN13`, `superclass:vnc_intrinsic`, `muscle:T3`. The hemilineage
   is parsed from the release's type names (`IN20A.22A039` carries both 20A and 22A), and a
-  selector that matches nothing throws rather than ablating an empty set. Ablation zeroes the
-  population's outgoing synapses through the per-neuron gain table, merged over the deployed
-  readout fit.
+  selector that matches nothing throws rather than ablating an empty set. Ablation silences by
+  threshold, the sibling programme's own definition: the cell never spikes, so it is gone from
+  every downstream synapse and from every readout that counts spikes. (It was first built as
+  zeroed outgoing synapses; a "headless" fly kept walking because the motor readout reads
+  descending-neuron rates directly and the scheduler was still driving them.)
 - `scaleEdges` multiplies a named edge class. The class is declared once in `spec.edgeRules` as
   a (pre selector, post selector, `contra`|`ipsi`|`any`) triple and resolved in the worker to a
   per-edge multiplier on the delivered weight; the same class can be an ensemble axis
@@ -204,9 +206,54 @@ the generator site the decapitation row is satisfied by construction and the bat
 
 ### What came out
 
-The first `respond-like-the-fly` run is recorded in the commit that follows this one; the
-battery, the bindings and the machinery are committed here so the run's numbers land against a
-fixed spec.
+`public/data/experiments/respond-like-the-fly.{json,md}`, 4 members × 9 perturbations × 3
+assays, 40 arena evaluations. The first run of this spec found two instrument faults, both
+fixed before the numbers below: ablation had been built as zeroed outgoing synapses, which
+leaves a silenced descending neuron visible to the motor readout (a "headless" fly kept walking
+under the scheduler), so ablation now silences by threshold; and the DNg100 doses of 10, 20 and
+40 mV reached 2.5, 4.5 and 28 Hz on the real wiring against 100–150 Hz on the shuffled one,
+because the embodied descending neurons sit in a high-conductance state ([doc 23](23-behaviour.md)).
+`driveHz` is what caught both. The `walk-from-cord` report re-ran under the new ablation and is
+bit-identical: for cord interneurons nothing reads their spikes, so the two definitions agree.
+
+**The calibrated real wiring matches four of the five animal rows.** Member 0 (real,
+`inhGain` 0.577): MDN at 95 Hz walks it backward (fore-aft −0.66 cm/s); 13B at 62 Hz slows it to
+a ratio of 0.206, inside Agrawal's 40–80% band; decapitation leaves it standing and still;
+silencing the two command types drops its speed to 0.05 cm/s. The row it fails is the dose:
+DNg100 at 28, 45 and 125 Hz gives speed 0.38, 0.60, 0.48 cm/s and cadence 8.2, 7.9, 4.5 Hz — an
+inverted U with the cadence falling at the top, the same shape the sibling programme recorded
+for its own champion ("inverted-U speed, flat cadence"). At 125 Hz the fly starts to lose its
+footing (upright 0.93); the readout's saturating speed map and the generator's capped cadence
+are where the shape comes from, and the row now says so in numbers.
+
+**Inhibition gain decides the sign of two rows.** Member 1 (real, `inhGain` 1.0) walks
+*backward* under a forward command at baseline (95% of its movement rearward) and, driven at
+13B, speeds up by 47% instead of slowing — the same sign flip the sibling programme recorded
+for its 13B arm (+11%). It matches MDN and decapitation and just misses the no-command ceiling
+(0.079 against 0.05 cm/s). The calibrated gain is the one that behaves like the animal.
+
+**The weight-shuffled wiring fails the rows that need the wiring.** Both shuffled members walk
+forward at 4.0–4.6 cm/s of fore-aft travel at baseline, their forward descending neurons
+saturated, and nothing moves them: MDN at 112–124 Hz leaves them at +3.2 and +3.8 cm/s;
+silencing the command types leaves them at 0.4–0.6 cm/s, because a permuted wiring drives the
+other forward neurons without a command. One shuffled member matches the 13B row (ratio 0.52)
+and both match decapitation. The ranking puts the command silencing, the MDN row and the 13B
+row at the top (0.667 separation each): those are the experiments that tell the wirings apart.
+
+**Decapitation is satisfied by construction on this site.** Every member matches it, because
+the readout needs descending spikes and a silenced head has none. The row is on the table so
+that it is *not* on the table by construction once the cord drives the legs.
+
+**Neither sibling prediction reproduces on the real wiring.** DNg93 at 89–136 Hz during the
+command slows member 0 by 26%, short of the 50% the row asks; DNge036 at 117–155 Hz on the
+rest site starts no walking on either real member. These are prediction rows and count for
+nothing either way; they are recorded because the sibling programme registered them as
+predictions about reconstructable cells.
+
+**One instrument caveat, carried.** The brain's noise stream is not reseeded between assays, so
+a member's read depends on which assays precede it in the job; a spec's assay set is part of
+the condition. The `walk-from-cord` and `respond-like-the-fly` baselines for the same brain
+differ for that reason and no other.
 
 ## What this does and does not give the walking problem
 

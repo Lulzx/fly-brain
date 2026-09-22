@@ -104,6 +104,7 @@
    "value": 0.498111995763124
   }
  ],
+ "responses": [],
  "members": [
   {
    "params": {
@@ -280,8 +281,8 @@
       "bodyHeightRel": 0.3400963807977948,
       "speed": 0.04705519015738111,
       "loadRhythm": 0.13232163103939232,
-      "cpgCadence": 8.421052631578947,
-      "cpgContra": 0.4764009910389869
+      "cpgCadence": 8.68421052631579,
+      "cpgContra": 0.48027558994060016
      },
      "kills": false
     },
@@ -501,17 +502,17 @@
     },
     "no_13B": {
      "values": {
-      "cadence": 1.3157894736842106,
-      "legsStepping": 3,
-      "duty": 0.35157894736842105,
+      "cadence": 1.0526315789473684,
+      "legsStepping": 2,
+      "duty": 0.4321052631578947,
       "contraPhase": null,
       "tripod": null,
       "upright": 0,
-      "bodyHeightRel": 0.6557191085926677,
-      "speed": 0.12262863394303919,
-      "loadRhythm": 0.016516891541049617,
-      "cpgCadence": 5.7894736842105265,
-      "cpgContra": 0.49592255607321484
+      "bodyHeightRel": 0.622851730572795,
+      "speed": 0.12959941223765598,
+      "loadRhythm": 0.07333184997775612,
+      "cpgCadence": 6.315789473684211,
+      "cpgContra": 0.49273749593750515
      },
      "kills": false
     },

@@ -111,12 +111,17 @@ const GAIT_DT = 2;   // ms between gait samples (500 Hz; the fastest real step i
 // Per-neuron ablation and edge-class gains, resolved in this process from the selector strings a
 // spec carries (src/exp/select.js). Cached by key: a worker sees the same few conditions many times.
 const ABLATE = new Map(), EDGES = new Map();
-function ablationTable(sels) {
+// Ablation silences by threshold (thr += 1e6 mV, the sibling programme's own definition of a
+// silenced cell): the cell never spikes, so it is gone from every downstream synapse AND from
+// every readout that counts its spikes. Zeroing outgoing synapses instead leaves a silenced
+// descending neuron visible to the motor readout, which reads DN rates directly -- a "headless"
+// fly kept walking under the scheduler's drive when ablation was first built that way.
+function ablationIdx(sels) {
   const key = JSON.stringify(sels);
   if (!ABLATE.has(key)) {
-    const t = {};
-    for (const sel of sels) { const m = resolveSelector(DATA, sel); for (let i = 0; i < DATA.N; i++) if (m[i]) t[i] = -50; }   // exp(-50) ~ 0: outgoing synapses gone
-    ABLATE.set(key, t);
+    const set = new Set();
+    for (const sel of sels) { const m = resolveSelector(DATA, sel); for (let i = 0; i < DATA.N; i++) if (m[i]) set.add(i); }
+    ABLATE.set(key, Int32Array.from(set));
   }
   return ABLATE.get(key);
 }
@@ -142,13 +147,13 @@ async function runSeed(cfg, seed) {
   // real topology), 'signFree' (every synapse excitatory). The shuffle draw is seeded per assay seed.
   if (o.wiring === 'weightShuffle') o.wShuffle = true; else if (o.wiring === 'signFree') o.signFree = true;
   else if (o.wiring && o.wiring !== 'real') throw new Error(`unknown wiring '${o.wiring}' (real|weightShuffle|signFree)`);
-  // `ablate`: selector strings -> per-neuron output gain ~0, merged over the deployed readout table
-  if (o.ablate?.length) o.neuronGainTable = { ...(o.neuronGainTable || {}), ...ablationTable(o.ablate) };
   // `edgeRules`: [{pre, post, cross, factor}] -> per-edge multiplier on the delivered weight
   if (o.edgeRules?.length) o.edgeGain = edgeGain(o.edgeRules);
   const data = (o.wBinary || o.wShuffle || o.wEB) ? { ...DATA, weights: weightsFor({ ...o, seed }) } : DATA;
   const mem = allocBrainMemory(data, SIZE, o.signFree ? ALL_EXC : SIGN, o, 1, VISION);
   const brain = await attachBrain(WASM, mem, 0, data, (seed * 2654435761) >>> 0); brain.reset();
+  // `ablate`: selector strings -> silenced by threshold for every scenario of this seed (thr survives reset())
+  if (o.ablate?.length) for (const i of ablationIdx(o.ablate)) brain.setThr(i, 1e6);
   const obs = { flipMs: 0, totalMs: 0, alive: 1, foodDist: 1e9, feedLatency: null, escapes: 0, walkBouts: [], schedBouts: [], byScenario: {} };
   const mnSpikes = Object.fromEntries(Object.keys(POOLS).map(k => [k, 0]));   // spikes per pool, summed over scenarios
   let mnMs = 0;

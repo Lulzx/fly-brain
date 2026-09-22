@@ -13,7 +13,7 @@
 // Perturbation kinds at this site:
 //   offPlugin   -> cfg.scaffolds[target] = false
 //   scaleGain   -> args {param, factor} multiplies a param (any of the addresses above)
-//   ablateType  -> target is a neuron selector (src/exp/select.js); its outgoing synapses go to ~0
+//   ablateType  -> target is a neuron selector (src/exp/select.js); the cells are silenced by threshold
 //   scaleEdges  -> target is a spec.edgeRules id, args {factor}
 //   driveType   -> target is a neuron selector, args {mv, fromMs?, toMs?}: constant bias on the population
 //   swapCompartment -> reported unimplemented (engram harness)

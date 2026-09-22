@@ -1,0 +1,1486 @@
+{
+ "spec": {
+  "id": "respond-like-the-fly",
+  "question": "Which ensemble members respond to the real perturbation experiments the way the animal did, and does the real wiring match rows the weight-shuffled wiring does not?",
+  "operators": [
+   "readout.descending",
+   "cord.premotorInhibition",
+   "cmd.MDN",
+   "cmd.BDN2"
+  ],
+  "splitRule": "speed < 0.5 * baseline.speed",
+  "backend": "arena",
+  "status": "ready",
+  "seeds": [
+   7
+  ]
+ },
+ "ensemble": {
+  "n": 4,
+  "params": [
+   "wiring",
+   "inhGain"
+  ],
+  "seed": 9
+ },
+ "observables": [
+  {
+   "id": "forward",
+   "where": "arena",
+   "measure": "gait.forward",
+   "args": {
+    "assay": "walk_cpg"
+   },
+   "value": 4.023612608348231
+  },
+  {
+   "id": "speed",
+   "where": "arena",
+   "measure": "gait.speed",
+   "args": {
+    "assay": "walk_cpg"
+   },
+   "value": 0.4257990929815995
+  },
+  {
+   "id": "cadence",
+   "where": "arena",
+   "measure": "gait.cadence",
+   "args": {
+    "assay": "walk_cpg"
+   },
+   "value": 5.2631578947368425
+  },
+  {
+   "id": "backFrac",
+   "where": "arena",
+   "measure": "gait.backFrac",
+   "args": {
+    "assay": "walk_cpg"
+   },
+   "value": 0.1897463002114165
+  },
+  {
+   "id": "upright",
+   "where": "arena",
+   "measure": "gait.upright",
+   "args": {
+    "assay": "walk_cpg"
+   },
+   "value": 1
+  },
+  {
+   "id": "displacement",
+   "where": "arena",
+   "measure": "gait.displacement",
+   "args": {
+    "assay": "walk_cpg"
+   },
+   "value": 1.618036553330078
+  },
+  {
+   "id": "driveHz",
+   "where": "arena",
+   "measure": "driveHz",
+   "args": {
+    "assay": "walk_cpg"
+   },
+   "value": 0
+  },
+  {
+   "id": "restSpeed",
+   "where": "arena",
+   "measure": "gait.speed",
+   "args": {
+    "assay": "rest_cpg"
+   },
+   "value": 0.1778436138674901
+  },
+  {
+   "id": "restUpright",
+   "where": "arena",
+   "measure": "gait.upright",
+   "args": {
+    "assay": "rest_cpg"
+   },
+   "value": 1
+  },
+  {
+   "id": "restDisplacement",
+   "where": "arena",
+   "measure": "gait.displacement",
+   "args": {
+    "assay": "rest_cpg"
+   },
+   "value": 0.6758057326964623
+  },
+  {
+   "id": "restDriveHz",
+   "where": "arena",
+   "measure": "driveHz",
+   "args": {
+    "assay": "rest_cpg"
+   },
+   "value": 0
+  }
+ ],
+ "responses": [
+  {
+   "id": "mdn_backward",
+   "row": "mdn_backward",
+   "status": "qualitative",
+   "experiment": "Activate the moonwalker descending neurons (MDN) in a walking fly",
+   "animal": "backward walking: the fly reverses for the duration of activation",
+   "source": "Bidaye, Machacek, Wu & Dickson 2014, Science 344:97 (moonwalker); the registry row cmd.MDN_direction carries the same reading as a sign on signed fore-aft displacement",
+   "match": 2,
+   "mismatch": 2,
+   "undefined": 0,
+   "skipped": 0
+  },
+  {
+   "id": "dng100_dose",
+   "row": "dng100_dose",
+   "status": "qualitative",
+   "experiment": "Drive the BDN2 / DNg100 descending pair at increasing rates",
+   "animal": "walking speed and step frequency both increase with drive, with a threshold below which the fly does not walk",
+   "source": "Sapkal et al. 2024, Nature 634:191 (BDN2 optogenetic dose); Pugliese et al. 2025, bioRxiv 2025.09.12.675944 (constant BDN2 command in simulation); registry row cmd.DNg100_dose",
+   "match": 0,
+   "mismatch": 4,
+   "undefined": 0,
+   "skipped": 0
+  },
+  {
+   "id": "b13_slowdown",
+   "row": "b13_slowdown",
+   "status": "measured",
+   "experiment": "Optogenetic activation of 13B premotor interneurons (13Balpha driver, 720 ms pulse) during walking",
+   "animal": "forward speed falls during the pulse: about 0.65 cm/s slowdown against about 0.1 cm/s in the no-driver control, a 40-80% reduction",
+   "source": "Agrawal et al. 2020, eLife 9:e60299, Fig 8; registry row premotor.13b_activation_slows_walking (band text and units)",
+   "match": 2,
+   "mismatch": 2,
+   "undefined": 0,
+   "skipped": 0
+  },
+  {
+   "id": "decapitated_stands",
+   "row": "decapitated_stands",
+   "status": "measured",
+   "experiment": "Decapitation: the brain removed, the nerve cord and legs intact",
+   "animal": "decapitated flies keep standing posture and do not locomote: 0 of 90 moved 1 mm or more in 2 min",
+   "source": "Yellman, Tao, He & Hirsh 1997, PNAS 94:4131; registry row cord.decapitated_standing (band [0,0] on the locomoting fraction)",
+   "match": 4,
+   "mismatch": 0,
+   "undefined": 0,
+   "skipped": 0
+  },
+  {
+   "id": "no_command_stands",
+   "row": "no_command_stands",
+   "status": "qualitative",
+   "experiment": "Brain intact, no walking command delivered",
+   "animal": "an undisturbed fly spends most of its time not walking; the descending command is required for sustained walking",
+   "source": "Sapkal et al. 2024 (BDN2 threshold); registry rows cmd.no_command_walking and brain.spontaneous_walking record that the sibling model walks without command and that the animal anchor is still a lead, not a citation",
+   "match": 1,
+   "mismatch": 3,
+   "undefined": 0,
+   "skipped": 0
+  },
+  {
+   "id": "dng93_stop",
+   "row": "dng93_stop",
+   "status": "prediction",
+   "experiment": "Drive the DNg93 descending pair (the largest direct descending projection onto leg motor neurons, GABA-predicted) during a walking command",
+   "animal": "no animal measurement. Sibling-model prediction: walking does not start, the fly stays upright with the motor pool at a tenth of its walking rate",
+   "source": "registry row cmd.DNg93_stop (lane D, 2026-09-02): model prediction, real-fly anchor pending",
+   "match": 0,
+   "mismatch": 4,
+   "undefined": 0,
+   "skipped": 0
+  },
+  {
+   "id": "dnge036_walks",
+   "row": "dnge036_walks",
+   "status": "prediction",
+   "experiment": "Drive the DNge036 pair with no other walking command",
+   "animal": "no animal measurement. Sibling-model prediction: walking starts within 0.2 s at command-class speed",
+   "source": "registry row cmd.DNge036_sufficiency (lane D, 2026-09-02): model prediction, real-fly anchor pending; the type takes 1,359 synapses from taste bristles and sends 1,907 directly onto motor neurons",
+   "match": 0,
+   "mismatch": 4,
+   "undefined": 0,
+   "skipped": 0
+  }
+ ],
+ "members": [
+  {
+   "params": {
+    "wiring": "real",
+    "inhGain": 0.577
+   },
+   "baseline": {
+    "forward": 3.3420341586839797,
+    "speed": 0.49735504569213457,
+    "cadence": 5,
+    "backFrac": 0.1897463002114165,
+    "upright": 1,
+    "displacement": 1.8899491736301113,
+    "driveHz": 0,
+    "restSpeed": 0.11503616958799252,
+    "restUpright": 1,
+    "restDisplacement": 0.4371374444343716,
+    "restDriveHz": 0
+   },
+   "cfg": {
+    "scaffolds": {},
+    "wiring": "real"
+   },
+   "perturbations": {
+    "mdn_on": {
+     "values": {
+      "forward": -0.6570761532732271,
+      "speed": 0.5674691673300195,
+      "cadence": 5.526315789473684,
+      "backFrac": 0.8597236981934112,
+      "upright": 0.7810526315789473,
+      "displacement": 2.156382835854074,
+      "driveHz": 95,
+      "restSpeed": 0.4574085462325949,
+      "restUpright": 0.7778947368421053,
+      "restDisplacement": 1.7381524756838607,
+      "restDriveHz": 83.875
+     },
+     "kills": false
+    },
+    "dng100_40": {
+     "values": {
+      "forward": 1.0520247130117055,
+      "speed": 0.3760361849675991,
+      "cadence": 8.157894736842106,
+      "backFrac": 0.31329113924050633,
+      "upright": 1,
+      "displacement": 1.4289375028768765,
+      "driveHz": 27.625,
+      "restSpeed": 0.30623516667300255,
+      "restUpright": 1,
+      "restDisplacement": 1.1636936333574097,
+      "restDriveHz": 9.625
+     },
+     "kills": false
+    },
+    "dng100_80": {
+     "values": {
+      "forward": 1.080832480106207,
+      "speed": 0.6022943764563189,
+      "cadence": 7.894736842105264,
+      "backFrac": 0.3248811410459588,
+      "upright": 1,
+      "displacement": 2.2887186305340115,
+      "driveHz": 45.25,
+      "restSpeed": 0.06402859393563032,
+      "restUpright": 1,
+      "restDisplacement": 0.24330865695539522,
+      "restDriveHz": 1
+     },
+     "kills": false
+    },
+    "dng100_160": {
+     "values": {
+      "forward": 2.0792438619287825,
+      "speed": 0.47927073375310797,
+      "cadence": 4.473684210526316,
+      "backFrac": 0.26992561105207225,
+      "upright": 0.9326315789473684,
+      "displacement": 1.8212287882618101,
+      "driveHz": 125.25,
+      "restSpeed": 0.6361395722681882,
+      "restUpright": 0.3705263157894737,
+      "restDisplacement": 2.417330374619115,
+      "restDriveHz": 119.75
+     },
+     "kills": false
+    },
+    "b13_on": {
+     "values": {
+      "forward": 0.8326828255461706,
+      "speed": 0.1026857345637538,
+      "cadence": 6.578947368421053,
+      "backFrac": 0.2213375796178344,
+      "upright": 1,
+      "displacement": 0.3902057913422644,
+      "driveHz": 62.065489749430526,
+      "restSpeed": 0.004062944825045498,
+      "restUpright": 1,
+      "restDisplacement": 0.01543919033517289,
+      "restDriveHz": 62.92312072892938
+     },
+     "kills": true
+    },
+    "headless": {
+     "values": {
+      "forward": -0.00031606359193274734,
+      "speed": 0.00031631109299373305,
+      "cadence": 0,
+      "backFrac": 1,
+      "upright": 1,
+      "displacement": 0.0012019821533761855,
+      "driveHz": 0,
+      "restSpeed": 0.00031631109299373305,
+      "restUpright": 1,
+      "restDisplacement": 0.0012019821533761855,
+      "restDriveHz": 0
+     },
+     "kills": true
+    },
+    "cmd_silenced": {
+     "values": {
+      "forward": 0.17432231693162575,
+      "speed": 0.04886821847956062,
+      "cadence": 4.2105263157894735,
+      "backFrac": 0.38873396542108196,
+      "upright": 1,
+      "displacement": 0.18569923022233034,
+      "driveHz": 0,
+      "restSpeed": 0.17955249992145403,
+      "restUpright": 1,
+      "restDisplacement": 0.6822994997015253,
+      "restDriveHz": 0
+     },
+     "kills": true
+    },
+    "dng93_on": {
+     "values": {
+      "forward": 0.5629895648289682,
+      "speed": 0.3673152105198173,
+      "cadence": 6.578947368421053,
+      "backFrac": 0.26267029972752043,
+      "upright": 1,
+      "displacement": 1.3957977999753057,
+      "driveHz": 89.375,
+      "restSpeed": 0.0455725244022376,
+      "restUpright": 1,
+      "restDisplacement": 0.1731755927285029,
+      "restDriveHz": 130.375
+     },
+     "kills": false
+    },
+    "dnge036_on": {
+     "values": {
+      "forward": 0.49789706898725256,
+      "speed": 0.46307489706303806,
+      "cadence": 5.7894736842105265,
+      "backFrac": 0.2955906369080022,
+      "upright": 1,
+      "displacement": 1.7596846088395446,
+      "driveHz": 116.75,
+      "restSpeed": 0.09129261852443805,
+      "restUpright": 1,
+      "restDisplacement": 0.3469119503928646,
+      "restDriveHz": 155.375
+     },
+     "kills": false
+    }
+   },
+   "responses": {
+    "mdn_backward": {
+     "outcome": "match",
+     "status": "qualitative",
+     "clauses": [
+      {
+       "measure": "gait.forward",
+       "comparator": "sign",
+       "outcome": "match",
+       "detail": "value -0.657, expected sign -1 with |v| >= 0.02"
+      }
+     ],
+     "perturbations": [
+      "mdn_on"
+     ]
+    },
+    "dng100_dose": {
+     "outcome": "mismatch",
+     "status": "qualitative",
+     "clauses": [
+      {
+       "measure": "gait.speed",
+       "comparator": "monotonic",
+       "outcome": "mismatch",
+       "detail": "series 0.376 -> 0.602 -> 0.479, expected non-decreasing with span >= 0.05"
+      },
+      {
+       "measure": "gait.cadence",
+       "comparator": "monotonic",
+       "outcome": "mismatch",
+       "detail": "series 8.158 -> 7.895 -> 4.474, expected non-decreasing with span >= 1"
+      }
+     ],
+     "perturbations": [
+      "dng100_40",
+      "dng100_80",
+      "dng100_160"
+     ]
+    },
+    "b13_slowdown": {
+     "outcome": "match",
+     "status": "measured",
+     "clauses": [
+      {
+       "measure": "gait.speed",
+       "comparator": "ratio",
+       "outcome": "match",
+       "detail": "ratio 0.206, expected in [0.2, 0.6]"
+      }
+     ],
+     "perturbations": [
+      "b13_on"
+     ]
+    },
+    "decapitated_stands": {
+     "outcome": "match",
+     "status": "measured",
+     "clauses": [
+      {
+       "measure": "gait.displacement",
+       "comparator": "below",
+       "outcome": "match",
+       "detail": "value 0.001, expected <= 0.1"
+      },
+      {
+       "measure": "gait.upright",
+       "comparator": "unchanged",
+       "outcome": "match",
+       "detail": "|delta| 0.000 against tolerance 0.150"
+      }
+     ],
+     "perturbations": [
+      "headless"
+     ]
+    },
+    "no_command_stands": {
+     "outcome": "match",
+     "status": "qualitative",
+     "clauses": [
+      {
+       "measure": "gait.speed",
+       "comparator": "below",
+       "outcome": "match",
+       "detail": "value 0.049, expected <= 0.05"
+      }
+     ],
+     "perturbations": [
+      "cmd_silenced"
+     ]
+    },
+    "dng93_stop": {
+     "outcome": "mismatch",
+     "status": "prediction",
+     "clauses": [
+      {
+       "measure": "gait.speed",
+       "comparator": "direction",
+       "outcome": "mismatch",
+       "detail": "delta -0.130 (base 0.497), expected sign -1 with |delta| >= 0.249"
+      }
+     ],
+     "perturbations": [
+      "dng93_on"
+     ]
+    },
+    "dnge036_walks": {
+     "outcome": "mismatch",
+     "status": "prediction",
+     "clauses": [
+      {
+       "measure": "gait.speed",
+       "comparator": "direction",
+       "outcome": "mismatch",
+       "detail": "delta -0.024 (base 0.115), expected sign 1 with |delta| >= 0.115"
+      }
+     ],
+     "perturbations": [
+      "dnge036_on"
+     ]
+    }
+   }
+  },
+  {
+   "params": {
+    "wiring": "real",
+    "inhGain": 1
+   },
+   "baseline": {
+    "forward": -0.40830909076307076,
+    "speed": 0.40537772274328454,
+    "cadence": 6.052631578947369,
+    "backFrac": 0.9459751485683414,
+    "upright": 1,
+    "displacement": 1.540435346424481,
+    "driveHz": 0,
+    "restSpeed": 0.1778436138674901,
+    "restUpright": 1,
+    "restDisplacement": 0.6758057326964623,
+    "restDriveHz": 0
+   },
+   "cfg": {
+    "scaffolds": {},
+    "wiring": "real"
+   },
+   "perturbations": {
+    "mdn_on": {
+     "values": {
+      "forward": -0.7386111142092797,
+      "speed": 0.5734448741098539,
+      "cadence": 6.315789473684211,
+      "backFrac": 0.9283039058319957,
+      "upright": 0.9447368421052632,
+      "displacement": 2.1790905216174448,
+      "driveHz": 124.75,
+      "restSpeed": 0.5579181430693508,
+      "restUpright": 0.9442105263157895,
+      "restDisplacement": 2.120088943663533,
+      "restDriveHz": 123.75
+     },
+     "kills": false
+    },
+    "dng100_40": {
+     "values": {
+      "forward": -0.42912603609588884,
+      "speed": 0.4270279836764476,
+      "cadence": 6.052631578947369,
+      "backFrac": 0.9066022544283414,
+      "upright": 1,
+      "displacement": 1.622706337970501,
+      "driveHz": 9,
+      "restSpeed": 0.22065642882010486,
+      "restUpright": 1,
+      "restDisplacement": 0.8384944295163984,
+      "restDriveHz": 5.5
+     },
+     "kills": false
+    },
+    "dng100_80": {
+     "values": {
+      "forward": -0.46395527446319124,
+      "speed": 0.4538637088842106,
+      "cadence": 6.052631578947369,
+      "backFrac": 0.9064171122994652,
+      "upright": 1,
+      "displacement": 1.7246820937600003,
+      "driveHz": 36.375,
+      "restSpeed": 0.4368271061542353,
+      "restUpright": 1,
+      "restDisplacement": 1.659943003386094,
+      "restDriveHz": 3.125
+     },
+     "kills": false
+    },
+    "dng100_160": {
+     "values": {
+      "forward": 0.5211909987294483,
+      "speed": 0.48220572315962806,
+      "cadence": 5.526315789473684,
+      "backFrac": 0.49044585987261147,
+      "upright": 1,
+      "displacement": 1.8323817480065865,
+      "driveHz": 113.125,
+      "restSpeed": 0.25507504005897125,
+      "restUpright": 1,
+      "restDisplacement": 0.9692851522240906,
+      "restDriveHz": 70
+     },
+     "kills": false
+    },
+    "b13_on": {
+     "values": {
+      "forward": -0.5954689895029344,
+      "speed": 0.594563105870916,
+      "cadence": 6.578947368421053,
+      "backFrac": 0.9819628647214854,
+      "upright": 1,
+      "displacement": 2.259339802309481,
+      "driveHz": 57.47722095671982,
+      "restSpeed": 0.1681026448781343,
+      "restUpright": 1,
+      "restDisplacement": 0.6387900505369104,
+      "restDriveHz": 57.76480637813212
+     },
+     "kills": false
+    },
+    "headless": {
+     "values": {
+      "forward": -0.00031606359193274734,
+      "speed": 0.00031631109299373305,
+      "cadence": 0,
+      "backFrac": 1,
+      "upright": 1,
+      "displacement": 0.0012019821533761855,
+      "driveHz": 0,
+      "restSpeed": 0.00031631109299373305,
+      "restUpright": 1,
+      "restDisplacement": 0.0012019821533761855,
+      "restDriveHz": 0
+     },
+     "kills": true
+    },
+    "cmd_silenced": {
+     "values": {
+      "forward": -0.07750590717613742,
+      "speed": 0.07857333953230473,
+      "cadence": 5.2631578947368425,
+      "backFrac": 0.566304347826087,
+      "upright": 1,
+      "displacement": 0.29857869022275796,
+      "driveHz": 0,
+      "restSpeed": 0.16611092868220884,
+      "restUpright": 1,
+      "restDisplacement": 0.6312215289923936,
+      "restDriveHz": 0
+     },
+     "kills": true
+    },
+    "dng93_on": {
+     "values": {
+      "forward": -0.3993901942922081,
+      "speed": 0.39770540525883236,
+      "cadence": 6.052631578947369,
+      "backFrac": 0.9213903743315508,
+      "upright": 1,
+      "displacement": 1.511280539983563,
+      "driveHz": 59.125,
+      "restSpeed": 0.17128946854256832,
+      "restUpright": 1,
+      "restDisplacement": 0.6508999804617596,
+      "restDriveHz": 136
+     },
+     "kills": false
+    },
+    "dnge036_on": {
+     "values": {
+      "forward": -0.33392139839554075,
+      "speed": 0.32922221350838166,
+      "cadence": 6.052631578947369,
+      "backFrac": 0.8798283261802575,
+      "upright": 1,
+      "displacement": 1.2510444113318502,
+      "driveHz": 99.375,
+      "restSpeed": 0.1728427001731229,
+      "restUpright": 1,
+      "restDisplacement": 0.656802260657867,
+      "restDriveHz": 133.25
+     },
+     "kills": false
+    }
+   },
+   "responses": {
+    "mdn_backward": {
+     "outcome": "match",
+     "status": "qualitative",
+     "clauses": [
+      {
+       "measure": "gait.forward",
+       "comparator": "sign",
+       "outcome": "match",
+       "detail": "value -0.739, expected sign -1 with |v| >= 0.02"
+      }
+     ],
+     "perturbations": [
+      "mdn_on"
+     ]
+    },
+    "dng100_dose": {
+     "outcome": "mismatch",
+     "status": "qualitative",
+     "clauses": [
+      {
+       "measure": "gait.speed",
+       "comparator": "monotonic",
+       "outcome": "match",
+       "detail": "series 0.427 -> 0.454 -> 0.482, expected non-decreasing with span >= 0.05"
+      },
+      {
+       "measure": "gait.cadence",
+       "comparator": "monotonic",
+       "outcome": "mismatch",
+       "detail": "series 6.053 -> 6.053 -> 5.526, expected non-decreasing with span >= 1"
+      }
+     ],
+     "perturbations": [
+      "dng100_40",
+      "dng100_80",
+      "dng100_160"
+     ]
+    },
+    "b13_slowdown": {
+     "outcome": "mismatch",
+     "status": "measured",
+     "clauses": [
+      {
+       "measure": "gait.speed",
+       "comparator": "ratio",
+       "outcome": "mismatch",
+       "detail": "ratio 1.467, expected in [0.2, 0.6]"
+      }
+     ],
+     "perturbations": [
+      "b13_on"
+     ]
+    },
+    "decapitated_stands": {
+     "outcome": "match",
+     "status": "measured",
+     "clauses": [
+      {
+       "measure": "gait.displacement",
+       "comparator": "below",
+       "outcome": "match",
+       "detail": "value 0.001, expected <= 0.1"
+      },
+      {
+       "measure": "gait.upright",
+       "comparator": "unchanged",
+       "outcome": "match",
+       "detail": "|delta| 0.000 against tolerance 0.150"
+      }
+     ],
+     "perturbations": [
+      "headless"
+     ]
+    },
+    "no_command_stands": {
+     "outcome": "mismatch",
+     "status": "qualitative",
+     "clauses": [
+      {
+       "measure": "gait.speed",
+       "comparator": "below",
+       "outcome": "mismatch",
+       "detail": "value 0.079, expected <= 0.05"
+      }
+     ],
+     "perturbations": [
+      "cmd_silenced"
+     ]
+    },
+    "dng93_stop": {
+     "outcome": "mismatch",
+     "status": "prediction",
+     "clauses": [
+      {
+       "measure": "gait.speed",
+       "comparator": "direction",
+       "outcome": "mismatch",
+       "detail": "delta -0.008 (base 0.405), expected sign -1 with |delta| >= 0.203"
+      }
+     ],
+     "perturbations": [
+      "dng93_on"
+     ]
+    },
+    "dnge036_walks": {
+     "outcome": "mismatch",
+     "status": "prediction",
+     "clauses": [
+      {
+       "measure": "gait.speed",
+       "comparator": "direction",
+       "outcome": "mismatch",
+       "detail": "delta -0.005 (base 0.178), expected sign 1 with |delta| >= 0.178"
+      }
+     ],
+     "perturbations": [
+      "dnge036_on"
+     ]
+    }
+   }
+  },
+  {
+   "params": {
+    "wiring": "weightShuffle",
+    "inhGain": 0.577
+   },
+   "baseline": {
+    "forward": 4.552613346744145,
+    "speed": 0.4257990929815995,
+    "cadence": 3.68421052631579,
+    "backFrac": 0.09057398630858346,
+    "upright": 1,
+    "displacement": 1.618036553330078,
+    "driveHz": 0,
+    "restSpeed": 0.5017928703848553,
+    "restUpright": 1,
+    "restDisplacement": 1.9068129074624502,
+    "restDriveHz": 0
+   },
+   "cfg": {
+    "scaffolds": {},
+    "wiring": "weightShuffle"
+   },
+   "perturbations": {
+    "mdn_on": {
+     "values": {
+      "forward": 3.1817885180122683,
+      "speed": 0.5094331364966572,
+      "cadence": 2.6315789473684212,
+      "backFrac": 0.41227125941872983,
+      "upright": 1,
+      "displacement": 1.9358459186872972,
+      "driveHz": 123.5625,
+      "restSpeed": 0.2311955300249883,
+      "restUpright": 1,
+      "restDisplacement": 0.8785430140949555,
+      "restDriveHz": 127.5
+     },
+     "kills": false
+    },
+    "dng100_40": {
+     "values": {
+      "forward": 4.562976185238334,
+      "speed": 0.41048207976743584,
+      "cadence": 3.947368421052632,
+      "backFrac": 0.08214849921011058,
+      "upright": 1,
+      "displacement": 1.5598319031162562,
+      "driveHz": 149.75,
+      "restSpeed": 0.6082502405770739,
+      "restUpright": 1,
+      "restDisplacement": 2.3113509141928805,
+      "restDriveHz": 132.875
+     },
+     "kills": false
+    },
+    "dng100_80": {
+     "values": {
+      "forward": 4.605546563475058,
+      "speed": 0.5312963369431719,
+      "cadence": 3.68421052631579,
+      "backFrac": 0.15437302423603794,
+      "upright": 1,
+      "displacement": 2.018926080384053,
+      "driveHz": 175.25,
+      "restSpeed": 0.25490861593063846,
+      "restUpright": 1,
+      "restDisplacement": 0.968652740536426,
+      "restDriveHz": 167.375
+     },
+     "kills": false
+    },
+    "dng100_160": {
+     "values": {
+      "forward": 4.501931718897633,
+      "speed": 0.5168128463906873,
+      "cadence": 3.947368421052632,
+      "backFrac": 0.08236536430834214,
+      "upright": 1,
+      "displacement": 1.9638888162846113,
+      "driveHz": 199.375,
+      "restSpeed": 0.5148113461316998,
+      "restUpright": 1,
+      "restDisplacement": 1.956283115300459,
+      "restDriveHz": 200
+     },
+     "kills": false
+    },
+    "b13_on": {
+     "values": {
+      "forward": 4.5710206624472836,
+      "speed": 0.5390730208661448,
+      "cadence": 3.68421052631579,
+      "backFrac": 0.13435194942044257,
+      "upright": 1,
+      "displacement": 2.0484774792913503,
+      "driveHz": 62.88610478359909,
+      "restSpeed": 0.40998288959391616,
+      "restUpright": 1,
+      "restDisplacement": 1.5579349804568814,
+      "restDriveHz": 63.34339407744875
+     },
+     "kills": false
+    },
+    "headless": {
+     "values": {
+      "forward": -0.00031606359193274734,
+      "speed": 0.00031631109299373305,
+      "cadence": 0,
+      "backFrac": 1,
+      "upright": 1,
+      "displacement": 0.0012019821533761855,
+      "driveHz": 0,
+      "restSpeed": 0.00031631109299373305,
+      "restUpright": 1,
+      "restDisplacement": 0.0012019821533761855,
+      "restDriveHz": 0
+     },
+     "kills": true
+    },
+    "cmd_silenced": {
+     "values": {
+      "forward": 3.69165708647496,
+      "speed": 0.40664843964403885,
+      "cadence": 2.368421052631579,
+      "backFrac": 0.3840042372881356,
+      "upright": 1,
+      "displacement": 1.5452640706473475,
+      "driveHz": 0,
+      "restSpeed": 0.3854029806734908,
+      "restUpright": 1,
+      "restDisplacement": 1.464531326559265,
+      "restDriveHz": 0
+     },
+     "kills": false
+    },
+    "dng93_on": {
+     "values": {
+      "forward": 4.587573465592436,
+      "speed": 0.3943563298387009,
+      "cadence": 3.947368421052632,
+      "backFrac": 0.09114857744994731,
+      "upright": 1,
+      "displacement": 1.4985540533870634,
+      "driveHz": 155.375,
+      "restSpeed": 0.45961325312380813,
+      "restUpright": 1,
+      "restDisplacement": 1.7465303618704708,
+      "restDriveHz": 155.75
+     },
+     "kills": false
+    },
+    "dnge036_on": {
+     "values": {
+      "forward": 4.538651186436912,
+      "speed": 0.49990894317162,
+      "cadence": 3.4210526315789473,
+      "backFrac": 0.08966244725738397,
+      "upright": 1,
+      "displacement": 1.8996539840521558,
+      "driveHz": 162.25,
+      "restSpeed": 0.3533314594827227,
+      "restUpright": 1,
+      "restDisplacement": 1.3426595460343462,
+      "restDriveHz": 161.25
+     },
+     "kills": false
+    }
+   },
+   "responses": {
+    "mdn_backward": {
+     "outcome": "mismatch",
+     "status": "qualitative",
+     "clauses": [
+      {
+       "measure": "gait.forward",
+       "comparator": "sign",
+       "outcome": "mismatch",
+       "detail": "value 3.182, expected sign -1 with |v| >= 0.02"
+      }
+     ],
+     "perturbations": [
+      "mdn_on"
+     ]
+    },
+    "dng100_dose": {
+     "outcome": "mismatch",
+     "status": "qualitative",
+     "clauses": [
+      {
+       "measure": "gait.speed",
+       "comparator": "monotonic",
+       "outcome": "mismatch",
+       "detail": "series 0.410 -> 0.531 -> 0.517, expected non-decreasing with span >= 0.05"
+      },
+      {
+       "measure": "gait.cadence",
+       "comparator": "monotonic",
+       "outcome": "mismatch",
+       "detail": "series 3.947 -> 3.684 -> 3.947, expected non-decreasing with span >= 1"
+      }
+     ],
+     "perturbations": [
+      "dng100_40",
+      "dng100_80",
+      "dng100_160"
+     ]
+    },
+    "b13_slowdown": {
+     "outcome": "mismatch",
+     "status": "measured",
+     "clauses": [
+      {
+       "measure": "gait.speed",
+       "comparator": "ratio",
+       "outcome": "mismatch",
+       "detail": "ratio 1.266, expected in [0.2, 0.6]"
+      }
+     ],
+     "perturbations": [
+      "b13_on"
+     ]
+    },
+    "decapitated_stands": {
+     "outcome": "match",
+     "status": "measured",
+     "clauses": [
+      {
+       "measure": "gait.displacement",
+       "comparator": "below",
+       "outcome": "match",
+       "detail": "value 0.001, expected <= 0.1"
+      },
+      {
+       "measure": "gait.upright",
+       "comparator": "unchanged",
+       "outcome": "match",
+       "detail": "|delta| 0.000 against tolerance 0.150"
+      }
+     ],
+     "perturbations": [
+      "headless"
+     ]
+    },
+    "no_command_stands": {
+     "outcome": "mismatch",
+     "status": "qualitative",
+     "clauses": [
+      {
+       "measure": "gait.speed",
+       "comparator": "below",
+       "outcome": "mismatch",
+       "detail": "value 0.407, expected <= 0.05"
+      }
+     ],
+     "perturbations": [
+      "cmd_silenced"
+     ]
+    },
+    "dng93_stop": {
+     "outcome": "mismatch",
+     "status": "prediction",
+     "clauses": [
+      {
+       "measure": "gait.speed",
+       "comparator": "direction",
+       "outcome": "mismatch",
+       "detail": "delta -0.031 (base 0.426), expected sign -1 with |delta| >= 0.213"
+      }
+     ],
+     "perturbations": [
+      "dng93_on"
+     ]
+    },
+    "dnge036_walks": {
+     "outcome": "mismatch",
+     "status": "prediction",
+     "clauses": [
+      {
+       "measure": "gait.speed",
+       "comparator": "direction",
+       "outcome": "mismatch",
+       "detail": "delta -0.148 (base 0.502), expected sign 1 with |delta| >= 0.502"
+      }
+     ],
+     "perturbations": [
+      "dnge036_on"
+     ]
+    }
+   }
+  },
+  {
+   "params": {
+    "wiring": "weightShuffle",
+    "inhGain": 1
+   },
+   "baseline": {
+    "forward": 4.023612608348231,
+    "speed": 0.3811337693883382,
+    "cadence": 5.2631578947368425,
+    "backFrac": 0.15348101265822786,
+    "upright": 1,
+    "displacement": 1.448308323675685,
+    "driveHz": 0,
+    "restSpeed": 0.07572683120912443,
+    "restUpright": 1,
+    "restDisplacement": 0.28776195859467285,
+    "restDriveHz": 0
+   },
+   "cfg": {
+    "scaffolds": {},
+    "wiring": "weightShuffle"
+   },
+   "perturbations": {
+    "mdn_on": {
+     "values": {
+      "forward": 3.7652082481721987,
+      "speed": 0.598558496593728,
+      "cadence": 2.6315789473684212,
+      "backFrac": 0.3596629805160611,
+      "upright": 1,
+      "displacement": 2.274522287056166,
+      "driveHz": 111.75,
+      "restSpeed": 0.5142553307398413,
+      "restUpright": 1,
+      "restDisplacement": 1.954170256811397,
+      "restDriveHz": 112.5625
+     },
+     "kills": false
+    },
+    "dng100_40": {
+     "values": {
+      "forward": 0.6400454011503912,
+      "speed": 0.5084313251295965,
+      "cadence": 5.2631578947368425,
+      "backFrac": 0.43243243243243246,
+      "upright": 0.6536842105263158,
+      "displacement": 1.9320390354924668,
+      "driveHz": 125,
+      "restSpeed": 0.4456803905622529,
+      "restUpright": 0.2294736842105263,
+      "restDisplacement": 1.693585484136561,
+      "restDriveHz": 112.5
+     },
+     "kills": false
+    },
+    "dng100_80": {
+     "values": {
+      "forward": 0.7148594869188873,
+      "speed": 0.499780664820978,
+      "cadence": 5.2631578947368425,
+      "backFrac": 0.399364406779661,
+      "upright": 0.5242105263157895,
+      "displacement": 1.8991665263197164,
+      "driveHz": 160.375,
+      "restSpeed": 0.508298631282456,
+      "restUpright": 0.7226315789473684,
+      "restDisplacement": 1.9315347988733327,
+      "restDriveHz": 155.875
+     },
+     "kills": false
+    },
+    "dng100_160": {
+     "values": {
+      "forward": 2.5190440066745365,
+      "speed": 0.6096980936383204,
+      "cadence": 5.7894736842105265,
+      "backFrac": 0.23044397463002114,
+      "upright": 0.99,
+      "displacement": 2.3168527558256176,
+      "driveHz": 186.5,
+      "restSpeed": 0.49155318042529234,
+      "restUpright": 0.22157894736842104,
+      "restDisplacement": 1.8679020856161108,
+      "restDriveHz": 183.375
+     },
+     "kills": false
+    },
+    "b13_on": {
+     "values": {
+      "forward": 1.067217820081916,
+      "speed": 0.1984495157074866,
+      "cadence": 8.157894736842106,
+      "backFrac": 0.3052464228934817,
+      "upright": 1,
+      "displacement": 0.754108159688449,
+      "driveHz": 60.481776765375855,
+      "restSpeed": 0.05221117589292061,
+      "restUpright": 1,
+      "restDisplacement": 0.1984024683930983,
+      "restDriveHz": 61.2630979498861
+     },
+     "kills": false
+    },
+    "headless": {
+     "values": {
+      "forward": -0.00031606359193274734,
+      "speed": 0.00031631109299373305,
+      "cadence": 0,
+      "backFrac": 1,
+      "upright": 1,
+      "displacement": 0.0012019821533761855,
+      "driveHz": 0,
+      "restSpeed": 0.00031631109299373305,
+      "restUpright": 1,
+      "restDisplacement": 0.0012019821533761855,
+      "restDriveHz": 0
+     },
+     "kills": true
+    },
+    "cmd_silenced": {
+     "values": {
+      "forward": 2.072797584807262,
+      "speed": 0.5966967648053274,
+      "cadence": 3.947368421052632,
+      "backFrac": 0.25824175824175827,
+      "upright": 1,
+      "displacement": 2.267447706260244,
+      "driveHz": 0,
+      "restSpeed": 0.04881293422187916,
+      "restUpright": 1,
+      "restDisplacement": 0.18548915004314082,
+      "restDriveHz": 0
+     },
+     "kills": false
+    },
+    "dng93_on": {
+     "values": {
+      "forward": 2.035380961868198,
+      "speed": 0.7455421895793284,
+      "cadence": 4.2105263157894735,
+      "backFrac": 0.31735889243876464,
+      "upright": 1,
+      "displacement": 2.8330603204014477,
+      "driveHz": 152.875,
+      "restSpeed": 0.08601371593410125,
+      "restUpright": 1,
+      "restDisplacement": 0.32685212054958473,
+      "restDriveHz": 153.5
+     },
+     "kills": false
+    },
+    "dnge036_on": {
+     "values": {
+      "forward": 1.183811360284729,
+      "speed": 0.4474303744854181,
+      "cadence": 7.894736842105264,
+      "backFrac": 0.2857142857142857,
+      "upright": 1,
+      "displacement": 1.7002354230445889,
+      "driveHz": 157.25,
+      "restSpeed": 0.04527690460633249,
+      "restUpright": 1,
+      "restDisplacement": 0.17205223750406345,
+      "restDriveHz": 156.25
+     },
+     "kills": false
+    }
+   },
+   "responses": {
+    "mdn_backward": {
+     "outcome": "mismatch",
+     "status": "qualitative",
+     "clauses": [
+      {
+       "measure": "gait.forward",
+       "comparator": "sign",
+       "outcome": "mismatch",
+       "detail": "value 3.765, expected sign -1 with |v| >= 0.02"
+      }
+     ],
+     "perturbations": [
+      "mdn_on"
+     ]
+    },
+    "dng100_dose": {
+     "outcome": "mismatch",
+     "status": "qualitative",
+     "clauses": [
+      {
+       "measure": "gait.speed",
+       "comparator": "monotonic",
+       "outcome": "mismatch",
+       "detail": "series 0.508 -> 0.500 -> 0.610, expected non-decreasing with span >= 0.05"
+      },
+      {
+       "measure": "gait.cadence",
+       "comparator": "monotonic",
+       "outcome": "mismatch",
+       "detail": "series 5.263 -> 5.263 -> 5.789, expected non-decreasing with span >= 1"
+      }
+     ],
+     "perturbations": [
+      "dng100_40",
+      "dng100_80",
+      "dng100_160"
+     ]
+    },
+    "b13_slowdown": {
+     "outcome": "match",
+     "status": "measured",
+     "clauses": [
+      {
+       "measure": "gait.speed",
+       "comparator": "ratio",
+       "outcome": "match",
+       "detail": "ratio 0.521, expected in [0.2, 0.6]"
+      }
+     ],
+     "perturbations": [
+      "b13_on"
+     ]
+    },
+    "decapitated_stands": {
+     "outcome": "match",
+     "status": "measured",
+     "clauses": [
+      {
+       "measure": "gait.displacement",
+       "comparator": "below",
+       "outcome": "match",
+       "detail": "value 0.001, expected <= 0.1"
+      },
+      {
+       "measure": "gait.upright",
+       "comparator": "unchanged",
+       "outcome": "match",
+       "detail": "|delta| 0.000 against tolerance 0.150"
+      }
+     ],
+     "perturbations": [
+      "headless"
+     ]
+    },
+    "no_command_stands": {
+     "outcome": "mismatch",
+     "status": "qualitative",
+     "clauses": [
+      {
+       "measure": "gait.speed",
+       "comparator": "below",
+       "outcome": "mismatch",
+       "detail": "value 0.597, expected <= 0.05"
+      }
+     ],
+     "perturbations": [
+      "cmd_silenced"
+     ]
+    },
+    "dng93_stop": {
+     "outcome": "mismatch",
+     "status": "prediction",
+     "clauses": [
+      {
+       "measure": "gait.speed",
+       "comparator": "direction",
+       "outcome": "mismatch",
+       "detail": "delta 0.364 (base 0.381), expected sign -1 with |delta| >= 0.191"
+      }
+     ],
+     "perturbations": [
+      "dng93_on"
+     ]
+    },
+    "dnge036_walks": {
+     "outcome": "mismatch",
+     "status": "prediction",
+     "clauses": [
+      {
+       "measure": "gait.speed",
+       "comparator": "direction",
+       "outcome": "mismatch",
+       "detail": "delta -0.030 (base 0.076), expected sign 1 with |delta| >= 0.076"
+      }
+     ],
+     "perturbations": [
+      "dnge036_on"
+     ]
+    }
+   }
+  }
+ ],
+ "skipped": [],
+ "ranked": [
+  {
+   "experiment": "cmd_silenced",
+   "separation": 0.667
+  },
+  {
+   "experiment": "obs:restDisplacement",
+   "separation": 0.667
+  },
+  {
+   "experiment": "resp:mdn_backward",
+   "separation": 0.667
+  },
+  {
+   "experiment": "resp:b13_slowdown",
+   "separation": 0.667
+  },
+  {
+   "experiment": "b13_on",
+   "separation": 0.5
+  },
+  {
+   "experiment": "obs:forward",
+   "separation": 0.5
+  },
+  {
+   "experiment": "obs:cadence",
+   "separation": 0.5
+  },
+  {
+   "experiment": "obs:backFrac",
+   "separation": 0.5
+  },
+  {
+   "experiment": "obs:restSpeed",
+   "separation": 0.5
+  },
+  {
+   "experiment": "resp:no_command_stands",
+   "separation": 0.5
+  },
+  {
+   "experiment": "mdn_on",
+   "separation": 0
+  },
+  {
+   "experiment": "dng100_40",
+   "separation": 0
+  },
+  {
+   "experiment": "dng100_80",
+   "separation": 0
+  },
+  {
+   "experiment": "dng100_160",
+   "separation": 0
+  },
+  {
+   "experiment": "headless",
+   "separation": 0
+  },
+  {
+   "experiment": "dng93_on",
+   "separation": 0
+  },
+  {
+   "experiment": "dnge036_on",
+   "separation": 0
+  },
+  {
+   "experiment": "obs:speed",
+   "separation": 0
+  },
+  {
+   "experiment": "obs:upright",
+   "separation": 0
+  },
+  {
+   "experiment": "obs:displacement",
+   "separation": 0
+  },
+  {
+   "experiment": "obs:driveHz",
+   "separation": 0
+  },
+  {
+   "experiment": "obs:restUpright",
+   "separation": 0
+  },
+  {
+   "experiment": "obs:restDriveHz",
+   "separation": 0
+  },
+  {
+   "experiment": "resp:dng100_dose",
+   "separation": 0
+  },
+  {
+   "experiment": "resp:decapitated_stands",
+   "separation": 0
+  },
+  {
+   "experiment": "resp:dng93_stop",
+   "separation": 0
+  },
+  {
+   "experiment": "resp:dnge036_walks",
+   "separation": 0
+  }
+ ]
+}
