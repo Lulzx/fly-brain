@@ -72,6 +72,7 @@ which covers the structural analysis and the model ensembles.
 42. [Engram](42-engram.md): the mushroom-body memory harness — anatomy-derived compartments, a named per-edge gain, a teach rule, and whether the written engram can be read back
 43. [GPU adjoint](43-gpu-adjoint.md): the backward sweep on WebGPU — kernels, packing, and the correctness gates
 44. [Walking compiler](44-walking-compiler.md): the experiment compiler pointed at the nerve cord — a phase-free gait instrument, cell-type and edge-class perturbations, null wirings as ensemble members, the first walk-from-cord run, and the response battery: real perturbation experiments as the objective
+45. [Bend formalization](45-bend-formalization.md): the connectome compiler and the male connectome in Bend — a pure model of the IR, the lowering and the kernel's fire rule and delay line, 34 laws with machine-checked proofs, and a parallel run over the real tables that reproduces the shipped build's numbers
 
 ## Repository layout
 
@@ -87,6 +88,7 @@ which covers the structural analysis and the model ensembles.
 | `src/visdiff.js` | The two joined into one differentiable chain, luminance to spikes |
 | `src/diffsetup.js` | The per-neuron structure `makeBrain` applies, in the form the adjoint takes |
 | `src/brainmodel.js`, `src/brainsetup.js` | Calibrated brain construction, shared memory |
+| `connectome.bend`, `dataset.bend`, `LAWS.bend`, `PROOF.bend`, `malecns.bend` | The compiler and the male connectome formalized in Bend, with laws, proofs and a run over the real tables ([doc 45](45-bend-formalization.md)) |
 | `src/flyvis.js` | flyvis optic-lobe runtime |
 | `public/` | Preprocessed data served to the browser |
 | `scripts/` | Preprocessing, calibration, optimisation, tests |
