@@ -1,21 +1,29 @@
-// Arena backend for the experiment compiler (spec S7): measures observables on the embodied fly
-// through scripts/behavior_eval.mjs, so an experiment's "arena" site is the same animal and the
-// same assays the scaffold ledger uses.
+// Arena backend for the experiment compiler (spec S7, walking site S8): measures observables on the
+// embodied fly through scripts/behavior_eval.mjs, so an experiment's "arena" site is the same animal
+// and the same assays the scaffold ledger uses.
 //
 // Ensemble params are named by where they land:
 //   'scaffold.<plugin>.<param>'  -> brainOpts.scaffoldParams[plugin][param] (plugin knob sweep)
 //   'scaffolds.<plugin>'         -> brainOpts.scaffolds[plugin]             (member-level kills)
-//   anything else                -> a brain_params field                    (e.g. laminaBias)
+//   'typeGain.<type|regex>'      -> brainOpts.typeGain[key]                 (per-type output gain)
+//   'edges.<ruleId>'             -> an edge-class multiplier, the class defined in spec.edgeRules
+//   'wiring'                     -> 'real' | 'weightShuffle' | 'signFree'   (null arms as members)
+//   anything else                -> a brain_params field                    (e.g. laminaBias, inhGain)
 //
 // Perturbation kinds at this site:
 //   offPlugin   -> cfg.scaffolds[target] = false
-//   scaleGain   -> args {param, factor} multiplies a param (scaffold.* or brain param)
-//   ablateType / swapCompartment -> reported unimplemented (no per-type silencing in the arena)
+//   scaleGain   -> args {param, factor} multiplies a param (any of the addresses above)
+//   ablateType  -> target is a neuron selector (src/exp/select.js); its outgoing synapses go to ~0
+//   scaleEdges  -> target is a spec.edgeRules id, args {factor}
+//   swapCompartment -> reported unimplemented (engram harness)
 import fs from 'node:fs';
+import { classifyGait } from '../gait.js';
+import { parseSelector } from '../select.js';
 
 const scen = (r, n) => r.obs.byScenario?.[n] || {};
 // named measures over evaluate() output. `scenarios` lists the assays a member must run for the
-// read to be defined; the backend unions them per spec.
+// read to be defined; the backend unions them per spec. A measure may be a function of the
+// observable's args (the gait reads take {assay}, default walk_cx).
 export const MEASURES = {
   walkDist:    { scenarios: ['forage'],    read: r => scen(r, 'forage').dist ?? 0 },
   loomEscape:  { scenarios: ['loom_disk'], read: r => scen(r, 'loom_disk').escapes ?? 0 },
@@ -31,6 +39,18 @@ export const MEASURES = {
   boutMedian:  { scenarios: ['forage'],    read: r => r.obs.boutMedian ?? 0 },
   score:       { scenarios: ['forage', 'onfood', 'threat', 'heat', 'bitter'], read: r => r.score },
 };
+// The gait instrument's fields (src/exp/gait.js), each a measure over a walking assay. `gait.<field>`
+// reads walk_cx unless args.assay says otherwise; walk_cpg is the positive control.
+export const GAIT_FIELDS = ['cadence', 'duty', 'swingMs', 'contraPhase', 'contraR', 'tripod', 'legsStepping', 'minLifts',
+  'upright', 'support', 'bodyHeight', 'bodyHeightRel', 'speed', 'path', 'loadRhythm'];
+export const WALK_ASSAYS = ['walk_cx', 'walk_cpg'];
+for (const f of GAIT_FIELDS) MEASURES['gait.' + f] = {
+  scenarios: args => [assayOf(args)],
+  read: (r, args) => { const g = scen(r, assayOf(args)).gait; if (!g) throw new Error(`gait.${f}: assay ${assayOf(args)} carries no gait record`); return g[f] ?? null; },
+  classify: v => classifyGait(f, v),
+};
+function assayOf(args) { const a = args?.assay || 'walk_cx'; if (!WALK_ASSAYS.includes(a)) throw new Error(`gait measure: assay must be ${WALK_ASSAYS.join('|')}`); return a; }
+const scenariosOf = (M, args) => typeof M.scenarios === 'function' ? M.scenarios(args) : M.scenarios;
 
 export function makeBackend({ basePath = 'public/data/brain_params.json', seeds = [7] } = {}) {
   const BASE = (() => { const o = JSON.parse(fs.readFileSync(basePath));
@@ -38,26 +58,40 @@ export function makeBackend({ basePath = 'public/data/brain_params.json', seeds 
   let evaluate = null;   // lazy: MuJoCo only loads when an arena experiment actually runs
   const evalOf = async () => (evaluate ||= (await import('../../../scripts/behavior_eval.mjs')).evaluate);
 
-  const applyParam = (cfg, name, value) => {
-    const m = name.match(/^scaffold\.(\w+)\.(\w+)$/);
-    if (m) { (cfg.scaffoldParams ||= {})[m[1]] = { ...(cfg.scaffoldParams[m[1]] || {}), [m[2]]: value }; return; }
-    const t = name.match(/^scaffolds\.(\w+)$/);
-    if (t) { (cfg.scaffolds ||= {})[t[1]] = !!value; return; }
+  const applyParam = (cfg, name, value, spec) => {
+    let m;
+    if ((m = name.match(/^scaffold\.(\w+)\.(\w+)$/))) { (cfg.scaffoldParams ||= {})[m[1]] = { ...(cfg.scaffoldParams[m[1]] || {}), [m[2]]: value }; return; }
+    if ((m = name.match(/^scaffolds\.(\w+)$/))) { (cfg.scaffolds ||= {})[m[1]] = !!value; return; }
+    if ((m = name.match(/^typeGain\.(.+)$/))) { (cfg.typeGain ||= {})[m[1]] = value; return; }
+    if ((m = name.match(/^edges\.(.+)$/))) {
+      const rule = spec?.edgeRules?.[m[1]];
+      if (!rule) throw new Error(`ensemble param '${name}': no edge rule '${m[1]}' in spec.edgeRules`);
+      (cfg.edgeRules ||= []).push({ id: m[1], pre: rule.pre ?? 'any', post: rule.post ?? 'any', cross: rule.cross ?? 'any', factor: value }); return;
+    }
+    if (name === 'wiring') { cfg.wiring = value; return; }
     cfg[name] = value;
   };
-  const toCfg = (params, scenarios) => {
+  // the current value of an addressable param, for scaleGain
+  const readParam = (cfg, name, spec) => {
+    let m;
+    if ((m = name.match(/^scaffold\.(\w+)\.(\w+)$/))) return cfg.scaffoldParams?.[m[1]]?.[m[2]] ?? null;
+    if ((m = name.match(/^typeGain\.(.+)$/))) return cfg.typeGain?.[m[1]] ?? 1;
+    if ((m = name.match(/^edges\.(.+)$/))) return 1;   // rules compose multiplicatively; a scale is a new rule
+    return cfg[name];
+  };
+  const toCfg = (params, scenarios, spec) => {
     // structuredClone, not a spread: nested tables (scaffolds, scaffoldParams, neuromod) must be
     // fresh per ctx or a perturbation's `cfg.scaffolds[target] = false` edits BASE's shared object
     // and silently lands in every baseline too — the bug that made loom-vs-gait report a uniform
     // no-escape run: by dispatch time every ctx had all three kills applied.
     const cfg = structuredClone({ ...BASE, scenarios });
-    for (const [k, v] of Object.entries(params)) applyParam(cfg, k, v);
+    for (const [k, v] of Object.entries(params)) applyParam(cfg, k, v, spec);
     return cfg;
   };
-  const scenariosFor = (spec) => [...new Set(spec.observables.flatMap(o => MEASURES[o.measure]?.scenarios || []))];
+  const scenariosFor = (spec) => [...new Set(spec.observables.flatMap(o => { const M = MEASURES[o.measure]; return M ? scenariosOf(M, o.args) : []; }))];
   // spec.seeds is part of the pre-registration (a binary assay must not pick it ad hoc);
   // the backend default is the ledger's calibrated seed
-  const newCtx = (params, spec) => ({ params, cfg: toCfg(params, scenariosFor(spec)), seeds: spec.seeds ?? seeds });
+  const newCtx = (params, spec) => ({ params, cfg: toCfg(params, scenariosFor(spec), spec), seeds: spec.seeds ?? seeds });
   const pertCtx = (params, pert, spec) => {
     const ctx = newCtx(params, spec);
     if (pert.kind === 'offPlugin') { (ctx.cfg.scaffolds ||= {})[pert.target] = false; return ctx; }
@@ -65,9 +99,18 @@ export function makeBackend({ basePath = 'public/data/brain_params.json', seeds 
       const { param, factor } = pert.args || {};
       if (typeof param !== 'string' || typeof factor !== 'number')
         return { unimplemented: true, reason: 'scaleGain needs args {param, factor}' };
-      const m = param.match(/^scaffold\.(\w+)\.(\w+)$/);
-      const cur = m ? (ctx.cfg.scaffoldParams?.[m[1]]?.[m[2]] ?? null) : ctx.cfg[param];
-      applyParam(ctx.cfg, param, (cur ?? 1) * factor);
+      const cur = readParam(ctx.cfg, param, spec);
+      applyParam(ctx.cfg, param, (cur ?? 1) * factor, spec);
+      return ctx;
+    }
+    if (pert.kind === 'ablateType') {
+      try { parseSelector(pert.target); } catch (e) { return { unimplemented: true, reason: e.message }; }
+      (ctx.cfg.ablate ||= []).push(pert.target); return ctx;
+    }
+    if (pert.kind === 'scaleEdges') {
+      const rule = spec.edgeRules?.[pert.target];
+      if (!rule) return { unimplemented: true, reason: `scaleEdges: no edge rule '${pert.target}'` };
+      (ctx.cfg.edgeRules ||= []).push({ id: pert.target, pre: rule.pre ?? 'any', post: rule.post ?? 'any', cross: rule.cross ?? 'any', factor: pert.args.factor });
       return ctx;
     }
     return { unimplemented: true, reason: `kind '${pert.kind}' has no arena backend yet` };
@@ -146,8 +189,18 @@ export function makeBackend({ basePath = 'public/data/brain_params.json', seeds 
       if (!M) throw new Error(`arena backend: unknown measure '${obs.measure}' (known: ${Object.keys(MEASURES).join(', ')})`);
       if (!ctx._result) { const ev = await evalOf(); ctx._result = await ev(ctx.cfg, ctx.seeds); }
       if (ctx._result?.error) throw new Error(`arena eval failed: ${String(ctx._result.error).split('\n')[0]}`);
-      return M.read(ctx._result);
+      return M.read(ctx._result, obs.args);
     },
-    classify(obsId, v) { return typeof v === 'number' ? (v > 0.5 ? 'high' : v > 0.05 ? 'low' : 'none') : String(v); },
+    classify(obsId, v, obs) {
+      const M = obs && MEASURES[obs.measure];
+      const c = M?.classify ? M.classify(v) : null;
+      if (c != null) return c;
+      return typeof v === 'number' ? (v > 0.5 ? 'high' : v > 0.05 ? 'low' : 'none') : String(v);
+    },
+    /** what the ctx actually ran with, for the report: the resolved cfg deltas a reader can replay */
+    describeMember(ctx) {
+      const { scaffolds, scaffoldParams, typeGain, edgeRules, wiring, ablate } = ctx.cfg;
+      return { cfg: { scaffolds, scaffoldParams, typeGain, edgeRules, wiring, ablate } };
+    },
   };
 }

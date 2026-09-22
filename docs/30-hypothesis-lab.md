@@ -365,9 +365,10 @@ interface ExperimentSpec {
     n: number;                   // members (full grid when axes are smaller)
     seed: number;                // seeded sampling — member sets are reproducible
   };
-  perturbations: Array<{ id; kind: 'ablateType'|'offPlugin'|'scaleGain'|'swapCompartment';
+  perturbations: Array<{ id; kind: 'ablateType'|'offPlugin'|'scaleGain'|'scaleEdges'|'swapCompartment';
                          target: string; args? }>;
-  observables: Array<{ id; where: 'circuit'|'arena'; measure: string }>;
+  edgeRules?: Record<id, { pre: selector; post: selector; cross?: 'contra'|'ipsi'|'any' }>;
+  observables: Array<{ id; where: 'circuit'|'arena'; measure: string; args? }>;
   splitRule: string;             // e.g. 'loomEscape < 0.5*baseline.loomEscape && walk > 0.5*baseline.walk'
   seeds?: number[];              // assay seeds — part of the pre-registration, not a knob
   status?: 'ready' | 'pending';  // pending = pre-registered, backend lands with its spec section
@@ -406,7 +407,13 @@ reference into anything another condition can mutate.
   experiment's arena site is the same animal and the same assays the
   [scaffold ledger](37-scaffold-ledger.md) uses. Ensemble params are addressed by where they
   land: `scaffold.<plugin>.<param>` sweeps a plugin knob (per-instance parameter overrides),
-  `scaffolds.<plugin>` is a member-level kill, anything else is a `brain_params` field.
+  `scaffolds.<plugin>` is a member-level kill, `typeGain.<type>` a per-type output gain,
+  `edges.<rule>` an edge-class multiplier declared in `spec.edgeRules`, `wiring` a null arm
+  (`real` | `weightShuffle` | `signFree`), anything else is a `brain_params` field. Since S8
+  ([doc 44](44-walking-compiler.md)) the arena site also resolves `ablateType` targets as neuron
+  selectors (`hemilineage:13A`, `type:IN19B012@left`, `regex:^IN13`, `muscle:T3`, ...) and
+  `scaleEdges` over a named edge class, and carries the gait instrument's `gait.<field>` measures
+  over the two walking assays.
 
 ### The committed specs (`src/exp/specs/`)
 
@@ -417,6 +424,7 @@ reference into anything another condition can mutate.
 | `stand-scramble` | arena | ready — motor-gain ensemble; `premotor_scramble` recorded unimplemented until S2 |
 | `oa-split` | arena | ran — S5's operator split is in docs/40; `synFast` eliminated, field family degenerate, `oaArousalRule` stays required |
 | `engram-recover` | engram | pending — S6's engram harness |
+| `walk-from-cord` | arena | ran — S8: wiring x inhGain x commissural ensemble read by the gait instrument; result in [doc 44](44-walking-compiler.md) |
 
 ## What's next
 

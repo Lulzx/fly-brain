@@ -71,6 +71,7 @@ which covers the structural analysis and the model ensembles.
 41. [Visual adjoint](41-visual-adjoint.md): the C¹ coupling, the stable reverse kernel, and the first permitted visual fit — a recorded negative
 42. [Engram](42-engram.md): the mushroom-body memory harness — anatomy-derived compartments, a named per-edge gain, a teach rule, and whether the written engram can be read back
 43. [GPU adjoint](43-gpu-adjoint.md): the backward sweep on WebGPU — kernels, packing, and the correctness gates
+44. [Walking compiler](44-walking-compiler.md): the experiment compiler pointed at the nerve cord — a phase-free gait instrument, cell-type and edge-class perturbations, null wirings as ensemble members, and the first walk-from-cord run
 
 ## Repository layout
 

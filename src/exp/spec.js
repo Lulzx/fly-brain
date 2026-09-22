@@ -16,6 +16,15 @@
 //       axes?: Record<string, unknown[]>;   // candidate values per param (backend may supply)
 //     };
 //     perturbations: Array<{ id: string; kind: PERTURB_KIND; target: string; args?: object }>;
+//       ablateType     target = a neuron selector (src/exp/select.js): type:IN19B012, hemilineage:13B,
+//                      hemilineage:19B@left, regex:^IN13, muscle:T3, superclass:..., class:...
+//       offPlugin      target = a scaffold plugin id (docs/37)
+//       scaleGain      args {param, factor}: multiplies an ensemble-addressable param
+//       scaleEdges     target = an id in spec.edgeRules, args {factor}: multiplies one edge class
+//       swapCompartment  reserved (engram harness)
+//     edgeRules?: Record<id, { pre: selector, post: selector, cross?: 'contra'|'ipsi'|'any' }>;
+//                                    // named edge classes; an ensemble axis 'edges.<id>' sweeps the
+//                                    // class's multiplier and scaleEdges perturbs it
 //     observables: Array<{ id: string; where: "circuit"|"arena"; measure: string; args?: object }>;
 //     splitRule: string;             // "<obsId> <op> <expr> [&& ...]", expr may use baseline.<obsId>
 //     seeds?: number[];              // assay seeds (arena backend); the seed is part of the
@@ -24,7 +33,8 @@
 //   }
 //
 // validateSpec throws on malformed input — a typo must not silently produce an empty experiment.
-export const PERTURB_KINDS = ['ablateType', 'offPlugin', 'scaleGain', 'swapCompartment'];
+import { parseSelector } from './select.js';
+export const PERTURB_KINDS = ['ablateType', 'offPlugin', 'scaleGain', 'scaleEdges', 'swapCompartment'];
 export const SITES = ['circuit', 'arena'];
 
 export function validateSpec(s) {
@@ -47,7 +57,22 @@ export function validateSpec(s) {
     ids.add(p.id);
     if (!PERTURB_KINDS.includes(p.kind)) bad(`perturbation '${p.id}': kind must be one of ${PERTURB_KINDS.join('|')}`);
     if (typeof p.target !== 'string' || !p.target) bad(`perturbation '${p.id}': missing target`);
+    // the arena site resolves ablateType targets as neuron selectors; other sites (heading's
+    // population names, the engram harness's compartment slices) keep their own target vocabulary
+    if (p.kind === 'ablateType' && s.backend === 'arena' && (s.status ?? 'ready') === 'ready') { try { parseSelector(p.target); } catch (e) { bad(`perturbation '${p.id}': ${e.message}`); } }
+    if (p.kind === 'scaleEdges') {
+      if (!s.edgeRules?.[p.target]) bad(`perturbation '${p.id}': scaleEdges target '${p.target}' is not in spec.edgeRules`);
+      if (typeof p.args?.factor !== 'number') bad(`perturbation '${p.id}': scaleEdges needs args.factor`);
+    }
   }
+  if (s.edgeRules !== undefined) {
+    if (typeof s.edgeRules !== 'object' || Array.isArray(s.edgeRules)) bad('edgeRules must be an object keyed by rule id');
+    for (const [id, r] of Object.entries(s.edgeRules)) {
+      for (const k of ['pre', 'post']) { try { parseSelector(r[k] ?? 'any'); } catch (e) { bad(`edgeRules.${id}.${k}: ${e.message}`); } }
+      if (r.cross !== undefined && !['contra', 'ipsi', 'any'].includes(r.cross)) bad(`edgeRules.${id}.cross must be contra|ipsi|any`);
+    }
+  }
+  if (e.axes) for (const p of Object.keys(e.axes)) { const m = p.match(/^edges\.(.+)$/); if (m && !s.edgeRules?.[m[1]]) bad(`ensemble axis '${p}' names no edge rule in spec.edgeRules`); }
   if (!Array.isArray(s.observables) || !s.observables.length) bad('observables must be a non-empty array');
   const oids = new Set();
   for (const o of s.observables) {

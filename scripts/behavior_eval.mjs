@@ -17,6 +17,8 @@ import { allocBrainMemory, attachBrain, attachEyes } from '../src/brainsetup.js'
 import { parseFlyVis } from '../src/flyvis.js';
 import { BRAIN_DEFAULTS } from '../src/brainmodel.js';
 import { motorPools } from './motor_pools.mjs';
+import { resolveSelector, edgeGainFor } from '../src/exp/select.js';
+import { gaitMetrics, LEG_ORDER } from '../src/exp/gait.js';
 
 const D = loadAll(); const DATA = { ...D, superclass: D.sc };
 const SIZE = new Float32Array(fs.readFileSync('public/data/neuron_size.bin').buffer.slice(0));
@@ -90,7 +92,35 @@ const ASSAYS = {
   court: { secs: 6, setup: env => [[0, 0], 0], others: [{ x: 0.7, y: 0, yaw: Math.PI, sex: 'f' }] },
   // a female agent with a male decoy at close range behind her: decamp runs and kicks
   reject: { secs: 6, setup: env => [[0, 0], 0], sex: 'f', others: [{ x: -0.2, y: 0, yaw: 0, sex: 'm', singing: true }] },
+  // Walking assays for the experiment compiler (spec S8, docs/44-walking-compiler.md). Open floor,
+  // nothing to collide with, the bout scheduler held in 'walk' so the forward DNs carry a walking
+  // command for the whole assay, and the gait instrument (src/exp/gait.js) reading the six claws.
+  //   walk_cx   connectome motor mode: the leg motor neurons drive the joints, no stepping generator
+  //   walk_cpg  descending mode: the fitted tripod generator executes the same command -- the
+  //             instrument's positive control, which must read inside the real-fly bands
+  walk_cx:  { secs: 4, setup: openFloor, mode: 'connectome', walkDrive: true, gait: true },
+  walk_cpg: { secs: 4, setup: openFloor, mode: 'descending', walkDrive: true, gait: true },
 };
+function openFloor(env) { env.obstacles = []; env.hazards = []; env.food = []; env.odors = []; env.bitterPatches = []; return [[0, 0], 0]; }
+const GAIT_DT = 2;   // ms between gait samples (500 Hz; the fastest real step is ~16 Hz)
+
+// Per-neuron ablation and edge-class gains, resolved in this process from the selector strings a
+// spec carries (src/exp/select.js). Cached by key: a worker sees the same few conditions many times.
+const ABLATE = new Map(), EDGES = new Map();
+function ablationTable(sels) {
+  const key = JSON.stringify(sels);
+  if (!ABLATE.has(key)) {
+    const t = {};
+    for (const sel of sels) { const m = resolveSelector(DATA, sel); for (let i = 0; i < DATA.N; i++) if (m[i]) t[i] = -50; }   // exp(-50) ~ 0: outgoing synapses gone
+    ABLATE.set(key, t);
+  }
+  return ABLATE.get(key);
+}
+function edgeGain(rules) {
+  const key = JSON.stringify(rules);
+  if (!EDGES.has(key)) EDGES.set(key, edgeGainFor(DATA, rules));
+  return EDGES.get(key);
+}
 
 const clamp = x => Math.max(0, Math.min(1, x));
 const mean = a => a.length ? a.reduce((x, y) => x + y, 0) / a.length : 0;
@@ -102,6 +132,14 @@ async function runSeed(cfg, seed) {
     o.scaffoldParams = { ...(cfg.scaffoldParams || {}), reafference: { ...(cfg.scaffoldParams?.reafference || {}), model: REAFFERENCE } };
   if (GAINTABLE && o.standFit !== false && !o.neuronGainTable) o.neuronGainTable = GAINTABLE;
   if (o.oaMode && OATARGETS && !o.oaTargets) o.oaTargets = OATARGETS;
+  // `wiring` names a null arm: 'real' (default), 'weightShuffle' (synapse counts permuted over the
+  // real topology), 'signFree' (every synapse excitatory). The shuffle draw is seeded per assay seed.
+  if (o.wiring === 'weightShuffle') o.wShuffle = true; else if (o.wiring === 'signFree') o.signFree = true;
+  else if (o.wiring && o.wiring !== 'real') throw new Error(`unknown wiring '${o.wiring}' (real|weightShuffle|signFree)`);
+  // `ablate`: selector strings -> per-neuron output gain ~0, merged over the deployed readout table
+  if (o.ablate?.length) o.neuronGainTable = { ...(o.neuronGainTable || {}), ...ablationTable(o.ablate) };
+  // `edgeRules`: [{pre, post, cross, factor}] -> per-edge multiplier on the delivered weight
+  if (o.edgeRules?.length) o.edgeGain = edgeGain(o.edgeRules);
   const data = (o.wBinary || o.wShuffle || o.wEB) ? { ...DATA, weights: weightsFor({ ...o, seed }) } : DATA;
   const mem = allocBrainMemory(data, SIZE, o.signFree ? ALL_EXC : SIGN, o, 1, VISION);
   const brain = await attachBrain(WASM, mem, 0, data, (seed * 2654435761) >>> 0); brain.reset();
@@ -129,13 +167,26 @@ async function runSeed(cfg, seed) {
     if (sc.energy !== undefined) fly.energy = sc.energy;
     let H = null, fed = false, escaped = false, running = 0, lastMoving = false, schedRun = 0, lastSchedWalk = false;
     let scFlipMs = 0, scGroomMs = 0, scTurnMs = 0, scCourtMs = 0, scFoodMin = 1e9;
+    const gaitN = sc.gait ? Math.floor(sc.secs * 1000 / GAIT_DT) : 0, L = LEG_ORDER.length;
+    const gt = sc.gait ? { dtMs: GAIT_DT, legs: LEG_ORDER, touch: new Uint8Array(gaitN * L), load: new Float32Array(gaitN * L),
+      z: new Float32Array(gaitN), up: new Float32Array(gaitN), x: new Float32Array(gaitN), y: new Float32Array(gaitN) } : null;
     for (let s = 1; s <= sc.secs * 1000; s++) {
+      if (sc.walkDrive && fly.intrinsic) {
+        // hold the scheduler in a walking bout: the forward DNs receive the walking drive every ms and
+        // nothing else (no saccades, no approach slowing), so the assay reads the command's execution
+        fly.intrinsic.state = 'walk'; fly.intrinsic.left = 1e9; fly.intrinsic.approach = false; fly.intrinsic.sacc = null;
+      }
       if (sc.threatAt) {
         if (s === sc.threatAt) { const st = fly.state(); H = { p: st.pos, a: Math.atan2(fly.mjd.xmat[fly.bid.thorax * 9 + 3], fly.mjd.xmat[fly.bid.thorax * 9]) + 0.6 }; }
         const u = H ? Math.min(1, (s - sc.threatAt) / sc.loomMs) : 0, k = u * u;
         env.threat = H && s < sc.threatAt + sc.loomMs + 600 ? { x: H.p[0] + Math.cos(H.a) * (3 * (1 - k) + 0.3 * k), y: H.p[1] + Math.sin(H.a) * (3 * (1 - k) + 0.3 * k), z: 1.6 * (1 - k) + 0.45 * k } : null;
       }
       fly.step();
+      if (gt && s % GAIT_DT === 0 && s / GAIT_DT <= gaitN) {
+        const k = s / GAIT_DT - 1, st = fly.state(), xm = fly.mjd.xmat, b = fly.bid.thorax * 9;
+        for (let l = 0; l < L; l++) { gt.touch[k * L + l] = st.touch[LEG_ORDER[l]] > 0 ? 1 : 0; gt.load[k * L + l] = st.load[LEG_ORDER[l]]; }
+        gt.z[k] = st.pos[2]; gt.up[k] = xm[b + 8]; gt.x[k] = st.pos[0]; gt.y[k] = st.pos[1];
+      }
       if (s % 20 === 0) {
         const st = fly.state(), b = fly.behavior(st);
         obs.totalMs += 20;
@@ -178,7 +229,9 @@ async function runSeed(cfg, seed) {
     // kill matrix can attribute a collapse to a mechanism rather than to a shared score
     obs.byScenario[name] = { ms: sc.secs * 1000, flipMs: scFlipMs, groomMs: scGroomMs, turnMs: scTurnMs, courtMs: scCourtMs,
       dist: fly.dist, foodMin: scFoodMin > 1e8 ? null : scFoodMin, fed, feedLatency: name === 'onfood' && fed ? obs.feedLatency : null,
-      escapes: escaped ? 1 : 0, jumps: fly.jumps, rejections: fly.intrinsic?.rejections || 0, kicks: fly.intrinsic?.kicks || 0, alive: fly.alive ? 1 : 0 };
+      escapes: escaped ? 1 : 0, jumps: fly.jumps, rejections: fly.intrinsic?.rejections || 0, kicks: fly.intrinsic?.kicks || 0, alive: fly.alive ? 1 : 0,
+      // the gait instrument's read of this assay; the first 200 ms are settling and are not scored
+      ...(gt ? { gait: gaitMetrics(gt, { startMs: 200 }) } : {}) };
     // The agent owns ~28 MB of emscripten heap that the collector never sees; five scenarios per
     // evaluation and dozens of evaluations per worker reach the 2 GB heap limit without this.
     fly.dispose();
@@ -221,13 +274,16 @@ export function scoreObs(obs) {
 // to mean() (numbers only; nulls are skipped, booleans become fractions of seeds)
 const mergeByScenario = runs => {
   const out = {};
-  for (const r of runs) for (const [n, so] of Object.entries(r.obs.byScenario || {})) {
-    const acc = out[n] ||= {};
-    for (const [k, v] of Object.entries(so)) {
-      if (v == null) continue;
-      acc[k] = (acc[k] || 0) + (typeof v === 'boolean' ? +v : v) / runs.length;
-    }
-  }
+  // nested records (the gait read) merge field by field; arrays (per-leg values) element-wise;
+  // a null on one seed is skipped for that field, so a phase undefined on one seed does not
+  // poison the mean of the seeds that stepped
+  const merge = (acc, v, n) => {
+    if (v == null) return acc;
+    if (Array.isArray(v)) { acc = acc || []; v.forEach((x, i) => { acc[i] = merge(acc[i], x, n); }); return acc; }
+    if (typeof v === 'object') { acc = acc || {}; for (const [k, x] of Object.entries(v)) acc[k] = merge(acc[k], x, n); return acc; }
+    return (acc || 0) + (typeof v === 'boolean' ? +v : v) / n;
+  };
+  for (const r of runs) for (const [n, so] of Object.entries(r.obs.byScenario || {})) out[n] = merge(out[n], so, runs.length);
   return out;
 };
 

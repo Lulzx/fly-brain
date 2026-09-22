@@ -90,9 +90,13 @@ export async function runExperiment(spec, backend, { progress } = {}) {
   }
   for (const o of obs) experiments['obs:' + o.id] = { outcome: out.map(m => String(classify(o, m.baseline[o.id]))) };
   const ranked = rankExperiments(experiments);
-  return { spec: { id: spec.id, question: spec.question, operators: spec.operators, splitRule: spec.splitRule, backend: spec.backend, status: spec.status },
+  // the observables table carries the ensemble median of each baseline read, so the report's
+  // headline numbers come from the same members as the ranking
+  const med = a => { const s = a.filter(v => typeof v === 'number' && !Number.isNaN(v)).sort((x, y) => x - y); return s.length ? s[s.length >> 1] : null; };
+  const observables = spec.observables.map(o => ({ ...o, value: med(out.map(m => m.baseline[o.id])) }));
+  return { spec: { id: spec.id, question: spec.question, operators: spec.operators, splitRule: spec.splitRule, backend: spec.backend, status: spec.status, seeds: spec.seeds, edgeRules: spec.edgeRules },
     ensemble: { n: members.length, params: spec.ensemble.params, seed: spec.ensemble.seed },
-    observables: spec.observables,
+    observables,
     members: out, skipped,
     ranked: ranked.map(([name, e]) => ({ experiment: name, separation: e.score })) };
 }
@@ -107,7 +111,7 @@ export function renderMarkdown(result) {
     `Ensemble: ${ensemble.n} members over ${ensemble.params.join(', ')} (seed ${ensemble.seed})`, '');
   if (result.observables) {
     L.push('## Pre-registered observables', '', '| observable | site | measure | value |', '|---|---|---|---|');
-    for (const o of result.observables) L.push(`| ${o.id} | ${o.where} | ${o.measure} | ${o.value ?? '—'} |`);
+    for (const o of result.observables) L.push(`| ${o.id} | ${o.where} | ${o.measure}${o.args ? ' ' + JSON.stringify(o.args) : ''} | ${o.value == null ? '—' : fmt(o.value)} |`);
     L.push('');
   }
   L.push('## Ranked perturbations', '', '| experiment | separation |', '|---|---|');
@@ -119,6 +123,18 @@ export function renderMarkdown(result) {
     const kills = Object.entries(m.perturbations).filter(([, r]) => r.kills).map(([k]) => k).join(',') || '-';
     L.push(`| ${i} | ${JSON.stringify(m.params)} | ${base} | ${kills} |`);
   });
+  // the perturbed reads themselves, one table per perturbation, so a kill can be checked against
+  // the numbers that produced it rather than taken from the flag
+  const pids = [...new Set(members.flatMap(m => Object.keys(m.perturbations)))];
+  if (pids.length && result.observables) {
+    L.push('', '## Perturbed reads', '');
+    for (const p of pids) {
+      L.push(`### ${p}`, '', '| member | ' + result.observables.map(o => o.id).join(' | ') + ' | kills |', '|---|' + result.observables.map(() => '---').join('|') + '|---|');
+      members.forEach((m, i) => { const r = m.perturbations[p]; if (!r) return;
+        L.push(`| ${i} | ` + result.observables.map(o => fmt(r.values[o.id])).join(' | ') + ` | ${r.kills ? 'yes' : ''} |`); });
+      L.push('');
+    }
+  }
   return L.join('\n') + '\n';
 }
-const fmt = v => typeof v === 'number' ? +v.toFixed(3) : JSON.stringify(v);
+const fmt = v => typeof v === 'number' ? +v.toFixed(3) : v == null ? '—' : JSON.stringify(v);
