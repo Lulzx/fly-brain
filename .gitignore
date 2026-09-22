@@ -27,3 +27,7 @@ public/data/flysuite_frames.bin
 # Bend native builds of malecns.bend (bend malecns.bend -o malecns)
 malecns
 malecns.gpu
+cordcheck
+cordcheck.gpu
+cordrun
+cordrun.gpu

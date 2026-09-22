@@ -2,6 +2,7 @@
 import Base
 import ./connectome.bend as C
 import ./dataset.bend as D
+import ./cord.bend as K
 import ./LAWS.bend as L
 
 # ================================================================= lemmas
@@ -277,3 +278,256 @@ def L.cb_intrinsic_is_not_sensory():
 
 def L.cell_of_bytes_sensory(flags, nt, side):
   {==}
+
+# ================================================================= cord lemmas
+# Arithmetic over Nat, enough for the span bound and the rank invariant.
+
+def Nat.add_zero(a: Nat) -> {Nat.add(a, 0n) == a : Nat}:
+  match a:
+    case 0n:
+      {==}
+    case 1n+p:
+      %Nat.add_zero(p) : {1n+Nat.add(p, 0n) == 1n+_ : Nat}
+      {==}
+
+def Nat.add_succ_r(a: Nat, +b: Nat) -> {Nat.add(a, 1n+b) == 1n+Nat.add(a, b) : Nat}:
+  match a:
+    case 0n:
+      {==}
+    case 1n+p:
+      %Nat.add_succ_r(p, b) : {1n+Nat.add(p, 1n+b) == 1n+_ : Nat}
+      {==}
+
+def Nat.add_comm(a: Nat, +b: Nat) -> {Nat.add(a, b) == Nat.add(b, a) : Nat}:
+  match a:
+    case 0n:
+      Equal.sym(Nat, Nat.add(b, 0n), b, Nat.add_zero(b))
+    case 1n++p:
+      %Equal.sym(Nat, Nat.add(b, 1n+p), 1n+Nat.add(b, p), Nat.add_succ_r(b, p)) : {1n+Nat.add(p, b) == _ : Nat}
+      Equal.cong(Nat, Nat, x => 1n+x, Nat.add(p, b), Nat.add(b, p), Nat.add_comm(p, b))
+
+def Nat.leb_refl(a: Nat) -> {K.Nat.leb(a, a) == True{} : Bool}:
+  match a:
+    case 0n:
+      {==}
+    case 1n+p:
+      Nat.leb_refl(p)
+
+# adding the same amount in front of both sides keeps the order
+def Nat.leb_add_l(c: Nat, -a: Nat, -b: Nat, e: {K.Nat.leb(a, b) == True{} : Bool}) ->
+  {K.Nat.leb(Nat.add(c, a), Nat.add(c, b)) == True{} : Bool}:
+  match c:
+    case 0n:
+      e
+    case 1n+q:
+      Nat.leb_add_l(q, a, b, e)
+
+# a bound only gets weaker when the bound grows
+def Nat.leb_add_r(a: Nat, b: Nat, -g: Nat, e: {K.Nat.leb(a, b) == True{} : Bool}) ->
+  {K.Nat.leb(a, Nat.add(b, g)) == True{} : Bool}:
+  match a b:
+    case 0n _:
+      {==}
+    case 1n+p 0n:
+      Empty.elim({K.Nat.leb(1n+p, Nat.add(0n, g)) == True{} : Bool}, Bool.false_true(e))
+    case 1n+p 1n+q:
+      Nat.leb_add_r(p, q, g, e)
+
+def Nat.ltb_add_r(a: Nat, b: Nat, -g: Nat, e: {K.Nat.ltb(a, b) == True{} : Bool}) ->
+  {K.Nat.ltb(a, Nat.add(b, g)) == True{} : Bool}:
+  match b:
+    case 0n:
+      Empty.elim({K.Nat.ltb(a, Nat.add(0n, g)) == True{} : Bool}, Bool.false_true(e))
+    case 1n+q:
+      Nat.leb_add_r(a, q, g, e)
+
+# ================================================================= 8. The cord IR
+
+# The targets a delta row denotes rise strictly: each is its gap past the first position the
+# row may still occupy, and the next row may only start one past it.
+def L.dposts_asc(row, base, prev, e):
+  match row:
+    case Nil{}:
+      {==}
+    case K.DSyn{+g, c} <> t:
+      Bool.and_intro(K.Nat.ltb(prev, Nat.add(base, g)),
+        K.NAsc.go(K.DRow.posts.go(t, 1n+Nat.add(base, g)), Nat.add(base, g)),
+        Nat.ltb_add_r(prev, base, g, e),
+        L.dposts_asc(t, 1n+Nat.add(base, g), Nat.add(base, g), Nat.leb_refl(Nat.add(base, g))))
+
+# The span bound. Each member cell either widens the gap by one or carries an emitted entry,
+# so the induced span never outruns the members plus the gap already accumulated.
+def L.dsub_span(keep, row, skip, gap):
+  match keep:
+    case Nil{}:
+      {==}
+    case k <> +kt:
+      match k:
+        case True{}:
+          match row:
+            case Nil{}:
+              {==}
+            case K.DSyn{g, +c} <> +rt:
+              match skip:
+                case 1n+s:
+                  %Nat.add_succ_r(K.DSub.kept(kt), gap) :
+                    {K.Nat.leb(K.DRow.span(K.DSub.go(kt, K.DSyn{g, c} <> rt, s, 1n+gap)), _) == True{} : Bool}
+                  L.dsub_span(kt, K.DSyn{g, c} <> rt, s, 1n+gap)
+                case 0n:
+                  %Nat.add_comm(gap, K.DSub.kept(kt)) :
+                    {K.Nat.leb(Nat.add(gap, K.DRow.span(K.DSub.go(kt, rt, K.DRow.head_gap(rt), 0n))), _) == True{} : Bool}
+                  %Nat.add_zero(K.DSub.kept(kt)) :
+                    {K.Nat.leb(Nat.add(gap, K.DRow.span(K.DSub.go(kt, rt, K.DRow.head_gap(rt), 0n))), Nat.add(gap, _)) == True{} : Bool}
+                  Nat.leb_add_l(gap, K.DRow.span(K.DSub.go(kt, rt, K.DRow.head_gap(rt), 0n)), Nat.add(K.DSub.kept(kt), 0n),
+                    L.dsub_span(kt, rt, K.DRow.head_gap(rt), 0n))
+        case False{}:
+          match row:
+            case Nil{}:
+              {==}
+            case K.DSyn{g, +c} <> +rt:
+              match skip:
+                case 1n+s:
+                  L.dsub_span(kt, K.DSyn{g, c} <> rt, s, gap)
+                case 0n:
+                  L.dsub_span(kt, rt, K.DRow.head_gap(rt), gap)
+
+# The induced-subgraph property. The gap bookkeeping computes the member ranks: the invariant
+# is that the next entry's rank is the first free position plus the members passed since the
+# last one, and each of the three moves preserves it.
+def L.dsub_posts_are_ranks(keep, row, skip, gap, base, rank, e):
+  match keep:
+    case Nil{}:
+      {==}
+    case k <> +kt:
+      match k:
+        case True{}:
+          match row:
+            case Nil{}:
+              {==}
+            case K.DSyn{g, +c} <> +rt:
+              match skip:
+                case 1n+s:
+                  L.dsub_posts_are_ranks(kt, K.DSyn{g, c} <> rt, s, 1n+gap, base, 1n+rank,
+                    Equal.trans(Nat, 1n+rank, 1n+Nat.add(base, gap), Nat.add(base, 1n+gap),
+                      Equal.cong(Nat, Nat, x => 1n+x, rank, Nat.add(base, gap), e),
+                      Equal.sym(Nat, Nat.add(base, 1n+gap), 1n+Nat.add(base, gap), Nat.add_succ_r(base, gap))))
+                case 0n:
+                  %e : {_ <> K.DRow.posts.go(K.DSub.go(kt, rt, K.DRow.head_gap(rt), 0n), 1n+Nat.add(base, gap))
+                        == rank <> K.DSub.spec(kt, rt, K.DRow.head_gap(rt), 1n+rank) : List<&2, Nat>}
+                  %Equal.sym(List<&2, Nat>,
+                      K.DRow.posts.go(K.DSub.go(kt, rt, K.DRow.head_gap(rt), 0n), 1n+Nat.add(base, gap)),
+                      K.DSub.spec(kt, rt, K.DRow.head_gap(rt), 1n+rank),
+                      L.dsub_posts_are_ranks(kt, rt, K.DRow.head_gap(rt), 0n, 1n+Nat.add(base, gap), 1n+rank,
+                        Equal.trans(Nat, 1n+rank, 1n+Nat.add(base, gap), 1n+Nat.add(Nat.add(base, gap), 0n),
+                          Equal.cong(Nat, Nat, x => 1n+x, rank, Nat.add(base, gap), e),
+                          Equal.sym(Nat, 1n+Nat.add(Nat.add(base, gap), 0n), 1n+Nat.add(base, gap),
+                            Equal.cong(Nat, Nat, x => 1n+x, Nat.add(Nat.add(base, gap), 0n), Nat.add(base, gap),
+                              Nat.add_zero(Nat.add(base, gap))))))) :
+                    {rank <> _ == rank <> K.DSub.spec(kt, rt, K.DRow.head_gap(rt), 1n+rank) : List<&2, Nat>}
+                  {==}
+        case False{}:
+          match row:
+            case Nil{}:
+              {==}
+            case K.DSyn{g, +c} <> +rt:
+              match skip:
+                case 1n+s:
+                  L.dsub_posts_are_ranks(kt, K.DSyn{g, c} <> rt, s, gap, base, rank, e)
+                case 0n:
+                  L.dsub_posts_are_ranks(kt, rt, K.DRow.head_gap(rt), gap, base, rank, e)
+
+def L.dsub_counts_spec(keep, row, skip, gap):
+  match keep:
+    case Nil{}:
+      {==}
+    case k <> +kt:
+      match k:
+        case True{}:
+          match row:
+            case Nil{}:
+              {==}
+            case K.DSyn{g, +c} <> +rt:
+              match skip:
+                case 1n+s:
+                  L.dsub_counts_spec(kt, K.DSyn{g, c} <> rt, s, 1n+gap)
+                case 0n:
+                  Equal.cong(List<&2, U32>, List<&2, U32>, xs => c <> xs,
+                    K.DRow.counts(K.DSub.go(kt, rt, K.DRow.head_gap(rt), 0n)),
+                    K.DSub.spec_counts(kt, rt, K.DRow.head_gap(rt)),
+                    L.dsub_counts_spec(kt, rt, K.DRow.head_gap(rt), 0n))
+        case False{}:
+          match row:
+            case Nil{}:
+              {==}
+            case K.DSyn{g, +c} <> +rt:
+              match skip:
+                case 1n+s:
+                  L.dsub_counts_spec(kt, K.DSyn{g, c} <> rt, s, gap)
+                case 0n:
+                  L.dsub_counts_spec(kt, rt, K.DRow.head_gap(rt), gap)
+
+def L.dsub_counts_ok(keep, row, skip, gap, minW, e):
+  match keep:
+    case Nil{}:
+      {==}
+    case k <> +kt:
+      match k:
+        case True{}:
+          match row:
+            case Nil{}:
+              {==}
+            case K.DSyn{g, +c} <> +rt:
+              match skip:
+                case 1n+s:
+                  L.dsub_counts_ok(kt, K.DSyn{g, c} <> rt, s, 1n+gap, minW, e)
+                case 0n:
+                  Bool.and_intro(U32.is_ge(c, minW), K.DRow.counts_ok(K.DSub.go(kt, rt, K.DRow.head_gap(rt), 0n), minW),
+                    Bool.and_true_l(U32.is_ge(c, minW), K.DRow.counts_ok(rt, minW), e),
+                    L.dsub_counts_ok(kt, rt, K.DRow.head_gap(rt), 0n, minW,
+                      Bool.and_true_r(U32.is_ge(c, minW), K.DRow.counts_ok(rt, minW), e)))
+        case False{}:
+          match row:
+            case Nil{}:
+              {==}
+            case K.DSyn{g, +c} <> +rt:
+              match skip:
+                case 1n+s:
+                  L.dsub_counts_ok(kt, K.DSyn{g, c} <> rt, s, gap, minW, e)
+                case 0n:
+                  L.dsub_counts_ok(kt, rt, K.DRow.head_gap(rt), gap, minW,
+                    Bool.and_true_r(U32.is_ge(c, minW), K.DRow.counts_ok(rt, minW), e))
+
+# the span bound at the entry point, where the accumulated gap is zero
+def Nat.leb_span_kept(+keep: List<&2, Bool>, +row: List<&2, K.DSyn>) ->
+  {K.Nat.leb(K.DRow.span(K.DSub.row(keep, row)), K.DSub.kept(keep)) == True{} : Bool}:
+  %Nat.add_zero(K.DSub.kept(keep)) :
+    {K.Nat.leb(K.DRow.span(K.DSub.go(keep, row, K.DRow.head_gap(row), 0n)), _) == True{} : Bool}
+  L.dsub_span(keep, row, K.DRow.head_gap(row), 0n)
+
+def L.dsub_row_ok(keep, row, minW, e):
+  Bool.and_intro(K.Nat.leb(K.DRow.span(K.DSub.row(keep, row)), K.DSub.kept(keep)),
+    K.DRow.counts_ok(K.DSub.row(keep, row), minW),
+    Nat.leb_span_kept(keep, row),
+    L.dsub_counts_ok(keep, row, K.DRow.head_gap(row), 0n, minW, e))
+
+def L.dsub_rows_ok(keep, members, rows, minW, e):
+  match members:
+    case Nil{}:
+      {==}
+    case k <> mt:
+      match k:
+        case True{}:
+          match rows:
+            case Nil{}:
+              {==}
+            case +r <> rt:
+              Bool.and_intro(K.DRow.ok(K.DSub.row(keep, r), K.DSub.kept(keep), minW),
+                K.DSub.rows_ok(K.DSub.rows(keep, mt, rt), K.DSub.kept(keep), minW),
+                L.dsub_row_ok(keep, r, minW, Bool.and_true_l(K.DRow.counts_ok(r, minW), K.DSub.all_counts_ok(rt, minW), e)),
+                L.dsub_rows_ok(keep, mt, rt, minW, Bool.and_true_r(K.DRow.counts_ok(r, minW), K.DSub.all_counts_ok(rt, minW), e)))
+        case False{}:
+          match rows:
+            case Nil{}:
+              {==}
+            case +r <> rt:
+              L.dsub_rows_ok(keep, mt, rt, minW, Bool.and_true_r(K.DRow.counts_ok(r, minW), K.DSub.all_counts_ok(rt, minW), e))

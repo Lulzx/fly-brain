@@ -9,6 +9,7 @@
 import Base
 import ./connectome.bend as C
 import ./dataset.bend as D
+import ./cord.bend as K
 
 # ================================================================= 1. Well-formed rows
 
@@ -387,3 +388,81 @@ law cell_of_bytes_sensory:
   for nt: U32
   for side: U32
   {C.Cell.sensory(D.Cell.of_bytes(flags, nt, side)) == D.Flags.bit(flags, 0n) : Bool}
+
+# ================================================================= 8. The cord IR
+# `cord.bend` takes the induced subgraph of a connectome on a membership list, over rows that
+# carry gaps rather than targets. These laws say the construction is the induced subgraph and
+# that it lands inside the member index space. See docs/46-cord-ir.md.
+
+# LAW: a delta row denotes strictly ascending targets. Nothing checks this at run time and
+# nothing can violate it: it is a property of the representation, and this is the proof that
+# the representation has it. `base` is the first target the row may still occupy.
+law dposts_asc:
+  for +row: List<&2, K.DSyn>
+  for +base: Nat
+  for +prev: Nat
+  for +e: {K.Nat.ltb(prev, base) == True{} : Bool}
+  {K.NAsc.go(K.DRow.posts.go(row, base), prev) == True{} : Bool}
+
+# LAW: the induced row lands inside the member index space. Walking `keep` can emit at most one
+# entry per member and can widen a gap at most once per member, so the induced row's span is
+# bounded by the members alone — whatever the row it came from was.
+law dsub_span:
+  for keep: List<&2, Bool>
+  for row: List<&2, K.DSyn>
+  for +skip: Nat
+  for +gap: Nat
+  {K.Nat.leb(K.DRow.span(K.DSub.go(keep, row, skip, gap)), Nat.add(K.DSub.kept(keep), gap)) == True{} : Bool}
+
+# LAW: the induced targets are the member ranks of the surviving targets. This is the
+# induced-subgraph property itself: `DSub.spec` counts members and emits that count at every
+# target that is a member, with no gap arithmetic at all, and the construction agrees with it.
+# The hypothesis is the invariant the walk maintains: the rank of the next emitted entry is the
+# first free position plus the members passed since the last one.
+law dsub_posts_are_ranks:
+  for keep: List<&2, Bool>
+  for row: List<&2, K.DSyn>
+  for +skip: Nat
+  for +gap: Nat
+  for +base: Nat
+  for +rank: Nat
+  for +e: {rank == Nat.add(base, gap) : Nat}
+  {K.DRow.posts.go(K.DSub.go(keep, row, skip, gap), base) == K.DSub.spec(keep, row, skip, rank) : List<&2, Nat>}
+
+# LAW: the induced row carries the surviving entries' synapse counts, unchanged and in order.
+law dsub_counts_spec:
+  for keep: List<&2, Bool>
+  for row: List<&2, K.DSyn>
+  for +skip: Nat
+  for +gap: Nat
+  {K.DRow.counts(K.DSub.go(keep, row, skip, gap)) == K.DSub.spec_counts(keep, row, skip) : List<&2, U32>}
+
+# LAW: every count of the induced row reaches the reconstruction threshold if every count of
+# the row it came from does. Taking a subgraph cannot manufacture a connection below threshold.
+law dsub_counts_ok:
+  for keep: List<&2, Bool>
+  for row: List<&2, K.DSyn>
+  for +skip: Nat
+  for +gap: Nat
+  for +minW: U32
+  for +e: {K.DRow.counts_ok(row, minW) == True{} : Bool}
+  {K.DRow.counts_ok(K.DSub.go(keep, row, skip, gap), minW) == True{} : Bool}
+
+# LAW: the headline. The induced row is well-formed for the member index space at the same
+# threshold, whatever cell count the row it came from was well-formed for.
+law dsub_row_ok:
+  for +keep: List<&2, Bool>
+  for +row: List<&2, K.DSyn>
+  for +minW: U32
+  for +e: {K.DRow.counts_ok(row, minW) == True{} : Bool}
+  {K.DRow.ok(K.DSub.row(keep, row), K.DSub.kept(keep), minW) == True{} : Bool}
+
+# LAW: and for a whole graph: taking the member rows of a well-formed graph gives a well-formed
+# graph over the members.
+law dsub_rows_ok:
+  for +keep: List<&2, Bool>
+  for members: List<&2, Bool>
+  for rows: List<&2, List<&2, K.DSyn>>
+  for +minW: U32
+  for +e: {K.DSub.all_counts_ok(rows, minW) == True{} : Bool}
+  {K.DSub.rows_ok(K.DSub.rows(keep, members, rows), K.DSub.kept(keep), minW) == True{} : Bool}

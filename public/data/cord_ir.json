@@ -1,0 +1,248 @@
+{
+ "version": 1,
+ "spec": "cord IR: VNC leg-premotor subgraph (leg MNs + 2-hop VNC/descending ancestors), rows delta-encoded",
+ "counts": {
+  "N": 21843,
+  "E": 1615182,
+  "Nfull": 165122,
+  "interneuron": 14395,
+  "motor": 328,
+  "descending": 1273,
+  "sensory": 5847,
+  "commissural": 309435,
+  "maxGap": 21566
+ },
+ "header": {
+  "magic": "CORD",
+  "bytes": 32,
+  "fields": [
+   "magic",
+   "version",
+   "N",
+   "E",
+   "Nfull",
+   "nSets",
+   "nPools",
+   "maxGap"
+  ]
+ },
+ "layout": {
+  "origIdx": {
+   "off": 32,
+   "bytes": 87372,
+   "n": 21843
+  },
+  "indptr": {
+   "off": 87404,
+   "bytes": 87376,
+   "n": 21844
+  },
+  "gaps": {
+   "off": 174780,
+   "bytes": 6460728,
+   "n": 1615182
+  },
+  "counts": {
+   "off": 6635508,
+   "bytes": 3230364,
+   "n": 1615182
+  },
+  "edgeClass": {
+   "off": 9865872,
+   "bytes": 1615182,
+   "n": 1615182
+  },
+  "role": {
+   "off": 11481056,
+   "bytes": 21843,
+   "n": 21843
+  },
+  "nt": {
+   "off": 11502900,
+   "bytes": 21843,
+   "n": 21843
+  },
+  "side": {
+   "off": 11524744,
+   "bytes": 21843,
+   "n": 21843
+  },
+  "hl": {
+   "off": 11546588,
+   "bytes": 21843,
+   "n": 21843
+  },
+  "sign": {
+   "off": 11568432,
+   "bytes": 87372,
+   "n": 21843
+  },
+  "size": {
+   "off": 11655804,
+   "bytes": 87372,
+   "n": 21843
+  },
+  "setPtr": {
+   "off": 11743176,
+   "bytes": 92,
+   "n": 23
+  },
+  "setIdx": {
+   "off": 11743268,
+   "bytes": 37252,
+   "n": 9313
+  }
+ },
+ "legOrder": [
+  "T1_left",
+  "T2_left",
+  "T3_left",
+  "T1_right",
+  "T2_right",
+  "T3_right"
+ ],
+ "hemilineages": [
+  "13A",
+  "13B",
+  "19B"
+ ],
+ "sets": [
+  {
+   "name": "pool:T1_left",
+   "from": 0,
+   "to": 68,
+   "n": 68
+  },
+  {
+   "name": "pool:T2_left",
+   "from": 68,
+   "to": 114,
+   "n": 46
+  },
+  {
+   "name": "pool:T3_left",
+   "from": 114,
+   "to": 166,
+   "n": 52
+  },
+  {
+   "name": "pool:T1_right",
+   "from": 166,
+   "to": 231,
+   "n": 65
+  },
+  {
+   "name": "pool:T2_right",
+   "from": 231,
+   "to": 277,
+   "n": 46
+  },
+  {
+   "name": "pool:T3_right",
+   "from": 277,
+   "to": 328,
+   "n": 51
+  },
+  {
+   "name": "hemilineage:13A",
+   "from": 328,
+   "to": 759,
+   "n": 431
+  },
+  {
+   "name": "hemilineage:13B",
+   "from": 759,
+   "to": 1198,
+   "n": 439
+  },
+  {
+   "name": "hemilineage:19B",
+   "from": 1198,
+   "to": 1479,
+   "n": 281
+  },
+  {
+   "name": "dn:DNg100",
+   "from": 1479,
+   "to": 1481,
+   "n": 2
+  },
+  {
+   "name": "dn:DNg97",
+   "from": 1481,
+   "to": 1483,
+   "n": 2
+  },
+  {
+   "name": "dn:DNp09",
+   "from": 1483,
+   "to": 1485,
+   "n": 2
+  },
+  {
+   "name": "dn:DNa05",
+   "from": 1485,
+   "to": 1487,
+   "n": 2
+  },
+  {
+   "name": "dn:DNa07",
+   "from": 1487,
+   "to": 1489,
+   "n": 2
+  },
+  {
+   "name": "dn:DNp26",
+   "from": 1489,
+   "to": 1491,
+   "n": 2
+  },
+  {
+   "name": "dn:DNa01",
+   "from": 1491,
+   "to": 1493,
+   "n": 2
+  },
+  {
+   "name": "dn:DNa02",
+   "from": 1493,
+   "to": 1495,
+   "n": 2
+  },
+  {
+   "name": "dn:MDN",
+   "from": 1495,
+   "to": 1499,
+   "n": 4
+  },
+  {
+   "name": "role:motor",
+   "from": 1499,
+   "to": 1827,
+   "n": 328
+  },
+  {
+   "name": "role:descending",
+   "from": 1827,
+   "to": 3100,
+   "n": 1273
+  },
+  {
+   "name": "role:sensory",
+   "from": 3100,
+   "to": 8947,
+   "n": 5847
+  },
+  {
+   "name": "sensory:proprioceptive",
+   "from": 8947,
+   "to": 9313,
+   "n": 366
+  }
+ ],
+ "bin": {
+  "file": "cord_ir.bin",
+  "bytes": 11780520,
+  "sha256": "a9a2ded4f0ab2d8283408c40fac4e6e90b5266ff481fabd690277e1f40b56729"
+ }
+}
