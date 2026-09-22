@@ -230,7 +230,7 @@ proprioceptive loop closed and the descending command driving.
 ```sh
 node scripts/prep_cord_ir.mjs && bend cordcheck.bend -o cordcheck && ./cordcheck
 node scripts/cord_kernel_ref.mjs && bend cordrun.bend -o cordrun && ./cordrun
-bend PROOF.bend                                    # 50 laws, including the cord and perturbation ones
+bend PROOF.bend                                    # 51 laws, including the cord and perturbation ones
 node scripts/pool_unit.mjs                         # the instrument, on synthetic gaits
 node scripts/cord_ens_tab.mjs && bend cordens.bend -o cordens && ./cordens
 node scripts/cord_search.mjs                       # the instrument, the ranking, the kill tests

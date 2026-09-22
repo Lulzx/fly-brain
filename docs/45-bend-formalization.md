@@ -14,7 +14,7 @@ over the real MaleCNS tables and reproduces the shipped build's numbers.
 |---|---|
 | `connectome.bend` | the IR (`Cell`, `Syn`, `IR`), well-formedness (`IR.row_ok`), the per-cell lowering (`Compile.sign`, `Compile.thr`, `Compile.bias`, `Compile.in_scale`), the per-edge lowering (`Compile.syn`, `Compile.row`), the kernel's integrate and fire rule (`Kernel.integrate`, `Kernel.fire`) and delay line (`Ring.step`) |
 | `dataset.bend` | MaleCNS v1.0 as data: dimensions, the byte layout of `graph_w3.bin` and `neurons.bin`, the superclass and class code tables, cell decoding, IEEE 754 decoding |
-| `LAWS.bend` | 34 laws over the two modules, each an open claim |
+| `LAWS.bend` | 51 laws over the modules, each an open claim (34 of them the compiler's, doc 45) |
 | `PROOF.bend` | their proofs; `bend PROOF.bend` prints `All terms check.` |
 | `malecns.bend` | the loader: reads the tables, checks well-formedness, lowers every cell and edge with the proven functions in parallel, prints a summary |
 | `scripts/bend_malecns.mjs` | writes `public/data/cellflags.bin`, computes the same summary with the JavaScript build, and diffs the two |
