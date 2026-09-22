@@ -59,6 +59,7 @@ outside the graph? The second list turned out to be as interesting as the first.
 | `src/lif.js`, `src/lifwasm.js`, `src/lifgpu.js`, `src/wasm/lif.c` | brain model in JavaScript, WebAssembly and WebGPU |
 | `src/brainmodel.js`, `src/brainsetup.js` | calibrated brain construction, shared memory |
 | `connectome.bend`, `dataset.bend`, `LAWS.bend`, `PROOF.bend`, `malecns.bend` | the compiler and the male connectome formalized in Bend: laws, proofs, and a run over the real tables |
+| `cord.bend`, `kernel.bend`, `perturb.bend`, `cord*.bend` | the nerve cord in Bend: a checked subgraph, a bit-identical spiking kernel, proven perturbations, and the ensemble |
 | `src/flyvis.js` | flyvis optic-lobe runtime |
 | `public/` | preprocessed data served to the browser |
 | `scripts/` | preprocessing, calibration, optimisation, analysis, tests |

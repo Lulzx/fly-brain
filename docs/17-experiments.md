@@ -28,6 +28,10 @@
 | `node scripts/dn_flight.mjs screen\|detail` | [M1](20-roadmap.md): every descending type driven in turn, ranked by what reaches the wing pools rather than the legs |
 | `node scripts/mn9_quiet.mjs dose\|sources\|silence\|chain\|fix\|combo\|refine\|paired` | [M3](20-roadmap.md): where the proboscis motor neuron's 26.6 Hz idle comes from, and what it costs to remove |
 | `node scripts/check_courtship.mjs` | Song pulse structure and female rejection, measured rather than assumed ([Courtship](26-courtship.md)) |
+| `./cordcheck` | The cord IR against the connectome it was taken from: every row filtered to the members, entry by entry ([doc 46](46-cord-ir.md)) |
+| `./cordrun` | The Bend LIF kernel against the shipped WebAssembly one, bit for bit ([doc 46](46-cord-ir.md)) |
+| `node scripts/pool_unit.mjs` | The motor-pool gait instrument on synthetic gaits with known answers ([doc 46](46-cord-ir.md)) |
+| `./cordens && node scripts/cord_search.mjs` | The cord ensemble: 64 members x 6 perturbations, ranked, with kill tests ([doc 46](46-cord-ir.md)) |
 | `python3 scripts/algo_operators.py fly worm` | Annotation-free operator detectors: expansion, normalization, ring ([Compiler](29-connectome-compiler.md)) |
 | `node scripts/check_flyvisgpu.mjs` | WebGPU flyvis kernel against the reference model, real adapter ([WebGPU](27-webgpu.md)) |
 | `node scripts/wing_mn.mjs [s] [seed]` | What the wing power and steering motor neurons do through a flight ([Flight](24-flight.md)) |
