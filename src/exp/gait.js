@@ -9,7 +9,7 @@
 //
 // Trace: { dtMs, legs: [6 names], touch: Uint8Array[n*6] (1 = claw on substrate), load: Float32Array[n*6],
 //          z: Float32Array[n] thorax height (cm), up: Float32Array[n] body-up z component,
-//          x, y: Float32Array[n] thorax position (cm) }
+//          x, y: Float32Array[n] thorax position (cm), hx, hy: Float32Array[n] body heading (unit, world xy) }
 // Legs are ordered T1_left, T2_left, T3_left, T1_right, T2_right, T3_right. The two tripods are
 // {T1_left, T2_right, T3_left} and {T1_right, T2_left, T3_right}.
 
@@ -118,6 +118,11 @@ export function gaitMetrics(tr, { minRunMs = 6, startMs = 0 } = {}) {
   const z0 = median(Array.from(tr.z.subarray(0, Math.max(1, Math.round(50 / dt)))));
   const dx = tr.x[n - 1] - tr.x[i0], dy = tr.y[n - 1] - tr.y[i0];
   let path = 0; for (let i = i0 + 1; i < n; i++) path += Math.hypot(tr.x[i] - tr.x[i - 1], tr.y[i] - tr.y[i - 1]);
+  // signed fore-aft travel: each step's displacement projected on the heading at that moment, so a
+  // backward-walking fly reads negative even if it turns (the MDN read; Bidaye et al. 2014)
+  let fore = 0, backN = 0, moveN = 0;
+  if (tr.hx) for (let i = i0 + 1; i < n; i++) { const p = (tr.x[i] - tr.x[i - 1]) * tr.hx[i] + (tr.y[i] - tr.y[i - 1]) * tr.hy[i]; fore += p;
+    if (Math.abs(p) > 1e-5) { moveN++; if (p < 0) backN++; } }
   // rhythm: each leg's load vector strength at that leg's own lift rate (why_not_walking's phase
   // instrument): a leg that is quiet and a leg that is incoherent both read low on raw amplitude;
   // this separates them. A leg with fewer than two lifts has no rate and reads 0.
@@ -133,6 +138,7 @@ export function gaitMetrics(tr, { minRunMs = 6, startMs = 0 } = {}) {
     upright: upN / Math.max(1, n - i0), support: sup / Math.max(1, n - i0),
     bodyHeight: median(zs), bodyHeightRel: z0 ? median(zs) / z0 : null,
     speed: Math.hypot(dx, dy) / secs, path: path / secs,
+    forward: tr.hx ? fore / secs : null, backFrac: tr.hx ? (moveN ? backN / moveN : 0) : null, displacement: Math.hypot(dx, dy),
     loadRhythm: median(loadRhythm), loadRhythmLegs: loadRhythm.map(v => +v.toFixed(3)),
   };
 }

@@ -365,9 +365,10 @@ interface ExperimentSpec {
     n: number;                   // members (full grid when axes are smaller)
     seed: number;                // seeded sampling — member sets are reproducible
   };
-  perturbations: Array<{ id; kind: 'ablateType'|'offPlugin'|'scaleGain'|'scaleEdges'|'swapCompartment';
+  perturbations: Array<{ id; kind: 'ablateType'|'offPlugin'|'scaleGain'|'scaleEdges'|'driveType'|'swapCompartment';
                          target: string; args? }>;
   edgeRules?: Record<id, { pre: selector; post: selector; cross?: 'contra'|'ipsi'|'any' }>;
+  responses?: Array<{ id; row: string; observable: string; perturbations: string[] }>;  // battery bindings (S9)
   observables: Array<{ id; where: 'circuit'|'arena'; measure: string; args? }>;
   splitRule: string;             // e.g. 'loomEscape < 0.5*baseline.loomEscape && walk > 0.5*baseline.walk'
   seeds?: number[];              // assay seeds — part of the pre-registration, not a knob
@@ -425,6 +426,7 @@ reference into anything another condition can mutate.
 | `oa-split` | arena | ran — S5's operator split is in docs/40; `synFast` eliminated, field family degenerate, `oaArousalRule` stays required |
 | `engram-recover` | engram | pending — S6's engram harness |
 | `walk-from-cord` | arena | ran — S8: wiring x inhGain x commissural ensemble read by the gait instrument; result in [doc 44](44-walking-compiler.md) |
+| `respond-like-the-fly` | arena | ran — S9: the response battery (real perturbation experiments with measured deltas) as the objective; result in [doc 44](44-walking-compiler.md) |
 
 ## What's next
 

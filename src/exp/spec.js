@@ -21,7 +21,15 @@
 //       offPlugin      target = a scaffold plugin id (docs/37)
 //       scaleGain      args {param, factor}: multiplies an ensemble-addressable param
 //       scaleEdges     target = an id in spec.edgeRules, args {factor}: multiplies one edge class
+//       driveType      target = a neuron selector, args {mv, fromMs?, toMs?}: a constant depolarising
+//                      bias on the population (the model's optogenetic activation), tonic unless windowed
 //       swapCompartment  reserved (engram harness)
+//     responses?: Array<{ id; row: string; observable: string; perturbations: string[] }>;
+//                                    // bindings to the response battery (src/exp/responses.js): the
+//                                    // battery row, the observable that reads it (its measure must be
+//                                    // the row's measure; `also` clauses find their measures among the
+//                                    // spec's observables), and the perturbation(s) that stand in for
+//                                    // the experiment, in dose order for a series
 //     edgeRules?: Record<id, { pre: selector, post: selector, cross?: 'contra'|'ipsi'|'any' }>;
 //                                    // named edge classes; an ensemble axis 'edges.<id>' sweeps the
 //                                    // class's multiplier and scaleEdges perturbs it
@@ -34,7 +42,8 @@
 //
 // validateSpec throws on malformed input — a typo must not silently produce an empty experiment.
 import { parseSelector } from './select.js';
-export const PERTURB_KINDS = ['ablateType', 'offPlugin', 'scaleGain', 'scaleEdges', 'swapCompartment'];
+import { RESPONSE_BY_ID } from './responses.js';
+export const PERTURB_KINDS = ['ablateType', 'offPlugin', 'scaleGain', 'scaleEdges', 'driveType', 'swapCompartment'];
 export const SITES = ['circuit', 'arena'];
 
 export function validateSpec(s) {
@@ -60,6 +69,10 @@ export function validateSpec(s) {
     // the arena site resolves ablateType targets as neuron selectors; other sites (heading's
     // population names, the engram harness's compartment slices) keep their own target vocabulary
     if (p.kind === 'ablateType' && s.backend === 'arena' && (s.status ?? 'ready') === 'ready') { try { parseSelector(p.target); } catch (e) { bad(`perturbation '${p.id}': ${e.message}`); } }
+    if (p.kind === 'driveType') {
+      try { parseSelector(p.target); } catch (e) { bad(`perturbation '${p.id}': ${e.message}`); }
+      if (typeof p.args?.mv !== 'number') bad(`perturbation '${p.id}': driveType needs args.mv`);
+    }
     if (p.kind === 'scaleEdges') {
       if (!s.edgeRules?.[p.target]) bad(`perturbation '${p.id}': scaleEdges target '${p.target}' is not in spec.edgeRules`);
       if (typeof p.args?.factor !== 'number') bad(`perturbation '${p.id}': scaleEdges needs args.factor`);
@@ -80,6 +93,24 @@ export function validateSpec(s) {
     oids.add(o.id);
     if (!SITES.includes(o.where)) bad(`observable '${o.id}': where must be ${SITES.join('|')}`);
     if (typeof o.measure !== 'string' || !o.measure) bad(`observable '${o.id}': missing measure`);
+  }
+  if (s.responses !== undefined) {
+    if (!Array.isArray(s.responses)) bad('responses must be an array');
+    const rids = new Set();
+    const measureOf = Object.fromEntries(s.observables.map(o => [o.id, o]));
+    for (const r of s.responses) {
+      if (!r.id || rids.has(r.id)) bad(`response id missing or duplicated: ${r.id}`); rids.add(r.id);
+      const row = RESPONSE_BY_ID[r.row]; if (!row) bad(`response '${r.id}': unknown battery row '${r.row}'`);
+      const o = measureOf[r.observable]; if (!o) bad(`response '${r.id}': unknown observable '${r.observable}'`);
+      if (o.measure !== row.measure) bad(`response '${r.id}': observable '${r.observable}' measures ${o.measure}, the row wants ${row.measure}`);
+      for (const c of row.also || []) {
+        const twin = s.observables.find(x => x.measure === c.measure && JSON.stringify(x.args || {}) === JSON.stringify(o.args || {}));
+        if (!twin) bad(`response '${r.id}': row '${row.id}' also needs ${c.measure} on the same assay; declare that observable`);
+      }
+      if (!Array.isArray(r.perturbations) || !r.perturbations.length) bad(`response '${r.id}': perturbations must be a non-empty array`);
+      for (const pid of r.perturbations) if (!ids.has(pid)) bad(`response '${r.id}': unknown perturbation '${pid}'`);
+      if (row.comparator === 'monotonic' && r.perturbations.length < 2) bad(`response '${r.id}': a monotonic row needs a series of >= 2 perturbations`);
+    }
   }
   if (typeof s.splitRule !== 'string' || !s.splitRule) bad('missing splitRule');
   // splitRule clauses must name declared observables — a typo there is a silent pass. Terms may

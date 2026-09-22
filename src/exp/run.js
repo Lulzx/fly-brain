@@ -18,6 +18,7 @@
 // the numbers.
 import { ensembleMembers } from './spec.js';
 import { rankExperiments } from './rank.js';
+import { RESPONSE_BY_ID, evaluateResponse } from './responses.js';
 
 /** tiny evaluator for splitRule clauses: "<obs> <op> <expr>" joined by &&.
  *  expr: number, obsId (or a dotted path into its record), baseline.<path>, member.<param>,
@@ -72,6 +73,18 @@ export async function runExperiment(spec, backend, { progress } = {}) {
       member.perturbations[p.id] = { values: pv, kills: evalSplitRule(spec.splitRule, { baseline, pert: pv, member: params }) };
     }
     backend.finalize?.(member);   // post-hoc classification needing perturbed values (e.g. mechanism)
+    // the response battery: did this member respond to each bound experiment the way the animal did?
+    if (spec.responses?.length) {
+      member.responses = {};
+      const byMeasure = vals => { const m = {}; for (const o of obs) m[o.measure + (o.args ? JSON.stringify(o.args) : '')] = vals[o.id]; return m; };
+      for (const r of spec.responses) {
+        const row = RESPONSE_BY_ID[r.row], o = obs.find(x => x.id === r.observable), key = m => m + (o.args ? JSON.stringify(o.args) : '');
+        const perts = r.perturbations.map(pid => member.perturbations[pid]?.values);
+        if (perts.some(v => !v)) { member.responses[r.id] = { outcome: 'skipped', status: row.status, reason: 'a bound perturbation was skipped' }; continue; }
+        const pick = vals => { const bm = byMeasure(vals), o2 = {}; for (const c of [{ measure: row.measure }, ...(row.also || [])]) o2[c.measure] = bm[key(c.measure)]; return o2; };
+        member.responses[r.id] = { ...evaluateResponse(row, { base: pick(baseline), pert: perts.map(pick) }), perturbations: r.perturbations };
+      }
+    }
     out.push(member);
     progress?.(`  ${mi + 1}/${members.length} ${JSON.stringify(params)} ${Date.now() - t0}ms`);
   }
@@ -89,6 +102,13 @@ export async function runExperiment(spec, backend, { progress } = {}) {
     if (oc.some(c => c !== 'skipped')) experiments[p.id] = { outcome: oc };
   }
   for (const o of obs) experiments['obs:' + o.id] = { outcome: out.map(m => String(classify(o, m.baseline[o.id]))) };
+  for (const r of spec.responses || []) experiments['resp:' + r.id] = { outcome: out.map(m => m.responses?.[r.id]?.outcome ?? 'skipped') };
+  // the response operator table: per row, how many members match the animal. Prediction rows are
+  // reported on their own line and never counted as agreement with the animal.
+  const responses = (spec.responses || []).map(r => { const row = RESPONSE_BY_ID[r.row];
+    const oc = out.map(m => m.responses?.[r.id]?.outcome ?? 'skipped');
+    return { id: r.id, row: r.row, status: row.status, experiment: row.experiment, animal: row.animal, source: row.source,
+      match: oc.filter(x => x === 'match').length, mismatch: oc.filter(x => x === 'mismatch').length, undefined: oc.filter(x => x === 'undefined').length, skipped: oc.filter(x => x === 'skipped').length }; });
   const ranked = rankExperiments(experiments);
   // the observables table carries the ensemble median of each baseline read, so the report's
   // headline numbers come from the same members as the ranking
@@ -96,7 +116,7 @@ export async function runExperiment(spec, backend, { progress } = {}) {
   const observables = spec.observables.map(o => ({ ...o, value: med(out.map(m => m.baseline[o.id])) }));
   return { spec: { id: spec.id, question: spec.question, operators: spec.operators, splitRule: spec.splitRule, backend: spec.backend, status: spec.status, seeds: spec.seeds, edgeRules: spec.edgeRules },
     ensemble: { n: members.length, params: spec.ensemble.params, seed: spec.ensemble.seed },
-    observables,
+    observables, responses,
     members: out, skipped,
     ranked: ranked.map(([name, e]) => ({ experiment: name, separation: e.score })) };
 }
@@ -114,6 +134,16 @@ export function renderMarkdown(result) {
     for (const o of result.observables) L.push(`| ${o.id} | ${o.where} | ${o.measure}${o.args ? ' ' + JSON.stringify(o.args) : ''} | ${o.value == null ? '—' : fmt(o.value)} |`);
     L.push('');
   }
+  if (result.responses?.length) {
+    L.push('## Response operator', '', 'How many ensemble members respond to each real experiment the way the animal did. `measured` and `qualitative` rows are animal data; `prediction` rows are sibling-model predictions with no animal anchor and count for nothing; `pending` rows have no source yet.', '',
+      '| row | status | experiment | animal | match | mismatch | undefined |', '|---|---|---|---|---|---|---|');
+    for (const r of result.responses) L.push(`| ${r.id} | ${r.status} | ${r.experiment} | ${r.animal} | ${r.match} | ${r.mismatch} | ${r.undefined + (r.skipped ? ` (+${r.skipped} skipped)` : '')} |`);
+    L.push('');
+    const scored = result.responses.filter(r => r.status === 'measured' || r.status === 'qualitative');
+    const nM = members.length;
+    L.push(`Animal rows matched by every member: ${scored.filter(r => r.match === nM).length} of ${scored.length}. ` +
+      `Members matching every animal row: ${members.filter(m => scored.every(r => m.responses?.[r.id]?.outcome === 'match')).length} of ${nM}.`, '');
+  }
   L.push('## Ranked perturbations', '', '| experiment | separation |', '|---|---|');
   for (const r of ranked) L.push(`| ${r.experiment} | ${r.separation} |`);
   if (skipped.length) { L.push('', 'Skipped (no backend yet): ' + [...new Set(skipped.map(s => s.perturbation))].join(', ')); }
@@ -123,6 +153,10 @@ export function renderMarkdown(result) {
     const kills = Object.entries(m.perturbations).filter(([, r]) => r.kills).map(([k]) => k).join(',') || '-';
     L.push(`| ${i} | ${JSON.stringify(m.params)} | ${base} | ${kills} |`);
   });
+  if (result.responses?.length) {
+    L.push('', '## Response reads', '', '| member | ' + result.responses.map(r => r.id).join(' | ') + ' |', '|---|' + result.responses.map(() => '---').join('|') + '|');
+    members.forEach((m, i) => L.push(`| ${i} | ` + result.responses.map(r => { const x = m.responses?.[r.id]; return x ? (x.outcome + (x.clauses ? ': ' + x.clauses.map(c => c.detail).join('; ') : '')) : '—'; }).join(' | ') + ' |'));
+  }
   // the perturbed reads themselves, one table per perturbation, so a kill can be checked against
   // the numbers that produced it rather than taken from the flag
   const pids = [...new Set(members.flatMap(m => Object.keys(m.perturbations)))];

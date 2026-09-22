@@ -17,7 +17,7 @@ import { allocBrainMemory, attachBrain, attachEyes } from '../src/brainsetup.js'
 import { parseFlyVis } from '../src/flyvis.js';
 import { BRAIN_DEFAULTS } from '../src/brainmodel.js';
 import { motorPools } from './motor_pools.mjs';
-import { resolveSelector, edgeGainFor } from '../src/exp/select.js';
+import { resolveSelector, selectIndices, edgeGainFor } from '../src/exp/select.js';
 import { gaitMetrics, LEG_ORDER } from '../src/exp/gait.js';
 
 const D = loadAll(); const DATA = { ...D, superclass: D.sc };
@@ -100,6 +100,10 @@ const ASSAYS = {
   //             instrument's positive control, which must read inside the real-fly bands
   walk_cx:  { secs: 4, setup: openFloor, mode: 'connectome', walkDrive: true, gait: true },
   walk_cpg: { secs: 4, setup: openFloor, mode: 'descending', walkDrive: true, gait: true },
+  //   rest_cpg  descending mode with NO endogenous scheduler: the descending neurons receive only
+  //             what the senses and a spec's `drive` give them. The site for sufficiency rows
+  //             (does driving one cell pair start walking) and for stop rows.
+  rest_cpg: { secs: 4, setup: openFloor, mode: 'descending', intrinsic: false, gait: true },
 };
 function openFloor(env) { env.obstacles = []; env.hazards = []; env.food = []; env.odors = []; env.bitterPatches = []; return [[0, 0], 0]; }
 const GAIT_DT = 2;   // ms between gait samples (500 Hz; the fastest real step is ~16 Hz)
@@ -116,6 +120,8 @@ function ablationTable(sels) {
   }
   return ABLATE.get(key);
 }
+const DRIVE = new Map();
+function driveIdx(sel) { if (!DRIVE.has(sel)) DRIVE.set(sel, selectIndices(DATA, sel)); return DRIVE.get(sel); }
 function edgeGain(rules) {
   const key = JSON.stringify(rules);
   if (!EDGES.has(key)) EDGES.set(key, edgeGainFor(DATA, rules));
@@ -160,7 +166,7 @@ async function runSeed(cfg, seed) {
     const env = structuredClone(DEFAULT_ENV);
     const [pos, yaw] = sc.setup(env);
     const fly = new FlyAgent({ mj: MJ, flyXML: FLYXML, env, data, size: SIZE, sign: SIGN, bodymap: D.bodymap, gait: GAIT,
-      brain, brainOpts: o, neuromod: o.neuromod === false ? null : NEUROMOD, pos, yaw, vision: true, intrinsic: true, seed, id: 1,
+      brain, brainOpts: o, neuromod: o.neuromod === false ? null : NEUROMOD, pos, yaw, vision: true, intrinsic: sc.intrinsic !== false, seed, id: 1,
       mode: sc.mode || 'descending', sex: sc.sex || 'm',
       flyvis: { eyes: attachEyes(brain.instance, mem, 0), map: VISION.map, gain: 150 } });
     fly.others = sc.others || [];
@@ -169,8 +175,15 @@ async function runSeed(cfg, seed) {
     let scFlipMs = 0, scGroomMs = 0, scTurnMs = 0, scCourtMs = 0, scFoodMin = 1e9;
     const gaitN = sc.gait ? Math.floor(sc.secs * 1000 / GAIT_DT) : 0, L = LEG_ORDER.length;
     const gt = sc.gait ? { dtMs: GAIT_DT, legs: LEG_ORDER, touch: new Uint8Array(gaitN * L), load: new Float32Array(gaitN * L),
-      z: new Float32Array(gaitN), up: new Float32Array(gaitN), x: new Float32Array(gaitN), y: new Float32Array(gaitN) } : null;
+      z: new Float32Array(gaitN), up: new Float32Array(gaitN), x: new Float32Array(gaitN), y: new Float32Array(gaitN), hx: new Float32Array(gaitN), hy: new Float32Array(gaitN) } : null;
+    // `drive`: [{target: selector, mv, fromMs?, toMs?}] -- a constant depolarising bias on a named
+    // population (the model's optogenetic activation), tonic unless windowed. Rates of the driven
+    // cells are reported as driveHz so a dial that does not reach threshold is visible.
+    const drives = (o.drive || []).map(d => ({ ...d, idx: driveIdx(d.target), from: d.fromMs ?? 0, to: d.toMs ?? sc.secs * 1000 }));
+    const driveSet = new Set(); for (const d of drives) for (const i of d.idx) driveSet.add(i);
+    const driveIx = Int32Array.from(driveSet), drivePrev = Uint32Array.from(driveIx, i => brain.spikeCount[i]);
     for (let s = 1; s <= sc.secs * 1000; s++) {
+      for (const d of drives) { if (s === d.from + 1 || (d.from === 0 && s === 1)) brain.setBias(d.idx, d.mv); if (s === d.to + 1) brain.setBias(d.idx, 0); }
       if (sc.walkDrive && fly.intrinsic) {
         // hold the scheduler in a walking bout: the forward DNs receive the walking drive every ms and
         // nothing else (no saccades, no approach slowing), so the assay reads the command's execution
@@ -186,6 +199,7 @@ async function runSeed(cfg, seed) {
         const k = s / GAIT_DT - 1, st = fly.state(), xm = fly.mjd.xmat, b = fly.bid.thorax * 9;
         for (let l = 0; l < L; l++) { gt.touch[k * L + l] = st.touch[LEG_ORDER[l]] > 0 ? 1 : 0; gt.load[k * L + l] = st.load[LEG_ORDER[l]]; }
         gt.z[k] = st.pos[2]; gt.up[k] = xm[b + 8]; gt.x[k] = st.pos[0]; gt.y[k] = st.pos[1];
+        const hn = Math.hypot(xm[b], xm[b + 3]) || 1; gt.hx[k] = xm[b] / hn; gt.hy[k] = xm[b + 3] / hn;
       }
       if (s % 20 === 0) {
         const st = fly.state(), b = fly.behavior(st);
@@ -231,7 +245,9 @@ async function runSeed(cfg, seed) {
       dist: fly.dist, foodMin: scFoodMin > 1e8 ? null : scFoodMin, fed, feedLatency: name === 'onfood' && fed ? obs.feedLatency : null,
       escapes: escaped ? 1 : 0, jumps: fly.jumps, rejections: fly.intrinsic?.rejections || 0, kicks: fly.intrinsic?.kicks || 0, alive: fly.alive ? 1 : 0,
       // the gait instrument's read of this assay; the first 200 ms are settling and are not scored
-      ...(gt ? { gait: gaitMetrics(gt, { startMs: 200 }) } : {}) };
+      ...(gt ? { gait: gaitMetrics(gt, { startMs: 200 }) } : {}),
+      ...(driveIx.length ? { driveHz: driveIx.reduce((a, i, k) => a + brain.spikeCount[i] - drivePrev[k], 0) / driveIx.length / sc.secs } : {}) };
+    if (drives.length) for (const d of drives) brain.setBias(d.idx, 0);   // the bias survives reset(); clear it for the next scenario
     // The agent owns ~28 MB of emscripten heap that the collector never sees; five scenarios per
     // evaluation and dozens of evaluations per worker reach the 2 GB heap limit without this.
     fly.dispose();

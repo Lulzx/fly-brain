@@ -11,6 +11,8 @@
 //   class:mechanosensory     an annotated class (meta.classes)
 //   regex:^IN13[AB]          a regular expression over the type name
 //   muscle:T3                every leg motor neuron of a bodymap muscle group matching the regex
+//   group:brain              a named union of superclasses (GROUPS below): brain = everything with
+//                            its soma in the head, cord = everything in the nerve cord
 //   any                      everything
 //
 // Any selector may take a side suffix: `hemilineage:19B@left`, `type:IN19B012@right`.
@@ -20,6 +22,14 @@
 // throws, because an ablation of an empty set is the silent-zero failure this file exists to stop.
 
 const HL = /^IN((?:\d{2}[AB]|XXX)(?:\.\d{2}[AB])*)\d+(?:_[a-z])?$/;
+// superclass unions. `brain` is what a decapitation removes (Yellman et al. 1997): every central-brain
+// and optic-lobe class plus the descending neurons, whose somata are in the head. `cord` is what it
+// leaves: VNC intrinsic, motor, sensory and efferent classes, and the ascending neurons.
+export const GROUPS = {
+  brain: ['cb_efferent', 'cb_endocrine', 'cb_intrinsic', 'cb_motor', 'cb_sensory', 'cb_sensory_tbc', 'descending_neuron', 'efferent_descending',
+    'ol_intrinsic', 'ol_sensory', 'visual_centrifugal', 'visual_projection', 'visual_projection_tbc'],
+  cord: ['vnc_intrinsic', 'vnc_motor', 'vnc_sensory', 'vnc_sensory_tbc', 'vnc_efferent', 'vnc_endocrine', 'vnc_tbc', 'ascending_neuron', 'sensory_ascending', 'sensory_ascending_tbc', 'efferent_ascending'],
+};
 /** hemilineages named in a type string, e.g. 'IN20A.22A039' -> ['20A','22A']; non-IN types -> [] */
 export function hemilineagesOf(type) {
   const m = typeof type === 'string' ? type.match(HL) : null;
@@ -33,8 +43,8 @@ export function parseSelector(sel) {
   if (at > 0) { const sd = s.slice(at + 1); s = s.slice(0, at);
     side = sd === 'left' ? 1 : sd === 'right' ? 2 : (() => { throw new Error(`selector '${sel}': side must be left|right`); })(); }
   if (s === 'any') return { kind: 'any', arg: '', side };
-  const m = s.match(/^(type|hemilineage|superclass|class|regex|muscle):(.+)$/);
-  if (!m) throw new Error(`selector '${sel}': expected <type|hemilineage|superclass|class|regex|muscle>:<name>[@left|@right] or 'any'`);
+  const m = s.match(/^(type|hemilineage|superclass|class|regex|muscle|group):(.+)$/);
+  if (!m) throw new Error(`selector '${sel}': expected <type|hemilineage|superclass|class|regex|muscle|group>:<name>[@left|@right] or 'any'`);
   return { kind: m[1], arg: m[2], side };
 }
 
@@ -63,6 +73,11 @@ export function resolveSelector(D, sel) {
       for (let i = 0; i < N; i++) if (D.cls[i] === k) take(i); break;
     }
     case 'regex': { const re = new RegExp(arg); for (let i = 0; i < N; i++) if (re.test(String(types[i]))) take(i); break; }
+    case 'group': {
+      const names = GROUPS[arg]; if (!names) throw new Error(`selector '${sel}': unknown group (known: ${Object.keys(GROUPS).join(', ')})`);
+      const ks = new Set(names.map(n => D.meta.superclasses.indexOf(n)).filter(k => k >= 0));
+      for (let i = 0; i < N; i++) if (ks.has(D.sc[i])) take(i); break;
+    }
     case 'muscle': {
       const re = new RegExp(arg);
       for (const m of D.bodymap?.muscles || []) if (re.test(m.name)) for (const i of m.idx) take(i);
@@ -73,6 +88,9 @@ export function resolveSelector(D, sel) {
   mask.count = n;
   return mask;
 }
+
+/** Int32Array of indices for a selector */
+export function selectIndices(D, sel) { const m = resolveSelector(D, sel); const o = []; for (let i = 0; i < D.N; i++) if (m[i]) o.push(i); return Int32Array.from(o); }
 
 /** per-edge multiplier for a list of edge rules, or null when there are none.
  *  rule: { pre: selector, post: selector, cross?: 'contra'|'ipsi'|'any', factor: number }

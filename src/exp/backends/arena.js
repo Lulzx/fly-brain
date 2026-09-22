@@ -15,6 +15,7 @@
 //   scaleGain   -> args {param, factor} multiplies a param (any of the addresses above)
 //   ablateType  -> target is a neuron selector (src/exp/select.js); its outgoing synapses go to ~0
 //   scaleEdges  -> target is a spec.edgeRules id, args {factor}
+//   driveType   -> target is a neuron selector, args {mv, fromMs?, toMs?}: constant bias on the population
 //   swapCompartment -> reported unimplemented (engram harness)
 import fs from 'node:fs';
 import { classifyGait } from '../gait.js';
@@ -42,8 +43,10 @@ export const MEASURES = {
 // The gait instrument's fields (src/exp/gait.js), each a measure over a walking assay. `gait.<field>`
 // reads walk_cx unless args.assay says otherwise; walk_cpg is the positive control.
 export const GAIT_FIELDS = ['cadence', 'duty', 'swingMs', 'contraPhase', 'contraR', 'tripod', 'legsStepping', 'minLifts',
-  'upright', 'support', 'bodyHeight', 'bodyHeightRel', 'speed', 'path', 'loadRhythm'];
-export const WALK_ASSAYS = ['walk_cx', 'walk_cpg'];
+  'upright', 'support', 'bodyHeight', 'bodyHeightRel', 'speed', 'path', 'forward', 'backFrac', 'displacement', 'loadRhythm'];
+export const WALK_ASSAYS = ['walk_cx', 'walk_cpg', 'rest_cpg'];
+// mean rate (Hz) of the cells a driveType perturbation drives, over the assay: the dial's own read
+MEASURES.driveHz = { scenarios: args => [assayOf(args)], read: (r, args) => scen(r, assayOf(args)).driveHz ?? 0 };
 for (const f of GAIT_FIELDS) MEASURES['gait.' + f] = {
   scenarios: args => [assayOf(args)],
   read: (r, args) => { const g = scen(r, assayOf(args)).gait; if (!g) throw new Error(`gait.${f}: assay ${assayOf(args)} carries no gait record`); return g[f] ?? null; },
@@ -106,6 +109,10 @@ export function makeBackend({ basePath = 'public/data/brain_params.json', seeds 
     if (pert.kind === 'ablateType') {
       try { parseSelector(pert.target); } catch (e) { return { unimplemented: true, reason: e.message }; }
       (ctx.cfg.ablate ||= []).push(pert.target); return ctx;
+    }
+    if (pert.kind === 'driveType') {
+      try { parseSelector(pert.target); } catch (e) { return { unimplemented: true, reason: e.message }; }
+      (ctx.cfg.drive ||= []).push({ target: pert.target, mv: pert.args.mv, fromMs: pert.args.fromMs, toMs: pert.args.toMs }); return ctx;
     }
     if (pert.kind === 'scaleEdges') {
       const rule = spec.edgeRules?.[pert.target];
@@ -199,8 +206,8 @@ export function makeBackend({ basePath = 'public/data/brain_params.json', seeds 
     },
     /** what the ctx actually ran with, for the report: the resolved cfg deltas a reader can replay */
     describeMember(ctx) {
-      const { scaffolds, scaffoldParams, typeGain, edgeRules, wiring, ablate } = ctx.cfg;
-      return { cfg: { scaffolds, scaffoldParams, typeGain, edgeRules, wiring, ablate } };
+      const { scaffolds, scaffoldParams, typeGain, edgeRules, wiring, ablate, drive } = ctx.cfg;
+      return { cfg: { scaffolds, scaffoldParams, typeGain, edgeRules, wiring, ablate, drive } };
     },
   };
 }

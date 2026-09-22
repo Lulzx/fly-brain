@@ -150,6 +150,64 @@ multiplier become identical conditions under the commissural cut (0 × 1 = 0 × 
 perturbed reads agree to the printed digit across all eleven observables. The whole path — seed,
 graph build, ablation table, edge gain, MuJoCo, instrument — replays.
 
+## S9: the response battery — real experiments as the objective
+
+A hand-written band is still a drawn target. The proposal that followed the S8 run (recorded in
+the session that produced it) replaces it with the fly's own response operator: for each real
+perturbation experiment with a measured behavioural change, ask whether the model responds the
+way the animal did. A parameter set that reproduces the animal's response to a battery of
+manipulations shares its causal structure, whether or not anyone can name the mechanism. This
+section builds the battery as data and runs it through the compiler with no gradient; the
+gradient version needs per-type dynamics in the twin first (doc 33, doc 43) and is not here.
+
+**The battery** (`src/exp/responses.js`). One row per experiment: what was done to the animal,
+what changed, the gait-instrument measure that reads it, a comparator, and the source. Rows are
+graded by what the source gives, and the grade travels into every report:
+
+| row | status | experiment | animal | comparator |
+|---|---|---|---|---|
+| `mdn_backward` | qualitative | MDN activation while walking | backward walking (Bidaye et al. 2014) | fore-aft travel negative |
+| `dng100_dose` | qualitative | BDN2/DNg100 driven at rising rates | speed and cadence rise with drive (Sapkal et al. 2024) | both monotonic over the series |
+| `b13_slowdown` | measured | 13B premotor activation, 720 ms pulse | 40–80% slowdown (Agrawal et al. 2020, Fig 8) | speed ratio in [0.2, 0.6] |
+| `decapitated_stands` | measured | brain removed | stands, 0 of 90 locomote ≥1 mm (Yellman et al. 1997) | displacement ≤ 1 mm and upright unchanged |
+| `no_command_stands` | qualitative | command neurons silenced | no sustained walking | speed ≤ 0.05 cm/s |
+| `dng93_stop` | prediction | DNg93 driven during the command | sibling-model prediction: walking stops | never counted as animal agreement |
+| `dnge036_walks` | prediction | DNge036 driven, no command | sibling-model prediction: walking starts | never counted |
+| `mdn_silenced`, `load_removed` | pending | named by the programme | no primary read yet | on record, not scored |
+
+A comparator on an undefined value reports `undefined`, not a mismatch. Prediction rows are
+evaluated and printed on their own line; the report's headline counts only `measured` and
+`qualitative` rows. The registry the numbers come from carries about five perturbation rows,
+most of them a sign or an ordering rather than a delta with a tolerance; that thinness is the
+battery's main limit and is why it is data rather than code, so a primary read adds a row
+without touching the runner.
+
+**The binding is a homology hypothesis.** A row does not say which cells to drive; the spec
+does, next to the seed. `respond-like-the-fly` drives the four annotated MDN cells, the two
+DNg100 cells at three doses, the whole 13B hemilineage (Agrawal's driver covers a subset, and
+pulses rather than holds), ablates every head superclass for decapitation, and silences the two
+forward command types for the no-command row. Each choice is written in the spec header so a
+mismatch can be charged to the binding rather than to the wiring.
+
+**Two new channels.** `driveType` puts a constant depolarising bias on a selected population
+(the model's optogenetic activation; `driveHz` reports the driven cells' rate so a dial that
+never reaches threshold is visible), and `rest_cpg` is an assay with no endogenous scheduler,
+where the descending neurons receive only the senses and the spec's drive — the site for
+sufficiency and stop rows. The spec's `responses` block binds row, observable and perturbation
+series, and the runner evaluates every row per member and writes a response-operator table:
+rows × members, matched or not, with the comparator's own arithmetic beside each verdict.
+
+**Site.** The bindings run on the generator site, where the descending readout decides and the
+supplied tripod executes. That tests the connectome's *decision* — the part the wiring supplies
+today — not the cord's stepping. The same bindings apply to `walk_cx` once the cord stands; on
+the generator site the decapitation row is satisfied by construction and the battery says so.
+
+### What came out
+
+The first `respond-like-the-fly` run is recorded in the commit that follows this one; the
+battery, the bindings and the machinery are committed here so the run's numbers land against a
+fixed spec.
+
 ## What this does and does not give the walking problem
 
 It gives the cord a scoreboard that does not assume a phase, a way to name a population or an edge
