@@ -10,7 +10,7 @@
 //   * the pool gait metrics of src/exp/pools.js (as scripts/cord_search.mjs)
 //   * the in-phase fraction at the population spectral peak: with xL, xR the two
 //     population traces at 1 ms, P+ the power of xL+xR and P- the power of
-//     xL-xR, the statistic is P+(f*)/(P+(f*)+P-(f*)) at the band peak f* of P+.
+//     xL-xR, the statistic is P+(f*)/(P+(f*)+P-(f*)) at the band peak f* of P+ + P-.
 //     1.0 means the left and right populations fluctuate perfectly together at
 //     the dominant frequency; 0.5 is the no-structure floor; near 0 would mean
 //     an alternating (anti-phase) mode.
@@ -18,6 +18,7 @@
 // The battery row is the command condition: silencing the descending command
 // must abolish a walking rhythm for the rhythm to count.
 import fs from 'node:fs';
+import { inPhase } from '../src/exp/spectrum.js';
 import { poolMetrics, traceFromCounts, LEG_ORDER, BANDS, classifyGait } from '../src/exp/pools.js';
 
 const IN = 'ext/cord_search.bin', OUT = 'ext/cord_search';
@@ -50,49 +51,7 @@ for (const grp of [0, 1, 2]) {
 if (runAt.length !== RUNS) throw new Error(`run map has ${runAt.length} entries, expected ${RUNS}`);
 
 // ---------------------------------------------------------------- spectra
-// one-sided power spectrum of a 1 ms-sampled signal on a Hann window, via a
-// radix-2 FFT on the next power of two
-function fftPow(x) {
-  let n = 1; while (n < x.length) n <<= 1;
-  const re = new Float64Array(n), im = new Float64Array(n);
-  const mean = x.reduce((a, v) => a + v, 0) / x.length;
-  for (let i = 0; i < x.length; i++) re[i] = (x[i] - mean) * (0.5 - 0.5 * Math.cos(2 * Math.PI * i / (x.length - 1)));
-  for (let s = 2; s <= n; s <<= 1) {
-    const h = s >> 1, wr = Math.cos(-2 * Math.PI / s), wi = Math.sin(-2 * Math.PI / s);
-    for (let k = 0; k < n; k += s) {
-      let ar = 1, ai = 0;
-      for (let j = 0; j < h; j++) {
-        const tr = re[k + j + h] * ar - im[k + j + h] * ai, ti = re[k + j + h] * ai + im[k + j + h] * ar;
-        re[k + j + h] = re[k + j] - tr; im[k + j + h] = im[k + j] - ti;
-        re[k + j] += tr; im[k + j] += ti;
-        const t = ar * wr - ai * wi; ai = ar * wi + ai * wr; ar = t;
-      }
-    }
-  }
-  const p = new Float64Array(n >> 1);
-  for (let k = 1; k < (n >> 1); k++) p[k] = re[k] * re[k] + im[k] * im[k];
-  return { p, df: 1000 / n };           // Hz per bin at 1 ms sampling
-}
-
-// in-phase statistic for a pair of equal-length traces
-function inPhase(xL, xR) {
-  const plus = fftPow(xL.map((v, i) => v + xR[i]));
-  const minus = fftPow(xL.map((v, i) => v - xR[i]));
-  const { p: Pp, df } = plus, Pm = minus.p;
-  const kLo = Math.ceil(BAND[0] / df), kHi = Math.floor(BAND[1] / df);
-  let kStar = kLo;
-  for (let k = kLo; k <= kHi; k++) if (Pp[k] > Pp[kStar]) kStar = k;
-  let bp = 0, bm = 0;
-  for (let k = kLo; k <= kHi; k++) { bp += Pp[k]; bm += Pm[k]; }
-  return {
-    peakHz: +(kStar * df).toFixed(2),
-    inPhase: +(Pp[kStar] / (Pp[kStar] + Pm[kStar] || 1)).toFixed(3),
-    inPhaseBand: +(bp / (bp + bm || 1)).toFixed(3),
-    peakPower: Pp[kStar],
-  };
-}
-
-// steps -> 1 ms samples for one channel of one run, transient dropped
+// The shared FFT and phase scorer live in src/exp/spectrum.js.
 function chan1ms(run, ch) {
   const x = [];
   const s0 = 1 + Math.round(SKIP_MS / DT);
@@ -108,8 +67,8 @@ runAt.forEach((r, k) => {
   const pool = new Uint16Array((RECS - 1) * 6);
   for (let t = 1; t < RECS; t++) for (let c = 0; c < 6; c++) pool[(t - 1) * 6 + c] = raw[t * CH + c];
   const gait = poolMetrics(traceFromCounts(pool, RECS - 1, DT, BIN), { startMs: 100 });
-  const pop = inPhase(chan1ms(k, 6), chan1ms(k, 7));
-  const pair = [0, 1, 2].map(seg => inPhase(chan1ms(k, seg), chan1ms(k, seg + 3)));
+  const pop = inPhase(chan1ms(k, 6), chan1ms(k, 7), BAND);
+  const pair = [0, 1, 2].map(seg => inPhase(chan1ms(k, seg), chan1ms(k, seg + 3), BAND));
   const totSpikes = raw.slice(CH).reduce((a, v) => a + v, 0);
   G[r.m][r.c] = { gait, pop, pair, totSpikes };
 });
@@ -167,6 +126,7 @@ const pairMedians = [0, 1, 2].map(seg => ({
 }));
 const report = {
   spec: 'cord ensemble on an externally packed cord IR: gain axes x named perturbations x proprioceptive loop {open, 5, 20, 80 ms}',
+  phaseScore: { version: 2, fft: 'Hann radix-2 with bit reversal', peak: 'maximum P+ + P- in 2-20 Hz' },
   sizes: { members: MEMBERS, conditions: CONDS, steps: STEPS, runs: RUNS, dtMs: DT, channels: CH },
   axes: [...AXES, 'proprio mode (2 bits: open/5/20/80 ms)'], conditions: COND,
   bandHz: BAND, skipMs: SKIP_MS,

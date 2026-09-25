@@ -5,14 +5,16 @@ document does the same run on a second, independently assembled nerve cord — t
 (brain-and-nerve-cord) connectome — to ask the question doc 46 could not: is the null a property
 of one cord, or of the model class?
 
-The answer is not a repeat of the null. This cord produces a strong bilateral rhythm of its
-own — a left-right **in-phase** population mode near 8 Hz — and it still produces no leg gait.
+The answer is not a repeat of the null. This cord produces a left-right **in-phase**
+population mode in the 2–20 Hz band, and it still produces no leg gait. The spectrum and
+phase numbers below were rescored after finding a missing bit-reversal permutation in the
+original hand-written FFT; see doc 48 for the audit.
 
 | file | contents |
 |---|---|
 | `scripts/prep_cord_banc.py` | packs the public BANC connectome into the cord IR: every nerve-cord-region cell plus every descending cell, the induced edges between them, delta-encoded |
 | `cordx.bend` | the ensemble, generalised: graph size from the file headers, an eight-channel tally, and a four-state proprioceptive loop |
-| `scripts/cordx_search.mjs` | the gait instrument plus the bilateral phase statistic |
+| `scripts/cordx_search.mjs`, `src/exp/spectrum.js` | the gait instrument plus the checked bilateral phase statistic |
 | `ext/` | where the packed IR, kernel input, tables, and output live (gitignored; regenerated in minutes) |
 
 ## 1. The external path
@@ -45,23 +47,21 @@ than 6; it is a flag, and the descriptor records it.
 
 With `xL`, `xR` the two population channels at 1 ms, `P+` the power of `xL + xR` and `P-` the
 power of `xL - xR`, the **in-phase fraction** is `P+(f*) / (P+(f*) + P-(f*))` where `f*` is the
-band peak of `P+` over 2-20 Hz. 1.0 is a fully in-phase bilateral mode; ~0.5 is the no-structure
-floor; near 0 would be an alternating mode. The band-integrated version sums both spectra over
-the whole band. The control is pairing a run's left channel with a *different* run's right
-channel: the same mode at the same frequency but no shared fluctuation.
+peak of `P+ + P-` over 2–20 Hz. The peak selection is symmetric between in-phase and anti-phase
+power. 1.0 is a fully in-phase bilateral mode; ~0.5 is the no-structure floor; near 0 would be
+an alternating mode. The band-integrated version sums both spectra over the whole band.
 
 ## 3. What the ensemble reads
 
 | read | value |
 |---|---|
-| in-phase fraction at the peak, baseline median | **0.92** (band-integrated 0.65) |
-| the mode | ~7.8 Hz fundamental; per-run peaks split between it and its 15.6 Hz second harmonic |
-| cross-run control | 0.58 — the lock is inside the runs, not in the statistic |
-| proprio loop open | 0.88 — the mode is a cord property, not a loop property |
-| loop closed (5 / 20 / 80 ms) | +0.03 / +0.04 / +0.04 over matched open twins |
-| commissural class cut | 0.85 — commissures strengthen the lock, do not create it |
-| command silenced | 0.89, pool rate 171 -> 72 Hz — weaker, still in-phase |
-| leg motor pairs (T1/T2/T3, L vs R) | 0.86 / 0.87 / 0.82 — in-phase too |
+| in-phase fraction at the peak, baseline median | **0.936** (band-integrated 0.802) |
+| median peak in the 2–20 Hz band | 15.63 Hz |
+| proprio loop open | 0.932 — the mode persists with the loop open |
+| loop closed (5 / 20 / 80 ms) | −0.002 / +0.017 / +0.040 over matched open twins |
+| commissural class cut | 0.893 — commissures strengthen the lock, but are not required |
+| command silenced | 0.885, pool rate 171 -> 72 Hz — weaker, still in-phase |
+| leg motor pairs (T1/T2/T3, L vs R) | 0.777 / 0.522 / 0.553 — only T1 has a strong even component |
 | live leg rhythms | **0 of 128 members** |
 
 The hemilineage ablations move the rate without breaking the mode: 13A off triples the median
@@ -70,7 +70,7 @@ between. The gain axes and commissural boost modulate the amplitude of the same 
 
 ## 4. What this is evidence for, and what it is not
 
-For: a bilateral in-phase population mode near 8 Hz is a property this wiring produces under
+For: a bilateral in-phase population mode in the measured band is a property this wiring produces under
 the plain kernel — static weights, one delay, Poisson drive, no graded release. It does not
 need the sensorimotor loop, and it appears in a cord assembled from a different animal's data
 than the one doc 46 ran. Whatever produces it lives in the shared model class — LIF cells over

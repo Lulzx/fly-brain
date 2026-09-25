@@ -74,6 +74,8 @@ which covers the structural analysis and the model ensembles.
 44. [Walking compiler](44-walking-compiler.md): the experiment compiler pointed at the nerve cord — a phase-free gait instrument, cell-type and edge-class perturbations, null wirings as ensemble members, the first walk-from-cord run, and the response battery: real perturbation experiments as the objective
 45. [Bend formalization](45-bend-formalization.md): the connectome compiler and the male connectome in Bend — a pure model of the IR, the lowering and the kernel's fire rule and delay line, 34 laws with machine-checked proofs, and a parallel run over the real tables that reproduces the shipped build's numbers
 46. [The cord in Bend](46-cord-ir.md): the leg-premotor subgraph as a checked object with the induced-subgraph property proven, the spiking kernel gated bit-identical, perturbations as proven operations, a gait instrument with no body, and a 64-member search that found no rhythm
+47. [External cord](47-cord-external.md): the BANC nerve cord through the checked IR and ensemble, with a corrected bilateral in-phase population score and no leg gait
+48. [Cord mechanism audit](48-cord-mechanisms.md): a mechanism screen, the repaired spectral scorer, and longer runs that withdraw an apparent anti-phase-basin result
 
 ## Repository layout
 

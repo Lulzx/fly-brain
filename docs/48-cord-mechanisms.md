@@ -1,90 +1,92 @@
-# 48. Cracking the in-phase mode: a mechanism screen on the external cord
+# 48. Mechanism screen and phase-score audit on the external cord
 
-Doc 47 found that the external cord, under the shipped kernel, settles into a bilateral
-in-phase population mode near 8 Hz and never produces an anti-phase leg gait. This document
-asks the follow-up: what does it take to break that mode? Five candidate mechanisms were
-added to the kernel and screened as ensemble axes, each checkable on its own and in
-combination.
+Doc 47 found a bilateral in-phase population mode in the external BANC cord and no leg gait.
+This screen asked whether delay heterogeneity, synaptic depression, side-split feedback, a
+unilateral kick or reduced inhibition could turn that mode into alternation. The original
+version of this report claimed a persistent anti-phase state for member 329. **That claim was
+an analysis error.** The spike trace itself is unchanged; the hand-written FFT used to score
+it omitted the bit-reversal permutation required by its radix-2 butterflies. Its reported
+frequencies and phase fractions were therefore not Fourier spectra. A separate error called
+the post-kick observation 1.8 seconds, although the entire run was only 1 second.
 
-| file | contents |
-|---|---|
-| `cordx2.bend` | the extended ensemble: a 16-slot delay ring with per-cell delay classes, a synaptic resource term, side-split proprioceptive feedback, a transient unilateral drive protocol, and an inhibitory-gain axis |
-| `scripts/prep_cord_banc.py` | the packer, extended: a per-cell delay column (a volume^(1/3) cable-length proxy, mean-matched to the nominal 4 steps, clamped to the ring) and side-coded proprioceptor entries |
-| `scripts/cordx2_search.mjs` | the same in-phase statistic as doc 47, plus matched-pair mechanism deltas and per-member axes |
-| `ext/cord2_search.{bin,json,md}` | the screen output and report (gitignored) |
+`src/exp/spectrum.js` now compares its FFT bins against a direct DFT in
+`scripts/spectrum_unit.mjs`. Both cord screens use that one implementation and select the
+largest **total** bilateral power, `P+ + P-`, in 2–20 Hz, so the peak choice does not favour
+either phase. `P+` is the power of left plus right; `P-` is the power of left minus right.
+The band fraction sums each across 2–20 Hz. The corrected one-second results below come
+from rescoring the saved `ext/cord2_search.bin`; no neural simulation was rerun for them.
 
-## 1. The screen
+## Screen and corrected results
 
-512 members over nine bits: the commissural, 13A, and 13B gain axes; inhibitory gain
-(normal, x0.6); a two-bit proprioceptive mode (open, shared 20 ms, side-split 20 ms,
-side-split 80 ms); per-cell delay classes (off, on); synaptic depression (off, depU 0.2 with
-resource recovery 0.0025/step); and a unilateral kick (off, or +40 Hz on the left
-proprioceptors for the first 200 ms). Crossed with the same six named perturbations as
-doc 47. 2000 steps of 0.5 ms, 3072 runs.
+`cordx2.bend` runs 512 members across nine bits and six named perturbations, for 3072 runs
+of 2000 steps at 0.5 ms. The bits vary commissural, 13A and 13B gain, inhibitory gain,
+proprioceptive return (open, shared 20 ms, side-split 20 or 80 ms), per-cell delay classes,
+presynaptic depression and a 200 ms left-proprioceptor kick. Delay classes are a
+volume-based proxy, not measured conduction times. The motor-pool gait instrument is the
+one in doc 46.
 
-Depression is implemented as a presynaptic resource `res`: each firing decrements it by
-depU, it recovers toward 1 at kRec per step, and `depU = 0` is an exact no-op. Side-split
-feedback routes each motor pool's tally to the proprioceptors of the same side only, so the
-loop is no longer symmetric by construction.
+| axis | matched median change in peak in-phase fraction | median with axis on | median pool-rate change |
+|---|---:|---:|---:|
+| delay classes | +0.036 | 0.805 | +2.2 Hz |
+| depression, depU 0.2 | −0.307 | 0.579 | −202.2 Hz |
+| unilateral kick | −0.008 | 0.761 | +2.2 Hz |
+| inhibitory gain x0.6 | +0.014 | 0.767 | +43.3 Hz |
 
-## 2. What the median says, and what the tail says
+The baseline median is 0.780 at the total-power peak and 0.656 over the band. The
+side-split 20 ms loop changes the matched peak fraction by only −0.012 versus loop-open;
+shared 20 ms changes it by −0.007, and split 80 ms by +0.019. No single axis produces a
+population-wide alternating mode. Depression has the largest median phase effect but also
+starves the motor pools; delay plus depression has median pool output of only 2.2 Hz.
 
-| mechanism | matched median delta in-phase | median on | min on |
-|---|---|---|---|
-| delay classes | +0.001 | 0.804 | 0.181 |
-| depression depU 0.2 | -0.005 | 0.784 | 0.242 |
-| kick | +0.014 | 0.821 | 0.181 |
-| inhibitory x0.6 | +0.027 | 0.823 | 0.181 |
+At the peak, 139 of 512 baseline members read below 0.55, but only 17 of those have motor
+pool output above 100 Hz. A low value at one selected frequency is insufficient evidence
+of a mode: it can coexist with an even-power majority across the band. Member 329, the old
+headline, is **0.722 at the corrected peak and 0.776 across the band**, at 603 Hz of pool
+output in its original one-second run. Members 65 and 257, also cited previously as
+anti-phase examples, are 0.952 and 0.958 at the corrected peaks. Three members pass the
+instrument's preliminary periodicity bar, but their leg pairs do not form an alternating
+gait.
 
-Read by medians, nothing works: the baseline in-phase fraction sits at 0.797 and every axis
-leaves it within +/-0.03. But the median hides a bimodal break — 71 of 512 members fall
-below 0.55, and they break along two different routes.
+## Longer, preselected follow-up
 
-**Route one: starvation.** Most depU members that lose the lock lose it because the pools
-go silent — depU costs ~200 Hz of median pool rate, and its low-in-phase members sit at
-0-20 Hz of motor output. Depression converts synchrony into asynchrony by starving the
-network, not by organising alternation.
+`cordx3.bend` extends eight configurations to four seconds, each with its original random
+seed and a second seed shared across configurations. The original-seed first second matches
+the saved one-second binary **entry for entry**. The selection includes the three members
+with live pools and the strongest odd-power band fractions in the corrected first second
+(62, 92 and 260), unmodified member 0, and a 2x2 delay/kick set (329, 73, 265, 9) at fixed
+commissural and inhibitory gains. The kick ends at 0.2 s; all windows below start at 0.5 s.
 
-**Route two: decorrelation with live pools.** The delay-classes members that crack the mode
-keep the motor pools firing (m=65: in-phase 0.19, pool 186 Hz; m=94: 0.20, 214 Hz), and so
-do the kick members (m=257: 0.25, 181 Hz). The standout is m=329 — commissural x3, reduced
-inhibition, delay classes, kick, loop open — which reaches in-phase 0.18 with a pool rate of
-603 Hz. Its bilateral spectrum is anti-phase *dominated*: the odd power P- exceeds P+ by
-~4.5x at 3.9 Hz and ~18x at 11.7 Hz. That is not the 0.5 floor of unrelated sides; the two
-hemicords are oscillating in opposition. Delay heterogeneity is the ingredient the
-population-level break needs — nearly every member of the deep tail carries it — and a
-symmetry breaker (kick or commissural gain) pushes it over.
+| member | original seed, band in-phase 0.5–1 s | 1–2 s | 2–4 s | fresh seed, 0.5–4 s |
+|---|---:|---:|---:|---:|
+| 62 | 0.450 | 0.875 | 0.738 | 0.795 |
+| 92 | 0.362 | 0.755 | 0.796 | 0.865 |
+| 260 | 0.342 | 0.765 | 0.877 | 0.742 |
+| 329 | 0.776 | 0.786 | 0.840 | 0.769 |
 
-The proprioceptive modes, matched against open twins: shared 20 ms -0.003, split 20 ms
--0.044, split 80 ms +0.016. Side-split feedback at a short delay is the only loop setting
-that pulls the median down, and several mid-tail members carry it — but it does not produce
-anti-phase structure on its own.
+None of the 16 runs has live pools and band odd-power dominance in both 1–2 and 2–4 s.
+The three apparent candidates lose that dominance immediately after the original scoring
+window. The extended m329 trace has band fractions 0.776, 0.786 and 0.840 in successive
+windows; the kick did not put it into a persistent anti-phase basin. Pairing the original
+left trace with the fresh-seed right trace of the **same configuration** yields band
+fractions 0.480–0.588 across the eight configurations, a control for shared fluctuations
+within a run. These are two seeds for selected configurations, not an exhaustive search of
+parameter space.
 
-## 3. What did not happen
+## Decision
 
-No member produced a coordinated anti-phase leg gait. The leg-pair medians sit at
-0.41-0.51 — the silent-pool floor — and the three members that pass the gait instrument's
-periodicity bar (m=73, 77, 93) do so on pool rates of 450-625 Hz with leg pairs still
-in-phase at 0.58-0.99: coherent bilateral bursts, not stepping. The anti-phase structure the
-screen finds lives in the population mode, not in the motor pools' relative phasing.
+The cord still has a bilateral in-phase population mode, and the screen still has no
+coordinated anti-phase leg gait. The earlier claim that delay heterogeneity plus a symmetry
+breaker exposed a persistent anti-phase basin is withdrawn. The corrected evidence does not
+identify a mechanism that connects the population mode to alternating motor output. A
+future model of limb-specific sensory return remains a hypothesis, not an inference from
+this screen.
 
-Reduced inhibition moved the wrong way (+0.027): weakening inhibition strengthens the lock,
-which suggests the in-phase mode is not maintained by an inhibitory scaffold — consistent
-with it being an excitatory resonance the inhibition was holding in check.
+```sh
+node scripts/spectrum_unit.mjs
+node scripts/cordx_search.mjs && node scripts/cordx2_search.mjs
+bend cordx3.bend -o cordx3 && ./cordx3 && node scripts/cordx3_long.mjs
+```
 
-## 4. Where this leaves the question
-
-The doc-47 conclusion — the in-phase mode is a model-class property — survives, but the mode
-is not unbreakable. The crack needs two ingredients at once: delay heterogeneity, which lets
-distant cells stop sharing one loop time constant, and an asymmetry source that selects which
-side leads. A transient kick was enough to tip some members into an anti-phase-dominated
-state that persisted for the remaining 1.8 s of the run — so the anti-phase basin exists, is
-not a knife-edge, and is reachable.
-
-What the anti-phase state lacks is structure: population-level opposition without leg-pool
-phasing is churn, not a gait. The missing piece is plausibly whatever couples the two-sided
-mode to motor output — in a real animal that coupling is the musculoskeletal plant feeding
-side-specific proprioceptors, which the side-split mode here only gestures at (a shared
-pool tally, not a limb signal). The candidate list that remains is narrower than the one
-this screen started with: not delays alone, not depression, not inhibition — but an
-asymmetric, body-coupled sensory return on top of heterogeneous delays.
+The external IR and binary runs are in `ext/`, which is gitignored; doc 47 records how to
+recreate the IR from the public BANC source. `ext/cord3_long.{json,md}` holds all 16
+four-second scores and per-window leg-pair reads.
