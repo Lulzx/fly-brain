@@ -42,7 +42,8 @@
   so those legs hold a posture ([docs 50](50-cord-cell-types.md), [51](51-cord-drive.md)).
 - **The cord's antagonist alternation has no period.** Fatigue in the inhibitory premotor loop makes flexor and
   extensor mutually exclusive, but they switch every ~20 ms with exponential-like dwells; no candidate holds
-  a rhythm over 10 s and two seeds ([doc 51](51-cord-drive.md)).
+  a rhythm over 10 s and two seeds, with or without slow adaptation in that loop ([docs 51](51-cord-drive.md),
+  [52](52-cord-slow-adaptation.md)).
 - Descending-neuron roles and readout thresholds are chosen from the literature, not derived.
 - **42% of motor output cannot reach the body.** Over 20 s of foraging, 350 of the model's 815 motor
   neurons have no route to any actuator, and they are not quiet: they fire at 21.4 Hz against 21.9 Hz for

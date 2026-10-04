@@ -7,6 +7,7 @@
 //   node scripts/cordx4_search.mjs          # rescore saved runs only
 //   node scripts/cordx4_search.mjs --screen x5 [run]   # the cell-type screen, cordx5.bend
 //   node scripts/cordx4_search.mjs --screen x6 [run]   # the inhibitory half-centre, cordx6.bend
+//   node scripts/cordx4_search.mjs --screen x7 [run]   # slow adaptation in that loop, cordx7.bend
 //
 // Member bits: 0-1 adaptation per spike {0.072, 0.5, 2, 5} mV, 2 adaptation
 // tau {100, 400} ms, 3-4 rebound gain {0, 6, 15, 30} mV, 5 proprioceptive
@@ -35,6 +36,7 @@ const LEGS = ['T1_left', 'T2_left', 'T3_left', 'T1_right', 'T2_right', 'T3_right
 const COND = ['baseline', 'no_command'];
 const AINC = [0.072, 0.5, 2, 5], ATAU = [100, 400], GH = [0, 6, 15, 30];
 const RB5 = [0, 15, 30, 60], AI5 = [0.072, 1, 3, 6], TONIC = [0, 2, 4, 6];
+const TAU7 = [100, 300, 600, 1000], INC7 = [0, 0.5, 1, 2];
 
 // x5 member bits: 0-1 rebound gain on excitatory premotor cells, 2-3 their
 // adaptation per spike, 4 graded release in inhibitory premotor cells, 5-6
@@ -68,6 +70,16 @@ const SCREENS = {
     axes: [
       { name: 'rebound gain mV, inh premotor', of: m => RB5[m & 3] },
       { name: 'adaptation mV, inh premotor', of: m => AI5[(m >> 2) & 3] },
+      { name: 'tonic depolarisation mV', of: m => TONIC[(m >> 4) & 3] },
+      { name: 'inh premotor loop gain', of: m => (m >> 6) & 1 ? 3 : 1 },
+    ],
+  },
+  x7: {
+    dir: 'ext/x7', bin: './cordx7', shippedMask: 127, title: 'Slow-adaptation screen: real wiring against scrambles',
+    axesOf: m => ({ tauMs: TAU7[m & 3], incr: INC7[(m >> 2) & 3], tonic: TONIC[(m >> 4) & 3], loopGain: (m >> 6) & 1 ? 3 : 1 }),
+    axes: [
+      { name: 'slow adaptation tau ms, inh premotor', of: m => TAU7[m & 3] },
+      { name: 'slow adaptation mV per spike', of: m => INC7[(m >> 2) & 3] },
       { name: 'tonic depolarisation mV', of: m => TONIC[(m >> 4) & 3] },
       { name: 'inh premotor loop gain', of: m => (m >> 6) & 1 ? 3 : 1 },
     ],

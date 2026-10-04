@@ -11,21 +11,24 @@
 //
 //   bend cordx6L.bend -o cordx6L && node scripts/cord_rhythm_long.mjs run
 //   node scripts/cord_rhythm_long.mjs          # rescore
+//   node scripts/cord_rhythm_long.mjs --screen x7 [run]   # picks from ext/x7/picks.json
 import fs from 'node:fs';
 import { execFileSync } from 'node:child_process';
 
-const DIR = 'ext/x6', WIRINGS = ['real', 'deg'];
+const SCREEN = process.argv.includes('--screen') ? process.argv[process.argv.indexOf('--screen') + 1] : 'x6';
+const DIR = `ext/${SCREEN}`, WIRINGS = ['real', 'deg'];
 const DT = 0.5, BIN = 10, BLOCK = 5, NULLS = 20, RI_MIN = 0.2, R_MAX = -0.2, MIN_HZ = 2, TOL = 0.2;
 const WINDOWS = [[500, 5000], [5000, 10000]];
 const LEGS = ['T1_left', 'T2_left', 'T3_left', 'T1_right', 'T2_right', 'T3_right'];
-const PICK = [[40, 57, 42, 44, 56, 58, 60, 62], [116, 118, 106, 121, 102, 117, 119, 115]];
-const meta = JSON.parse(fs.readFileSync(`${DIR}/x6.json`, 'utf8'));
+const PICK = SCREEN === 'x6' ? [[40, 57, 42, 44, 56, 58, 60, 62], [116, 118, 106, 121, 102, 117, 119, 115]]
+  : JSON.parse(fs.readFileSync(`${DIR}/picks.json`, 'utf8')).picks;
+const meta = JSON.parse(fs.readFileSync(`${DIR}/${SCREEN}.json`, 'utf8'));
 
 if (process.argv.includes('run')) {
   for (const w of WIRINGS) {
     fs.rmSync(`${DIR}/cur`, { force: true });
     fs.symlinkSync(w, `${DIR}/cur`);
-    execFileSync('./cordx6L', { stdio: 'inherit' });
+    execFileSync(`./cord${SCREEN}L`, { stdio: 'inherit' });
   }
 }
 
@@ -81,8 +84,8 @@ function legWindow(D, run, l, win) {
 
 const report = { criteria: { BIN, BLOCK, NULLS, RI_MIN, R_MAX, MIN_HZ, TOL, WINDOWS }, wirings: {} };
 for (const w of WIRINGS) {
-  const D = load(`${DIR}/${w}/x6_long.bin`);
-  const S = w === 'real' || fs.existsSync(`${DIR}/${w}/x6_search.bin`) ? load(`${DIR}/${w}/x6_search.bin`) : null;
+  const D = load(`${DIR}/${w}/${SCREEN}_long.bin`);
+  const S = fs.existsSync(`${DIR}/${w}/${SCREEN}_search.bin`) ? load(`${DIR}/${w}/${SCREEN}_search.bin`) : null;
   const members = [];
   let prefixOk = 0, prefixN = 0;
   for (let g = 0; g < 2; g++) for (let k = 0; k < 8; k++) {
@@ -113,4 +116,4 @@ for (const w of WIRINGS) {
   console.log(`  windows live ${all.filter(x => x.live).length}/${all.length}, anticorrelated ${all.filter(x => x.live && x.r < R_MAX).length}, rhythmic (RI >= ${RI_MIN} and above nulls) ${all.filter(x => x.live && x.ri >= RI_MIN && x.ri > x.nullMax).length}, both ${all.filter(x => x.live && x.pass).length}`);
   for (const m of members) console.log(`  m=${m.member} gain x${m.loopGain}: ${m.seeds.map(s => `${s.seed} ${s.sustainedLegs} legs [${s.periods.join(',')}] ms${s.agree ? ' agree' : ''}`).join(' | ')}${m.pass ? '  PASS' : ''}`);
 }
-fs.writeFileSync(`${DIR}/x6_long.json`, JSON.stringify(report, null, 1));
+fs.writeFileSync(`${DIR}/${SCREEN}_long.json`, JSON.stringify(report, null, 1));

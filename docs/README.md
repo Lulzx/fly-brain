@@ -79,6 +79,7 @@ which covers the structural analysis and the model ensembles.
 49. [Scrambled cords and antagonist alternation](49-cord-scramble-alternation.md): the in-phase population mode survives degree-preserving scrambles, the real cord's coxa-trochanter antagonists are anticorrelated where a scramble's are co-active, and adaptation or rebound added uniformly yields no rhythm
 50. [Cord cell types](50-cord-cell-types.md): rebound, adaptation, graded release and tonic drive placed by premotor class; the antagonist signature replicates against both scrambles, no rhythm appears, graded release needs recalibration, and only the front-leg pools are ever reached
 51. [Where the cord's posture comes from](51-cord-drive.md): per-cell drive shows 19A holding flexors and 13A holding extensors in a mutually inhibitory loop 1.6x denser than chance; fatigue in that loop gives sustained, wiring-specific antagonist switching, and a pre-registered 10 s test finds it is not periodic
+52. [Slow adaptation in the inhibitory premotor loop](52-cord-slow-adaptation.md): a 100 ms-1 s fatigue variable in the 19A/13A loop leaves the switch periodless over 10 s; dwells of 20 ms are too short for any slow process to time, so the missing ingredient is hysteresis
 
 ## Repository layout
 

@@ -85,4 +85,14 @@ const agree = out.filter(o => o.c === 0).map(o => {
 }).filter(a => a.n >= 2).sort((a, b) => b.n - a.n);
 console.log(`members with >= 2 rhythmic alternating legs: ${agree.length}`);
 for (const a of agree.slice(0, 15)) console.log(`  m=${a.m} legs ${a.n} periods ${a.periods.join(',')} ms (spread ${a.spread})`);
+// the long-run candidates, by rule: the top eight members of each loop-gain group (members
+// 0-63, 64-127) by rhythmic alternating legs, then by the screen's alternation calls
+if (WIRING === 'real' && fs.existsSync(`${DIR}/${SCREEN}_search.json`)) {
+  const sc = JSON.parse(fs.readFileSync(`${DIR}/${SCREEN}_search.json`, 'utf8'));
+  const score = m => out.find(o => o.m === m && o.c === 0).legs.filter(l => l.ri >= RI_MIN && l.riNull < RI_MIN && l.corr < -0.2).length;
+  const alt = m => sc.members[m].reads.real[0].legs.filter(l => l.alt).length;
+  const picks = [0, 1].map(g => [...Array(64).keys()].map(k => g * 64 + k).sort((a, b) => score(b) - score(a) || alt(b) - alt(a) || a - b).slice(0, 8));
+  fs.writeFileSync(`${DIR}/picks.json`, JSON.stringify({ rule: 'top 8 per loop-gain group by rhythmic alternating legs, then alternation calls, then member index', picks }, null, 1));
+  console.log(`picks: ${JSON.stringify(picks)}`);
+}
 fs.writeFileSync(`${DIR}/${WIRING}/${SCREEN}_rhythm.json`, JSON.stringify({ screen: SCREEN, wiring: WIRING, riMin: RI_MIN, blockMs: BLOCK, runs: out }, null, 1));

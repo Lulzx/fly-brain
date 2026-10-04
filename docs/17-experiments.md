@@ -39,6 +39,7 @@
 | `python3 scripts/cord_drive.py --meta <meta> --run` | Per-cell spike counts (cordx5c) pushed through the wiring: each motor pool's drive by source hemilineage ([doc 51](51-cord-drive.md)) |
 | `node scripts/cordx4_search.mjs --screen x6 run` | Inhibitory half-centre screen: fatigue and rebound in inhibitory premotor cells, loop gain, against scrambles ([doc 51](51-cord-drive.md)) |
 | `node scripts/cord_rhythm_long.mjs run` | 10 s, two-seed periodicity test of the screen's rule-chosen candidates, with prefix identity ([doc 51](51-cord-drive.md)) |
+| `node scripts/cordx4_search.mjs --screen x7 run`, then `cord_rhythm.mjs`, `cord_long_bend.py` and `cord_rhythm_long.mjs --screen x7 run` | Slow adaptation in the inhibitory premotor loop, with the same pre-registered 10 s test on generated `cordx7L.bend` ([doc 52](52-cord-slow-adaptation.md)) |
 | `python3 scripts/algo_operators.py fly worm` | Annotation-free operator detectors: expansion, normalization, ring ([Compiler](29-connectome-compiler.md)) |
 | `node scripts/check_flyvisgpu.mjs` | WebGPU flyvis kernel against the reference model, real adapter ([WebGPU](27-webgpu.md)) |
 | `node scripts/wing_mn.mjs [s] [seed]` | What the wing power and steering motor neurons do through a flight ([Flight](24-flight.md)) |
