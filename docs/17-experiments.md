@@ -34,6 +34,7 @@
 | `./cordens && node scripts/cord_search.mjs` | The cord ensemble: 64 members x 6 perturbations, ranked, with kill tests ([doc 46](46-cord-ir.md)) |
 | `node scripts/spectrum_unit.mjs` | The bilateral FFT against a direct DFT and known in-phase/anti-phase sinusoids ([doc 48](48-cord-mechanisms.md)) |
 | `./cordx3 && node scripts/cordx3_long.mjs` | Four-second external-cord follow-up, with exact one-second prefix checks and a cross-seed phase control ([doc 48](48-cord-mechanisms.md)) |
+| `node scripts/cordx4_search.mjs run` | Alternation screen: adaptation and rebound axes on the real cord and two degree-preserving scrambles, antagonist phase against a rotated surrogate ([doc 49](49-cord-scramble-alternation.md)) |
 | `python3 scripts/algo_operators.py fly worm` | Annotation-free operator detectors: expansion, normalization, ring ([Compiler](29-connectome-compiler.md)) |
 | `node scripts/check_flyvisgpu.mjs` | WebGPU flyvis kernel against the reference model, real adapter ([WebGPU](27-webgpu.md)) |
 | `node scripts/wing_mn.mjs [s] [seed]` | What the wing power and steering motor neurons do through a flight ([Flight](24-flight.md)) |

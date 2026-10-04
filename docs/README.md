@@ -76,6 +76,7 @@ which covers the structural analysis and the model ensembles.
 46. [The cord in Bend](46-cord-ir.md): the leg-premotor subgraph as a checked object with the induced-subgraph property proven, the spiking kernel gated bit-identical, perturbations as proven operations, a gait instrument with no body, and a 64-member search that found no rhythm
 47. [External cord](47-cord-external.md): the BANC nerve cord through the checked IR and ensemble, with a corrected bilateral in-phase population score and no leg gait
 48. [Cord mechanism audit](48-cord-mechanisms.md): a mechanism screen, the repaired spectral scorer, and longer runs that withdraw an apparent anti-phase-basin result
+49. [Scrambled cords and antagonist alternation](49-cord-scramble-alternation.md): the in-phase population mode survives degree-preserving scrambles, the real cord's coxa-trochanter antagonists are anticorrelated where a scramble's are co-active, and adaptation or rebound added uniformly yields no rhythm
 
 ## Repository layout
 

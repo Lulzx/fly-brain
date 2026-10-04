@@ -34,6 +34,9 @@
 - No connectome-only model produces coordinated walking from the whole nerve cord. Pugliese et al. found
   rhythm in a front-leg subnetwork for about 3% of descending neurons. Hence the descending-command mode.
 - The full-connectome mode cannot hold posture.
+- **The cord's ~8 Hz bilateral in-phase mode is not the wiring's.** Degree-preserving scrambles of the
+  BANC cord reproduce it at the same frequency ([doc 49](49-cord-scramble-alternation.md)); what the real
+  wiring adds is antagonist anticorrelation at the coxa-trochanter joint, not a rhythm.
 - Descending-neuron roles and readout thresholds are chosen from the literature, not derived.
 - **42% of motor output cannot reach the body.** Over 20 s of foraging, 350 of the model's 815 motor
   neurons have no route to any actuator, and they are not quiet: they fire at 21.4 Hz against 21.9 Hz for
