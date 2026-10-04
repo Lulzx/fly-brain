@@ -5,6 +5,7 @@
 //   python3 scripts/prep_cord_x4.py --meta <meta.feather>
 //   bend cordx4.bend -o cordx4 && node scripts/cordx4_search.mjs run
 //   node scripts/cordx4_search.mjs          # rescore saved runs only
+//   node scripts/cordx4_search.mjs --screen x5 [run]   # the cell-type screen, cordx5.bend
 //
 // Member bits: 0-1 adaptation per spike {0.072, 0.5, 2, 5} mV, 2 adaptation
 // tau {100, 400} ms, 3-4 rebound gain {0, 6, 15, 30} mV, 5 proprioceptive
@@ -25,33 +26,63 @@ import fs from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { fftPow, inPhase } from '../src/exp/spectrum.js';
 
-const DIR = 'ext/x4', WIRINGS = ['real', 'deg', 'side'];
+const SCREEN = process.argv.includes('--screen') ? process.argv[process.argv.indexOf('--screen') + 1] : 'x4';
+const WIRINGS = ['real', 'deg', 'side'];
 const DT = 0.5, SKIP_MS = 500, BAND = [1, 20], POP_BAND = [2, 20];
 const ALT = 0.35, CONC = 0.2, MIN_HZ = 2;
 const LEGS = ['T1_left', 'T2_left', 'T3_left', 'T1_right', 'T2_right', 'T3_right'];
 const COND = ['baseline', 'no_command'];
 const AINC = [0.072, 0.5, 2, 5], ATAU = [100, 400], GH = [0, 6, 15, 30];
+const RB5 = [0, 15, 30, 60], AI5 = [0.072, 1, 3, 6], TONIC = [0, 2, 4, 6];
 
-if (process.argv[2] === 'run') {
+// x5 member bits: 0-1 rebound gain on excitatory premotor cells, 2-3 their
+// adaptation per spike, 4 graded release in inhibitory premotor cells, 5-6
+// tonic depolarisation of both premotor classes
+const SCREENS = {
+  x4: {
+    dir: 'ext/x4', bin: './cordx4', shippedMask: 31, title: 'Alternation screen: real wiring against scrambles',
+    axesOf: m => ({ ainc: AINC[m & 3], atau: ATAU[(m >> 2) & 1], gh: GH[(m >> 3) & 3],
+      loop: (m >> 5) & 1 ? 'split 20 ms' : 'open', kick: (m >> 6) & 1 }),
+    axes: [
+      { name: 'adaptation per spike', of: m => AINC[m & 3] },
+      { name: 'adaptation tau ms', of: m => ATAU[(m >> 2) & 1] },
+      { name: 'rebound gain mV', of: m => GH[(m >> 3) & 3] },
+      { name: 'proprio loop', of: m => (m >> 5) & 1 ? 'split 20 ms' : 'open' },
+      { name: 'kick', of: m => (m >> 6) & 1 },
+    ],
+  },
+  x5: {
+    dir: 'ext/x5', bin: './cordx5', shippedMask: 127, title: 'Cell-type screen: real wiring against scrambles',
+    axesOf: m => ({ rebound: RB5[m & 3], adapt: AI5[(m >> 2) & 3], graded: (m >> 4) & 1, tonic: TONIC[(m >> 5) & 3] }),
+    axes: [
+      { name: 'rebound gain mV, exc premotor', of: m => RB5[m & 3] },
+      { name: 'adaptation mV, exc premotor', of: m => AI5[(m >> 2) & 3] },
+      { name: 'graded release, inh premotor', of: m => (m >> 4) & 1 },
+      { name: 'tonic depolarisation mV', of: m => TONIC[(m >> 5) & 3] },
+    ],
+  },
+};
+const S = SCREENS[SCREEN];
+if (!S) throw new Error(`unknown screen ${SCREEN}`);
+const DIR = S.dir;
+
+if (process.argv.slice(2).includes('run')) {
   for (const w of WIRINGS) {
     fs.rmSync(`${DIR}/cur`, { force: true });
     fs.symlinkSync(w, `${DIR}/cur`);
     console.log(`--- ${w}`);
-    execFileSync('./cordx4', { stdio: 'inherit' });
+    execFileSync(S.bin, { stdio: 'inherit' });
   }
 }
 
-const meta = JSON.parse(fs.readFileSync(`${DIR}/x4.json`, 'utf8'));
+const meta = JSON.parse(fs.readFileSync(`${DIR}/${SCREEN}.json`, 'utf8'));
 const size = leg => [meta.pools[LEGS[leg]].flex, meta.pools[LEGS[leg]].ext];
-const axesOf = m => ({
-  ainc: AINC[m & 3], atau: ATAU[(m >> 2) & 1], gh: GH[(m >> 3) & 3],
-  loop: (m >> 5) & 1 ? 'split 20 ms' : 'open', kick: (m >> 6) & 1,
-});
+const axesOf = S.axesOf;
 const median = xs => { const s = xs.filter(v => v != null && !Number.isNaN(v)).sort((a, b) => a - b); return s.length ? s[s.length >> 1] : null; };
 const r3 = x => x == null ? null : +x.toFixed(3);
 
 function load(w) {
-  const b = fs.readFileSync(`${DIR}/${w}/x4_search.bin`);
+  const b = fs.readFileSync(`${DIR}/${w}/${SCREEN}_search.bin`);
   const ab = b.buffer.slice(b.byteOffset, b.byteOffset + b.byteLength);
   const hdr = new Uint32Array(ab, 0, 8);
   if (hdr[0] !== 0x48435553 || hdr[1] !== 4) throw new Error(`${w}: bad header`);
@@ -131,7 +162,7 @@ const byWiring = WIRINGS.map(w => ({
   popInPhase: r3(median(R[w].runs.filter(r => r.c === 0).map(r => r.pop.inPhase))),
   popInPhaseBand: r3(median(R[w].runs.filter(r => r.c === 0).map(r => r.pop.inPhaseBand))),
   popPeakHz: median(R[w].runs.filter(r => r.c === 0).map(r => r.pop.peakHz)),
-  popInPhaseShipped: r3(median(R[w].runs.filter(r => r.c === 0 && (r.m & 31) === 0).map(r => r.pop.inPhaseBand))),
+  popInPhaseShipped: r3(median(R[w].runs.filter(r => r.c === 0 && (r.m & S.shippedMask) === 0).map(r => r.pop.inPhaseBand))),
   liveLegs: R[w].runs.filter(r => r.c === 0).reduce((a, r) => a + r.legs.filter(l => l.live).length, 0),
   antagonistBand: r3(legStat(w, 0, l => l.inPhaseBand)),
   surrogateBand: r3(legStat(w, 0, l => l.surrogate)),
@@ -144,13 +175,7 @@ const byWiring = WIRINGS.map(w => ({
 }));
 
 // marginal effect of each mechanism on the antagonist band fraction, real wiring
-const AX = [
-  { name: 'adaptation per spike', of: m => AINC[m & 3] },
-  { name: 'adaptation tau ms', of: m => ATAU[(m >> 2) & 1] },
-  { name: 'rebound gain mV', of: m => GH[(m >> 3) & 3] },
-  { name: 'proprio loop', of: m => axesOf(m).loop },
-  { name: 'kick', of: m => (m >> 6) & 1 },
-];
+const AX = S.axes;
 const marginals = AX.map(ax => {
   const levels = [...new Set([...Array(M).keys()].map(ax.of))];
   return {
@@ -205,10 +230,23 @@ const report = {
     }))])),
   })),
 };
-fs.writeFileSync(`${DIR}/x4_search.json`, JSON.stringify(report, null, 1));
+// x5 with every axis at its first level is x4's member 0: same seed, same cells, same arithmetic
+let identity = null;
+if (SCREEN === 'x5' && fs.existsSync('ext/x4/real/x4_search.bin')) {
+  const a = R.real.D, b4 = load4();
+  const n = 2 * a.RECS * a.CH;
+  identity = b4.length >= n && a.counts.subarray(0, n).every((v, i) => v === b4[i]);
+  console.log(`x5 member 0 against x4 member 0, real wiring: ${identity ? 'byte-identical' : 'DIFFERENT'}`);
+}
+function load4() {
+  const b = fs.readFileSync('ext/x4/real/x4_search.bin');
+  return new Uint16Array(b.buffer.slice(b.byteOffset + 32, b.byteOffset + b.byteLength));
+}
+report.identityWithX4 = identity;
+fs.writeFileSync(`${DIR}/${SCREEN}_search.json`, JSON.stringify(report, null, 1));
 
 const L = [];
-L.push(`# Alternation screen: real wiring against scrambles\n`);
+L.push(`# ${S.title}\n`);
 L.push(`${M} members x ${R.real.D.CONDS} conditions x ${WIRINGS.length} wirings, ${R.real.D.STEPS} steps at ${DT} ms, scored ${SKIP_MS} ms on.\n`);
 L.push(`| wiring | pop in-phase (peak / band) | pop peak Hz | pop band, shipped cells | live legs | antagonist band | surrogate | alternating legs | same call on surrogate | no command | members >= 2 | motor Hz |`);
 L.push(`|---|---|---|---|---|---|---|---|---|---|---|---|`);
@@ -224,5 +262,6 @@ for (const a of marginals) for (const v of a.levels)
 L.push(``);
 L.push(`## Members with the most alternating legs, real wiring\n`);
 for (const t of top) L.push(`- m=${t.m} ${JSON.stringify(t.axes)}: real ${t.real}, deg ${t.deg}, side ${t.side}, no-command ${t.realNoCmd}; mean band ${t.meanBand}`);
-fs.writeFileSync(`${DIR}/x4_search.md`, L.join('\n') + '\n');
+if (identity != null) L.push(`\nAll axes off against cordx4 member 0, real wiring: ${identity ? 'byte-identical' : 'DIFFERENT'}.`);
+fs.writeFileSync(`${DIR}/${SCREEN}_search.md`, L.join('\n') + '\n');
 console.log(L.join('\n'));
