@@ -79,17 +79,19 @@ silenced, the live legs go from 0 to 0, 4 and 13 as tonic drive rises through 0,
 and motor output from 216 Hz to 447 Hz. It also lowers the antagonist band on the real cord
 (0.48 to 0.38–0.40). It lowers it on the scrambles too (0.81 to 0.62), so that part is generic.
 
-**Only the front legs are ever live.** Across every member, live legs are 17 for T1 left and 45 for
-T1 right, 1 for T2 left and none for the other three. That holds under the command, under tonic
-drive and under every mechanism. The middle and hind leg pools are not being reached, so no
-mechanism screen can find a gait there.
+**Only the front legs have both antagonists live.** Across every member, live legs are 17 for T1
+left and 45 for T1 right, 1 for T2 left and none for the other three. That holds under the
+command, under tonic drive and under every mechanism. *Correction:* an earlier version of this
+paragraph said the middle and hind pools are not reached. They are reached, but one antagonist of
+each pair is held silent. The T2 flexors fire at about 2 Hz per cell while the T2 extensors sit
+near 0, and the T3 left extensors fire while the T3 left flexors do not. A leg counts as live only
+when both pools fire, so these legs hold a fixed posture and are not silent. [Doc 51](51-cord-drive.md)
+traces which inhibitory hemilineage holds each one down.
 
 ## What this decides
 
-1. **T2 and T3 drive comes first.** Before another mechanism axis, measure why their
-   coxa-trochanter pools stay silent. The candidates are DNg100's projections into the posterior
-   neuromeres, the input scale of their motor neurons (the volume rule in `prep_cord_banc.py`),
-   and how far tonic drive must go before they fire.
+1. **T2 and T3 posture comes first.** Before another mechanism axis, find what holds one antagonist
+   of each middle and hind leg silent. That is done in [doc 51](51-cord-drive.md).
 2. **Recalibrate graded release** to match the spiking cell's mean delivered weight before
    counting it for or against anything.
 3. **The positive control remains open.** Reproducing the published front-leg rhythm under

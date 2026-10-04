@@ -6,6 +6,7 @@
 //   bend cordx4.bend -o cordx4 && node scripts/cordx4_search.mjs run
 //   node scripts/cordx4_search.mjs          # rescore saved runs only
 //   node scripts/cordx4_search.mjs --screen x5 [run]   # the cell-type screen, cordx5.bend
+//   node scripts/cordx4_search.mjs --screen x6 [run]   # the inhibitory half-centre, cordx6.bend
 //
 // Member bits: 0-1 adaptation per spike {0.072, 0.5, 2, 5} mV, 2 adaptation
 // tau {100, 400} ms, 3-4 rebound gain {0, 6, 15, 30} mV, 5 proprioceptive
@@ -59,6 +60,16 @@ const SCREENS = {
       { name: 'adaptation mV, exc premotor', of: m => AI5[(m >> 2) & 3] },
       { name: 'graded release, inh premotor', of: m => (m >> 4) & 1 },
       { name: 'tonic depolarisation mV', of: m => TONIC[(m >> 5) & 3] },
+    ],
+  },
+  x6: {
+    dir: 'ext/x6', bin: './cordx6', shippedMask: 127, title: 'Inhibitory half-centre screen: real wiring against scrambles',
+    axesOf: m => ({ rebound: RB5[m & 3], adapt: AI5[(m >> 2) & 3], tonic: TONIC[(m >> 4) & 3], loopGain: (m >> 6) & 1 ? 3 : 1 }),
+    axes: [
+      { name: 'rebound gain mV, inh premotor', of: m => RB5[m & 3] },
+      { name: 'adaptation mV, inh premotor', of: m => AI5[(m >> 2) & 3] },
+      { name: 'tonic depolarisation mV', of: m => TONIC[(m >> 4) & 3] },
+      { name: 'inh premotor loop gain', of: m => (m >> 6) & 1 ? 3 : 1 },
     ],
   },
 };
@@ -230,13 +241,13 @@ const report = {
     }))])),
   })),
 };
-// x5 with every axis at its first level is x4's member 0: same seed, same cells, same arithmetic
+// x5 and x6 with every axis at its first level are x4's member 0: same seed, same cells, same arithmetic
 let identity = null;
-if (SCREEN === 'x5' && fs.existsSync('ext/x4/real/x4_search.bin')) {
+if (SCREEN !== 'x4' && fs.existsSync('ext/x4/real/x4_search.bin')) {
   const a = R.real.D, b4 = load4();
   const n = 2 * a.RECS * a.CH;
   identity = b4.length >= n && a.counts.subarray(0, n).every((v, i) => v === b4[i]);
-  console.log(`x5 member 0 against x4 member 0, real wiring: ${identity ? 'byte-identical' : 'DIFFERENT'}`);
+  console.log(`${SCREEN} member 0 against x4 member 0, real wiring: ${identity ? 'byte-identical' : 'DIFFERENT'}`);
 }
 function load4() {
   const b = fs.readFileSync('ext/x4/real/x4_search.bin');

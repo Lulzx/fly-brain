@@ -36,6 +36,9 @@
 | `./cordx3 && node scripts/cordx3_long.mjs` | Four-second external-cord follow-up, with exact one-second prefix checks and a cross-seed phase control ([doc 48](48-cord-mechanisms.md)) |
 | `node scripts/cordx4_search.mjs run` | Alternation screen: adaptation and rebound axes on the real cord and two degree-preserving scrambles, antagonist phase against a rotated surrogate ([doc 49](49-cord-scramble-alternation.md)) |
 | `node scripts/cordx4_search.mjs --screen x5 run` | Cell-type screen: mechanisms by premotor class, tonic drive, a byte-identity check against cordx4 member 0 ([doc 50](50-cord-cell-types.md)) |
+| `python3 scripts/cord_drive.py --meta <meta> --run` | Per-cell spike counts (cordx5c) pushed through the wiring: each motor pool's drive by source hemilineage ([doc 51](51-cord-drive.md)) |
+| `node scripts/cordx4_search.mjs --screen x6 run` | Inhibitory half-centre screen: fatigue and rebound in inhibitory premotor cells, loop gain, against scrambles ([doc 51](51-cord-drive.md)) |
+| `node scripts/cord_rhythm_long.mjs run` | 10 s, two-seed periodicity test of the screen's rule-chosen candidates, with prefix identity ([doc 51](51-cord-drive.md)) |
 | `python3 scripts/algo_operators.py fly worm` | Annotation-free operator detectors: expansion, normalization, ring ([Compiler](29-connectome-compiler.md)) |
 | `node scripts/check_flyvisgpu.mjs` | WebGPU flyvis kernel against the reference model, real adapter ([WebGPU](27-webgpu.md)) |
 | `node scripts/wing_mn.mjs [s] [seed]` | What the wing power and steering motor neurons do through a flight ([Flight](24-flight.md)) |

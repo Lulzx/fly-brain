@@ -37,8 +37,12 @@
 - **The cord's ~8 Hz bilateral in-phase mode is not the wiring's.** Degree-preserving scrambles of the
   BANC cord reproduce it at the same frequency ([doc 49](49-cord-scramble-alternation.md)); what the real
   wiring adds is antagonist anticorrelation at the coxa-trochanter joint, not a rhythm.
-- **Only the front-leg motor pools are reached on the BANC cord.** Under the DNg100 command, tonic drive
-  or any cell-type mechanism, the middle and hind coxa-trochanter pools stay silent ([doc 50](50-cord-cell-types.md)).
+- **Only the front legs have both antagonists live on the BANC cord.** In the middle and hind legs one
+  coxa-trochanter pool is held silent by its inhibitory hemilineage (19A onto flexors, 13A onto extensors),
+  so those legs hold a posture ([docs 50](50-cord-cell-types.md), [51](51-cord-drive.md)).
+- **The cord's antagonist alternation has no period.** Fatigue in the inhibitory premotor loop makes flexor and
+  extensor mutually exclusive, but they switch every ~20 ms with exponential-like dwells; no candidate holds
+  a rhythm over 10 s and two seeds ([doc 51](51-cord-drive.md)).
 - Descending-neuron roles and readout thresholds are chosen from the literature, not derived.
 - **42% of motor output cannot reach the body.** Over 20 s of foraging, 350 of the model's 815 motor
   neurons have no route to any actuator, and they are not quiet: they fire at 21.4 Hz against 21.9 Hz for
