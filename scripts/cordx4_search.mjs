@@ -8,6 +8,7 @@
 //   node scripts/cordx4_search.mjs --screen x5 [run]   # the cell-type screen, cordx5.bend
 //   node scripts/cordx4_search.mjs --screen x6 [run]   # the inhibitory half-centre, cordx6.bend
 //   node scripts/cordx4_search.mjs --screen x7 [run]   # slow adaptation in that loop, cordx7.bend
+//   node scripts/cordx4_search.mjs --screen x8 [run]   # within-half inhibition weakened, cordx8.bend
 //
 // Member bits: 0-1 adaptation per spike {0.072, 0.5, 2, 5} mV, 2 adaptation
 // tau {100, 400} ms, 3-4 rebound gain {0, 6, 15, 30} mV, 5 proprioceptive
@@ -37,6 +38,8 @@ const COND = ['baseline', 'no_command'];
 const AINC = [0.072, 0.5, 2, 5], ATAU = [100, 400], GH = [0, 6, 15, 30];
 const RB5 = [0, 15, 30, 60], AI5 = [0.072, 1, 3, 6], TONIC = [0, 2, 4, 6];
 const TAU7 = [100, 300, 600, 1000], INC7 = [0, 0.5, 1, 2];
+// x8 row-set groups (member bits 5-7): 0-3 scale the within-hemilineage loop, 4-7 the own-half inhibition
+const ROW8 = ['hl x1', 'hl x0.5', 'hl x0.25', 'hl x0', 'own x0.75', 'own x0.5', 'own x0.25', 'own x0'];
 
 // x5 member bits: 0-1 rebound gain on excitatory premotor cells, 2-3 their
 // adaptation per spike, 4 graded release in inhibitory premotor cells, 5-6
@@ -82,6 +85,16 @@ const SCREENS = {
       { name: 'slow adaptation mV per spike', of: m => INC7[(m >> 2) & 3] },
       { name: 'tonic depolarisation mV', of: m => TONIC[(m >> 4) & 3] },
       { name: 'inh premotor loop gain', of: m => (m >> 6) & 1 ? 3 : 1 },
+    ],
+  },
+  x8: {
+    dir: 'ext/x8', bin: './cordx8', shippedMask: 255, title: 'Within-half inhibition screen: real wiring against scrambles',
+    axesOf: m => ({ tonic: TONIC[m & 3], graded: (m >> 2) & 1, incr: INC7[(m >> 3) & 3], rows: ROW8[m >> 5] }),
+    axes: [
+      { name: 'tonic depolarisation mV', of: m => TONIC[m & 3] },
+      { name: 'graded release, inh premotor', of: m => (m >> 2) & 1 },
+      { name: 'slow adaptation mV per spike (tau 300 ms)', of: m => INC7[(m >> 3) & 3] },
+      { name: 'within-half inhibition row-set', of: m => ROW8[m >> 5] },
     ],
   },
 };
